@@ -1,4 +1,4 @@
-const SurfSpots = () => {
+export const AllSpots = () => {
     return (
         <section>
             <h2>Surf Spots</h2>
@@ -7,4 +7,3 @@ const SurfSpots = () => {
     );
 };
 
-export default SurfSpots;
