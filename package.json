@@ -3,7 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "next": "yarn --cwd apps/dakar dev",
+    "build:deps": "yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-cta run build",
+    "build:dakar": "yarn build:deps && yarn workspace @robusta/dakar run build",
+    "dev": "yarn --cwd apps/dakar dev",
     "yarn:install": "yarn install",
     "clean": "npx rimraf packages/*/dist && rimraf node_modules",
     "clean:install": "yarn clean && yarn install",
@@ -14,6 +16,10 @@
     "packages/*"
   ],
   "devDependencies": {
+    "typescript": "^5.6.2",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.5.0",
     "eslint-plugin-react": "^7.35.2",
     "@typescript-eslint/parser": "^8.5.0",
@@ -21,7 +27,6 @@
     "eslint": "8.57.0",
     "eslint-plugin-import": "^2.30.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.6.2",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "eslint-config-next": "15.0.3"
