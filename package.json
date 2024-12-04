@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build:deps": "yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-cta run build",
+    "build:deps": "yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-cta run build",
     "build:dakar": "yarn build:deps && yarn workspace @robusta/dakar run build",
     "dev": "yarn --cwd apps/dakar dev",
     "yarn:install": "yarn install",

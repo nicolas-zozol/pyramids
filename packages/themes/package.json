@@ -1,5 +1,5 @@
 {
-  "name": "@robusta/pyramids-cta",
+  "name": "@robusta/pyramids-themes",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,9 +10,7 @@
     "lint": "eslint src/**/*.ts src/**/*.tsx"
   },
   "dependencies": {
-    "react": "^19.0.0-rc-66855b96-20241106",
-    "@robusta/pyramids-themes": "*",
-    "@robusta/pyramids-layouts": "*"
+    "react": "^19.0.0-rc-66855b96-20241106"
   },
   "devDependencies": {
     "typescript": "^5",

@@ -10,7 +10,8 @@
     "lint": "eslint src/**/*.ts src/**/*.tsx"
   },
   "dependencies": {
-    "react": "^19.0.0-rc-66855b96-20241106"
+    "react": "^19.0.0-rc-66855b96-20241106",
+    "@robusta/pyramids-themes": "*"
   },
   "devDependencies": {
     "typescript": "^5",
