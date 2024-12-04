@@ -8,8 +8,13 @@ interface TText {
 }
 
 interface TButton {
-  primaryButtonColor: string;
-  primaryButtonBackgroundColor: string;
+  text: string;
+  bg: string;
+}
+
+interface TCta {
+  text: string;
+  bg: string;
 }
 
 interface TLink {
@@ -37,20 +42,34 @@ interface TSeparation {
   hr: string;
 }
 
-interface TCtas {
-  background: string;
+interface TPanel {
   text: string;
+  bg: string;
+  borderColor: string;
+  boxShadow: string;
+}
+interface TCard {
+  text: string;
+  bg: string;
+  borderColor: string;
+  boxShadow: string;
 }
 
 export interface SiteTheme {
   text: TText;
-  button: TButton;
+  buttonPrimary: TButton;
+  buttonSecondary: TButton;
+  buttonCancel: TButton;
   link: TLink;
   menu: TMenu;
   background: TBackground;
   table: TTable;
   separation: TSeparation;
-  ctas: TCtas;
+  ctaPrimary: TCta;
+  ctaSecondary: TCta;
+  ctaOther: TCta;
+  card: TCard;
+  panel: TPanel;
 }
 
 export const standardTheme: SiteTheme = {
@@ -60,9 +79,17 @@ export const standardTheme: SiteTheme = {
     opposite: colors.almostWhite,
     filledText: '#FDF9FF',
   },
-  button: {
-    primaryButtonColor: '#FFFFFF',
-    primaryButtonBackgroundColor: '#01013D',
+  buttonPrimary: {
+    text: '#FFFFFF',
+    bg: '#01013D',
+  },
+  buttonSecondary: {
+    text: '#01013D',
+    bg: '#FFFFFF',
+  },
+  buttonCancel: {
+    text: '#4e4d4d',
+    bg: '#FFFFFF',
   },
   link: {
     standardLinkColor: '#0E0E2B',
@@ -84,8 +111,28 @@ export const standardTheme: SiteTheme = {
     standardBorderColor: '#53536E',
     hr: '#E9E5F4',
   },
-  ctas: {
-    background: colors.alpha(colors.darkBlue, 0.6),
+  ctaPrimary: {
     text: colors.white,
+    bg: colors.alpha(colors.darkBlue, 0.6),
+  },
+  ctaSecondary: {
+    text: colors.darkBlue,
+    bg: colors.almostWhite,
+  },
+  ctaOther: {
+    text: colors.darkBlue,
+    bg: colors.almostWhite,
+  },
+  card: {
+    text: colors.darkBlue,
+    bg: colors.white,
+    borderColor: colors.lightGrey,
+    boxShadow: 'rgba(0, 0, 0, 0.1)',
+  },
+  panel: {
+    text: colors.darkBlue,
+    bg: colors.white,
+    borderColor: colors.lightGrey,
+    boxShadow: 'rgba(0, 0, 0, 0.1)',
   },
 };
