@@ -1,19 +1,18 @@
-import { TwoColumn } from '@robusta/pyramids-layouts';
+import { EmptyLine, TwoColumn } from '@robusta/pyramids-layouts';
 import Image from 'next/image';
 import { FiMapPin } from 'react-icons/fi';
 import Almadies from './almadies-small.png';
 
 export const PlacesToStay = () => {
   return (
-    <section>
-      <h2>Places to Stay</h2>
+    <section className="text-main bg-background-body mt-16">
+      <h2>Best Places to Stay in Dakar</h2>
 
       <TwoColumn
         leftContent={<MaremeText />}
         rightContent={<AlmadiesMap />}
         leftClassName="flex flex-col justify-center"
       />
-      <div></div>
     </section>
   );
 };
@@ -21,6 +20,11 @@ export const PlacesToStay = () => {
 const MaremeText = () => {
   return (
     <div className="flex flex-col center">
+      <div>
+        You need a place close to the surf spots in Dakar. And it must not be a
+        fake place with fake ratings - which was my first experience !
+      </div>
+      <EmptyLine />
       <div className="flex flex-col">
         <p>
           The best place to stay for surfers is{' '}
