@@ -3,6 +3,11 @@ h2 {
   padding: 20px 0;
 }
 
+h3 {
+  font-size: 1.8rem;
+  padding: 16px 0;
+}
+
 a.standard {
   color: #0063b1;
   text-decoration: none;

@@ -5,7 +5,7 @@ import Almadies from './almadies-small.png';
 
 export const PlacesToStay = () => {
   return (
-    <section className="text-main bg-background-body">
+    <section className="text-main bg-background-body mt-16">
       <h2>Best Places to Stay in Dakar</h2>
 
       <TwoColumn

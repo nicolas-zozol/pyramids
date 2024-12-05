@@ -12,7 +12,7 @@ import pic9 from './images/pic-9.png';
 
 export const AllSpots = () => {
   return (
-    <section className="text-main bg-background-body">
+    <section className="text-main bg-background-body mt-16">
       <h2>Surf Spots</h2>
       <SimpleGridLayout items={getSpotItems()} />
     </section>

@@ -1,5 +1,6 @@
 import { getTheme } from '@robusta/pyramids-themes/dist/themes/get-theme';
 import daisyui from 'daisyui';
+import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 
 // tslint:disable-next-line
@@ -11,6 +12,7 @@ export default {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/layouts/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/ctas/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -33,5 +35,5 @@ export default {
       },
     },
   },
-  plugins: [daisyui],
+  plugins: [typography, daisyui],
 } satisfies Config;

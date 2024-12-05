@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { FiPhone } from 'react-icons/fi';
 
 interface PhoneCTAProps {
   phoneNumber: string; // Phone number to display and call
@@ -11,12 +12,15 @@ export const SimplePhoneCTA: FC<PhoneCTAProps> = ({
   label,
   className,
 }) => (
-  <div className={`flex items-center ${className || ''}`}>
-    {label && <span className="mr-2 text-gray-700">{label}</span>}
+  <div className={`flex  items-center ${className || ''}`}>
+    {label && (
+      <span className="btn btn-primary mr-2 text-gray-700">{label}</span>
+    )}
     <a
       href={`tel:${phoneNumber}`}
-      className="text-blue-600 underline font-medium"
+      className="mt-4 btn btn-primary text-white underline font-medium  "
     >
+      <FiPhone />
       {phoneNumber}
     </a>
   </div>
