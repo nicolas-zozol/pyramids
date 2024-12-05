@@ -1,10 +1,10 @@
 import { getTheme } from '@robusta/pyramids-themes/dist/themes/get-theme';
+import daisyui from 'daisyui';
 import type { Config } from 'tailwindcss';
 
 // tslint:disable-next-line
 const theme = getTheme('dakar') as any;
 
-console.log({ theme });
 export default {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -33,5 +33,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [daisyui],
 } satisfies Config;

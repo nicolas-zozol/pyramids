@@ -76,8 +76,8 @@ export interface SiteTheme {
 }
 
 export const standardTheme: SiteTheme = {
-  main: colors.almostWhite,
-  opposite: colors.almostBlack,
+  main: colors.almostBlack,
+  opposite: colors.almostWhite,
   text: {
     main: colors.almostBlack,
     secondary: colors.almostWhite,

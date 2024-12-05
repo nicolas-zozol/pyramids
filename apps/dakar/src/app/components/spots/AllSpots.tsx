@@ -5,7 +5,7 @@ import {
 
 export const AllSpots = () => {
   return (
-    <section>
+    <section className="text-main bg-background-body">
       <h2>Surf Spots</h2>
       <SimpleGridLayout items={getSpotItems()} />
     </section>
