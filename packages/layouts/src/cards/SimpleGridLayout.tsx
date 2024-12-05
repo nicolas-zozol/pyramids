@@ -8,20 +8,24 @@ interface GridLayoutProps {
 
 export const SimpleGridLayout: FC<GridLayoutProps> = ({
   items,
-  itemMaximumWidth,
-  gap,
+  itemMaximumWidth = 350,
+  gap = 4,
 }) => {
-  itemMaximumWidth = itemMaximumWidth || 400;
-  gap = gap || 4;
   return (
     <div
-      className={`grid gap-${gap}`}
+      className={`grid gap-${gap} justify-items-center`}
       style={{
         gridTemplateColumns: `repeat(auto-fit, minmax(${itemMaximumWidth}px, 1fr))`,
       }}
     >
       {items.map((item, index) => (
-        <div key={index} style={{ maxWidth: itemMaximumWidth }}>
+        <div
+          key={index}
+          style={{
+            maxWidth: itemMaximumWidth,
+            width: '100%', // Ensures items stretch to their maximum width
+          }}
+        >
           {item}
         </div>
       ))}
