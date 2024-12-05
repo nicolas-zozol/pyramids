@@ -29,6 +29,7 @@ interface TMenu {
 
 interface TBackground {
   body: string;
+  hero: string;
   panelBackground: string;
   boxShadow: string;
 }
@@ -56,6 +57,8 @@ interface TCard {
 }
 
 export interface SiteTheme {
+  main: string;
+  opposite: string;
   text: TText;
   buttonPrimary: TButton;
   buttonSecondary: TButton;
@@ -73,6 +76,8 @@ export interface SiteTheme {
 }
 
 export const standardTheme: SiteTheme = {
+  main: colors.almostWhite,
+  opposite: colors.almostBlack,
   text: {
     main: colors.almostBlack,
     secondary: colors.almostWhite,
@@ -101,6 +106,7 @@ export const standardTheme: SiteTheme = {
   },
   background: {
     body: '#FDF9FF',
+    hero: '#52459D',
     panelBackground: '#FFFFFF',
     boxShadow: 'rgba(0, 0, 0, 0.1)',
   },

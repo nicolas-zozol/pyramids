@@ -1,6 +1,7 @@
 import { getTheme } from '@robusta/pyramids-themes/dist/themes/get-theme';
 import type { Config } from 'tailwindcss';
 
+// tslint:disable-next-line
 const theme = getTheme('dakar') as any;
 
 console.log({ theme });
@@ -14,6 +15,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        main: theme.main,
+        opposite: theme.opposite,
         text: theme.text,
         buttonPrimary: theme.buttonPrimary,
         buttonSecondary: theme.buttonSecondary,

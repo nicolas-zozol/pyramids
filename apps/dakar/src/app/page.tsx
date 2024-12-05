@@ -1,4 +1,4 @@
-import { HeroSection } from './components/hero/HeroSection';
+import { HeroSectionWithHeader } from './components/hero/HeroSectionWithHeader';
 import { HowToMove } from './components/move/HowtoMove';
 import { PlacesToStay } from './components/places/PlacesSection';
 import { AllSpots } from './components/spots/AllSpots';
@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <main className="flex flex-col text-lg">
-        <HeroSection />
+        <HeroSectionWithHeader />
         <PlacesToStay />
         <AllSpots />
         <HowToMove />

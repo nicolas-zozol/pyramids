@@ -1,4 +1,4 @@
-import { SimplePhoneCTA } from '@robusta/pyramids-cta';
+import { SimplePhoneCTA } from '@robusta/pyramids-ctas';
 import Image from 'next/image';
 import Pistard from './pistard.png';
 

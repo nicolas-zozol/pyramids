@@ -4,7 +4,7 @@ import { SiteTheme, standardTheme } from './standard';
 export const dakarTheme: Partial<SiteTheme> = {
   background: {
     ...standardTheme.background,
-    body: colors.darkBlue,
+    body: colors.almostWhite,
   },
   ctaPrimary: {
     ...standardTheme.ctaPrimary,

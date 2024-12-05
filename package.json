@@ -5,11 +5,16 @@
   "scripts": {
     "build:deps": "yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-cta run build",
     "build:dakar": "yarn build:deps && yarn workspace @robusta/dakar run build",
-    "dev": "yarn --cwd apps/dakar dev",
+    "dev:dakar": "yarn workspace @robusta/dakar run dev",
     "yarn:install": "yarn install",
     "clean": "npx rimraf packages/*/dist && rimraf node_modules",
     "clean:install": "yarn clean && yarn install",
-    "lint": "eslint --ignore-path .eslintignore 'packages/**/src/**/*.{ts,tsx}'"
+    "lint": "eslint --ignore-path .eslintignore 'packages/**/src/**/*.{ts,tsx}'",
+    "w:themes": "yarn workspace @robusta/pyramids-themes run watch",
+    "w:layouts": "yarn workspace @robusta/pyramids-layouts run watch",
+    "w:ctas": "yarn workspace @robusta/pyramids-ctas run watch",
+    "w:deps": "yarn w:themes && yarn w:layouts && yarn w:ctas",
+    "dev:dev": "concurrently \"yarn w:deps\" \"yarn dev:dakar\""
   },
   "workspaces": [
     "apps/*",
