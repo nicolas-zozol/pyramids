@@ -9,7 +9,7 @@ export const HeroSectionWithHeader = () => {
       <EmptyLine size={2} />
       {/*<div className="absolute inset-0 bg-blue-900 bg-opacity-40"></div>*/}
       <h1 className="text-white text-4xl mx-10">
-        The best guide to surf in Dakar 🌊 🏄‍
+        The best guide to 🏄 in Dakar 🌊
       </h1>
       <EmptyLine size={2} />
 

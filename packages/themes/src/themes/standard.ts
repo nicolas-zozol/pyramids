@@ -39,7 +39,8 @@ interface TTable {
 }
 
 interface TSeparation {
-  standardBorderColor: string;
+  border: string;
+  secondary: string;
   hr: string;
 }
 
@@ -114,7 +115,8 @@ export const standardTheme: SiteTheme = {
     rowSeparator: '#E9E5F4',
   },
   separation: {
-    standardBorderColor: '#53536E',
+    border: '#53536E',
+    secondary: '#402d9d',
     hr: '#E9E5F4',
   },
   ctaPrimary: {

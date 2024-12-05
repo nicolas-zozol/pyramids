@@ -14,7 +14,7 @@
     "w:layouts": "yarn workspace @robusta/pyramids-layouts run watch",
     "w:ctas": "yarn workspace @robusta/pyramids-ctas run watch",
     "w:deps": "yarn w:themes && yarn w:layouts && yarn w:ctas",
-    "dev:dev": "concurrently \"yarn w:deps\" \"yarn dev:dakar\""
+    "dev:dev": "concurrently \"yarn w:themes\" \"yarn w:layouts\" \"yarn w:ctas\"  \"yarn dev:dakar\""
   },
   "workspaces": [
     "apps/*",
@@ -35,6 +35,6 @@
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "eslint-config-next": "15.0.3",
-    "daisyui":"^4.12.14"
+    "daisyui": "^4.12.14"
   }
 }

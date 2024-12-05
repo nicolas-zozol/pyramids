@@ -4,7 +4,7 @@ export const Header = () => {
   return (
     <header className="bg-background-hero text-white p-4">
       <nav className=" flex justify-between items-center">
-        <div className="text-xl font-bold">Dakar.🏄‍♂️</div>
+        <div className="text-xl font-bold">Dakar.🏄‍</div>
         <ul className="flex space-x-4">
           <li>
             <Link href="/" className="hover:text-gray-400">
