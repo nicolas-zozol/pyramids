@@ -1,6 +1,6 @@
 import { EmptyLine } from '@robusta/pyramids-layouts';
 import { Header } from '../header/Header';
-import hero from './hero-secret-surf-small.jpg'; // Use Next.js asset imports
+import hero from './hero.png'; // Use Next.js asset imports
 
 export const HeroSectionWithHeader = () => {
   return (
