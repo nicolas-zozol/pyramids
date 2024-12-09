@@ -9,6 +9,7 @@ import pic6 from './images/pic-6.png';
 import pic7 from './images/pic-7.png';
 import pic8 from './images/pic-8.png';
 import pic9 from './images/pic-9.png';
+import sen from './images/sen.jpg';
 
 export const AllSpots = () => {
   return (
@@ -106,7 +107,7 @@ function getSpotContentWithImages(spot: SpotProps) {
   return (
     <div>
       <div className="floaterRight pl-4 pb-4">
-        {spot.image && <Image src={spot.image} alt={spot.name} width={150} />}
+        {spot.image && <Image src={sen} alt={spot.name} width={150} />}
       </div>
       <div className="text-gray-700">{spot.description}</div>
     </div>
