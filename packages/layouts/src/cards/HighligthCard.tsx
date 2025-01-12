@@ -5,6 +5,7 @@ interface HighlightableCardProps {
   content: string | React.ReactNode;
   highlight?: boolean; // Toggle highlight
   highlightClass?: string; // Custom highlight Tailwind class
+  highlightText: string; // Custom highlight text
 }
 
 export const HighlightableCard: React.FC<HighlightableCardProps> = ({
@@ -12,6 +13,7 @@ export const HighlightableCard: React.FC<HighlightableCardProps> = ({
   content,
   highlight = false,
   highlightClass = 'bg-yellow-100', // Default highlight class
+  highlightText,
 }) => (
   <div
     className={` relative shadow-md p-4 rounded-lg h-full ${
@@ -20,7 +22,7 @@ export const HighlightableCard: React.FC<HighlightableCardProps> = ({
   >
     {highlight && (
       <div className="absolute badge badge-primary text-white right-4">
-        Pick of the day
+        {highlightText}
       </div>
     )}
     <h3 className="text-lg font-semibold mb-2">{title}</h3>
