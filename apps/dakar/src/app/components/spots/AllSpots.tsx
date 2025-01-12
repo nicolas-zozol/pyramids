@@ -1,15 +1,14 @@
 import { SimpleGridLayout } from '@robusta/pyramids-layouts';
 import { HighlightableCard } from '@robusta/pyramids-layouts/dist/cards/HighligthCard';
 import Image, { StaticImageData } from 'next/image';
-import pic1 from './images/pic-1.png';
-import pic2 from './images/pic-2.png';
-import pic3 from './images/pic-3.png';
-import pic5 from './images/pic-5.png';
-import pic6 from './images/pic-6.png';
-import pic7 from './images/pic-7.png';
-import pic8 from './images/pic-8.png';
-import pic9 from './images/pic-9.png';
-import sen from './images/sen.jpg';
+import fakeClubMed from './images/small-fake-club-med-640-427.jpg';
+import fakeNgorLeft from './images/small-fake-ngor-left-640-360.jpg';
+import fakeNgorRight from './images/small-fake-ngor-right-640-427.jpg';
+import fakeSecret from './images/small-fake-secret-640-427.jpg';
+import fakeVirage from './images/small-fake-virage-640-444.jpg';
+import fakeVivier from './images/small-fake-vivier-640-369.jpg';
+import fakeOuakam from './images/small-fake-ouakam-640-426.jpg';
+import fakeYoff from './images/small-fake-yoff-640-401.jpg';
 
 export const AllSpots = () => {
   return (
@@ -22,70 +21,135 @@ export const AllSpots = () => {
 
 interface SpotProps {
   name: string;
-  description: string;
+  description: React.ReactNode;
   anchor: string;
   highlight?: boolean;
-  image?: StaticImageData;
+  image: StaticImageData;
+  imageWidth: number;
+  imageHeight: number;
 }
 
 const dakarSpots: SpotProps[] = [
   {
     name: 'Ngor Right',
-    description:
-      'Ngor Right is a world-class reef break suited for intermediate to advanced surfers. Known for its long, clean right-handers, the spot offers powerful waves and consistent swells. The main difficulty lies in the sharp reef beneath the surface and strong currents, which require careful navigation. The charm of Ngor Right is its scenic surroundings, with views of Ngor Island and an authentic Senegalese vibe that makes every session unforgettable.',
+    description: (
+      <>
+        Ngor Right is a world-class reef break for intermediate to advanced
+        surfers. Known for its flawless rights, it offers powerful and
+        consistent waves. Pay attention to the reef and sea urchins. It can also
+        get very crowded.
+      </>
+    ),
     anchor: 'ngor-right',
-    image: pic1,
-  },
-  {
-    name: 'Yoff Beach',
-    description:
-      'Perfect for beginners and intermediate surfers, Yoff Beach features a sandy bottom with gentle, forgiving waves. The spot is excellent for learning, but it can become crowded with locals and surf schools. While the waves lack the power of reef breaks, the vibrant fishing village atmosphere and accessibility make Yoff a go-to spot for a relaxed surf day.',
-    anchor: 'yoff',
-    image: pic2,
-  },
-  {
-    name: 'Secret Spot',
-    description:
-      'Hidden away from the crowds, Secret Spot is ideal for advanced surfers looking for a challenge. This reef break produces powerful and hollow waves, particularly during big swells. The main difficulties are the shallow reef and tricky paddle-outs, but the secluded beauty and pristine conditions make it worth the effort for thrill-seekers.',
-    anchor: 'secret-spot',
     highlight: true,
-    image: pic3,
+    image: fakeNgorRight,
+    imageWidth: 640,
+    imageHeight: 427,
   },
   {
-    name: 'Virage',
-    description:
-      "Virage is a versatile spot offering a mix of beach and reef breaks, catering to intermediate surfers. It’s known for its fast, punchy waves that can form barrels on the right day. The main challenge comes from shifting sandbanks and occasional strong winds. Its proximity to Dakar's airport and vibrant local scene makes it a favorite for travelers.",
-    anchor: 'virage',
-    image: pic9,
+    name: 'Ngor Left',
+    description: (
+      <>
+        Located on the other side of the island, Ngor Left is a softer spot.
+        However, it requires a stronger swell and is less protected from the
+        wind. The sea urchins are still there...
+      </>
+    ),
+    anchor: 'ngor-left',
+    image: fakeNgorLeft,
+    imageWidth: 640,
+    imageHeight: 360,
   },
   {
     name: 'Ouakam',
-    description:
-      'Located near the iconic Mosque of Divinity, Ouakam is a breathtaking reef break for advanced surfers. It features steep, powerful waves with long rides. The shallow reef and strong rip currents pose significant challenges. However, the picturesque cliffs and turquoise waters create a surreal surfing experience.',
+    description: (
+      <>
+        Located in the heart of the city, Ouakam is a 5-star spot. Protected by
+        magnificent cliffs, the spot requires a significant ocean swell to work,
+        almost exclusively in winter.
+      </>
+    ),
     anchor: 'ouakam',
-    image: pic5,
+    image: fakeOuakam,
+    imageWidth: 640,
+    imageHeight: 426,
   },
   {
-    name: 'Almadies',
-    description:
-      'Almadies offers consistent reef breaks suited for intermediate to advanced surfers. The spot is renowned for its variety, with both left and right-hand waves depending on the swell direction. The sharp reef and strong tides demand caution, but the laid-back vibe and local seafood joints nearby make it an all-around favorite.',
-    anchor: 'almadies',
-    image: pic6,
+    name: 'Yoff Beach',
+    description: (
+      <>
+        Yoff Beach, much appreciated by locals and relatively untouched by
+        tourism, is a beach break accessible to all levels, offering several
+        peaks along the shoreline. It works particularly well in light winds
+        with a northwest swell.
+      </>
+    ),
+    anchor: 'yoff',
+    image: fakeYoff,
+    imageWidth: 640,
+    imageHeight: 401,
   },
   {
-    name: 'N’gor Left',
-    description:
-      'N’gor Left is a softer, more forgiving break compared to its counterpart, Ngor Right, making it great for beginners and intermediates. The waves here are playful and less powerful, ideal for practicing turns and building confidence. The main interest lies in its peaceful setting and accessibility via a short boat ride to Ngor Island.',
-    anchor: 'ngor-left',
+    name: 'Virage',
+    description: (
+      <>
+        Also a beach break, Virage shares many similarities with Yoff, featuring
+        the same orientation. However, it has fewer peaks, leading to tougher
+        competition in the lineup.
+      </>
+    ),
+    anchor: 'virage',
+    image: fakeVirage,
+    imageWidth: 640,
+    imageHeight: 444,
+  },
+  {
+    name: 'Secret Spot',
+    description: (
+      <>
+        Located in the heart of the Almadies Riviera, “Secret Spot” is no longer
+        much of a secret. Despite a few sea urchins, access remains relatively
+        easy and even allows parents to keep an eye on their children. The wave
+        is fun yet very short and technical, attracting a crowd: it’s where
+        surfers come to show off and impress one another.
+      </>
+    ),
+    anchor: 'secret-spot',
+
+    image: fakeSecret,
+    imageWidth: 640,
+    imageHeight: 427,
+  },
+
+  {
+    name: 'Vivier',
+    description: (
+      <>
+        Vivier offers two waves: a left and a right. The first works at low
+        tide, the other at high tide. It requires either a large north swell or
+        a south swell. At entrance and lower tide, beware of the sharp rocks.
+      </>
+    ),
+    anchor: 'vivier',
+    image: fakeVivier,
+    imageWidth: 640,
+    imageHeight: 369,
     highlight: true,
-    image: pic7,
   },
+
   {
-    name: 'Le Monument',
-    description:
-      'Le Monument, near the African Renaissance Monument, is a powerful beach break for advanced surfers. It produces heavy barrels, especially during the winter months. The main challenges include heavy shore breaks and unpredictable wave sections. The dramatic backdrop of the monument adds cultural significance to this thrilling surf spot.',
-    anchor: 'le-monument',
-    image: pic8,
+    name: 'Club Med',
+    description: (
+      <>
+        Located near the now-abandoned Club Med, this third spot in the Almadies
+        is more powerful than Vivier, but also more dangerous and extremely
+        difficult to access. However, it is rarely crowded.
+      </>
+    ),
+    anchor: 'club-med',
+    image: fakeClubMed,
+    imageWidth: 640,
+    imageHeight: 427,
   },
 ];
 
@@ -97,6 +161,7 @@ function getSpotItems() {
       title={spot.name}
       highlight={spot.highlight}
       highlightClass="border-2 border-separation-secondary"
+      highlightText="Favourite spot"
     />
   ));
 }
@@ -106,8 +171,15 @@ function getSpotContentWithImages(spot: SpotProps) {
   // with float:right css
   return (
     <div>
-      <div className="floaterRight pl-4 pb-4">
-        {spot.image && <Image src={sen} alt={spot.name} width={150} />}
+      <div className="floaterRight pl-4 pb-4 max-w-[40%]">
+        {spot.image && (
+          <Image
+            src={spot.image}
+            alt={spot.name}
+            width={spot.imageWidth}
+            height={spot.imageHeight}
+          />
+        )}
       </div>
       <div className="text-gray-700">{spot.description}</div>
     </div>
