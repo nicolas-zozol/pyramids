@@ -7,7 +7,7 @@ export const HeroSectionWithHeader = () => {
     <section className="relative bg-background-hero bg-cover bg-center w-full">
       <Header />
       <EmptyLine size={2} />
-      <h1 className="text-white text-4xl mx-10">
+      <h1 className="text-red-600 text-4xl mx-10">
         The best guide to 🏄 in Dakar 🌊
       </h1>
       <EmptyLine size={2} />
