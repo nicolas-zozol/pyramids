@@ -2,7 +2,6 @@ import { EmptyLine, TwoColumn } from '@robusta/pyramids-layouts';
 import Image from 'next/image';
 import { FiMapPin } from 'react-icons/fi';
 import Almadies from './almadies-small.png';
-import './places.css';
 
 export const PlacesToStay = () => {
   return (
@@ -48,13 +47,9 @@ const MaremeText = () => {
 
 const AlmadiesMap = () => {
   return (
-    <div className="relative w-full h-[400px] almadiesMap">
+    <div className="relative w-full h-[400px]">
       {/* Google Map Image */}
-      <Image
-        src={Almadies}
-        alt="Map"
-        className="h-[400px] object-cover rounded-lg"
-      />
+      <Image src={Almadies} alt="Map" className="h-[400px] object-cover" />
       {/* Pinpoint */}
       <FiMapPin
         className="absolute text-red-600"
