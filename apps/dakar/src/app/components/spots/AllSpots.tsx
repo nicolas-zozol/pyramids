@@ -1,5 +1,5 @@
 import { SimpleGridLayout } from '@robusta/pyramids-layouts';
-import { HighlightableCard } from '@robusta/pyramids-layouts/dist/cards/HighligthCard';
+import { HighlightableCard } from '@robusta/pyramids-layouts';
 import Image, { StaticImageData } from 'next/image';
 import fakeClubMed from './images/small-fake-club-med-640-427.jpg';
 import fakeNgorLeft from './images/small-fake-ngor-left-640-360.jpg';
