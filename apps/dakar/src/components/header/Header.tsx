@@ -7,7 +7,7 @@ export const Header = () => {
         <div className="text-xl font-bold">Dakar.🏄‍</div>
         <ul className="flex space-x-4">
           <li>
-            <Link href="/" className="hover:text-gray-400">
+            <Link href="/apps/dakar/public" className="hover:text-gray-400">
               Home
             </Link>
           </li>
