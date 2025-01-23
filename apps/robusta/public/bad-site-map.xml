@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>https://www.robusta.io</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.697Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.697Z</lastmod></url>
+<url><loc>https://www.robusta.io/catalog</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.697Z</lastmod></url>
+<url><loc>https://www.robusta.io/layout/BasicLayout</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.697Z</lastmod></url>
+<url><loc>https://www.robusta.io/posts/first</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.697Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/page/1</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/page/2</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/page/3</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/javascript/terminer-un-observable-rxjs-avec-un-autre</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/javascript/completing-a-rxjs-observable-with-another</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/web/easy-automation-with-sonoff-and-javascript</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/theory/quel-langage-pour-progresser-dans-sa-carriere</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/javascript/applying-correctly-classname-with-styled-components</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/privacy/leaving-gmail</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/javascript/starting-redux</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/javascript/es-2015</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/javascript/javascript-build</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/blog/theory/solid-principles</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/learn/javascript</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/learn/rxjs</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/learn/back</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/learn/front</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/learn/web</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+<url><loc>https://www.robusta.io/learn/hard</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2021-10-06T15:07:03.698Z</lastmod></url>
+</urlset>
