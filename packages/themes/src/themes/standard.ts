@@ -1,4 +1,4 @@
-import { colors } from '../colors';
+import { pyramidsColors } from '../colors';
 
 interface TText {
   main: string;
@@ -57,7 +57,7 @@ interface TCard {
   boxShadow: string;
 }
 
-export interface SiteTheme {
+export interface PyramidsTheme {
   main: string;
   opposite: string;
   text: TText;
@@ -76,13 +76,13 @@ export interface SiteTheme {
   panel: TPanel;
 }
 
-export const standardTheme: SiteTheme = {
-  main: colors.almostBlack,
-  opposite: colors.almostWhite,
+export const standardPyramidsTheme: PyramidsTheme = {
+  main: pyramidsColors.almostBlack,
+  opposite: pyramidsColors.almostWhite,
   text: {
-    main: colors.almostBlack,
-    secondary: colors.almostWhite,
-    opposite: colors.almostWhite,
+    main: pyramidsColors.almostBlack,
+    secondary: pyramidsColors.almostWhite,
+    opposite: pyramidsColors.almostWhite,
     filledText: '#FDF9FF',
   },
   buttonPrimary: {
@@ -120,27 +120,27 @@ export const standardTheme: SiteTheme = {
     hr: '#E9E5F4',
   },
   ctaPrimary: {
-    text: colors.white,
-    bg: colors.alpha(colors.darkBlue, 0.6),
+    text: pyramidsColors.white,
+    bg: pyramidsColors.alpha(pyramidsColors.darkBlue, 0.6),
   },
   ctaSecondary: {
-    text: colors.darkBlue,
-    bg: colors.almostWhite,
+    text: pyramidsColors.darkBlue,
+    bg: pyramidsColors.almostWhite,
   },
   ctaOther: {
-    text: colors.darkBlue,
-    bg: colors.almostWhite,
+    text: pyramidsColors.darkBlue,
+    bg: pyramidsColors.almostWhite,
   },
   card: {
-    text: colors.darkBlue,
-    bg: colors.white,
-    borderColor: colors.lightGrey,
+    text: pyramidsColors.darkBlue,
+    bg: pyramidsColors.white,
+    borderColor: pyramidsColors.lightGrey,
     boxShadow: 'rgba(0, 0, 0, 0.1)',
   },
   panel: {
-    text: colors.darkBlue,
-    bg: colors.white,
-    borderColor: colors.lightGrey,
+    text: pyramidsColors.darkBlue,
+    bg: pyramidsColors.white,
+    borderColor: pyramidsColors.lightGrey,
     boxShadow: 'rgba(0, 0, 0, 0.1)',
   },
 };

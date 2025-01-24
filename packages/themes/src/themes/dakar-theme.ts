@@ -1,14 +1,14 @@
-import { colors } from '../colors';
-import { SiteTheme, standardTheme } from './standard';
+import { pyramidsColors } from '../colors';
+import { PyramidsTheme, standardPyramidsTheme } from './standard';
 
-export const dakarTheme: Partial<SiteTheme> = {
+export const dakarTheme: Partial<PyramidsTheme> = {
   background: {
-    ...standardTheme.background,
-    body: colors.almostWhite,
+    ...standardPyramidsTheme.background,
+    body: pyramidsColors.almostWhite,
   },
   ctaPrimary: {
-    ...standardTheme.ctaPrimary,
-    text: colors.white,
-    bg: colors.alpha(colors.darkBlue, 0.6),
+    ...standardPyramidsTheme.ctaPrimary,
+    text: pyramidsColors.white,
+    bg: pyramidsColors.alpha(pyramidsColors.darkBlue, 0.6),
   },
 };

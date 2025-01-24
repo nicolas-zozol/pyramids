@@ -1,6 +1,9 @@
+import { FullHeader } from '@/components/FullHeader';
+
 export default function Home() {
   return (
-    <div>
+    <>
+      <FullHeader isHome={true} />
       <main className="flex flex-col text-lg">Migration</main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
@@ -11,6 +14,6 @@ export default function Home() {
           Edited by Robusta Build
         </a>
       </footer>
-    </div>
+    </>
   );
 }

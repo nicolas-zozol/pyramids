@@ -1,10 +1,10 @@
-import { getTheme } from '@robusta/pyramids-themes/dist/themes/get-theme';
 import daisyui from 'daisyui';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
+import { robustaTheme } from './src/theme/robusta-theme';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
-// tslint:disable-next-line
-const theme = getTheme('dakar') as any;
+const theme = robustaTheme;
 
 export default {
   content: [
@@ -15,23 +15,27 @@ export default {
     '../../packages/ctas/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      tab: { max: '800px' },
+      ...defaultTheme.screens,
+    },
     extend: {
       colors: {
-        main: theme.main,
-        opposite: theme.opposite,
+        /*main: theme.main,
         text: theme.text,
+        background: theme.background,
+        opposite: theme.opposite,
+        panel: theme.panel,
         buttonPrimary: theme.buttonPrimary,
         buttonSecondary: theme.buttonSecondary,
         buttonCancel: theme.buttonCancel,
         link: theme.link,
         menu: theme.menu,
-        background: theme.background,
         table: theme.table,
         separation: theme.separation,
         ctaPrimary: theme.ctaPrimary,
         ctaSecondary: theme.ctaSecondary,
-        ctaOther: theme.ctaOther,
-        panel: theme.panel,
+        ctaOther: theme.ctaOther,*/
       },
     },
   },

@@ -1,4 +1,4 @@
-export const colors = {
+export const pyramidsColors = {
   almostBlack: '#010122',
   darkerBlue: '#0E0E2B',
   darkBlue: '#01013D',

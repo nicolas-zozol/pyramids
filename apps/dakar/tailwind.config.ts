@@ -1,10 +1,10 @@
-import { getTheme } from '@robusta/pyramids-themes/dist/themes/get-theme';
 import daisyui from 'daisyui';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
+import { standardPyramidsTheme } from '@robusta/pyramids-themes';
 
 // tslint:disable-next-line
-const theme = getTheme('dakar') as any;
+const theme = standardPyramidsTheme;
 
 export default {
   content: [
@@ -16,7 +16,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        main: theme.main,
+        /*main: theme.main,
         opposite: theme.opposite,
         text: theme.text,
         buttonPrimary: theme.buttonPrimary,
@@ -30,7 +30,7 @@ export default {
         ctaPrimary: theme.ctaPrimary,
         ctaSecondary: theme.ctaSecondary,
         ctaOther: theme.ctaOther,
-        panel: theme.panel,
+        panel: theme.panel,*/
       },
     },
   },
