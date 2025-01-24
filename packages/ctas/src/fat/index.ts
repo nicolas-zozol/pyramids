@@ -1,0 +1,1 @@
+export {FatCta} from './FatCta'

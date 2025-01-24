@@ -1,38 +1,17 @@
 import daisyui from 'daisyui';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
-import { standardPyramidsTheme } from '@robusta/pyramids-themes';
-
-// tslint:disable-next-line
-const theme = standardPyramidsTheme;
 
 export default {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    '../../packages/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/layouts/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/ctas/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/links/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/helpers/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {
-    extend: {
-      colors: {
-        /*main: theme.main,
-        opposite: theme.opposite,
-        text: theme.text,
-        buttonPrimary: theme.buttonPrimary,
-        buttonSecondary: theme.buttonSecondary,
-        buttonCancel: theme.buttonCancel,
-        link: theme.link,
-        menu: theme.menu,
-        background: theme.background,
-        table: theme.table,
-        separation: theme.separation,
-        ctaPrimary: theme.ctaPrimary,
-        ctaSecondary: theme.ctaSecondary,
-        ctaOther: theme.ctaOther,
-        panel: theme.panel,*/
-      },
-    },
-  },
+
   plugins: [typography, daisyui],
 } satisfies Config;

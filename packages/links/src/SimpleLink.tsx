@@ -1,15 +1,18 @@
 import Link from 'next/link';
 import React from 'react';
+import { mergeCss } from '@robusta/pyramids-helpers';
 
 interface SimpleLinkProps {
   href?: string;
   children: React.ReactNode;
   dofollow?: boolean;
+  className?: string;
 }
 
 export const SimpleLink: React.FC<SimpleLinkProps> = ({
   children,
   href,
+  className = '',
   dofollow = false,
 }) => {
   href = href || '';
@@ -17,15 +20,18 @@ export const SimpleLink: React.FC<SimpleLinkProps> = ({
 
   const relValues = 'noopener noreferrer' + (dofollow ? '' : ' nofollow');
 
+  const basicClass = 'link link-primary';
+  const classNames = mergeCss(basicClass, className);
+
   if (isOut) {
     return (
-      <Link href={href} target="_blank" rel={relValues}>
+      <Link href={href} target="_blank" rel={relValues} className={classNames}>
         {children}
       </Link>
     );
   } else {
     return (
-      <Link href={href} className={'text-blue-500 hover:text-blue-700'}>
+      <Link href={href} className={classNames}>
         {children}
       </Link>
     );

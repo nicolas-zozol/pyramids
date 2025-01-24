@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './modern-reset.scss';
+import './base.scss';
 
 export const metadata: Metadata = {
   title: 'Robusta Build',
@@ -14,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme={'light'}>
-      <body className={`antialiased`}>
-        <main className={'container mx-auto'}>{children}</main>
-      </body>
+      <body className={`antialiased`}>{children}</body>
     </html>
   );
 }

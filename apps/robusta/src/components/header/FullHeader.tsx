@@ -14,7 +14,7 @@ export const FullHeader: FC<Props> = ({ isHome }) => {
       <nav className={'horizontalNav blog-container'}>
         {isHome && (
           <span className={'mr-40'}>
-            <SimpleLink href="/">Home</SimpleLink>
+            <SimpleLink href="/apps/robusta/public">Home</SimpleLink>
           </span>
         )}
 
@@ -44,7 +44,7 @@ export const FullHeader: FC<Props> = ({ isHome }) => {
       </nav>
 
       <div className={'mainLogo'}>
-        <Link href={'/'} legacyBehavior={true}>
+        <Link href={'/apps/robusta/public'} legacyBehavior={true}>
           <div className="logo">
             <div>Robusta Build</div>
             <div className={'emojis'}>💪🏗</div>
