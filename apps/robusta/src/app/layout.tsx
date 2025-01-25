@@ -4,8 +4,8 @@ import './modern-reset.scss';
 import './base.scss';
 
 export const metadata: Metadata = {
-  title: 'Robusta Build',
-  description: 'Created by Robusta Build',
+  title: 'Robusta Build: Freelance for ethers.js and blockchain',
+  description: 'Build robust applications with ethers.js and blockchain.',
 };
 
 export default function RootLayout({
