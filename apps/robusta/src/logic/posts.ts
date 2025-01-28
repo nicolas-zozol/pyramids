@@ -1,117 +1,117 @@
-import * as fs from 'fs'
-import * as path from 'path'
-import matter from 'gray-matter'
-import { remark } from 'remark'
-import html from 'remark-html'
-import { slugify } from './slugify'
+import * as fs from 'fs';
+import * as path from 'path';
+import matter from 'gray-matter';
+import { remark } from 'remark';
+import html from 'remark-html';
+import { slugify } from './slugify';
 
 // TODO: some or all are mandatory
 // frontMatter should have not mandatories, and we should create post from frontmatter
 export interface PostFrontMatter {
-  date: string
-  modified?: string
-  title: string
-  category: string
-  tags: string[]
-  lang: 'en' | 'fr'
-  image: string
-  slug?: string
-  excerpt: string
-  author?: string
-  enVersion?: string
-  frVersion?: string
-  featured?: boolean
-  keywords: string[]
+  date: string;
+  modified?: string;
+  title: string;
+  category: string;
+  tags: string[];
+  lang: 'en' | 'fr';
+  image: string;
+  slug?: string;
+  excerpt: string;
+  author?: string;
+  enVersion?: string;
+  frVersion?: string;
+  featured?: boolean;
+  keywords: string[];
 }
 
 export interface Post {
-  date: string
-  modified?: string
-  title: string
-  category: string
-  tags: string[]
-  lang: 'en' | 'fr'
-  image: string
-  slug: string
-  excerpt: string
-  author: string
-  enVersion?: string
-  frVersion?: string
-  featured: boolean
-  content: string
-  keywords: string[]
+  date: string;
+  modified?: string;
+  title: string;
+  category: string;
+  tags: string[];
+  lang: 'en' | 'fr';
+  image: string;
+  slug: string;
+  excerpt: string;
+  author: string;
+  enVersion?: string;
+  frVersion?: string;
+  featured: boolean;
+  content: string;
+  keywords: string[];
 }
 
 export interface RollContext {
-  currentPage: number
-  numberOfPages: number
-  rollSize: number
-  roll: Post[]
+  currentPage: number;
+  numberOfPages: number;
+  rollSize: number;
+  roll: Post[];
 }
 
 export interface PostMetaData {
-  id: string
+  id: string;
 }
 
 function traverseDir(dir: string, action: (path: string) => void) {
-  fs.readdirSync(dir).forEach(file => {
-    let fullPath = path.join(dir, file)
+  fs.readdirSync(dir).forEach((file) => {
+    let fullPath = path.join(dir, file);
     if (fs.lstatSync(fullPath).isDirectory()) {
-      traverseDir(fullPath, action)
+      traverseDir(fullPath, action);
     } else {
-      action(fullPath)
+      action(fullPath);
     }
-  })
+  });
 }
 
 // should be renamed as createPost or hydratePost, with validation
 function validateFrontMatter(
   frontMatter: Partial<PostFrontMatter>,
-  path: string
+  path: string,
 ) {
   if (!frontMatter.date) {
-    throw 'No date: ' + path
+    throw 'No date: ' + path;
   }
 
   if (frontMatter.date.length !== 10) {
-    throw `Wrong date format:${frontMatter.date} ` + path
+    throw `Wrong date format:${frontMatter.date} ` + path;
   }
   if (!frontMatter.title) {
-    throw 'No title: ' + path
+    throw 'No title: ' + path;
   }
   if (!frontMatter.category) {
-    throw 'No category: ' + path
+    throw 'No category: ' + path;
   }
   if (!path.includes(frontMatter.category)) {
-    throw `Wrong category ${frontMatter.category} from path: ${path}`
+    throw `Wrong category ${frontMatter.category} from path: ${path}`;
   }
   if (!frontMatter.tags) {
-    throw 'No tags: ' + path
+    throw 'No tags: ' + path;
   }
   if (!frontMatter.lang) {
-    frontMatter.lang = 'en'
+    frontMatter.lang = 'en';
   }
   if (!frontMatter.image) {
-    throw 'No image: ' + path
+    throw 'No image: ' + path;
   } else {
-    let path = frontMatter.image
+    let path = frontMatter.image;
     if (path.startsWith('./')) {
-      path = path.slice(2)
+      path = path.slice(2);
     }
     if (path.startsWith('images')) {
-      path = path.slice('images'.length)
+      path = path.slice('images'.length);
     }
     if (!path.startsWith('/')) {
-      path = '/' + path
+      path = '/' + path;
     }
-    console.log(frontMatter.image, path)
-    frontMatter.image = path
+    console.log(frontMatter.image, path);
+    frontMatter.image = path;
   }
   if (!frontMatter.featured) {
-    frontMatter.featured = false
+    frontMatter.featured = false;
   }
   if (!frontMatter.slug) {
-    frontMatter.slug = slugify(frontMatter.title)
+    frontMatter.slug = slugify(frontMatter.title);
   }
   if (!frontMatter.keywords) {
     frontMatter.keywords = [
@@ -119,74 +119,92 @@ function validateFrontMatter(
       'nicolas zozol',
       'tutorial',
       ...frontMatter.tags,
-    ]
+    ];
   } else {
     frontMatter.keywords = [
       ...frontMatter.keywords,
       'robusta build',
       'nicolas zozol',
-    ]
+    ];
   }
 }
 
-const posts: Post[] = []
-let postsGenerated = false
+const posts: Post[] = [];
+let postsGenerated = false;
 
 export async function getSortedPostsData(): Promise<Post[]> {
   // Get file names under /posts
   //const skipPrism = process.env.SKIP_PRISM === 'true'
   // console.log({skipPrism})
-  const pendings: Promise<any>[] = []
+  const pendings: Promise<any>[] = [];
   if (postsGenerated) {
-    console.log('+++++ Using cache ')
-    return sortPostsByDate(posts)
+    console.log('+++++ Using cache ');
+    return sortPostsByDate(posts);
   } else {
-    console.log('==== Calculating all')
-    postsGenerated = true
+    console.log('==== Calculating all');
+    postsGenerated = true;
   }
-  let i = 0
-  traverseDir('content/blog', path => {
+  let i = 0;
+  traverseDir('content/blog', (path) => {
     if (path.includes('.md')) {
-      const fileContents = fs.readFileSync(path, 'utf8')
+      const fileContents = fs.readFileSync(path, 'utf8');
 
       // Use gray-matter to parse the post metadata section
 
       const matterResult = matter(fileContents, {
         excerpt: true,
-      })
-      const frontMatter: PostFrontMatter = matterResult.data as PostFrontMatter
-      validateFrontMatter(frontMatter, path)
+      });
+      const frontMatter: PostFrontMatter = matterResult.data as PostFrontMatter;
+      validateFrontMatter(frontMatter, path);
       if (!matterResult.excerpt) {
-        throw 'No excerpt: ' + path
+        throw 'No excerpt: ' + path;
       }
-      frontMatter.excerpt = matterResult.excerpt
+      frontMatter.excerpt = matterResult.excerpt;
 
-      let parser = remark().use(html)
+      let parser = remark().use(html);
 
-      const processedContentPromise = parser.process(matterResult.content)
-      pendings.push(processedContentPromise)
+      const processedContentPromise = parser.process(matterResult.content);
+      pendings.push(processedContentPromise);
 
-      processedContentPromise.then(content => {
-        const contentHtml = content.toString()
+      processedContentPromise.then((content) => {
+        const contentHtml = content.toString();
         const newPost: Post = {
           slug: slugify(matterResult.data.title),
           content: contentHtml,
           ...frontMatter,
-        } as Post
-        newPost.content = contentHtml
-        posts.push(newPost)
-      })
+        } as Post;
+        newPost.content = contentHtml;
+        posts.push(newPost);
+      });
 
-      i++
+      i++;
     }
-  })
+  });
 
-  await Promise.all(pendings)
+  await Promise.all(pendings);
   // Sort posts by date
-  console.log('blog size :', posts.length)
-  return sortPostsByDate(posts)
+  console.log('blog size :', posts.length);
+  return sortPostsByDate(posts);
 }
 
 export function sortPostsByDate(posts: Post[]): Post[] {
-  return posts.sort(({ date: a }, { date: b }) => (a < b ? 1 : -1))
+  return posts.sort(({ date: a }, { date: b }) => (a < b ? 1 : -1));
+}
+
+export async function getPostByCategoryAndSlug(
+  categoryPath: string,
+  slug: string,
+): Promise<Post | undefined> {
+  const posts = await getSortedPostsData();
+
+  return posts.find(
+    (post) =>
+      trimSlash(post.category).toLowerCase() ===
+        trimSlash(categoryPath).toLowerCase() &&
+      trimSlash(post.slug).toLowerCase() === trimSlash(slug).toLowerCase(),
+  );
+}
+
+function trimSlash(path: string): string {
+  return path.replace(/^\/|\/$/g, '');
 }
