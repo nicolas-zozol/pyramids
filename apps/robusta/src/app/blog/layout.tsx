@@ -13,9 +13,10 @@ export default function BlogLayout({
 }>) {
   return (
     <>
+      <header>Blog header</header>
       <FullHeader isHome={false}></FullHeader>
       {children}
-      <footer>Foter</footer>
+      <footer>Blog Footer</footer>
     </>
   );
 }
