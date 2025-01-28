@@ -10,7 +10,7 @@ export const BlogRoll = ({ pageContext }: RollProps) => {
 
   return (
     <article className={'blog-container'}>
-      <div className={'flex flex-wrap justify-between'}>
+      <div className={'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'}>
         {roll.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
         ))}
@@ -24,5 +24,3 @@ export const BlogRoll = ({ pageContext }: RollProps) => {
     </article>
   );
 };
-
-export default BlogRoll;

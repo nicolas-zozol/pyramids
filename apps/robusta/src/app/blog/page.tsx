@@ -1,7 +1,7 @@
 import { getSortedPostsData } from '@/logic/posts';
 import { configuration } from '@/logic/configuration';
 import type { Metadata } from 'next';
-import BlogRoll from '@/components/blog/blog-roll';
+import { BlogRoll } from '@/components/blog/blog-roll';
 
 // Function to dynamically generate metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,9 +27,5 @@ export default async function BlogPage() {
     roll: posts.slice(0, size),
   };
 
-  return (
-    <>
-      <BlogRoll pageContext={rollContext} />
-    </>
-  );
+  return <BlogRoll pageContext={rollContext} />;
 }

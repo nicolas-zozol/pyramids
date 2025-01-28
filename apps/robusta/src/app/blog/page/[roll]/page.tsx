@@ -1,6 +1,6 @@
 import { getSortedPostsData } from '@/logic/posts';
 import { configuration } from '@/logic/configuration';
-import BlogRoll from '@/components/blog/blog-roll';
+import { BlogRoll } from '@/components/blog/blog-roll';
 import type { Metadata } from 'next';
 
 // Revalidation time for incremental static regeneration

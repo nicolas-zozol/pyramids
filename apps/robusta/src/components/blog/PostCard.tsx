@@ -1,6 +1,10 @@
 import { getThumbnail } from '@/logic/thumbnail';
 import { Post } from '@/logic/posts';
 import { SimpleLink } from '@robusta/pyramids-links';
+import Image from 'next/image';
+import { TitleLink } from '@robusta/pyramids-links/dist/SimpleLink';
+import { CtaLink } from '@robusta/pyramids-ctas';
+import { SimpleCardComponent } from '@robusta/pyramids-layouts';
 
 type PostCardProps = {
   post: Post;
@@ -8,23 +12,33 @@ type PostCardProps = {
 
 export const PostCard = ({ post }: PostCardProps) => {
   return (
-    <div className={'card mb-8 w-80'} key={post.slug}>
-      <SimpleLink href={`/blog/${post.category}/${post.slug}`}>
+    <SimpleCardComponent className={'relative mb-8 flex w-80 flex-col'}>
+      <TitleLink
+        href={`/blog/${post.category}/${post.slug}`}
+        className={'text-2xl'}
+      >
         {post.title}
-      </SimpleLink>
-      <div>
-        <img
+      </TitleLink>
+      <div className={'mb-[20px] h-full flex-grow'}>
+        <Image
           src={getThumbnail(post)}
-          className={'float-right'}
+          className={'float-right p-2'}
           alt={post.title}
+          width={200}
+          height={0} // Height is set to 0 because it's auto-calculated
         />
         <p className={'no-justify'}>{post.excerpt}</p>
       </div>
-      <div className={'stick-bottom'}>
-        <SimpleLink href={`/blog/${post.category}/${post.slug}`}>
+      <div className={'absolute bottom-[20px]'}>
+        <CtaLink
+          href={`/blog/${post.category}/${post.slug}`}
+          className={
+            'border-[#581287] text-[0.9rem] uppercase hover:text-[#d4941f]'
+          }
+        >
           Read More
-        </SimpleLink>
+        </CtaLink>
       </div>
-    </div>
+    </SimpleCardComponent>
   );
 };

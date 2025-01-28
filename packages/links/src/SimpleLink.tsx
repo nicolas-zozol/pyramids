@@ -37,3 +37,20 @@ export const SimpleLink: React.FC<SimpleLinkProps> = ({
     );
   }
 };
+
+export const TitleLink: React.FC<SimpleLinkProps> = ({
+  children,
+  href,
+  className = '',
+}) => {
+  href = href || '';
+
+  const basicClass = 'link link-hover text-black-300';
+  const classNames = mergeCss(basicClass, className);
+
+  return (
+    <Link href={href} className={classNames}>
+      {children}
+    </Link>
+  );
+};
