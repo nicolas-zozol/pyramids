@@ -7,19 +7,13 @@ import {
 import { getValuableTags, Tag } from '@/logic/tags';
 import { Article } from '@/components/blog/Article';
 
-interface Props {
-  host: string;
-  post: Post;
-  valuableTags: Tag[];
-}
-
 export default async function BlogPostPage({
   params,
 }: {
-  params: { path: string[] };
+  params: Promise<{ path: string[] }>;
 }) {
-  const pathParts = params.path; // ['blockchain', 'tools', 'tooling-for-solidity-coders']
-
+  const { path } = await params; // ['blockchain', 'tools', 'tooling-for-solidity-coders']
+  const pathParts = path;
   if (pathParts.length <= 1) return notFound();
 
   const slug = pathParts.pop()!; // Extract the last part as the slug

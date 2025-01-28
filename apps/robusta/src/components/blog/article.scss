@@ -1,0 +1,190 @@
+@import '../../app/media-queries';
+@import '../../app/colors';
+
+article.blogpost {
+  background-color: yellow !important;
+  @media screen and (min-width: 800px) {
+    pre,
+    code,
+    img,
+    a.gatsby-resp-image-link {
+      //max-width: initial !important;
+    }
+  }
+  // TODO : use responds-to
+  @media screen and (min-width: 32rem) and (max-width: 48rem) {
+    font-size: 15px;
+  }
+
+  @media screen and (min-width: 48rem) {
+    font-size: 16px;
+  }
+
+  @import url(https://fonts.googleapis.com/css?family=Merriweather:300italic,300);
+  color: #444;
+  font-family: 'Merriweather', Georgia, serif;
+  margin: 0;
+  max-width: 100%;
+  font-size: 1rem;
+
+  line-height: 1.85;
+
+  /* Counteract the specificity of the gross *:not() chain. */
+
+  h1 {
+    padding: 4rem 0 !important;
+  }
+
+  /*  === End gross hack */
+
+  p {
+    color: #555;
+    height: auto;
+    line-height: 1.45;
+    @media screen and (min-width: 800px) {
+      font-size: 1.4rem;
+    }
+    font-size: 1.2rem;
+    margin-bottom: 1.3rem;
+    @media screen and (max-width: 800px) {
+      margin-left: 10px !important;
+      margin-right: 10px !important;
+    }
+  }
+
+  // TODO : this * sucks, because has strong priorities
+  p,
+  *:not(div):not(img):not(body):not(html):not(li):not(blockquote):not(p) {
+    margin: 2rem auto 1rem;
+    max-width: 40rem;
+    padding: 0.25rem;
+    @media screen and (min-width: 800px) {
+      text-align: justify;
+    }
+  }
+
+  img {
+    height: initial !important;
+  }
+
+  img,
+  canvas,
+  iframe,
+  video,
+  svg,
+  select,
+  textarea {
+    max-width: 100%;
+  }
+
+  div {
+    width: 100%;
+  }
+
+  div img {
+    width: 100%;
+    max-width: min-content;
+  }
+
+  blockquote p {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin: 1rem auto 1rem;
+    max-width: 48rem;
+  }
+
+  li {
+    margin-left: 2rem;
+  }
+
+  pre,
+  code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 0.7rem;
+  }
+
+  code:not([class*='language-']) {
+    background-color: #efefef;
+    border: thin solid lightgrey;
+    border-radius: 5px;
+    word-break: break-word;
+  }
+
+  pre {
+    background-color: #fafafa;
+    font-size: 0.8rem;
+    overflow-x: scroll;
+    padding: 1.125em;
+  }
+
+  @include respond-to(mobile) {
+    pre {
+      margin-left: 5px;
+    }
+  }
+
+  @include when-bigger-than(laptop) {
+    pre {
+      margin-left: calc(40% - 250px) !important;
+    }
+  }
+
+  a,
+  a:visited {
+    color: #3498db;
+  }
+
+  a:hover,
+  a:focus,
+  a:active {
+    color: #2980b9;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 1.414rem 0 0.5rem;
+    font-weight: inherit;
+    line-height: 1.42;
+  }
+
+  h1 {
+    margin-top: 0;
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    &::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 2px;
+      background: rgb(103, 64, 127) none repeat scroll 0% 0%;
+      margin: 20px 0px 20px;
+    }
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+  }
+
+  small {
+    font-size: 0.707em;
+  }
+
+  hr {
+    padding: 0 !important;
+  }
+}
+
+.social {
+  width: 60px;
+  margin: 20px !important;
+}

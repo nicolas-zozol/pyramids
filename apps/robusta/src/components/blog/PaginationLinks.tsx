@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SimpleLink } from '@robusta/pyramids-links';
 
 type Props = {
   currentPage: number;
@@ -15,41 +16,48 @@ export const PaginationLinks = ({ currentPage, numberOfPages }: Props) => {
   const nextPage = '/blog/page/' + (currentPage + 1).toString();
 
   return (
-    <div className={'mt-80'}>
+    <div className="mt-8">
       {isFirst ? (
-        <span className={'pagination disabled'}>previous</span>
-      ) : (
-        <span>
-          <Link href={previousPage} legacyBehavior={true}>
-            <a>previous</a>
-          </Link>
+        <span className="text-light-grey m-2.5 p-2.5 font-normal">
+          previous
         </span>
+      ) : (
+        <SimpleLink
+          href={previousPage}
+          className="text-dark-blue hover:text-gold m-2.5 p-2.5 font-bold"
+        >
+          previous
+        </SimpleLink>
       )}
 
       {Array.from({ length: numberOfPages }, (_, i) =>
         currentPage === i + 1 ? (
-          <span className={'pagination current disabled'} key={i}>
+          <span
+            key={i}
+            className="text-light-grey m-2.5 border-[1px] border-purple-500 p-2.5 font-normal"
+          >
             {i + 1}
           </span>
         ) : (
           <span key={i}>
-            <Link
+            <SimpleLink
               href={`${i === 0 ? '/blog' : '/blog/page/' + (i + 1)}`}
-              legacyBehavior={true}
+              className="text-dark-blue hover:text-gold m-2.5 p-2.5 font-bold"
             >
-              <a className={'pagination'}>{i + 1}</a>
-            </Link>
+              {i + 1}
+            </SimpleLink>
           </span>
         ),
       )}
+
       {isLast ? (
-        <span className={'pagination disabled'}>next</span>
+        <span className="text-light-grey m-2.5 p-2.5 font-normal">next</span>
       ) : (
-        <span>
-          <Link href={nextPage} legacyBehavior={true}>
-            <a>next</a>
-          </Link>
-        </span>
+        <Link href={nextPage} legacyBehavior={true}>
+          <a className="text-dark-blue hover:text-gold m-2.5 p-2.5 font-bold">
+            next
+          </a>
+        </Link>
       )}
     </div>
   );

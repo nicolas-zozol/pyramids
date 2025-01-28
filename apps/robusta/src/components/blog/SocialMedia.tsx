@@ -26,13 +26,13 @@ export function SocialMedia({ post, className }: TSocialMediaProps) {
       <h3 className={'text-center'}>Share this post</h3>
       <div className={'justify-center'}>
         <a
-          className={article.social}
+          className={'!m-5 w-[60px]'}
           href={`${twitterShareLink}${getPostUrl(post)}`}
         >
           {twitterSharePic}
         </a>
         <a
-          className={article.social}
+          className={'!m-5 w-[60px]'}
           href={`${linkedinShareLink}${getPostUrl(post)}`}
         >
           {linkedinSharePic}

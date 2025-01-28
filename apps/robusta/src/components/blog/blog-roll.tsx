@@ -9,8 +9,8 @@ export const BlogRoll = ({ pageContext }: RollProps) => {
   const { currentPage, roll, numberOfPages } = pageContext;
 
   return (
-    <div className={'blog-container'}>
-      <div className={'wrap justify-between'}>
+    <article className={'blog-container'}>
+      <div className={'flex flex-wrap justify-between'}>
         {roll.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
         ))}
@@ -21,7 +21,7 @@ export const BlogRoll = ({ pageContext }: RollProps) => {
           numberOfPages={numberOfPages}
         />
       )}
-    </div>
+    </article>
   );
 };
 

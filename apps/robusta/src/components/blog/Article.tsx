@@ -1,13 +1,11 @@
 import { Post } from '@/logic/posts';
-import img from '../../styles/components/img.module.scss';
-import article from '../../styles/components/article.module.scss';
 import Link from 'next/link';
 import Head from 'next/head';
 import { Tag } from '@/logic/tags';
 import { SocialMedia } from './SocialMedia';
 import { getThumbnail } from '@/logic/thumbnail';
 import { MailingListForm } from '@/components/marketing/MailingList';
-
+import './article.scss';
 interface ArticleProps {
   post: Post;
   valuableTags: Tag[];
@@ -29,11 +27,11 @@ export const Article = ({ post, valuableTags }: ArticleProps) => {
         </Head>
       }
 
-      <article className={article.blogpost}>
+      <article className={'blogpost'}>
         <section>
           <img
             src={getThumbnail(post)}
-            className={img.thumbnail}
+            className={'max-w-[200px] object-contain'}
             alt={'thumbnail'}
           />
           <div>
