@@ -2,29 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme {
-  --font-alt: 'Roboto Slab', 'serif';
-  --font-code: 'Roboto Mono', 'monospace';
-}
-
-/*
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: oklch(var(--p));
+  --primary-content: oklch(var(--pc));
+  --secondary: oklch(var(--s));
+  --secondary-content: oklch(var(--sc));
+  --neutral: oklch(var(--n));
+  --neutral-content: oklch(var(--nc));
+
+  --accent: oklch(var(--a));
+  --accent-content: oklch(var(--ac));
+
+  --base100: oklch(var(--b1));
+  --base200: oklch(var(--b2));
+  --base300: oklch(var(--b3));
+  --base-content: oklch(var(--bc));
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* DaisyUI colors : https://daisyui.com/docs/colors/ */
 
-.prose h3,
-.prose strong {
-  color: var(--background);
-}
+@layer utilities {
+  .little-bar::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 2px;
+    background-color: var(--secondary); /* Accent theme color */
+    margin: 20px 0;
+  }
 
-.prose a {
-  color: blue;
+  .little-bar-primary::after {
+    background-color: var(--primary); /* Primary theme color */
+  }
+
+  .little-bar-accent::after {
+    background-color: var(--accent); /* Secondary theme color */
+  }
+
+  .little-bar-neutral::after {
+    background-color: var(--neutral); /* Neutral theme color */
+  }
+
+  /* Add more colors if needed */
 }
-*/

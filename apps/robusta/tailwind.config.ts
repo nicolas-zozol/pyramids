@@ -52,8 +52,12 @@ export default {
       {
         light: {
           ...require('daisyui/src/theming/themes')['light'],
-
-          accent: '#66407E',
+          primary: '#66407E',
+          secondary: '#FFCC3F',
+          accent: '#0B65C2',
+          'base-100': '#FFFFFF',
+          'base-200': '#F3F4F6',
+          'base-300': '#E7F8FA',
         },
       },
     ], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]

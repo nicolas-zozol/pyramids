@@ -11,7 +11,7 @@ interface Props {
 }
 export const FullHeader: FC<Props> = ({ showHomePageLink = true }) => {
   return (
-    <header id="full-header">
+    <header id="full-header" className={'bg-base-100'}>
       <nav className={'standard-hero-container flex justify-start gap-2'}>
         {showHomePageLink && (
           <span>
@@ -39,17 +39,19 @@ export const FullHeader: FC<Props> = ({ showHomePageLink = true }) => {
         </div>
         <div className="justify-self-end">
           <span>
-            <TitleLink className={'text-accent'} href="/blog">
+            <TitleLink className={'text-primary'} href="/blog">
               BLOG
             </TitleLink>
           </span>
         </div>
       </nav>
-      <div className={'border-accent border-b-2'}></div>
+      <div>
+        <div className={'border-primary border-b-2'}></div>
+      </div>
 
       <div className={'flex items-center justify-center'}>
         <div className="font-alt my-6 flex flex-col items-center justify-center text-4xl">
-          <div>Robusta Build</div>
+          <div className={'text-primary'}>Robusta Build</div>
           <div className={'my-4 text-6xl'}>💪🏗</div>
         </div>
       </div>
