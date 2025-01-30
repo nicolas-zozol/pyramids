@@ -4,7 +4,7 @@ import { FreelanceContent } from '@/components/freelance/FreelanceContent';
 export default function Home() {
   return (
     <>
-      <FullHeader isHome={true} />
+      <FullHeader showHomePageLink={false} />
       <FreelanceContent></FreelanceContent>
       <footer className="row-start-3 flex flex-wrap items-center justify-center gap-6">
         <a

@@ -17,8 +17,30 @@ h4 {
 ul {
 }
 
+$large-hero-container: 1400px;
+$standard-hero-container: 1152px;
 $main-container-width: 1152px;
-main.main-container {
+$text-container-width: 670px;
+
+.large-hero-container {
+  max-width: $large-hero-container;
+  margin: auto;
+  @media (max-width: $large-hero-container) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.standard-hero-container {
+  max-width: $standard-hero-container;
+  margin: auto;
+  @media (max-width: $standard-hero-container) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.main-container {
   max-width: $main-container-width;
   margin: auto;
 
@@ -28,12 +50,11 @@ main.main-container {
   }
 }
 
-$article-container-width: 1152px;
-article.blog-container {
-  max-width: $main-container-width;
+.blog-container {
+  max-width: $text-container-width;
   margin: auto;
 
-  @media (max-width: $main-container-width) {
+  @media (max-width: $text-container-width) {
     margin-left: 10px;
     margin-right: 10px;
   }

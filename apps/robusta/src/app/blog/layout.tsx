@@ -14,7 +14,7 @@ export default function BlogLayout({
   return (
     <>
       <header>Blog header</header>
-      <FullHeader isHome={false}></FullHeader>
+      <FullHeader showHomePageLink={true}></FullHeader>
       {children}
       <footer>Blog Footer</footer>
     </>

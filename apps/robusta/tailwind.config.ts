@@ -1,4 +1,3 @@
-import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 import { robustaTheme } from './src/theme/robusta-theme';
 import defaultTheme from 'tailwindcss/defaultTheme';
@@ -22,6 +21,10 @@ export default {
       ...defaultTheme.screens,
     },
     extend: {
+      fontFamily: {
+        alt: ['"Roboto Slab"', 'serif'],
+        code: ['"Roboto Mono"', 'monospace'],
+      },
       colors: {
         /*main: theme.main,
         text: theme.text,
@@ -45,7 +48,15 @@ export default {
   plugins: [daisyui],
   // daisyUI config (optional - here are the default values)
   daisyui: {
-    themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
+    themes: [
+      {
+        light: {
+          ...require('daisyui/src/theming/themes')['light'],
+
+          accent: '#66407E',
+        },
+      },
+    ], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
     darkTheme: 'dark', // name of one of the included themes for dark mode
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components

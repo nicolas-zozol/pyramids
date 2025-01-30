@@ -4,53 +4,74 @@ import Link from 'next/link';
 // TODO: not the right image
 import './full-header.scss';
 import { SimpleLink } from '@robusta/pyramids-links';
+import { mergeCss, twCss } from '@robusta/pyramids-helpers';
 
 interface Props {
-  isHome: boolean;
+  showHomePageLink?: boolean;
 }
-export const FullHeader: FC<Props> = ({ isHome }) => {
+export const FullHeader: FC<Props> = ({ showHomePageLink = true }) => {
   return (
     <header id="full-header">
-      <nav className={'horizontalNav blog-container'}>
-        {isHome && (
-          <span className={'mr-40'}>
-            <SimpleLink href="/apps/robusta/public">Home</SimpleLink>
+      <nav className={'standard-hero-container flex justify-start gap-2'}>
+        {showHomePageLink && (
+          <span>
+            <TitleLink href="/">💪🏗 Home</TitleLink>
           </span>
         )}
 
-        <div className={'start'}>
+        <div className={'tab:hidden flex justify-start gap-8'}>
           <span>
-            <SimpleLink>CLEAN CODE</SimpleLink>
+            <TitleLink href={''}>CLEAN CODE</TitleLink>
           </span>
           <span>
-            <SimpleLink>WEB</SimpleLink>
+            <TitleLink href={''}>WEB</TitleLink>
           </span>
           <span>
-            <SimpleLink>BLOCKCHAIN</SimpleLink>
+            <TitleLink href={''}>BLOCKCHAIN</TitleLink>
           </span>
           <span>
-            <SimpleLink>SOLIDITY</SimpleLink>
+            <TitleLink href={''}>SOLIDITY</TitleLink>
           </span>
 
           <span>
-            <SimpleLink>ETHERS.js</SimpleLink>
+            <TitleLink href={''}>ETHERS.js</TitleLink>
           </span>
         </div>
-        <div className="end">
+        <div className="justify-self-end">
           <span>
-            <SimpleLink href="/blog">BLOG</SimpleLink>
+            <TitleLink className={'text-accent'} href="/blog">
+              BLOG
+            </TitleLink>
           </span>
         </div>
       </nav>
+      <div className={'border-accent border-b-2'}></div>
 
-      <div className={'mainLogo'}>
-        <Link href={'/apps/robusta/public'} legacyBehavior={true}>
-          <div className="logo">
-            <div>Robusta Build</div>
-            <div className={'emojis'}>💪🏗</div>
-          </div>
-        </Link>
+      <div className={'flex items-center justify-center'}>
+        <div className="font-alt my-6 flex flex-col items-center justify-center text-4xl">
+          <div>Robusta Build</div>
+          <div className={'my-4 text-6xl'}>💪🏗</div>
+        </div>
       </div>
     </header>
+  );
+};
+
+// SimpleLink with class uppercase text-neutral-700 no-underline
+
+interface TitleLinkProps {
+  children: string;
+  href: string;
+  className?: string;
+}
+const TitleLink = ({ children, href, className }: TitleLinkProps) => {
+  const classes = twCss(
+    'font-bold uppercase text-neutral-700 no-underline ',
+    className,
+  );
+  return (
+    <SimpleLink href={href} className={classes}>
+      {children}
+    </SimpleLink>
   );
 };

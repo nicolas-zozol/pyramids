@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+  --font-alt: 'Roboto Slab', 'serif';
+  --font-code: 'Roboto Mono', 'monospace';
+}
+
 /*
 :root {
   --background: #ffffff;

@@ -21,7 +21,7 @@ export const CtaLink: React.FC<SimpleLinkProps> = ({
 }) => {
   href = href || '';
 
-  let basicClass = 'link link-hover  font-bold border-2  p-1  ';
+  let basicClass = 'link link-hover font-bold border-2 p-1';
   if (uppercase) basicClass += ' uppercase';
   const classNames = mergeCss(basicClass, className);
 
