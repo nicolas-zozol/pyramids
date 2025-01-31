@@ -1,18 +1,25 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { EmptyLine } from '@robusta/pyramids-layouts';
 import { SimpleLink } from '@robusta/pyramids-links';
 import { TimeDiffered } from '@robusta/pyramids-helpers';
-import { FatCta } from '@robusta/pyramids-ctas';
 import Image from 'next/image';
+import { FatLinkedIn } from '@robusta/pyramids-ctas';
+import { FaPhone } from 'react-icons/fa';
 
 const email = 'nicolas@robusta.build';
 const imageUrl = '/images/nicolas-zozol-picture.jpg';
 
 export const About: FC<{}> = ({}) => (
-  <section className={'my-10 px-4'}>
-    <h1>Experienced Fullstack freelance</h1>
-    <div className={'flex flex-wrap'}>
-      <div className={'my-4 mr-8 max-w-2xl'}>
+  <section className={'mt-0 px-4'}>
+    <h1
+      className={
+        'font-alt little-bar text-primary mt-4 text-4xl font-extrabold uppercase'
+      }
+    >
+      Experienced Fullstack freelance
+    </h1>
+    <div className={'text-base-content flex flex-wrap'}>
+      <div className={'my-8 mr-8 max-w-2xl'}>
         <p>
           I am <strong>Nicolas Zozol</strong>, Freelance based in Toulouse,
           France. Do you need a A team contributor?
@@ -33,30 +40,30 @@ export const About: FC<{}> = ({}) => (
         <br />
         <p>
           I am an <em>Oracle Master Java Certified</em> and
-          <SimpleLink href={'https://www.toptal.com/resume/nicolas-zozol'}>
+          <AboutLink href={'https://www.toptal.com/resume/nicolas-zozol'}>
             {' '}
             screened by Toptal
-          </SimpleLink>
+          </AboutLink>
           , the elite freelance agency. I worked with Big Companies like{' '}
-          <SimpleLink href={'https://www.renault.com'}> Renault </SimpleLink>
+          <AboutLink href={'https://www.renault.com'}> Renault </AboutLink>
           or{' '}
-          <SimpleLink href={'https://www.bcg.com/'}>
+          <AboutLink href={'https://www.bcg.com/'}>
             Boston Consulting Group
-          </SimpleLink>
+          </AboutLink>
           , as well as many startups such as{' '}
-          <SimpleLink href={'https://www.nauto.com/'}>Nauto</SimpleLink>,{' '}
-          <SimpleLink href={'https://www.diool.com/'}>Diool</SimpleLink>,{' '}
-          <SimpleLink href={'https://www.swaap.finance/'}>
+          <AboutLink href={'https://www.nauto.com/'}>Nauto</AboutLink>,{' '}
+          <AboutLink href={'https://www.diool.com/'}>Diool</AboutLink>,{' '}
+          <AboutLink href={'https://www.swaap.finance/'}>
             {' '}
             Swaap Finance
-          </SimpleLink>
+          </AboutLink>
           .{/* CTA : Hire me on Toptal */}
         </p>
         <p>My goal is to turn your ideas into robust products !</p>
 
         <div>
           <EmptyLine size={4} />
-          <FatCta center={true} />
+          <FatLinkedIn center={true} />
         </div>
 
         {/* Social proofs: linkedin, Github, Stack Overflow */}
@@ -64,7 +71,7 @@ export const About: FC<{}> = ({}) => (
         {/* Put the CV right below with no mail/phone */}
       </div>
 
-      <div className={'flex flex-col'}>
+      <div className={'my-8 flex flex-col'}>
         <Image width={300} height={350} alt="avatar" src={imageUrl} />
 
         <TimeDiffered>
@@ -101,4 +108,14 @@ export const About: FC<{}> = ({}) => (
       <EmptyLine size={2} />
     </div>
   </section>
+);
+
+interface Props {
+  href: string;
+  children?: React.ReactNode;
+}
+const AboutLink: React.FC<Props> = ({ children, href }: Props) => (
+  <SimpleLink href={href} className={'text-neutral'}>
+    {children}
+  </SimpleLink>
 );

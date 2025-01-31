@@ -1,1 +1,2 @@
-export {FatCta} from './FatCta'
+export { FatCta } from './FatCta';
+export { FatLinkedIn } from './FatLinkedIn';

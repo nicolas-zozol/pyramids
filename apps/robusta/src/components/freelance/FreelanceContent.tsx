@@ -4,6 +4,7 @@ import { PortfolioPreview } from '@/components/freelance/portfolio/PortfolioPrev
 import { WebResume } from '@/components/freelance/resume/WebResume';
 import { SocialProof } from '@/components/freelance/social/SocialProof';
 import { Skills } from '@/components/freelance/social/Skills';
+import { DesignSystem } from '@robusta/pyramids-helpers/dist/theme/DesignSystem';
 
 interface FreelanceContent {}
 
@@ -20,6 +21,10 @@ export const FreelanceContent = () => {
         <EmptyLine size={2} />
         <WebResume />
       </main>
+
+      <section className={'my-10'}>
+        <DesignSystem></DesignSystem>
+      </section>
     </div>
   );
 };
