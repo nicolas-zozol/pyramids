@@ -4,12 +4,13 @@ import Link from 'next/link';
 // TODO: not the right image
 import './full-header.scss';
 import { SimpleLink } from '@robusta/pyramids-links';
-import { mergeCss, twCss } from '@robusta/pyramids-helpers';
+import { showBool, twCss } from '@robusta/pyramids-helpers';
 
 interface Props {
-  showHomePageLink?: boolean;
+  showHomePageLink: boolean;
+  invertBar: boolean;
 }
-export const FullHeader: FC<Props> = ({ showHomePageLink = true }) => {
+export const FullHeader: FC<Props> = ({ showHomePageLink, invertBar }) => {
   return (
     <header id="full-header" className={'bg-base-100'}>
       <nav className={'standard-hero-container flex justify-start gap-2'}>
@@ -45,9 +46,11 @@ export const FullHeader: FC<Props> = ({ showHomePageLink = true }) => {
           </span>
         </div>
       </nav>
-      <div>
-        <div className={'border-primary border-b-2'}></div>
-      </div>
+      {!invertBar && (
+        <div>
+          <div className={'border-primary border-b-2'}></div>
+        </div>
+      )}
 
       <div className={'flex items-center justify-center'}>
         <div className="font-alt my-6 flex flex-col items-center justify-center text-4xl">
@@ -55,6 +58,11 @@ export const FullHeader: FC<Props> = ({ showHomePageLink = true }) => {
           <div className={'my-4 text-6xl'}>💪🏗</div>
         </div>
       </div>
+      {invertBar && (
+        <div>
+          <div className={'border-primary mb-10 border-b-2'}></div>
+        </div>
+      )}
     </header>
   );
 };

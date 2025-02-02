@@ -2,7 +2,6 @@
 @import '../../app/colors';
 
 article.blogpost {
-  background-color: yellow !important;
   @media screen and (min-width: 800px) {
     pre,
     code,
@@ -11,53 +10,24 @@ article.blogpost {
       //max-width: initial !important;
     }
   }
-  // TODO : use responds-to
-  @media screen and (min-width: 32rem) and (max-width: 48rem) {
-    font-size: 15px;
-  }
 
-  @media screen and (min-width: 48rem) {
-    font-size: 16px;
+  @media screen and (min-width: 800px) {
+    font-size: 1.2rem;
+    line-height: 2rem;
   }
+  font-size: 1.1rem;
+  line-height: 1.6rem;
 
   @import url(https://fonts.googleapis.com/css?family=Merriweather:300italic,300);
   color: #444;
   font-family: 'Merriweather', Georgia, serif;
-  margin: 0;
-  max-width: 100%;
-  font-size: 1rem;
-
-  line-height: 1.85;
-
-  /* Counteract the specificity of the gross *:not() chain. */
 
   h1 {
-    padding: 4rem 0 !important;
   }
-
-  /*  === End gross hack */
 
   p {
     color: #555;
-    height: auto;
-    line-height: 1.45;
-    @media screen and (min-width: 800px) {
-      font-size: 1.4rem;
-    }
-    font-size: 1.2rem;
     margin-bottom: 1.3rem;
-    @media screen and (max-width: 800px) {
-      margin-left: 10px !important;
-      margin-right: 10px !important;
-    }
-  }
-
-  // TODO : this * sucks, because has strong priorities
-  p,
-  *:not(div):not(img):not(body):not(html):not(li):not(blockquote):not(p) {
-    margin: 2rem auto 1rem;
-    max-width: 40rem;
-    padding: 0.25rem;
     @media screen and (min-width: 800px) {
       text-align: justify;
     }
@@ -87,20 +57,24 @@ article.blogpost {
   }
 
   blockquote p {
-    font-size: 1.5rem;
     font-style: italic;
     margin: 1rem auto 1rem;
     max-width: 48rem;
   }
 
+  ul {
+    list-style: disc;
+    margin: 1rem 0 2rem 0;
+  }
   li {
-    margin-left: 2rem;
+    font-size: inherit;
+    margin-left: 1rem;
   }
 
   pre,
   code {
     font-family: Menlo, Monaco, 'Courier New', monospace;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 
   code:not([class*='language-']) {
@@ -108,6 +82,7 @@ article.blogpost {
     border: thin solid lightgrey;
     border-radius: 5px;
     word-break: break-word;
+    padding: 0.1em 0.3em;
   }
 
   pre {
@@ -144,30 +119,32 @@ article.blogpost {
   h2,
   h3,
   h4 {
-    margin: 1.414rem 0 0.5rem;
     font-weight: inherit;
     line-height: 1.42;
   }
 
   h1 {
-    margin-top: 0;
     font-size: 2rem;
   }
 
   h2 {
+    margin-top: 4rem;
+    margin-bottom: 2rem;
     font-size: 1.5rem;
     &::after {
       content: '';
       display: block;
       width: 100px;
       height: 2px;
-      background: rgb(103, 64, 127) none repeat scroll 0% 0%;
-      margin: 20px 0px 20px;
+      background: var(--my-primary) none repeat scroll 0 0;
+      margin: 20px 0 20px;
     }
   }
 
   h3 {
-    font-size: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+
     font-weight: bold;
   }
 
@@ -184,7 +161,9 @@ article.blogpost {
   }
 }
 
-.social {
-  width: 60px;
-  margin: 20px !important;
+article .article-social {
+  svg {
+    width: 40px;
+    height: 40px;
+  }
 }

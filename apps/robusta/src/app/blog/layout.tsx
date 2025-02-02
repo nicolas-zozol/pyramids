@@ -16,7 +16,7 @@ export default function BlogLayout({
 }>) {
   return (
     <>
-      <FullHeader showHomePageLink={true}></FullHeader>
+      <FullHeader showHomePageLink={true} invertBar={true}></FullHeader>
       {children}
       <Footer
         currentPage={getRouterPath<AppRouterPage>()}

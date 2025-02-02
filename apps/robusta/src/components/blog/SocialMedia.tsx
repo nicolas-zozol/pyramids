@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FaTwitter, FaLinkedin, FaFacebook } from 'react-icons/fa';
 
-import article from '../../styles/components/article.module.scss';
 import { getPostUrl } from '@/logic/url';
 import { Post } from '@/logic/posts';
 
@@ -24,17 +23,9 @@ export function SocialMedia({ post, className }: TSocialMediaProps) {
   return (
     <div className={className}>
       <h3 className={'text-center'}>Share this post</h3>
-      <div className={'justify-center'}>
-        <a
-          className={'!m-5 w-[60px]'}
-          href={`${twitterShareLink}${getPostUrl(post)}`}
-        >
-          {twitterSharePic}
-        </a>
-        <a
-          className={'!m-5 w-[60px]'}
-          href={`${linkedinShareLink}${getPostUrl(post)}`}
-        >
+      <div className={'flex justify-center gap-10'}>
+        <a href={`${twitterShareLink}${getPostUrl(post)}`}>{twitterSharePic}</a>
+        <a href={`${linkedinShareLink}${getPostUrl(post)}`}>
           {linkedinSharePic}
         </a>
       </div>
@@ -44,7 +35,7 @@ export function SocialMedia({ post, className }: TSocialMediaProps) {
 
 function TwitterShare() {
   return (
-    <span>
+    <span className={'article-social'}>
       <FaTwitter />
     </span>
   );
@@ -52,7 +43,7 @@ function TwitterShare() {
 
 function LinkedinShare() {
   return (
-    <span>
+    <span className={'article-social'}>
       <FaLinkedin />
     </span>
   );
@@ -60,7 +51,7 @@ function LinkedinShare() {
 
 function FacebookShare() {
   return (
-    <span>
+    <span className={'article-social'}>
       <FaFacebook />
     </span>
   );

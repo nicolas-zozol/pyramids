@@ -1,6 +1,5 @@
 import { getThumbnail } from '@/logic/thumbnail';
 import { Post } from '@/logic/posts';
-import { SimpleLink } from '@robusta/pyramids-links';
 import Image from 'next/image';
 import { TitleLink } from '@robusta/pyramids-links/dist/SimpleLink';
 import { CtaLink } from '@robusta/pyramids-ctas';

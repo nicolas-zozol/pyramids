@@ -27,11 +27,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { roll: string };
+  params: Promise<{ roll: string }>;
 }): Promise<Metadata> {
+  const p = await params;
   const allPosts = await getSortedPostsData();
   const size = configuration.rollSize;
-  const currentPage = parseInt(params.roll, 10);
+  const currentPage = parseInt(p.roll, 10);
   const totalPages = Math.ceil(allPosts.length / size);
 
   return {

@@ -9,7 +9,7 @@ setRouterPath<AppRouterPage>(PAGES.HOME);
 export default function Home() {
   return (
     <>
-      <FullHeader showHomePageLink={false} />
+      <FullHeader showHomePageLink={false} invertBar={false} />
       <FreelanceContent></FreelanceContent>
       <Footer currentPage={PAGES.HOME}></Footer>
     </>

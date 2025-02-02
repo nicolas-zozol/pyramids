@@ -4,9 +4,18 @@ import { getValuableTags } from '@/logic/tags';
 import { Article } from '@/components/blog/Article';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { setRouterPath } from '@robusta/pyramids-helpers';
+import { Metadata } from 'next';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_POST);
-
+export const metadata: Metadata = {
+  //title: 'My Page',
+  //description: 'This page includes external scripts',
+  icons: '/favicon.ico',
+  other: {
+    stylesheet:
+      'https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-coy-without-shadows.min.css',
+  },
+};
 export default async function BlogPostPage({
   params,
 }: {
