@@ -55,7 +55,7 @@ export default {
           'accent-content': '#FFFFFF',
           'base-100': '#FFFFFF',
           'base-200': '#F3F4F6',
-          'base-300': '#E7F8FA',
+          'base-300': '#CCCCCC',
         },
       },
     ], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]

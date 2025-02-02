@@ -6,6 +6,6 @@ export function setRouterPath<T extends string>(path: T) {
   routerPath = path;
 }
 
-export function getRouterPath<T extends string>() {
-  return routerPath;
+export function getRouterPath<T extends string>(): T {
+  return routerPath as T;
 }

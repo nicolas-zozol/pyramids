@@ -12,7 +12,9 @@ type PostCardProps = {
 
 export const PostCard = ({ post }: PostCardProps) => {
   return (
-    <SimpleCardComponent className={'relative mb-8 flex w-80 flex-col'}>
+    <SimpleCardComponent
+      className={'bg-base-200 relative mb-8 flex w-80 flex-col'}
+    >
       <TitleLink
         href={`/blog/${post.category}/${post.slug}`}
         className={'text-2xl'}

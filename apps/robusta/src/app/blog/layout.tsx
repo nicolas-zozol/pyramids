@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import { FullHeader } from '@/components/header/FullHeader';
+import { Footer } from '@/components/footer/Footer';
+import { getRouterPath } from '@robusta/pyramids-helpers';
+import { AppRouterPage } from '@/app/router';
 
 export const metadata: Metadata = {
   title: 'Robusta Build: Blog layout',
@@ -13,10 +16,12 @@ export default function BlogLayout({
 }>) {
   return (
     <>
-      <header>Blog header</header>
       <FullHeader showHomePageLink={true}></FullHeader>
       {children}
-      <footer>Blog Footer</footer>
+      <Footer
+        currentPage={getRouterPath<AppRouterPage>()}
+        className={'my-10'}
+      ></Footer>
     </>
   );
 }

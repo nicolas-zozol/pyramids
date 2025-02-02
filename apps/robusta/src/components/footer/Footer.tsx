@@ -2,22 +2,28 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { SimpleLink } from '@robusta/pyramids-links';
+import { twCss } from '@robusta/pyramids-helpers';
 
 interface FooterProps {
   currentPage: AppRouterPage;
+  className?: string;
 }
-export const Footer: FC<FooterProps> = ({ currentPage }) => {
+export const Footer: FC<FooterProps> = ({ currentPage, className }) => {
   const isHome = currentPage === PAGES.HOME;
   const isAbout = currentPage === PAGES.ABOUT;
 
+  const classes = twCss('flex flex-col', className);
   return (
     // Replace 'flex-layout-column m-20 mt-40' with Tailwind classes
-    <footer className="m-[20px] mt-[40px] flex flex-col">
+    <footer className={classes}>
+      <div className={'main-container w-full'}>
+        <div className={'border-primary border-b-2'}>&nbsp;</div>
+      </div>
       {/* Nav section */}
-      <nav className="ml-[40px] border-b-2 border-purple-500 px-0">
-        <ul className="-ml-[40px] flex list-none flex-row justify-center md:flex-col md:p-0 md:text-center">
+      <nav className="mt-10">
+        <ul className="flex list-none flex-row justify-center md:flex-col md:p-0 md:text-center">
           {!isHome && (
-            <li className="px-[30px] py-[10px]">
+            <li className="px-[30px]">
               <SimpleLink className={'text-neutral'} href="/">
                 Home
               </SimpleLink>
@@ -34,9 +40,9 @@ export const Footer: FC<FooterProps> = ({ currentPage }) => {
         </ul>
       </nav>
 
-      <span className="mt-[80px] text-center">
+      <span className="mt-10 text-center">
         <Link href="/" legacyBehavior>
-          <a className="mb-[40px] inline-flex flex-row items-center justify-center text-[1.2em]">
+          <a className="inline-flex flex-row items-center justify-center text-[1.2em]">
             <div>Robusta Build</div>
             {/* Emojis */}
             <div className="ml-[10px] text-[1.5em]">💪🏗</div>

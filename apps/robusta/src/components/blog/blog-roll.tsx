@@ -6,10 +6,11 @@ type RollProps = {
   pageContext: RollContext;
 };
 export const BlogRoll = ({ pageContext }: RollProps) => {
+  const blogHome = pageContext.currentPage === 1;
   const { currentPage, roll, numberOfPages } = pageContext;
 
   return (
-    <article className={'blog-container'}>
+    <article className={'main-container'}>
       <div className={'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'}>
         {roll.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
