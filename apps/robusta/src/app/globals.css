@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
 :root {
   --my-primary: oklch(var(--p));
   --my-primary-content: oklch(var(--pc));
@@ -19,8 +18,6 @@
   --my-base300: oklch(var(--b3));
   --my-base-content: oklch(var(--bc));
 }
-
-
 
 @layer utilities {
   .little-bar::after {
@@ -43,8 +40,4 @@
   .little-bar-neutral::after {
     background-color: var(--my-neutral);
   }
-
-
 }
-
- */

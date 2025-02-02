@@ -15,8 +15,10 @@
     "w:themes": "yarn workspace @robusta/pyramids-themes run watch",
     "w:layouts": "yarn workspace @robusta/pyramids-layouts run watch",
     "w:ctas": "yarn workspace @robusta/pyramids-ctas run watch",
+    "w:links": "yarn workspace @robusta/pyramids-links run watch",
+    "w:helpers": "yarn workspace @robusta/pyramids-helpers run watch",
     "w:deps": "yarn w:themes && yarn w:layouts && yarn w:ctas",
-    "dev:dev": "concurrently \"yarn w:themes\" \"yarn w:layouts\" \"yarn w:ctas\"  \"yarn dev:dakar\""
+    "dev:dev": "concurrently \"yarn w:links\" \"yarn w:layouts\" \"yarn w:ctas\" \"yarn w:helpers\"  \"yarn dev:robusta\""
   },
   "workspaces": [
     "apps/*",

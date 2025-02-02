@@ -8,12 +8,12 @@ import oracle from './images/oracle.png';
 import toptal from './images/toptal.png';
 import GitHubCalendar from 'react-github-calendar';
 import { EmptyLine } from '@robusta/pyramids-layouts';
+import { H2Title } from '@/components/title/H2Title';
 
 export const SocialProof: FC<{}> = ({}) => {
   return (
-    <div className="mb-12">
-      <EmptyLine size={2} />
-      <h2>Social Proofs</h2>
+    <div className="my-20">
+      <H2Title>Social Proofs</H2Title>
       <section>
         {/* Social Icons */}
         <div className="flex items-center gap-10">

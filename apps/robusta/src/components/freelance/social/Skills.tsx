@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { H2Title } from '@/components/title/H2Title';
 
 interface SkillCategoryProps {
   title: string;
@@ -61,8 +62,8 @@ export const Skills: FC<{}> = () => {
   ];
 
   return (
-    <div>
-      <h2 className="mb-6 text-2xl font-bold">Skills</h2>
+    <div className={'my-20'}>
+      <H2Title>Skills</H2Title>
 
       <div className="ml-5 flex flex-col lg:flex-row">
         {skillsData.map((category, idx) => (

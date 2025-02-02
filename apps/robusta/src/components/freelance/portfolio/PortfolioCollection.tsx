@@ -1,15 +1,24 @@
 import { ReactNode } from 'react';
 import Image, { StaticImageData } from 'next/image';
+import { twCss } from '@robusta/pyramids-helpers';
 
 interface Props {
   images: StaticImageData[];
   title?: string;
   children?: ReactNode;
+  className?: string;
 }
 
-export const PortfolioItem = ({ images, title, children }: Props) => {
+export const PortfolioCollection = ({
+  images,
+  title,
+  children,
+  className,
+}: Props) => {
+  const classes = twCss('', className);
+
   return (
-    <article className="mt-40">
+    <article className={classes}>
       {title && <h2 className="mb-4">{title}</h2>}
 
       <div className="flex flex-wrap gap-8">

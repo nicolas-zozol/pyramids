@@ -4,20 +4,14 @@ import { SimpleLink } from '@robusta/pyramids-links';
 import { TimeDiffered } from '@robusta/pyramids-helpers';
 import Image from 'next/image';
 import { FatLinkedIn } from '@robusta/pyramids-ctas';
-import { FaPhone } from 'react-icons/fa';
+import { H2Title } from '../title/H2Title';
 
 const email = 'nicolas@robusta.build';
 const imageUrl = '/images/nicolas-zozol-picture.jpg';
 
 export const About: FC<{}> = ({}) => (
-  <section className={'mt-0 px-4'}>
-    <h1
-      className={
-        'font-alt little-bar text-primary mt-4 text-4xl font-extrabold uppercase'
-      }
-    >
-      Experienced Fullstack freelance
-    </h1>
+  <section className={'mt-0 px-4 pt-10'}>
+    <H2Title className={'mt-4'}>Experienced Fullstack freelance</H2Title>
     <div className={'text-base-content flex flex-wrap'}>
       <div className={'my-8 mr-8 max-w-2xl'}>
         <p>
@@ -103,9 +97,6 @@ export const About: FC<{}> = ({}) => (
         */}
         </TimeDiffered>
       </div>
-    </div>
-    <div>
-      <EmptyLine size={2} />
     </div>
   </section>
 );
