@@ -2,7 +2,10 @@ import { getSortedPostsData } from '@/logic/posts';
 import { configuration } from '@/logic/configuration';
 import { BlogRoll } from '@/components/blog/blog-roll';
 import type { Metadata } from 'next';
+import { setRouterPath } from '@robusta/pyramids-helpers';
+import { AppRouterPage, PAGES } from '@/app/router';
 
+setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
 // Revalidation time for incremental static regeneration
 export const revalidate = 300;
 

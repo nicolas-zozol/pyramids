@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation';
-import {
-  getPostByCategoryAndSlug,
-  getSortedPostsData,
-  Post,
-} from '@/logic/posts';
-import { getValuableTags, Tag } from '@/logic/tags';
+import { getPostByCategoryAndSlug, getSortedPostsData } from '@/logic/posts';
+import { getValuableTags } from '@/logic/tags';
 import { Article } from '@/components/blog/Article';
+import { AppRouterPage, PAGES } from '@/app/router';
+import { setRouterPath } from '@robusta/pyramids-helpers';
+
+setRouterPath<AppRouterPage>(PAGES.BLOG_POST);
 
 export default async function BlogPostPage({
   params,

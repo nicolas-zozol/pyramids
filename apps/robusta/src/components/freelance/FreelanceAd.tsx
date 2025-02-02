@@ -9,7 +9,7 @@ import { H2Title } from '../title/H2Title';
 const email = 'nicolas@robusta.build';
 const imageUrl = '/images/nicolas-zozol-picture.jpg';
 
-export const About: FC<{}> = ({}) => (
+export const FreelanceAd: FC<{}> = ({}) => (
   <section className={'mt-0 px-4 pt-10'}>
     <H2Title className={'mt-4'}>Experienced Fullstack freelance</H2Title>
     <div className={'text-base-content flex flex-wrap'}>
