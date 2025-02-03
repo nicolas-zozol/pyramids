@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { mergeCss } from '@robusta/pyramids-helpers';
 
-interface SimpleLinkProps {
+export interface SimpleLinkProps {
   href?: string;
   children: React.ReactNode;
   dofollow?: boolean;
@@ -36,21 +36,4 @@ export const SimpleLink: React.FC<SimpleLinkProps> = ({
       </Link>
     );
   }
-};
-
-export const TitleLink: React.FC<SimpleLinkProps> = ({
-  children,
-  href,
-  className = '',
-}) => {
-  href = href || '';
-
-  const basicClass = 'link link-hover text-black-300';
-  const classNames = mergeCss(basicClass, className);
-
-  return (
-    <Link href={href} className={classNames}>
-      {children}
-    </Link>
-  );
 };

@@ -1,14 +1,18 @@
-import { PageLink } from './PageLink';
 import React from 'react';
+import { PageLink } from '../standard';
 
 interface PageLinkNavigatorProps {
-  pages: { name: string; href: string; currentPathName: string }[];
+  pages: { name: string; href: string }[];
+  currentPathName: string;
 }
 
-export const PageLinkNavigator = ({ pages }: PageLinkNavigatorProps) => {
+export const PageLinkNavigator = ({
+  pages,
+  currentPathName,
+}: PageLinkNavigatorProps) => {
   return (
     <div className="flex space-x-4">
-      {pages.map(({ name, href, currentPathName }) => (
+      {pages.map(({ name, href }) => (
         <PageLink
           key={href}
           name={name}
