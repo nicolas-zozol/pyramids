@@ -49,7 +49,7 @@ export default {
       {
         light: {
           ...require('daisyui/src/theming/themes')['light'],
-          primary: '#66407E',
+          primary: '#562571',
           secondary: '#FFCC3F',
           accent: '#0B65C2',
           'accent-content': '#FFFFFF',

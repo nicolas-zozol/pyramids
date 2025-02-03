@@ -6,9 +6,13 @@ import { Skills } from '@/components/freelance/social/Skills';
 
 export const FreelanceContent = () => {
   return (
-    <div className={'bg-gray-100'}>
+    <div>
+      <div
+        className={'full-container bg-secondary/30 mt-0 flex justify-center'}
+      >
+        <FreelanceAd className={''} />
+      </div>
       <main className="main-container">
-        <FreelanceAd />
         <SocialProof />
         <Skills />
         <PortfolioPreview />

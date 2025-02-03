@@ -40,6 +40,16 @@ $text-container-width: 670px;
   }
 }
 
+.full-container {
+  width: 100%;
+  margin: auto;
+
+  @media (max-width: $main-container-width) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
 .main-container {
   max-width: $main-container-width;
   margin: auto;

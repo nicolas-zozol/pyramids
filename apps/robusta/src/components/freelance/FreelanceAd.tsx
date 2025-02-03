@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { EmptyLine } from '@robusta/pyramids-layouts';
 import { SimpleLink } from '@robusta/pyramids-links';
-import { TimeDiffered } from '@robusta/pyramids-helpers';
+import { TimeDiffered, twCss } from '@robusta/pyramids-helpers';
 import Image from 'next/image';
 import { FatLinkedIn } from '@robusta/pyramids-ctas';
 import { H2Title } from '../title/H2Title';
@@ -9,8 +9,11 @@ import { H2Title } from '../title/H2Title';
 const email = 'nicolas@robusta.build';
 const imageUrl = '/images/nicolas-zozol-picture.jpg';
 
-export const FreelanceAd: FC<{}> = ({}) => (
-  <section className={'mt-0 px-4 pt-10'}>
+interface FreelanceAdProps {
+  className?: string;
+}
+export const FreelanceAd: FC<FreelanceAdProps> = ({ className }) => (
+  <section className={twCss('px-4 pt-10', className)}>
     <H2Title className={'mt-4'}>Experienced Fullstack freelance</H2Title>
     <div className={'text-base-content flex flex-wrap'}>
       <div className={'my-8 mr-8 max-w-2xl'}>
@@ -34,23 +37,23 @@ export const FreelanceAd: FC<{}> = ({}) => (
         <br />
         <p>
           I am an <em>Oracle Master Java Certified</em> and
-          <AboutLink href={'https://www.toptal.com/resume/nicolas-zozol'}>
+          <NeutralLink href={'https://www.toptal.com/resume/nicolas-zozol'}>
             {' '}
             screened by Toptal
-          </AboutLink>
+          </NeutralLink>
           , the elite freelance agency. I worked with Big Companies like{' '}
-          <AboutLink href={'https://www.renault.com'}> Renault </AboutLink>
+          <NeutralLink href={'https://www.renault.com'}> Renault </NeutralLink>
           or{' '}
-          <AboutLink href={'https://www.bcg.com/'}>
+          <NeutralLink href={'https://www.bcg.com/'}>
             Boston Consulting Group
-          </AboutLink>
+          </NeutralLink>
           , as well as many startups such as{' '}
-          <AboutLink href={'https://www.nauto.com/'}>Nauto</AboutLink>,{' '}
-          <AboutLink href={'https://www.diool.com/'}>Diool</AboutLink>,{' '}
-          <AboutLink href={'https://www.swaap.finance/'}>
+          <NeutralLink href={'https://www.nauto.com/'}>Nauto</NeutralLink>,{' '}
+          <NeutralLink href={'https://www.diool.com/'}>Diool</NeutralLink>,{' '}
+          <NeutralLink href={'https://www.swaap.finance/'}>
             {' '}
             Swaap Finance
-          </AboutLink>
+          </NeutralLink>
           .{/* CTA : Hire me on Toptal */}
         </p>
         <p>My goal is to turn your ideas into robust products !</p>
@@ -101,11 +104,14 @@ export const FreelanceAd: FC<{}> = ({}) => (
   </section>
 );
 
-interface Props {
+interface NeutralLinkProps {
   href: string;
   children?: React.ReactNode;
 }
-const AboutLink: React.FC<Props> = ({ children, href }: Props) => (
+const NeutralLink: React.FC<NeutralLinkProps> = ({
+  children,
+  href,
+}: NeutralLinkProps) => (
   <SimpleLink href={href} className={'text-neutral'}>
     {children}
   </SimpleLink>
