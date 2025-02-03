@@ -1,5 +1,7 @@
-import { FC } from 'react';
+'use client';
+import { FC, useEffect, useState } from 'react';
 import { H2Title } from '@/components/title/H2Title';
+import { useInView } from '@robusta/pyramids-helpers';
 
 interface SkillCategoryProps {
   title: string;
@@ -61,18 +63,32 @@ export const Skills: FC<{}> = () => {
     },
   ];
 
+  const { ref, isVisible } = useInView({ threshold: 1 });
+  const [showClass, setShowClass] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowClass(isVisible);
+    }, 300);
+  }, [isVisible]);
+
   return (
     <div className={'my-20'}>
       <H2Title>Skills</H2Title>
 
-      <div className="ml-5 flex flex-col lg:flex-row">
-        {skillsData.map((category, idx) => (
-          <SkillCategory
-            key={idx}
-            title={category.title}
-            skills={category.skills}
-          />
-        ))}
+      <div
+        ref={ref}
+        className={`transition-all duration-300 ${showClass ? 'opacity-100' : 'opacity-40'}`}
+      >
+        <div className="ml-5 flex flex-col lg:flex-row">
+          {skillsData.map((category, idx) => (
+            <SkillCategory
+              key={idx}
+              title={category.title}
+              skills={category.skills}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

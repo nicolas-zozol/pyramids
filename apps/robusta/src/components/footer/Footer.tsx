@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { SimpleLink } from '@robusta/pyramids-links';
 import { twCss } from '@robusta/pyramids-helpers';
+import { EmptyLine } from '@robusta/pyramids-layouts';
 
 interface FooterProps {
   currentPage: AppRouterPage;
@@ -49,6 +50,7 @@ export const Footer: FC<FooterProps> = ({ currentPage, className }) => {
           </a>
         </Link>
       </span>
+      <EmptyLine size={2} />
     </footer>
   );
 };

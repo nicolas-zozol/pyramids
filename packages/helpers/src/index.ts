@@ -3,3 +3,4 @@ export * from './style/index';
 export * from './theme/index';
 export * from './router/index';
 export * from './debug/index';
+export * from './react/index';
