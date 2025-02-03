@@ -61,7 +61,7 @@ export default async function BlogRollPage({
   };
 
   return (
-    <div>
+    <div className={'bg-base-200 py-10'}>
       <BlogRoll pageContext={rollContext} />
     </div>
   );

@@ -31,5 +31,9 @@ export default async function BlogPage() {
     roll: posts.slice(0, size),
   };
 
-  return <BlogRoll pageContext={rollContext} />;
+  return (
+    <div className={'bg-base-200 py-10'}>
+      <BlogRoll pageContext={rollContext} />
+    </div>
+  );
 }
