@@ -3,14 +3,20 @@ import { FreelanceContent } from '@/components/freelance/FreelanceContent';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { setRouterPath } from '@robusta/pyramids-helpers';
 import { Footer } from '@/components/footer/Footer';
+import { getSortedPostsData } from '@/logic/posts';
+import { pickFeatured } from '@/logic/posts/pick-featured';
 
 setRouterPath<AppRouterPage>(PAGES.HOME);
 
-export default function Home() {
+export default async function Home() {
+  const allPosts = await getSortedPostsData();
+  const featured = pickFeatured(allPosts);
+
   return (
     <>
       <FullHeader showHomePageLink={false} invertBar={false} />
-      <FreelanceContent></FreelanceContent>
+      <FreelanceContent featured={featured}></FreelanceContent>
+
       <Footer currentPage={PAGES.HOME}></Footer>
     </>
   );

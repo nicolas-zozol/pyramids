@@ -1,5 +1,6 @@
 import { Post } from '@/logic/posts';
 import { PostCard } from './PostCard';
+import { H2Title } from '../title/H2Title';
 
 type FeaturedPostProps = {
   posts: Post[];
@@ -8,9 +9,9 @@ type FeaturedPostProps = {
 export const FeaturedPosts = ({ posts }: FeaturedPostProps) => {
   return (
     <>
-      <h2>recent articles</h2>
+      <H2Title>Recent articles</H2Title>
 
-      <div className={'wrap justify-between'}>
+      <div className={'flex flex-wrap justify-between'}>
         {posts.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
         ))}

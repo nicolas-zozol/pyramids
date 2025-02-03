@@ -6,16 +6,30 @@ import { setRouterPath } from '@robusta/pyramids-helpers';
 import { AppRouterPage, PAGES } from '@/app/router';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
+
 // Revalidation time for incremental static regeneration
 export const revalidate = 300;
 
-// Function to generate dynamic paths
-export async function generateStaticParams() {
+/**
+ * Define the type for our dynamic route parameters.
+ * This ensures consistency between the functions that use them.
+ */
+export type BlogRollParams = {
+  roll: string;
+};
+
+/**
+ * Generate all dynamic paths for the blog roll.
+ *
+ * We return an array of objects of type BlogRollParams.
+ * For example: [ { roll: "1" }, { roll: "2" }, ... ]
+ */
+export async function generateStaticParams(): Promise<BlogRollParams[]> {
   const allPosts = await getSortedPostsData();
   const size = configuration.rollSize;
   const numberOfPages = Math.ceil(allPosts.length / size);
 
-  const paths = [];
+  const paths: BlogRollParams[] = [];
   for (let i = 1; i <= numberOfPages; i++) {
     paths.push({ roll: `${i}` });
   }
@@ -23,16 +37,19 @@ export async function generateStaticParams() {
   return paths;
 }
 
-// Dynamic metadata for each page
+/**
+ * Generate dynamic metadata for each blog roll page.
+ *
+ * By typing params as BlogRollParams, we can safely access the roll value.
+ */
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ roll: string }>;
+  params: BlogRollParams;
 }): Promise<Metadata> {
-  const p = await params;
   const allPosts = await getSortedPostsData();
   const size = configuration.rollSize;
-  const currentPage = parseInt(p.roll, 10);
+  const currentPage = parseInt(params.roll, 10);
   const totalPages = Math.ceil(allPosts.length / size);
 
   return {
@@ -41,10 +58,16 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * The blog roll page component.
+ *
+ * We now type the `params` prop using BlogRollParams to ensure
+ * consistent and clear type usage.
+ */
 export default async function BlogRollPage({
   params,
 }: {
-  params: { roll: string };
+  params: BlogRollParams;
 }) {
   const allPosts = await getSortedPostsData();
   const size = configuration.rollSize;
@@ -61,7 +84,7 @@ export default async function BlogRollPage({
   };
 
   return (
-    <div className={'bg-base-200 py-10'}>
+    <div className="bg-base-200 py-10">
       <BlogRoll pageContext={rollContext} />
     </div>
   );

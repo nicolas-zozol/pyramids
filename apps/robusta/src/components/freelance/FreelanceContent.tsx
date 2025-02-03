@@ -3,8 +3,18 @@ import { PortfolioPreview } from '@/components/freelance/portfolio/PortfolioPrev
 import { WebResume } from '@/components/freelance/resume/WebResume';
 import { SocialProof } from '@/components/freelance/social/SocialProof';
 import { Skills } from '@/components/freelance/social/Skills';
+import { FeaturedPosts } from '@/components/blog/Featured';
+import { Post } from '@/logic/posts';
+import { FC } from 'react';
+import { EmptyLine } from '@robusta/pyramids-layouts';
 
-export const FreelanceContent = () => {
+interface FreelanceContentProps {
+  featured: Post[];
+}
+
+export const FreelanceContent: FC<FreelanceContentProps> = ({ featured }) => {
+  // TODO: add some suspense stuff while post are loading
+
   return (
     <div>
       <div
@@ -17,6 +27,8 @@ export const FreelanceContent = () => {
         <Skills />
         <PortfolioPreview />
         <WebResume className={'hidden md:block'} />
+        <FeaturedPosts posts={featured}></FeaturedPosts>
+        <EmptyLine />
       </main>
     </div>
   );
