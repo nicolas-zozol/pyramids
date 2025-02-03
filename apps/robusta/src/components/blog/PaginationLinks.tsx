@@ -7,56 +7,77 @@ type Props = {
 };
 
 export const PaginationLinks = ({ currentPage, numberOfPages }: Props) => {
+  // CSS classes for different states:
+  const disabledLinkClasses =
+    'text-light-grey m-2 p-2 px-4 font-normal opacity-50';
+  const activeLinkClasses =
+    'text-primary hover:opacity-80 m-2 p-2 px-4 font-bold';
+  const currentPageClasses =
+    'text-light-grey border-primary m-2 rounded border-2 p-2 px-4 font-normal';
+
+  // Determine if we're on the first or last page
   const isFirst = currentPage === 1;
   const isLast = currentPage === numberOfPages;
+
+  // Calculate the URL for the previous page.
+  // Note: if the previous page is the first page, we use '/blog'
   const previousPage =
-    currentPage - 1 === 1
-      ? '/blog'
-      : '/blog/page/' + (currentPage - 1).toString();
-  const nextPage = '/blog/page/' + (currentPage + 1).toString();
+    currentPage - 1 === 1 ? '/blog' : `/blog/page/${currentPage - 1}`;
+
+  // Calculate the URL for the next page.
+  const nextPage = `/blog/page/${currentPage + 1}`;
 
   return (
     <div className="mt-8">
+      {/**
+       * Previous Link:
+       * - If on the first page, display a non-clickable (disabled) element.
+       * - Otherwise, render a clickable link to the previous page.
+       */}
       {isFirst ? (
-        <span className="text-light-grey m-2.5 p-2.5 font-normal">
-          previous
-        </span>
+        <span className={disabledLinkClasses}>previous</span>
       ) : (
-        <SimpleLink
-          href={previousPage}
-          className="text-dark-blue hover:text-gold m-2.5 p-2.5 font-bold"
-        >
+        <SimpleLink href={previousPage} className={activeLinkClasses}>
           previous
         </SimpleLink>
       )}
 
-      {Array.from({ length: numberOfPages }, (_, i) =>
-        currentPage === i + 1 ? (
-          <span
-            key={i}
-            className="text-light-grey m-2.5 border-[1px] border-purple-500 p-2.5 font-normal"
-          >
-            {i + 1}
+      {/**
+       * Page Number Links:
+       * - For each page, we render an element:
+       *   - If it's the current page, show it as disabled (non-clickable) with a border.
+       *   - Otherwise, render a clickable link to that page.
+       * - For page 1, we use the URL '/blog' instead of '/blog/page/1'.
+       */}
+      {Array.from({ length: numberOfPages }, (_, i) => {
+        const page = i + 1;
+        const isCurrent = page === currentPage;
+        const href = page === 1 ? '/blog' : `/blog/page/${page}`;
+
+        return isCurrent ? (
+          <span key={page} className={currentPageClasses}>
+            {page}
           </span>
         ) : (
-          <span key={i}>
-            <SimpleLink
-              href={`${i === 0 ? '/blog' : '/blog/page/' + (i + 1)}`}
-              className="text-dark-blue hover:text-gold m-2.5 p-2.5 font-bold"
-            >
-              {i + 1}
+          <span key={page}>
+            <SimpleLink href={href} className={activeLinkClasses}>
+              {page}
             </SimpleLink>
           </span>
-        ),
-      )}
+        );
+      })}
 
+      {/**
+       * Next Link:
+       * - If on the last page, display a non-clickable (disabled) element.
+       * - Otherwise, render a clickable link to the next page.
+       * - Here we use Next.js’s Link with legacyBehavior.
+       */}
       {isLast ? (
-        <span className="text-light-grey m-2.5 p-2.5 font-normal">next</span>
+        <span className={disabledLinkClasses}>next</span>
       ) : (
-        <Link href={nextPage} legacyBehavior={true}>
-          <a className="text-dark-blue hover:text-gold m-2.5 p-2.5 font-bold">
-            next
-          </a>
+        <Link href={nextPage} legacyBehavior>
+          <a className={activeLinkClasses}>next</a>
         </Link>
       )}
     </div>
