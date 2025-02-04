@@ -9,9 +9,9 @@ interface WebResumeProps {
 export const WebResume: FC<WebResumeProps> = ({ className }) => {
   const classes = twCss('', className);
   return (
-    <div className={classes}>
+    <section className={classes}>
       {/* Web Section */}
-      <section className="show-cv-web">
+      <div className="show-cv-web">
         <H2Title>Curriculum Vitae</H2Title>
         <TimeDiffered time={300}>
           <iframe
@@ -21,7 +21,7 @@ export const WebResume: FC<WebResumeProps> = ({ className }) => {
             className={'border-inset border-2 border-gray-400 p-4'}
           ></iframe>
         </TimeDiffered>
-      </section>
+      </div>
 
       {/* PDF Section */}
       <section className="show-cv-pdf my-10 flex flex-wrap gap-16">
@@ -43,6 +43,6 @@ export const WebResume: FC<WebResumeProps> = ({ className }) => {
           Download Nicolas's Portfolio
         </a>
       </section>
-    </div>
+    </section>
   );
 };

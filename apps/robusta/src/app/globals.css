@@ -19,6 +19,13 @@
   --my-base-content: oklch(var(--bc));
 }
 
+@layer base {
+  :root {
+    --font-alt: 'Roboto Slab', serif;
+    --font-code: 'Roboto Mono', monospace;
+  }
+}
+
 @layer utilities {
   .little-bar::after {
     content: '';

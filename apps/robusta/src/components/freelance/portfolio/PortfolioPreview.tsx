@@ -16,7 +16,7 @@ interface PortfolioPreviewProps {
 export const PortfolioPreview: React.FC<PortfolioPreviewProps> = ({
   className,
 }) => {
-  const classes = twCss('my-20', className);
+  const classes = twCss('', className);
 
   return (
     <section className={classes}>

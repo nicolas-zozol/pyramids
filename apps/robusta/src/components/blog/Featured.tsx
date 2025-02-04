@@ -4,11 +4,12 @@ import { H2Title } from '../title/H2Title';
 
 type FeaturedPostProps = {
   posts: Post[];
+  className?: string;
 };
 
-export const FeaturedPosts = ({ posts }: FeaturedPostProps) => {
+export const FeaturedPosts = ({ posts, className }: FeaturedPostProps) => {
   return (
-    <>
+    <section className={className}>
       <H2Title>Recent articles</H2Title>
 
       <div className={'flex flex-wrap justify-between'}>
@@ -16,6 +17,6 @@ export const FeaturedPosts = ({ posts }: FeaturedPostProps) => {
           <PostCard key={post.slug} post={post} />
         ))}
       </div>
-    </>
+    </section>
   );
 };

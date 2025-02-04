@@ -12,7 +12,7 @@ const SkillCategory: FC<SkillCategoryProps> = ({ title, skills }) => {
   return (
     <div className="mt-4 flex flex-col lg:w-1/3">
       <div className="text-xl font-bold leading-8">{title}</div>
-      <ul className="list-none pl-4 text-base">
+      <ul className="border-primary/50 mt-4 list-none border-l pl-4 text-base">
         {skills.map((skill, idx) => (
           <li key={idx}>{skill}</li>
         ))}
@@ -73,7 +73,7 @@ export const Skills: FC<{}> = () => {
   }, [isVisible]);
 
   return (
-    <div className={'my-20'}>
+    <section className={'my-20'}>
       <H2Title>Skills</H2Title>
 
       <div
@@ -90,6 +90,6 @@ export const Skills: FC<{}> = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

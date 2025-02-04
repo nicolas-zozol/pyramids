@@ -25,10 +25,9 @@ export const FreelanceContent: FC<FreelanceContentProps> = ({ featured }) => {
       <main className="main-container">
         <SocialProof />
         <Skills />
-        <PortfolioPreview />
-        <WebResume className={'hidden md:block'} />
-        <FeaturedPosts posts={featured}></FeaturedPosts>
-        <EmptyLine />
+        <PortfolioPreview className="my-20" />
+        <WebResume className={'my-20 hidden md:block'} />
+        <FeaturedPosts posts={featured} className="my-20"></FeaturedPosts>
       </main>
     </div>
   );

@@ -8,10 +8,12 @@ h2 {
 
 h3 {
   font-size: 18px;
+  font-weight: bold;
 }
 
 h4 {
   font-size: 16px;
+  font-weight: bold;
 }
 
 ul {
@@ -72,4 +74,37 @@ $text-container-width: 670px;
 
 a:active {
   color: var(--my-secondary) !important;
+}
+
+section {
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+p {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+pre code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+}
+
+code:not([class*='language-']) {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #efefef;
+  border: thin solid lightgrey;
+  border-radius: 5px;
+  word-break: break-word;
+  padding: 1px 4px;
+  font-size: 0.75rem;
 }
