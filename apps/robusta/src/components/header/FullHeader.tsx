@@ -39,8 +39,8 @@ export const FullHeader: FC<Props> = ({ showHomePageLink, invertBar }) => {
         </div>
         <div className="justify-self-end">
           <span>
-            <TitleLink className={'text-primary'} href="/blog">
-              BLOG
+            <TitleLink className={'text-primary'} href="/learn">
+              LEARN
             </TitleLink>
           </span>
         </div>

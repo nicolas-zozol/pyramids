@@ -1,5 +1,5 @@
 import { Post } from './posts';
-import { configuration } from '@/logic/configuration';
+import { seoPyramidsConfig } from '@/seopyramids.config';
 
 export type Slug = string;
 export type Url = string; // without the domain !
@@ -17,12 +17,12 @@ export function path(paths: string[]) {
 export function getPostUrl(post: Post): string {
   if (oldUrlMap.has(post.slug)) {
     return path([
-      configuration.site,
+      seoPyramidsConfig.site,
       'blog',
       post.category,
       oldUrlMap.get(post.slug)!,
     ]);
   } else {
-    return path([configuration.site, 'blog', post.category, post.slug]);
+    return path([seoPyramidsConfig.site, 'blog', post.category, post.slug]);
   }
 }

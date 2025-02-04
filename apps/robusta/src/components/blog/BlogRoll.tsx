@@ -6,8 +6,17 @@ type RollProps = {
   pageContext: RollContext;
 };
 export const BlogRoll = ({ pageContext }: RollProps) => {
-  const blogHome = pageContext.currentPage === 1;
   const { currentPage, roll, numberOfPages } = pageContext;
+
+  if (roll.length === 0) {
+    return (
+      <div className={'text-center'}>
+        <h2 className={'text-neutral/80 mt-10 p-40 text-3xl'}>
+          No posts found on this subject
+        </h2>
+      </div>
+    );
+  }
 
   return (
     <article className={'main-container'}>

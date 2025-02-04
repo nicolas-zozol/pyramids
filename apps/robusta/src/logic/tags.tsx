@@ -40,3 +40,12 @@ export function getValuableTags(posts: Post[]) {
 export function getPostsByTag(tag: Tag, allPosts: Post[]) {
   return allPosts.filter((p) => p.tags.includes(tag));
 }
+
+export function getPostsByCategory(categoryPath: string, allPosts: Post[]) {
+  const categories = categoryPath.split('/');
+
+  return allPosts.filter((p) => {
+    const postCategories = p.category.split('/');
+    return categories.some((c) => postCategories.includes(c));
+  });
+}

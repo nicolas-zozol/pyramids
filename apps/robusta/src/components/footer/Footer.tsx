@@ -14,6 +14,7 @@ export const Footer: FC<FooterProps> = ({ currentPage, className }) => {
   const isAbout = currentPage === PAGES.ABOUT;
   const isPortfolio = currentPage === PAGES.PORTFOLIO_PAGE;
   const isProse = currentPage === PAGES.PROSE_MIRROR;
+  const isBlogHome = currentPage === PAGES.BLOG_HOME;
 
   const classes = twCss('flex flex-col', className);
   return (
@@ -34,6 +35,11 @@ export const Footer: FC<FooterProps> = ({ currentPage, className }) => {
           {!isPortfolio && (
             <li className="px-[30px]">
               <NeutralLink href="/portfolio">Portfolio</NeutralLink>
+            </li>
+          )}
+          {!isBlogHome && (
+            <li className="px-[30px]">
+              <NeutralLink href="/learn">Learn</NeutralLink>
             </li>
           )}
 

@@ -1,5 +1,5 @@
 import { getSortedPostsData } from '@/logic/posts';
-import { configuration } from '@/logic/configuration';
+import { seoPyramidsConfig } from '@/seopyramids.config';
 import { BlogRoll } from '@/components/blog/blog-roll';
 import type { Metadata } from 'next';
 import { setRouterPath } from '@robusta/pyramids-helpers';
@@ -26,7 +26,7 @@ export type BlogRollParams = {
  */
 export async function generateStaticParams(): Promise<BlogRollParams[]> {
   const allPosts = await getSortedPostsData();
-  const size = configuration.rollSize;
+  const size = seoPyramidsConfig.rollSize;
   const numberOfPages = Math.ceil(allPosts.length / size);
 
   const paths: BlogRollParams[] = [];
@@ -48,13 +48,13 @@ export async function generateMetadata({
   params: BlogRollParams;
 }): Promise<Metadata> {
   const allPosts = await getSortedPostsData();
-  const size = configuration.rollSize;
+  const size = seoPyramidsConfig.rollSize;
   const currentPage = parseInt(params.roll, 10);
   const totalPages = Math.ceil(allPosts.length / size);
 
   return {
-    title: `Blog - Page ${currentPage} of ${totalPages}`,
-    description: `Explore blog posts on page ${currentPage} of ${totalPages}.`,
+    title: `Learn - Page ${currentPage} of ${totalPages}`,
+    description: `Explore posts on page ${currentPage} of ${totalPages}.`,
   };
 }
 
@@ -70,7 +70,7 @@ export default async function BlogRollPage({
   params: BlogRollParams;
 }) {
   const allPosts = await getSortedPostsData();
-  const size = configuration.rollSize;
+  const size = seoPyramidsConfig.rollSize;
 
   const currentPage = parseInt(params.roll, 10);
   const start = size * (currentPage - 1);

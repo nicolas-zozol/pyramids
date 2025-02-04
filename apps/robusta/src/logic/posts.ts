@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { slugify } from './slugify';
+import { seoPyramidsConfig } from '@/seopyramids.config';
 
 // TODO: some or all are mandatory
 // frontMatter should have not mandatories, and we should create post from frontmatter
@@ -47,6 +48,28 @@ export interface RollContext {
   numberOfPages: number;
   rollSize: number;
   roll: Post[];
+}
+
+export function getRollContext(
+  posts: Post[],
+  currentPage: number,
+): RollContext {
+  if (currentPage < 1) {
+    throw 'currentPage starts at 1';
+  }
+
+  const rollSize = seoPyramidsConfig.rollSize;
+  const start = (currentPage - 1) * rollSize;
+  const end = start + rollSize;
+  const roll = posts.slice(start, end);
+  const numberOfPages = Math.ceil(posts.length / rollSize);
+
+  return {
+    currentPage,
+    roll,
+    numberOfPages,
+    rollSize,
+  };
 }
 
 export interface PostMetaData {

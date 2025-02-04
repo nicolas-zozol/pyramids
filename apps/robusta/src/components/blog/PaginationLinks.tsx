@@ -22,7 +22,7 @@ export const PaginationLinks = ({ currentPage, numberOfPages }: Props) => {
   // Calculate the URL for the previous page.
   // Note: if the previous page is the first page, we use '/blog'
   const previousPage =
-    currentPage - 1 === 1 ? '/blog' : `/blog/page/${currentPage - 1}`;
+    currentPage - 1 === 1 ? '/learn' : `/learn/page/${currentPage - 1}`;
 
   // Calculate the URL for the next page.
   const nextPage = `/blog/page/${currentPage + 1}`;
@@ -47,12 +47,12 @@ export const PaginationLinks = ({ currentPage, numberOfPages }: Props) => {
        * - For each page, we render an element:
        *   - If it's the current page, show it as disabled (non-clickable) with a border.
        *   - Otherwise, render a clickable link to that page.
-       * - For page 1, we use the URL '/blog' instead of '/blog/page/1'.
+       * - For page 1, we use the URL '/learn' instead of '/learn/page/1'.
        */}
       {Array.from({ length: numberOfPages }, (_, i) => {
         const page = i + 1;
         const isCurrent = page === currentPage;
-        const href = page === 1 ? '/blog' : `/blog/page/${page}`;
+        const href = page === 1 ? '/learn' : `/learn/page/${page}`;
 
         return isCurrent ? (
           <span key={page} className={currentPageClasses}>

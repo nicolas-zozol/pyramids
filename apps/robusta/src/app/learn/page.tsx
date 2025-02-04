@@ -1,7 +1,6 @@
-import { getSortedPostsData } from '@/logic/posts';
-import { configuration } from '@/logic/configuration';
+import { getRollContext, getSortedPostsData } from '@/logic/posts';
 import type { Metadata } from 'next';
-import { BlogRoll } from '@/components/blog/blog-roll';
+import { BlogRoll } from '@/components/blog/BlogRoll';
 import { setRouterPath } from '@robusta/pyramids-helpers';
 import { AppRouterPage, PAGES } from '@/app/router';
 
@@ -22,14 +21,8 @@ export const revalidate = 300;
 
 export default async function BlogPage() {
   const posts = await getSortedPostsData();
-  const size = configuration.rollSize;
 
-  const rollContext = {
-    currentPage: 1,
-    rollSize: size,
-    numberOfPages: Math.ceil(posts.length / size),
-    roll: posts.slice(0, size),
-  };
+  const rollContext = getRollContext(posts, 1);
 
   return (
     <div className={'bg-base-200 py-10'}>
