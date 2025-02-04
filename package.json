@@ -3,9 +3,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build:deps": "yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-ctas run build",
+    "build:deps": "yarn workspace @robusta/pyramids-helpers run build && yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-links run build && yarn workspace @robusta/pyramids-ctas run build",
     "build:dakar": "yarn build:deps && yarn workspace @robusta/dakar run build",
+    "build:robusta": "yarn build:deps && yarn workspace @robusta/build run build",
     "dev:dakar": "yarn workspace @robusta/dakar run dev",
+    "dev:robusta": "yarn workspace @robusta/build run dev",
     "yarn:install": "yarn install",
     "clean": "npx rimraf packages/*/dist && rimraf node_modules",
     "clean:install": "yarn clean && yarn install",
@@ -13,8 +15,10 @@
     "w:themes": "yarn workspace @robusta/pyramids-themes run watch",
     "w:layouts": "yarn workspace @robusta/pyramids-layouts run watch",
     "w:ctas": "yarn workspace @robusta/pyramids-ctas run watch",
+    "w:links": "yarn workspace @robusta/pyramids-links run watch",
+    "w:helpers": "yarn workspace @robusta/pyramids-helpers run watch",
     "w:deps": "yarn w:themes && yarn w:layouts && yarn w:ctas",
-    "dev:dev": "concurrently \"yarn w:themes\" \"yarn w:layouts\" \"yarn w:ctas\"  \"yarn dev:dakar\""
+    "dev:dev": "concurrently \"yarn w:links\" \"yarn w:layouts\" \"yarn w:ctas\" \"yarn w:helpers\"  \"yarn dev:robusta\""
   },
   "workspaces": [
     "apps/*",
@@ -35,6 +39,7 @@
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "eslint-config-next": "15.0.3",
-    "daisyui": "^4.12.14"
+    "daisyui": "^4.12.14",
+    "prettier-plugin-tailwindcss": "^0.6.11"
   }
 }
