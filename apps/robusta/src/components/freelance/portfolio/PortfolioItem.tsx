@@ -19,7 +19,7 @@ export const PortfolioItem = ({
 
   return (
     <article className={classes}>
-      {title && <h2 className="mb-4">{title}</h2>}
+      {title && <h2>{title}</h2>}
 
       <div className="flex flex-wrap gap-8">
         {images.map((img, idx) => (

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { AppRouterPage, PAGES } from '@/app/router';
-import { NeutralLink, SimpleLink } from '@robusta/pyramids-links';
+import { NeutralLink } from '@robusta/pyramids-links';
 import { twCss } from '@robusta/pyramids-helpers';
 import { EmptyLine } from '@robusta/pyramids-layouts';
 
