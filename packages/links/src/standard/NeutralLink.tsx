@@ -10,7 +10,8 @@ export const NeutralLink: React.FC<SimpleLinkProps> = ({
 }) => {
   href = href || '';
 
-  const basicClass = 'link link-hover text-neutral-content';
+  const basicClass =
+    'link link-hover text-dark-500 hover:text-dark-700 underline hover:no-underline';
   const classNames = twCss(basicClass, className);
 
   return (

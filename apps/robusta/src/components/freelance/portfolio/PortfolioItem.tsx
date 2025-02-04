@@ -9,7 +9,7 @@ interface Props {
   className?: string;
 }
 
-export const PortfolioCollection = ({
+export const PortfolioItem = ({
   images,
   title,
   children,

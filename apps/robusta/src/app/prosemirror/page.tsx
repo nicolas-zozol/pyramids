@@ -1,12 +1,8 @@
 import type { Metadata } from 'next';
-import { setRouterPath } from '@robusta/pyramids-helpers';
-import { AppRouterPage, PAGES } from '@/app/router';
 import { ProseMirrorEditorAutocomplete } from '@/components/prosemirror/autocomplete/ProseMirrorEditorAutocomplete';
 import './pm.css';
 import './prosemirror-page.scss';
 import { PageLinkNavigator } from '@robusta/pyramids-links';
-
-setRouterPath<AppRouterPage>(PAGES.PROSE_MIRROR);
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

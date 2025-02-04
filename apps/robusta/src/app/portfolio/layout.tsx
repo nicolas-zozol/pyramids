@@ -5,13 +5,13 @@ import { getRouterPath, setRouterPath } from '@robusta/pyramids-helpers';
 import { AppRouterPage, PAGES } from '@/app/router';
 
 export const metadata: Metadata = {
-  title: 'Robusta Build: ProseMirror demonstration',
-  description: 'ProseMirror is a powerful tool for building rich text editors',
+  title: 'Robusta Build Portfolio',
+  description: 'More than 20 years of experience in software development',
 };
 
-setRouterPath<AppRouterPage>(PAGES.PROSE_MIRROR);
+setRouterPath<AppRouterPage>(PAGES.PORTFOLIO_PAGE);
 
-export default function ProseMirrorLayout({
+export default function StandardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

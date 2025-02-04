@@ -28,7 +28,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         </div>
         <div className={'absolute bottom-[20px] w-full'}>
           <div className={'mr-8 flex justify-end'}>
-            <button className={'btn btn-secondary'}>Read More</button>
+            <span className={'btn btn-secondary'}>Read More</span>
           </div>
         </div>
       </SimpleCardComponent>
