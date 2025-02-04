@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --my-primary: oklch(var(--p));
+  --my-primary-content: oklch(var(--pc));
+  --my-secondary: oklch(var(--s));
+  --my-secondary-content: oklch(var(--sc));
+  --my-neutral: oklch(var(--n));
+  --my-neutral-content: oklch(var(--nc));
+
+  --my-accent: oklch(var(--a));
+  --my-accent-content: oklch(var(--ac));
+
+  --my-base100: oklch(var(--b1));
+  --my-base200: oklch(var(--b2));
+  --my-base300: oklch(var(--b3));
+  --my-base-content: oklch(var(--bc));
+}
+
+@layer base {
+  :root {
+    --font-alt: 'Roboto Slab', serif;
+    --font-code: 'Roboto Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .little-bar::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 2px;
+    background-color: var(--my-secondary);
+    margin: 20px 0;
+  }
+
+  .little-bar-primary::after {
+    background-color: var(--my-primary);
+  }
+
+  .little-bar-accent::after {
+    background-color: var(--my-accent);
+  }
+
+  .little-bar-neutral::after {
+    background-color: var(--my-neutral);
+  }
+}

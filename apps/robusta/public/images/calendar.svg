@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #67407f;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="calendar.png8_calendar.svg" data-name="calendar.png8, calendar.svg" class="cls-1" d="M416.747,438H418v3.75h-1.251V438Zm10,0H428v3.75h-1.25V438Zm-5.5,17.5h-7v-10H430.5v0.75a4.489,4.489,0,0,1,1.25.875v-7.874h-2.5V443H425.5v-3.749h-6.252V443H415.5v-3.749H413v17.5h9.128A4.484,4.484,0,0,1,421.249,455.5ZM430.5,453h-3.751v-3.749H428v2.5h2.5V453Zm-3.126-5A4.374,4.374,0,1,1,423,452.371,4.428,4.428,0,0,1,427.376,448Zm0-1.25A5.624,5.624,0,1,0,433,452.371a5.6,5.6,0,0,0-5.627-5.624h0Z" transform="translate(-413 -438)"/>
+</svg>

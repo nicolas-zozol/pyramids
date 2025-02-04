@@ -1,0 +1,52 @@
+@media print {
+  @page {
+    size: A4;
+    /*  margin: 5mm;*/
+  }
+
+  body {
+  }
+
+  h2 {
+    font-size: 2.4rem;
+  }
+
+  div.cv-page {
+    margin: 0 auto;
+  }
+
+  /* Ensures each project gets individual layout treatment */
+  .project {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  aside section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .project,
+  .item {
+    margin: 10px 0 20px;
+  }
+
+  .project p,
+  .project ul,
+  .skill-list {
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+  }
+
+  /* Page jump after 5 projects */
+  hr.jump {
+    page-break-after: always;
+    height: 0;
+    visibility: hidden;
+  }
+
+  aside h3 {
+    margin-top: 10px;
+    line-height: 1.8rem;
+  }
+}

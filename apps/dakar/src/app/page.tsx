@@ -1,7 +1,7 @@
-import { HeroSectionWithHeader } from './components/hero/HeroSectionWithHeader';
-import { HowToMove } from './components/move/HowtoMove';
-import { PlacesToStay } from './components/places/PlacesSection';
-import { AllSpots } from './components/spots/AllSpots';
+import { HeroSectionWithHeader } from '@/components/hero/HeroSectionWithHeader';
+import { HowToMove } from '@/components/move/HowtoMove';
+import { PlacesToStay } from '@/components/places/PlacesSection';
+import { AllSpots } from '@/components/spots/AllSpots';
 
 export default function Home() {
   return (

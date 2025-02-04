@@ -1,9 +1,11 @@
 import { dakarTheme } from './dakar-theme';
 import { robustaTheme } from './robusta-theme';
-import { SiteTheme, standardTheme } from './standard';
+import { PyramidsTheme, standardPyramidsTheme } from './standard';
 
-export function getTheme(site: 'standard' | 'dakar' | 'robusta'): SiteTheme {
-  const baseTheme = standardTheme;
+export function getTheme(
+  site: 'standard' | 'dakar' | 'robusta',
+): PyramidsTheme {
+  const baseTheme = standardPyramidsTheme;
   const siteOverrides =
     site === 'dakar' ? dakarTheme : site === 'robusta' ? robustaTheme : {};
   return {

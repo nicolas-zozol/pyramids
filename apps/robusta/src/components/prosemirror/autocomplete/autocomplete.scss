@@ -1,0 +1,72 @@
+.autocomplete-root {
+  max-width: 600px;
+}
+
+#editor-autocomplete {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  min-height: 180px;
+
+  .autocomplete-box {
+    border: 1px solid #aaa;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    max-height: 150px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+  }
+
+  .autocomplete-box::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar for Chrome, Edge, and Safari */
+  }
+
+  .autocomplete-box::-webkit-scrollbar-thumb {
+    //background-color: #ccc; /* Customize scrollbar thumb color */
+    border-radius: 4px; /* Round scrollbar thumb corners */
+  }
+
+  .suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  .suggestion-item.active {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .continue-item {
+    padding: 2px;
+    font-style: italic;
+  }
+
+  span.temporary {
+    border-radius: 3px;
+    padding: 3px;
+    color: grey;
+    font-style: italic;
+  }
+}
+
+span.mention,
+span.hashtag,
+span.flow {
+  padding: 3px;
+  color: white;
+  border-radius: 5px;
+  margin: 0 2px;
+}
+span.mention {
+  background-color: rgba(111, 168, 221, 0.78);
+}
+span.hashtag {
+  background-color: rgba(166, 221, 111, 0.78);
+}
+
+span.flow {
+  background-color: rgba(181, 41, 238, 0.5);
+  font-style: italic;
+}

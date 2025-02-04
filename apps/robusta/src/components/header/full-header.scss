@@ -1,0 +1,36 @@
+#full-header {
+  nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+
+  .start {
+    display: flex;
+    gap: 20px;
+
+    //noinspection CssInvalidFunction
+    @media (screen(tab)) {
+      display: none;
+    }
+  }
+
+  .end {
+    display: flex;
+    gap: 20px;
+  }
+
+  .logo {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Roboto Slab', serif;
+    font-size: 36px;
+
+    .emojis {
+      font-size: 46px;
+    }
+  }
+}

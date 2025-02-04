@@ -1,9 +1,9 @@
-import { colors } from '../colors';
-import { SiteTheme, standardTheme } from './standard';
+import { pyramidsColors } from '../colors';
+import { PyramidsTheme, standardPyramidsTheme } from './standard';
 
-export const robustaTheme: Partial<SiteTheme> = {
+export const robustaTheme: Partial<PyramidsTheme> = {
   background: {
-    ...standardTheme.background,
-    body: colors.almostWhite,
+    ...standardPyramidsTheme.background,
+    body: pyramidsColors.almostWhite,
   },
 };
