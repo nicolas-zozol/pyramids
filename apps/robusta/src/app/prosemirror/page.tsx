@@ -16,22 +16,39 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const revalidate = 3000;
+export const revalidate = 300;
 
 export default function Home() {
   const pages = [
-    { name: 'Suggest Box', href: '/prosemirror' },
-    { name: 'Telegram', href: '/prosemirror/telegram' },
-    { name: 'Minimal', href: '/prosemirror/minimal' },
+    { name: 'Suggest Box example', href: '/prosemirror' },
+    { name: 'Telegram plugin', href: '/prosemirror/telegram' },
+    { name: 'Minimal with React', href: '/prosemirror/minimal' },
   ];
 
   return (
     <main className={'blog-container'} id={'prose-mirror-page'}>
-      <h3>ProseMirror demonstration: IdeaFlow & Suggest Box</h3>
-      <section className={'mt-2'}>
-        <PageLinkNavigator pages={pages} currentPathName={'/prosemirror'} />
+      <section className={'my-6'}>
+        <PageLinkNavigator
+          pages={pages}
+          currentPathName={'/prosemirror'}
+          className={'bg-secondary flex justify-around rounded-2xl p-4'}
+        />
       </section>
-      <section className={'mt-6'}>
+      <section className={'my-6'}>
+        <h1 className={'font-alt'}>ProseMirror Editor examples</h1>
+        <p className={'my-4'}>
+          ProseMirror is an open-source toolkit for building customizable,
+          feature-rich text editors.
+        </p>
+        <p className={'my-4'}>
+          A good example of ProseMirror design, is that they are not built on
+          listening events, but on <b>commands dispatching</b>. If you consider
+          the DOM as the source, then it's a <b>CQRS</b> implementation, similar
+          to redux or blockchains approaches.
+        </p>
+      </section>
+
+      <section className={'my-6'}>
         <p>
           Type <code>@</code> to select a{' '}
           <span className={'mention'}>@User</span> : unmatched user will close
@@ -51,7 +68,7 @@ export default function Home() {
           choice, <code>ESCAPE</code> to cancel it.
         </p>
       </section>
-      <section className={'mt-6'}>
+      <section className={'my-6'}>
         <ProseMirrorEditorAutocomplete />
       </section>
     </main>

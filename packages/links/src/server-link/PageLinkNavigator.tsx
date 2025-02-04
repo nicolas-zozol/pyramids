@@ -1,17 +1,21 @@
 import React from 'react';
 import { PageLink } from '../standard';
+import { twCss } from '@robusta/pyramids-helpers';
 
 interface PageLinkNavigatorProps {
   pages: { name: string; href: string }[];
   currentPathName: string;
+
+  className?: string;
 }
 
 export const PageLinkNavigator = ({
   pages,
   currentPathName,
+  className = '',
 }: PageLinkNavigatorProps) => {
   return (
-    <div className="flex space-x-4">
+    <div className={twCss('flex space-x-4', className)}>
       {pages.map(({ name, href }) => (
         <PageLink
           key={href}

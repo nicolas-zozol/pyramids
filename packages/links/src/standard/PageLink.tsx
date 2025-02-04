@@ -11,9 +11,9 @@ export const PageLink = ({ name, href, active }: PageLinkProps) => {
   return (
     <div>
       {active ? (
-        <span className="link link-neutral">{name}</span>
+        <span className="text-primary font-bold">{name}</span>
       ) : (
-        <Link href={href} className="link link-primary">
+        <Link href={href} className="link link-neutral">
           {name}
         </Link>
       )}

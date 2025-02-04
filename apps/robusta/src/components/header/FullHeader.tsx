@@ -4,7 +4,7 @@ import Link from 'next/link';
 // TODO: not the right image
 import './full-header.scss';
 import { SimpleLink } from '@robusta/pyramids-links';
-import { showBool, twCss } from '@robusta/pyramids-helpers';
+import { twCss } from '@robusta/pyramids-helpers';
 
 interface Props {
   showHomePageLink: boolean;
@@ -22,20 +22,19 @@ export const FullHeader: FC<Props> = ({ showHomePageLink, invertBar }) => {
 
         <div className={'tab:hidden flex justify-start gap-8'}>
           <span>
-            <TitleLink href={''}>CLEAN CODE</TitleLink>
+            <FakeLink>CLEAN CODE</FakeLink>
           </span>
           <span>
-            <TitleLink href={''}>WEB</TitleLink>
+            <FakeLink>WEB</FakeLink>
           </span>
           <span>
-            <TitleLink href={''}>BLOCKCHAIN</TitleLink>
+            <FakeLink>BLOCKCHAIN</FakeLink>
           </span>
           <span>
-            <TitleLink href={''}>SOLIDITY</TitleLink>
+            <FakeLink>ETHERS.js</FakeLink>
           </span>
-
           <span>
-            <TitleLink href={''}>ETHERS.js</TitleLink>
+            <TitleLink href={'/prosemirror'}>PROSE MIRROR</TitleLink>
           </span>
         </div>
         <div className="justify-self-end">
@@ -76,12 +75,20 @@ interface TitleLinkProps {
 }
 const TitleLink = ({ children, href, className }: TitleLinkProps) => {
   const classes = twCss(
-    'font-bold uppercase text-neutral-700 no-underline ',
+    'font-bold uppercase text-primary no-underline hover:underline',
     className,
   );
   return (
     <SimpleLink href={href} className={classes}>
       {children}
     </SimpleLink>
+  );
+};
+
+const FakeLink = ({ children }: { children: string }) => {
+  return (
+    <span className={'font-bold uppercase text-neutral-700 no-underline'}>
+      {children}
+    </span>
   );
 };

@@ -17,7 +17,7 @@ export default function ProseMirrorLayout({
   return (
     <>
       <FullHeader showHomePageLink={true} invertBar={true}></FullHeader>
-      <div className={'min-h-[400px]'}>{children}</div>
+      <div className={'my-10 min-h-[400px]'}>{children}</div>
       <Footer currentPage={getRouterPath<AppRouterPage>()}></Footer>
     </>
   );

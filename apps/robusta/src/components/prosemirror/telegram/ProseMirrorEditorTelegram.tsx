@@ -1,19 +1,23 @@
-'use client'
-import { useEffect, useRef } from 'react'
-import { createProseEditorTelegram } from './create-prose-editor-telegram'
-import './telegram.scss'
+'use client';
+import { useEffect, useRef } from 'react';
+import { createProseEditorTelegram } from './create-prose-editor-telegram';
+import './telegram.scss';
 
 export const ProseMirrorEditorTelegram = () => {
-  const editorRef = useRef(null)
+  const editorRef = useRef(null);
 
   useEffect(() => {
-    const editorItem = document.querySelector('#editor-telegram')!
-    const { view } = createProseEditorTelegram(editorItem)
+    const editorItem = document.querySelector('#editor-telegram')!;
+    const { view } = createProseEditorTelegram(editorItem);
+
+    setTimeout(() => {
+      view.focus();
+    }, 200);
 
     return () => {
-      view.destroy()
-    }
-  }, [])
+      view.destroy();
+    };
+  }, []);
 
   return (
     <div
@@ -21,5 +25,5 @@ export const ProseMirrorEditorTelegram = () => {
       ref={editorRef}
       className={'ProseMirror editor'}
     ></div>
-  )
-}
+  );
+};

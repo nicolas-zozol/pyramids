@@ -69,3 +69,7 @@ $text-container-width: 670px;
     margin-right: 10px;
   }
 }
+
+a:active {
+  color: var(--my-secondary) !important;
+}

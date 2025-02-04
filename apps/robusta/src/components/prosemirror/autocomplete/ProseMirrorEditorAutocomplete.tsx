@@ -1,21 +1,25 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { createProseEditorAutocomplete } from './create-prose-editor-autocomplete'
-import './autocomplete.scss'
+import { useEffect, useRef } from 'react';
+import { createProseEditorAutocomplete } from './create-prose-editor-autocomplete';
+import './autocomplete.scss';
 
 export const ProseMirrorEditorAutocomplete = () => {
-  const parentRef = useRef(null)
-  const editorRef = useRef(null)
+  const parentRef = useRef(null);
+  const editorRef = useRef(null);
 
   useEffect(() => {
-    const editorItem = document.querySelector('#editor-autocomplete')!
-    const { view } = createProseEditorAutocomplete(editorItem)
+    const editorItem = document.querySelector('#editor-autocomplete')!;
+    const { view } = createProseEditorAutocomplete(editorItem);
+
+    setTimeout(() => {
+      view.focus();
+    }, 200);
 
     return () => {
-      view.destroy()
-    }
-  }, [])
+      view.destroy();
+    };
+  }, []);
 
   return (
     <div ref={parentRef} className={'autocomplete-root'}>
@@ -25,5 +29,5 @@ export const ProseMirrorEditorAutocomplete = () => {
         className={'ProseMirror editor'}
       ></div>
     </div>
-  )
-}
+  );
+};
