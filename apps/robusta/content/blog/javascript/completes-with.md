@@ -1,7 +1,7 @@
 ---
 title: "Completing a RxJs Observable with another"
 tags: ["javascript", "rxjs", "back", "front"]
-lang: "en"
+locale: "en"
 date: "2021-05-23"
 image: ./images/stop.png
 category: javascript

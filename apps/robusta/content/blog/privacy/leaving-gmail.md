@@ -1,7 +1,7 @@
 ---
 title: "Leaving Gmail"
 tags: ["web", "tech"]
-lang: "en"
+locale: "en"
 date: "2019-05-24"
 image: ./images/gmail.png
 category: privacy

@@ -1,6 +1,6 @@
 import { Post, RollContext } from '@/logic/posts';
 import { PostCard } from './PostCard';
-import { PaginationLinks } from '@/components/blog/PaginationLinks';
+import { BlogPaginationLinks } from '@/components/blog/BlogPaginationLinks';
 
 type RollProps = {
   pageContext: RollContext;
@@ -26,7 +26,7 @@ export const BlogRoll = ({ pageContext }: RollProps) => {
         ))}
       </div>
       {numberOfPages > 1 && (
-        <PaginationLinks
+        <BlogPaginationLinks
           currentPage={currentPage}
           numberOfPages={numberOfPages}
         />

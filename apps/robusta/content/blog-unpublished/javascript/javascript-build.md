@@ -1,7 +1,7 @@
 ---
 title: "Javascript Build"
 tags: ["javascript", "hard", "back", "front"]
-lang: "fr"
+locale: "fr"
 date: "2018-05-07"
 image: ../images/javascript.jpg
 category: javascript

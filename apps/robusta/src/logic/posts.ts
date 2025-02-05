@@ -3,8 +3,7 @@ import * as path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { slugify } from './slugify';
-import { seoPyramidsConfig } from '@/seopyramids.config';
+import { immutableSlugify } from '@/logic/routing/slugify';
 
 // TODO: some or all are mandatory
 // frontMatter should have not mandatories, and we should create post from frontmatter
@@ -14,8 +13,8 @@ export interface PostFrontMatter {
   title: string;
   category: string;
   tags: string[];
-  lang: 'en' | 'fr';
-  image: string;
+  locale?: string;
+  image?: string;
   slug?: string;
   excerpt: string;
   author?: string;
@@ -25,22 +24,44 @@ export interface PostFrontMatter {
   keywords: string[];
 }
 
-export interface Post {
+export interface IPost {
   date: string;
   modified?: string;
   title: string;
   category: string;
   tags: string[];
-  lang: 'en' | 'fr';
-  image: string;
+  locale: string;
+  image?: string;
   slug: string;
   excerpt: string;
-  author: string;
+  author?: string;
   enVersion?: string;
   frVersion?: string;
   featured: boolean;
   content: string;
   keywords: string[];
+}
+
+export class Post implements IPost {
+  date!: string;
+  modified?: string;
+  title!: string;
+  category!: string;
+  tags!: string[];
+  locale!: string;
+  image!: string;
+  slug!: string;
+  excerpt!: string;
+  author?: string;
+  enVersion?: string;
+  frVersion?: string;
+  featured: boolean = false;
+  content!: string;
+  keywords: string[] = [];
+
+  constructor(p: IPost) {
+    Object.assign(this, p);
+  }
 }
 
 export interface RollContext {
@@ -52,13 +73,13 @@ export interface RollContext {
 
 export function getRollContext(
   posts: Post[],
+  rollSize: number,
   currentPage: number,
 ): RollContext {
   if (currentPage < 1) {
     throw 'currentPage starts at 1';
   }
 
-  const rollSize = seoPyramidsConfig.rollSize;
   const start = (currentPage - 1) * rollSize;
   const end = start + rollSize;
   const roll = posts.slice(start, end);
@@ -87,75 +108,97 @@ function traverseDir(dir: string, action: (path: string) => void) {
   });
 }
 
+export interface BlogConfig {
+  defaultLocale: string;
+  debugImagePath: boolean;
+  mandatoryKeywords: string[];
+  rollSize: number;
+  author?: string;
+}
+
 // should be renamed as createPost or hydratePost, with validation
 function validateFrontMatter(
+  config: BlogConfig,
   frontMatter: Partial<PostFrontMatter>,
-  path: string,
-) {
+  filePath: string,
+): Post {
+  let iPost: Partial<IPost> = {};
   if (!frontMatter.date) {
-    throw 'No date: ' + path;
+    throw 'No date: ' + filePath;
   }
 
   if (frontMatter.date.length !== 10) {
-    throw `Wrong date format:${frontMatter.date} ` + path;
+    throw `${filePath} : Wrong date format:${frontMatter.date} - use YYYY-MM-DD`;
   }
   if (!frontMatter.title) {
-    throw 'No title: ' + path;
+    throw 'No title: ' + filePath;
   }
   if (!frontMatter.category) {
-    throw 'No category: ' + path;
+    throw 'No category: ' + filePath;
   }
-  if (!path.includes(frontMatter.category)) {
-    throw `Wrong category ${frontMatter.category} from path: ${path}`;
+  if (!filePath.includes(frontMatter.category)) {
+    throw `Wrong category ${frontMatter.category} from path: ${filePath}`;
   }
+
+  // -- END OF MANDATORY DATA
+
+  iPost = { ...frontMatter };
+
   if (!frontMatter.tags) {
-    throw 'No tags: ' + path;
+    iPost.tags = [];
   }
-  if (!frontMatter.lang) {
-    frontMatter.lang = 'en';
+
+  if (!frontMatter.locale) {
+    iPost.locale = config.defaultLocale;
   }
-  if (!frontMatter.image) {
-    throw 'No image: ' + path;
-  } else {
-    let path = frontMatter.image;
-    if (path.startsWith('./')) {
-      path = path.slice(2);
+
+  if (!frontMatter.author) {
+    iPost.author = config.author;
+  }
+
+  if (frontMatter.image) {
+    let imagePath = frontMatter.image;
+    if (imagePath.startsWith('./')) {
+      imagePath = imagePath.slice(2);
     }
-    if (path.startsWith('images')) {
-      path = path.slice('images'.length);
+    if (imagePath.startsWith('images')) {
+      imagePath = imagePath.slice('images'.length);
     }
-    if (!path.startsWith('/')) {
-      path = '/' + path;
+    if (!imagePath.startsWith('/')) {
+      imagePath = '/' + imagePath;
     }
-    console.log(frontMatter.image, path);
-    frontMatter.image = path;
+    // TODO: assert image exists
+    if (config.debugImagePath) {
+      console.log(`${filePath} => Found frontMatter.image: ${imagePath}`);
+    }
+
+    iPost.image = imagePath;
   }
   if (!frontMatter.featured) {
-    frontMatter.featured = false;
+    iPost.featured = false;
   }
   if (!frontMatter.slug) {
-    frontMatter.slug = slugify(frontMatter.title);
+    const locale = iPost.locale!;
+    iPost.slug = immutableSlugify(frontMatter.title, locale);
   }
+
+  // If no keywords, use tags as keywords
   if (!frontMatter.keywords) {
-    frontMatter.keywords = [
-      'robusta build',
-      'nicolas zozol',
-      'tutorial',
-      ...frontMatter.tags,
-    ];
+    frontMatter.keywords = [...iPost.tags!, ...config.mandatoryKeywords];
   } else {
-    frontMatter.keywords = [
-      ...frontMatter.keywords,
-      'robusta build',
-      'nicolas zozol',
-    ];
+    iPost.keywords = [...frontMatter.keywords, ...config.mandatoryKeywords];
   }
+
+  return new Post(iPost as IPost);
 }
 
 const posts: Post[] = [];
 let postsGenerated = false;
 
-export async function getSortedPostsData(): Promise<Post[]> {
+// TODO: this is awful and should be refactored
+// TODO: it does at the same time frontMatter validation and mapping to post creation
+// TODO: but also file traversing, which is a configuration job
+export async function getSortedPostsData(config: BlogConfig): Promise<Post[]> {
   // Get file names under /posts
   //const skipPrism = process.env.SKIP_PRISM === 'true'
   // console.log({skipPrism})
@@ -178,9 +221,9 @@ export async function getSortedPostsData(): Promise<Post[]> {
         excerpt: true,
       });
       const frontMatter: PostFrontMatter = matterResult.data as PostFrontMatter;
-      validateFrontMatter(frontMatter, path);
+      const post = validateFrontMatter(config, frontMatter, path);
       if (!matterResult.excerpt) {
-        throw 'No excerpt: ' + path;
+        throw 'Error reading frontMatter content: No excerpt: ' + path;
       }
       frontMatter.excerpt = matterResult.excerpt;
 
@@ -191,13 +234,9 @@ export async function getSortedPostsData(): Promise<Post[]> {
 
       processedContentPromise.then((content) => {
         const contentHtml = content.toString();
-        const newPost: Post = {
-          slug: slugify(matterResult.data.title),
-          content: contentHtml,
-          ...frontMatter,
-        } as Post;
-        newPost.content = contentHtml;
-        posts.push(newPost);
+        post.slug = immutableSlugify(frontMatter.title, post.locale);
+        post.content = contentHtml;
+        posts.push(post);
       });
 
       i++;
@@ -215,10 +254,11 @@ export function sortPostsByDate(posts: Post[]): Post[] {
 }
 
 export async function getPostByCategoryAndSlug(
+  blogConfig: BlogConfig,
   categoryPath: string,
   slug: string,
 ): Promise<Post | undefined> {
-  const posts = await getSortedPostsData();
+  const posts = await getSortedPostsData(blogConfig);
 
   return posts.find(
     (post) =>

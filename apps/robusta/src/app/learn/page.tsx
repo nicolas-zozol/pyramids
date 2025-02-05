@@ -3,12 +3,14 @@ import type { Metadata } from 'next';
 import { BlogRoll } from '@/components/blog/BlogRoll';
 import { setRouterPath } from '@robusta/pyramids-helpers';
 import { AppRouterPage, PAGES } from '@/app/router';
+import { getSeoPyramidsConfig } from '@/seopyramids.config';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_HOME);
 
 // Function to dynamically generate metadata
 export async function generateMetadata(): Promise<Metadata> {
-  const posts = await getSortedPostsData(); // Fetch the posts data
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const posts = await getSortedPostsData(blogConfig);
   const numberOfPosts = posts.length;
 
   return {
@@ -20,9 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 300;
 
 export default async function BlogPage() {
-  const posts = await getSortedPostsData();
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const posts = await getSortedPostsData(blogConfig);
 
-  const rollContext = getRollContext(posts, 1);
+  const rollSize = blogConfig.rollSize;
+  const rollContext = getRollContext(posts, rollSize, 1);
 
   return (
     <div className={'bg-base-200 py-10'}>

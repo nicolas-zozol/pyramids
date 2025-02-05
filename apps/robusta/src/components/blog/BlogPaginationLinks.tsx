@@ -6,7 +6,7 @@ type Props = {
   numberOfPages: number;
 };
 
-export const PaginationLinks = ({ currentPage, numberOfPages }: Props) => {
+export const BlogPaginationLinks = ({ currentPage, numberOfPages }: Props) => {
   // CSS classes for different states:
   const disabledLinkClasses =
     'text-light-grey m-2 p-2 px-4 font-normal opacity-50';
@@ -25,7 +25,7 @@ export const PaginationLinks = ({ currentPage, numberOfPages }: Props) => {
     currentPage - 1 === 1 ? '/learn' : `/learn/page/${currentPage - 1}`;
 
   // Calculate the URL for the next page.
-  const nextPage = `/blog/page/${currentPage + 1}`;
+  const nextPage = `/learn/page/${currentPage + 1}`;
 
   return (
     <div className="mt-8">

@@ -1,7 +1,7 @@
 ---
 title: "Quel second langage pour un jeune développeur ?"
 tags: ["langages"]
-lang: "en"
+locale: "en"
 date: "2020-12-13"
 image: ../images/all-langages.png
 category: theory
