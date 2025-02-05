@@ -1,7 +1,7 @@
 import { getSeoPyramidsConfig } from '@/seopyramids.config';
 import { uniqueValues } from '@robusta/pyramids-helpers';
 
-export function getLocales(): string[] {
+export function getAllLocales(): string[] {
   const config = getSeoPyramidsConfig();
   return uniqueValues([config.defaultLocale, ...config.otherLocales]);
 }

@@ -59,8 +59,25 @@ export class Post implements IPost {
   content!: string;
   keywords: string[] = [];
 
-  constructor(p: IPost) {
+  constructor(
+    p: IPost,
+    protected blogSlug: string,
+    protected isDefaultLocale: boolean,
+  ) {
     Object.assign(this, p);
+  }
+
+  getFilePath(): string {
+    return `/${this.category}/${this.slug}`;
+  }
+
+  /**
+   * IMPORTANT: this URL should not change over time
+   * otherwise it will break SEO backlinks
+   */
+  getImmutableUrl(): string {
+    const localeSegment = this.isDefaultLocale ? '' : `/${this.locale}`;
+    return `/${this.blogSlug}/${localeSegment}/${this.category}/${this.slug}`;
   }
 }
 
@@ -149,7 +166,7 @@ function validateFrontMatter(
   }
 
   if (!frontMatter.locale) {
-    iPost.locale = config.defaultLocale;
+    iPost.locale = config.defaultLocale.toLowerCase();
   }
 
   if (!frontMatter.author) {
@@ -178,7 +195,7 @@ function validateFrontMatter(
     iPost.featured = false;
   }
   if (!frontMatter.slug) {
-    const locale = iPost.locale!;
+    const locale = iPost.locale!.toLowerCase();
     iPost.slug = immutableSlugify(frontMatter.title, locale);
   }
 
@@ -189,7 +206,11 @@ function validateFrontMatter(
     iPost.keywords = [...frontMatter.keywords, ...config.mandatoryKeywords];
   }
 
-  return new Post(iPost as IPost);
+  return new Post(
+    iPost as IPost,
+    'learn',
+    iPost.locale?.toLowerCase() === config.defaultLocale.toLowerCase(),
+  );
 }
 
 const posts: Post[] = [];
@@ -244,8 +265,6 @@ export async function getSortedPostsData(config: BlogConfig): Promise<Post[]> {
   });
 
   await Promise.all(pendings);
-  // Sort posts by date
-  console.log('blog size :', posts.length);
   return sortPostsByDate(posts);
 }
 
