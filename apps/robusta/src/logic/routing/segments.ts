@@ -7,6 +7,27 @@ export type Segments = string; // without the domain !
 /* Old urls with a bit of SEO traffic */
 const oldUrlMap = new Map<Slug, Segments>();
 
+export interface UrlSegments {
+  locale: string | undefined;
+  categories: string[] | undefined;
+  slug: string;
+}
+
+export interface BlogSegments {
+  blogHome: boolean;
+  locale: string | undefined;
+  categories: string[];
+  slug: string | undefined;
+  defaultLocale: boolean;
+}
+export interface BlogSegmentsResolver {
+  resolve: (segments: string[]) => BlogSegments;
+}
+
+export function cleanSegment(segment: string): string {
+  return segment.trim().replace(/^\/+|\/+$/g, '');
+}
+
 /**
  * Joins multiple path segments into a single clean path.
  * Strips leading/trailing slashes from each segment
@@ -31,6 +52,7 @@ export function joinSegments(segments: string[]): string {
   );
 }
 
+// TODO: move this to robusta-routing
 export function getPostUrl(post: Post): string {
   if (oldUrlMap.has(post.slug)) {
     return joinSegments([

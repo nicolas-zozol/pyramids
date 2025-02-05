@@ -33,16 +33,16 @@ export default async function BlogPostPage({
   params: Promise<{ path: string[] }>;
 }) {
   const { path } = await params; // ['blockchain', 'tools', 'tooling-for-solidity-coders']
-  const pathParts = path;
-  if (pathParts.length === 0) {
+  const urlSegmentParts = path;
+  if (urlSegmentParts.length === 0) {
     return notFound();
   }
   const blogConfig = getSeoPyramidsConfig().blogConfig;
   const posts = await getSortedPostsData(blogConfig);
   const tags = getValuableTags(posts);
 
-  if (pathParts.length === 1) {
-    const tagOrCategory = pathParts[0];
+  if (urlSegmentParts.length === 1) {
+    const tagOrCategory = urlSegmentParts[0];
     const tagPosts = getPostsByTag(tagOrCategory, posts);
     const categoryPost = getPostsByCategory(tagOrCategory, posts);
 
@@ -53,8 +53,8 @@ export default async function BlogPostPage({
     return <BlogRoll pageContext={rollContext} />;
   }
 
-  const slug = pathParts.pop()!; // Extract the last part as the slug
-  const category = pathParts.join('/'); // Remaining parts form the category path
+  const slug = urlSegmentParts.pop()!; // Extract the last part as the slug
+  const category = urlSegmentParts.join('/'); // Remaining parts form the category path
 
   const post = await getPostByCategoryAndSlug(blogConfig, category, slug);
   if (!post) {
