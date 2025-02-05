@@ -1,7 +1,7 @@
 ---
 title: "Solid Principles"
 tags: ["theory", "hard", "clean-code", "architecture", "java"]
-lang: fr
+locale: fr
 date: "2016-11-07"
 image: ../images/javascript.jpg
 category: theory

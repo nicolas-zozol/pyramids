@@ -1,10 +1,37 @@
+import { BlogConfig } from '@/logic/posts';
+
 const mission = 'Building Internet the right way';
 const url = 'https://www.robusta.build';
-export const seoPyramidsConfig = {
+
+interface SeoPyramidsConfig {
+  site: string;
+  siteName: string;
+  siteTitle: string;
+  mission?: string;
+  logo: string;
+  // number of items to display in the roll
+  defaultLocale: string;
+  otherLocales: string[];
+  blogConfig: BlogConfig;
+}
+
+const robustaPyramidsConfig: SeoPyramidsConfig = {
   site: url,
   siteName: 'Robusta Build',
   siteTitle: 'Robusta Build: Freelance ethers.js, solidity, web, blockchain',
   mission,
   logo: `${url}/images/logo.png`,
-  rollSize: 12,
+  defaultLocale: 'en',
+  otherLocales: ['fr'],
+  blogConfig: {
+    defaultLocale: 'en',
+    debugImagePath: true,
+    mandatoryKeywords: ['robusta build', 'freelance'],
+    rollSize: 4,
+    author: 'Nicolas Zozol',
+  },
 };
+
+export function getSeoPyramidsConfig() {
+  return robustaPyramidsConfig;
+}

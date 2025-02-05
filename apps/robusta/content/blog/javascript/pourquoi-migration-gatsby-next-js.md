@@ -1,7 +1,7 @@
 ---
 title: "Pourquoi j'ai migré de Gatsby vers NextJS"
 tags: ["javascript", "react"]
-lang: "fr"
+locale: "fr"
 date: "2021-11-08"
 image: ./images/promo-gatsby-vs-next.png
 category: javascript

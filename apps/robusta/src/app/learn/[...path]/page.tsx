@@ -15,6 +15,7 @@ import { setRouterPath } from '@robusta/pyramids-helpers';
 import { Metadata } from 'next';
 import { uniqueBy } from '@robusta/pyramids-helpers/dist/arrays/unique-by';
 import { BlogRoll } from '@/components/blog/BlogRoll';
+import { getSeoPyramidsConfig } from '@/seopyramids.config';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_POST);
 export const metadata: Metadata = {
@@ -36,7 +37,8 @@ export default async function BlogPostPage({
   if (pathParts.length === 0) {
     return notFound();
   }
-  const posts = await getSortedPostsData();
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const posts = await getSortedPostsData(blogConfig);
   const tags = getValuableTags(posts);
 
   if (pathParts.length === 1) {
@@ -46,14 +48,15 @@ export default async function BlogPostPage({
 
     // make Post unique by slug
     const filteredPost = uniqueBy([tagPosts, categoryPost], 'slug');
-    const rollContext = getRollContext(filteredPost, 1);
+    const rollSize = blogConfig.rollSize;
+    const rollContext = getRollContext(filteredPost, rollSize, 1);
     return <BlogRoll pageContext={rollContext} />;
   }
 
   const slug = pathParts.pop()!; // Extract the last part as the slug
   const category = pathParts.join('/'); // Remaining parts form the category path
 
-  const post = await getPostByCategoryAndSlug(category, slug);
+  const post = await getPostByCategoryAndSlug(blogConfig, category, slug);
   if (!post) {
     return notFound();
   }

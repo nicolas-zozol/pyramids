@@ -1,7 +1,7 @@
 ---
 title: "Tooling for Solidity coders"
 tags: ["blockchain", "solidity"]
-lang: "en"
+locale: "en"
 date: "2021-12-13"
 image: ./images/ganache-cli.png
 category: blockchain

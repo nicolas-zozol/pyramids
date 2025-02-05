@@ -1,7 +1,7 @@
 ---
 title: "Provenance des rendements du Yield Farming dans la blockchain"
 tags: ["blockchain", "DeFi"]
-lang: "fr"
+locale: "fr"
 date: "2021-11-30"
 image: ./images/aave-small.png
 category: blockchain

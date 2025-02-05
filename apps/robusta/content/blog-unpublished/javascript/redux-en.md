@@ -1,7 +1,7 @@
 ---
 title: "Starting Redux"
 tags: ["javascript", "hard", "front", "react"]
-lang: "en"
+locale: "en"
 date: "2018-11-17"
 image: ../images/redux.png
 category: javascript
