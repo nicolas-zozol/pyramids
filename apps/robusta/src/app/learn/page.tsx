@@ -14,9 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const numberOfPosts = posts.length;
 
   return {
-    title: `Particular page - ${numberOfPosts} posts available`,
-    description: 'A dynamic blog page showcasing the latest posts',
+    title: `Page 1 - ${numberOfPosts} posts available`,
+    description: 'Explore the latest posts on this page.',
   };
+  // TODO: canonical URL
 }
 
 export const revalidate = 300;

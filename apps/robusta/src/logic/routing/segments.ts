@@ -13,15 +13,15 @@ export interface UrlSegments {
   slug: string;
 }
 
-export interface BlogSegments {
-  blogHome: boolean;
+export interface Segmentation {
+  homeUrl: boolean;
   locale: string | undefined;
   categories: string[];
   slug: string | undefined;
   defaultLocale: boolean;
 }
 export interface BlogSegmentsResolver {
-  resolve: (segments: string[]) => BlogSegments;
+  resolve: (segments: string[]) => Segmentation;
 }
 
 export function cleanSegment(segment: string): string {
@@ -56,14 +56,14 @@ export function joinSegments(segments: string[]): string {
 export function getPostUrl(post: Post): string {
   if (oldUrlMap.has(post.slug)) {
     return joinSegments([
-      getSeoPyramidsConfig().site,
+      getSeoPyramidsConfig().domain,
       'blog',
       post.category,
       oldUrlMap.get(post.slug)!,
     ]);
   } else {
     return joinSegments([
-      getSeoPyramidsConfig().site,
+      getSeoPyramidsConfig().domain,
       'blog',
       post.category,
       post.slug,

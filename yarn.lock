@@ -361,6 +361,18 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@masala/parser@1.0.0", "@masala/parser@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@masala/parser/-/parser-1.0.0.tgz#0146cddf9a1c4cc0af0e4b783d36cfc962b45eb2"
+  integrity sha512-pqTUqfbd/SEMU+BPMnuXK/VgqhnOQSZ5yXdFyDkWWptde79K6Y0K/L3HFDflTtNQjfn3OBcCljhLYxgUtlV/yg==
+
+"@masala/x@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@masala/x/-/x-0.1.7.tgz#39d41402a5a4b5d18bc291705745118aebf60b10"
+  integrity sha512-oHSuWihby5FJhsYWJ+q4ES4AfEsP4VwEUNjCYeLFfhW7/8So5awiuL+M1DL+a9PQOdcSJSo5oEB4lt5HA9p9Cw==
+  dependencies:
+    "@masala/parser" "1.0.0"
+
 "@next/env@15.1.6":
   version "15.1.6"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-15.1.6.tgz#2fa863d8c568a56b1c8328a86e621b8bdd4f2a20"
