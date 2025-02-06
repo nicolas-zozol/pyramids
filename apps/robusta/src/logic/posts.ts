@@ -61,7 +61,7 @@ export class Post implements IPost {
 
   constructor(
     p: IPost,
-    protected blogSlug: string,
+    protected blogHome: string,
     protected isDefaultLocale: boolean,
   ) {
     Object.assign(this, p);
@@ -77,7 +77,7 @@ export class Post implements IPost {
    */
   getImmutableUrl(): string {
     const localeSegment = this.isDefaultLocale ? '' : `/${this.locale}`;
-    return `/${this.blogSlug}/${localeSegment}/${this.category}/${this.slug}`;
+    return `/${this.blogHome}/${localeSegment}/${this.category}/${this.slug}`;
   }
 }
 

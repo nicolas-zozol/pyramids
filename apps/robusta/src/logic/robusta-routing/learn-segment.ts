@@ -3,16 +3,16 @@ import {
   getDefaultLocale,
 } from '@/logic/robusta-routing/get-locales';
 import { Post } from '@/logic/posts';
-import { BlogSegments, BlogSegmentsResolver } from '@/logic/routing/segments';
+import { Segmentation, BlogSegmentsResolver } from '@/logic/routing/segments';
 
 export class RobustaBlogSegmentsResolver implements BlogSegmentsResolver {
-  resolve(segments: string[]): BlogSegments {
-    return getBlogSegments(this.allPosts, segments, this.blogSlug);
+  resolve(segments: string[]): Segmentation {
+    return getBlogSegments(this.allPosts, segments, this.homeUrl);
   }
 
   constructor(
     private allPosts: Post[],
-    private blogSlug: string,
+    private homeUrl: string,
   ) {}
 }
 
@@ -20,12 +20,12 @@ function getBlogSegments(
   allPosts: Post[],
   segments: string[],
   blogSlug: string,
-): BlogSegments {
+): Segmentation {
   const allLocales = getAllLocales();
 
   if (segments.length === 0) {
     return {
-      blogHome: true,
+      homeUrl: true,
       locale: undefined,
       categories: [],
       slug: undefined,
@@ -52,7 +52,7 @@ function getBlogSegments(
 
   if (workingSegments.length === 0) {
     return {
-      blogHome: true, // blogHome for that locale
+      homeUrl: true, // blogHome for that locale
       locale,
       categories: [],
       slug: undefined,
@@ -82,7 +82,7 @@ function getBlogSegments(
       // because the slug can be the same as a category name
 
       return {
-        blogHome: false,
+        homeUrl: false,
         locale,
         categories: workingSegments,
         slug: possibleSlug,
@@ -95,7 +95,7 @@ function getBlogSegments(
   // but we removed the last category from the segments
   const slug = '';
   return {
-    blogHome: false,
+    homeUrl: false,
     locale,
     categories: [...workingSegments, possibleSlug],
     slug,

@@ -4,7 +4,7 @@ const mission = 'Building Internet the right way';
 const url = 'https://www.robusta.build';
 
 interface SeoPyramidsConfig {
-  site: string;
+  domain: string;
   siteName: string;
   siteTitle: string;
   mission?: string;
@@ -16,7 +16,7 @@ interface SeoPyramidsConfig {
 }
 
 const robustaPyramidsConfig: SeoPyramidsConfig = {
-  site: url,
+  domain: url,
   siteName: 'Robusta Build',
   siteTitle: 'Robusta Build: Freelance ethers.js, solidity, web, blockchain',
   mission,
