@@ -116,7 +116,10 @@ export interface PostMetaData {
 }
 
 function traverseDir(dir: string, action: (path: string) => void) {
-  fs.readdirSync(dir).forEach((file) => {
+  const home = process.cwd();
+  const dirPath = path.join(home, dir);
+  console.log({ dirPath, home, cwd: process.cwd() });
+  fs.readdirSync(dirPath).forEach((file) => {
     let fullPath = path.join(dir, file);
     if (fs.lstatSync(fullPath).isDirectory()) {
       traverseDir(fullPath, action);
