@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SimpleLink } from '@robusta/pyramids-links';
+import { cleanUrl } from '@/logic/routing/parse-url';
 
 type Props = {
   currentPage: number;
@@ -31,7 +32,6 @@ export const BlogPaginationLinks = ({
 
   // Calculate the URL for the next page.
   const nextPage = `${baseUrl}/page/${currentPage + 1}`;
-
   return (
     <div className="mt-8">
       {/**
@@ -42,7 +42,7 @@ export const BlogPaginationLinks = ({
       {isFirst ? (
         <span className={disabledLinkClasses}>previous</span>
       ) : (
-        <SimpleLink href={previousPage} className={activeLinkClasses}>
+        <SimpleLink href={cleanUrl(previousPage)} className={activeLinkClasses}>
           previous
         </SimpleLink>
       )}
@@ -65,7 +65,7 @@ export const BlogPaginationLinks = ({
           </span>
         ) : (
           <span key={page}>
-            <SimpleLink href={href} className={activeLinkClasses}>
+            <SimpleLink href={cleanUrl(href)} className={activeLinkClasses}>
               {page}
             </SimpleLink>
           </span>
@@ -81,7 +81,7 @@ export const BlogPaginationLinks = ({
       {isLast ? (
         <span className={disabledLinkClasses}>next</span>
       ) : (
-        <Link href={nextPage} className={activeLinkClasses}>
+        <Link href={cleanUrl(nextPage)} className={activeLinkClasses}>
           next
         </Link>
       )}

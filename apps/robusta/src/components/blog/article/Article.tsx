@@ -50,7 +50,7 @@ export const Article = ({ post, valuableTags, route }: ArticleProps) => {
         <section className="list-tags mt-10">
           <strong>Learn more : </strong>
           {valuableTags.map((tag: string, index: number, array: string[]) => (
-            <Link href={`/learn/${tag}`} key={tag} legacyBehavior={true}>
+            <Link href={`/learn/tag/${tag}`} key={tag} legacyBehavior={true}>
               <a>
                 {tag} {index < array.length - 1 ? ', ' : ''}
               </a>
