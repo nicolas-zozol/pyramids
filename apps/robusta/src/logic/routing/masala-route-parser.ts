@@ -16,7 +16,7 @@ interface ParseResult extends ParseResultNoLocale {
 
 type PR = Partial<ParseResult>;
 
-const slugDiscriminant = 's';
+const slugDiscriminant = 's' as const;
 
 const slash = C.string('/');
 const word = F.not(slash)

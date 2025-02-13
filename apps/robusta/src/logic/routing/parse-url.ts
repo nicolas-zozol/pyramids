@@ -8,7 +8,9 @@ import {
 
 type RouteType = 'BLOG_ROLL' | 'CATEGORY' | 'POST';
 
-export interface ParseResult {
+export interface ParsedRoute {
+  url: string;
+  home: string;
   type: RouteType;
   isDefaultLocale: boolean;
   locale: string; // 'en' or 'fr'
@@ -31,7 +33,8 @@ export function parseUrl(
   defaultLocale: string,
   otherLocales: string[],
   allCategories: string[][],
-): ParseResult | undefined {
+): ParsedRoute | undefined {
+  const initialUrl = url;
   if (!url.startsWith('/')) {
     throw 'url must start with / : ' + url;
   }
@@ -62,6 +65,8 @@ export function parseUrl(
 
   if (url === '') {
     return {
+      url: initialUrl,
+      home,
       type: 'BLOG_ROLL',
       isDefaultLocale,
       locale,
@@ -72,6 +77,8 @@ export function parseUrl(
   let blogRollPage = pageParser.val(url);
   if (blogRollPage) {
     return {
+      url: initialUrl,
+      home,
       type: 'BLOG_ROLL',
       isDefaultLocale,
       locale,
@@ -84,6 +91,8 @@ export function parseUrl(
   const post = postParser(allCategories).val(url);
   if (catHome) {
     return {
+      url: initialUrl,
+      home,
       type: 'CATEGORY',
       isDefaultLocale,
       locale,
@@ -94,6 +103,8 @@ export function parseUrl(
 
   if (catPage) {
     return {
+      url: initialUrl,
+      home,
       isDefaultLocale,
       locale,
       ...catPage,
@@ -102,6 +113,8 @@ export function parseUrl(
 
   if (post) {
     return {
+      url: initialUrl,
+      home,
       isDefaultLocale,
       locale,
       ...post,

@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { immutableSlugify } from '@/logic/routing/slugify';
+import { PageRoute } from 'next/dist/server/dev/turbopack/types';
 
 // TODO: some or all are mandatory
 // frontMatter should have not mandatories, and we should create post from frontmatter
@@ -127,10 +128,12 @@ function traverseDir(dir: string, action: (path: string) => void) {
 
 export interface BlogConfig {
   defaultLocale: string;
+  otherLocales: string[];
   debugImagePath: boolean;
   mandatoryKeywords: string[];
   rollSize: number;
   author?: string;
+  getCategories: () => Promise<string[][]>;
 }
 
 // should be renamed as createPost or hydratePost, with validation

@@ -1,17 +1,19 @@
 import { Post } from '@/logic/posts';
 import Link from 'next/link';
 import { Tag } from '@/logic/tags';
-import { SocialMedia } from './SocialMedia';
+import { SocialMedia } from '../SocialMedia';
 import { getThumbnail } from '@/logic/thumbnail';
 import { EmptyLine } from '@robusta/pyramids-layouts';
-interface ArticleProps {
-  post: Post;
-  valuableTags: Tag[];
-}
 import Script from 'next/script';
 import './article.scss';
 import './prism.scss';
+import { ParsedRoute } from '@/logic/routing/parse-url';
 
+interface ArticleProps {
+  post: Post;
+  valuableTags: Tag[];
+  route: ParsedRoute;
+}
 export const Article = ({ post, valuableTags }: ArticleProps) => {
   return (
     <div>

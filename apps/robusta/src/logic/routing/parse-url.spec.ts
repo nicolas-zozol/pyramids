@@ -1,6 +1,6 @@
 // parseUrl.test.ts
 import { describe, it, expect } from 'vitest';
-import { parseUrl, ParseResult } from './parse-url'; // adjust import path
+import { parseUrl, ParsedRoute } from './parse-url'; // adjust import path
 
 describe('parseUrl', () => {
   const home = '/learn';
@@ -16,7 +16,7 @@ describe('parseUrl', () => {
   /**
    * Helper function for quick testing.
    */
-  function testRoute(url: string, expected: ParseResult | undefined) {
+  function testRoute(url: string, expected: ParsedRoute | undefined) {
     const result = parseUrl(
       url,
       home,
@@ -33,6 +33,8 @@ describe('parseUrl', () => {
 
   it('should parse the blog home (default locale, no page)', () => {
     testRoute('/learn', {
+      url: '/learn',
+      home: '/learn',
       type: 'BLOG_ROLL',
       isDefaultLocale: true,
       locale: 'en',
@@ -42,6 +44,8 @@ describe('parseUrl', () => {
 
   it('should parse second page of the blog home', () => {
     testRoute('/learn/page/2', {
+      url: '/learn/page/2',
+      home: '/learn',
       type: 'BLOG_ROLL',
       isDefaultLocale: true,
       locale: 'en',
@@ -51,6 +55,8 @@ describe('parseUrl', () => {
 
   it('should parse the blog home in French', () => {
     testRoute('/learn/fr', {
+      url: '/learn/fr',
+      home: '/learn',
       type: 'BLOG_ROLL',
       isDefaultLocale: false,
       locale: 'fr',
@@ -60,6 +66,8 @@ describe('parseUrl', () => {
 
   it('should parse category page (e.g. /learn/blockchain)', () => {
     testRoute('/learn/blockchain', {
+      url: '/learn/blockchain',
+      home: '/learn',
       type: 'CATEGORY',
       isDefaultLocale: true,
       locale: 'en',
@@ -70,6 +78,8 @@ describe('parseUrl', () => {
 
   it('should parse a paginated category page (e.g. /learn/blockchain/page/2)', () => {
     testRoute('/learn/blockchain/page/2', {
+      url: '/learn/blockchain/page/2',
+      home: '/learn',
       type: 'CATEGORY',
       isDefaultLocale: true,
       locale: 'en',
@@ -81,6 +91,8 @@ describe('parseUrl', () => {
 
   it('should parse a blog post with slug (e.g. /learn/blockchain/s/what-is-blockchain)', () => {
     testRoute('/learn/blockchain/s/what-is-blockchain', {
+      url: '/learn/blockchain/s/what-is-blockchain',
+      home: '/learn',
       type: 'POST',
       isDefaultLocale: true,
       locale: 'en',
@@ -92,6 +104,8 @@ describe('parseUrl', () => {
 
   it('should parse French category page (e.g. /learn/fr/blockchain)', () => {
     testRoute('/learn/fr/blockchain', {
+      url: '/learn/fr/blockchain',
+      home: '/learn',
       type: 'CATEGORY',
       isDefaultLocale: false,
       locale: 'fr',
@@ -102,6 +116,8 @@ describe('parseUrl', () => {
 
   it('should parse French paginated category page (e.g. /learn/fr/blockchain/page/2)', () => {
     testRoute('/learn/fr/blockchain/page/2', {
+      url: '/learn/fr/blockchain/page/2',
+      home: '/learn',
       type: 'CATEGORY',
       isDefaultLocale: false,
       locale: 'fr',
@@ -113,6 +129,8 @@ describe('parseUrl', () => {
 
   it('should parse French blog post (e.g. /learn/fr/blockchain/s/voici-la-blockchain)', () => {
     testRoute('/learn/fr/blockchain/s/voici-la-blockchain', {
+      url: '/learn/fr/blockchain/s/voici-la-blockchain',
+      home: '/learn',
       type: 'POST',
       isDefaultLocale: false,
       locale: 'fr',
@@ -124,6 +142,8 @@ describe('parseUrl', () => {
 
   it('should parse multiple categories (e.g. /learn/blockchain/security)', () => {
     testRoute('/learn/blockchain/security', {
+      url: '/learn/blockchain/security',
+      home: '/learn',
       type: 'CATEGORY',
       isDefaultLocale: true,
       locale: 'en',
@@ -134,6 +154,8 @@ describe('parseUrl', () => {
 
   it('should parse multiple categories with pagination (e.g. /learn/blockchain/security/page/2)', () => {
     testRoute('/learn/blockchain/security/page/2', {
+      url: '/learn/blockchain/security/page/2',
+      home: '/learn',
       type: 'CATEGORY',
       isDefaultLocale: true,
       locale: 'en',
