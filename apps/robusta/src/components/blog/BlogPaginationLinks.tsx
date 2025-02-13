@@ -27,12 +27,10 @@ export const BlogPaginationLinks = ({
   // Calculate the URL for the previous page.
   // Note: if the previous page is the first page, we use '/blog'
   const previousPage =
-    currentPage - 1 === 1
-      ? `/${baseUrl}`
-      : `/${baseUrl}/page/${currentPage - 1}`;
+    currentPage - 1 === 1 ? `${baseUrl}` : `${baseUrl}/page/${currentPage - 1}`;
 
   // Calculate the URL for the next page.
-  const nextPage = `/${baseUrl}/page/${currentPage + 1}`;
+  const nextPage = `${baseUrl}/page/${currentPage + 1}`;
 
   return (
     <div className="mt-8">
@@ -83,8 +81,8 @@ export const BlogPaginationLinks = ({
       {isLast ? (
         <span className={disabledLinkClasses}>next</span>
       ) : (
-        <Link href={nextPage} legacyBehavior>
-          <a className={activeLinkClasses}>next</a>
+        <Link href={nextPage} className={activeLinkClasses}>
+          next
         </Link>
       )}
     </div>

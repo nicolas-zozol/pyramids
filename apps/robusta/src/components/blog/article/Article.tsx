@@ -8,29 +8,34 @@ import Script from 'next/script';
 import './article.scss';
 import './prism.scss';
 import { ParsedRoute } from '@/logic/routing/parse-url';
+import { BreadCrumb } from '@/components/blog/breadcrumb/BreadCrumb';
 
 interface ArticleProps {
   post: Post;
   valuableTags: Tag[];
   route: ParsedRoute;
 }
-export const Article = ({ post, valuableTags }: ArticleProps) => {
+export const Article = ({ post, valuableTags, route }: ArticleProps) => {
   return (
     <div>
+      <div className={'blog-container'}>
+        <BreadCrumb route={route} />
+      </div>
       <article className={'blogpost blog-container'}>
         {/* ✅ Load External JS via `next/script` */}
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.9.0/prism.min.js"
           strategy="afterInteractive"
         />
+
         <section>
           <div>
             <h1>{post.title}</h1>
-            <span className="text-info">{post.date}</span> by{' '}
-            <span className="text-info">{post.author}</span>
+            <span className={'text-sm'}>
+              {post.date} by {post.author}
+            </span>
           </div>
         </section>
-        <EmptyLine size={2} />
         <img
           src={getThumbnail(post)}
           className={'max-w-[200px] object-contain'}

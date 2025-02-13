@@ -2,17 +2,19 @@ import { Post, RollContext } from '@/logic/posts';
 import { BlogPaginationLinks } from '@/components/blog/BlogPaginationLinks';
 import { PostCard } from '@/components/blog/PostCard';
 import { ParsedRoute } from '@/logic/routing/parse-url';
+import { BreadCrumb } from '@/components/blog/breadcrumb/BreadCrumb';
+import { EmptyLine } from '@robusta/pyramids-layouts';
 
 interface CategoryRollContext extends RollContext {
   categories: string[];
 }
 interface CategoryRollProps {
-  pageContext: CategoryRollContext;
+  rollContext: CategoryRollContext;
   route: ParsedRoute;
 }
 
-export const CategoryRoll = ({ pageContext, route }: CategoryRollProps) => {
-  const { currentPage, roll, numberOfPages, categories } = pageContext;
+export const CategoryRoll = ({ rollContext, route }: CategoryRollProps) => {
+  const { currentPage, roll, numberOfPages, categories } = rollContext;
 
   if (roll.length === 0) {
     return (
@@ -26,6 +28,9 @@ export const CategoryRoll = ({ pageContext, route }: CategoryRollProps) => {
 
   return (
     <section className={'main-container'}>
+      <BreadCrumb route={route} />
+      <EmptyLine />
+
       <div className={'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'}>
         {roll.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
