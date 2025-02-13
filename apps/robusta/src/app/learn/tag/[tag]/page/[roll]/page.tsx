@@ -18,6 +18,7 @@ export const revalidate = 300;
  */
 type RouteParams = {
   tag: string;
+  roll: string;
 };
 
 /**
@@ -30,15 +31,13 @@ export async function generateMetadata({
 }: {
   params: Promise<RouteParams>;
 }): Promise<Metadata> {
-  const p = await params;
-  const { tag } = p;
+  const { tag, roll } = await params;
   const blogConfig = getSeoPyramidsConfig().blogConfig;
   const allPosts = await getSortedPostsData(blogConfig);
   const posts = getPostsByTag(tag, allPosts);
 
-  console.log('metadata: route params', p);
+  const currentPage = parseInt(roll, 10);
   const size = blogConfig.rollSize;
-  const currentPage = 1;
   const totalPages = Math.ceil(posts.length / size);
 
   return {
@@ -58,15 +57,14 @@ export default async function TagRollPage({
 }: {
   params: Promise<RouteParams>;
 }) {
-  const p = await params;
-  const { tag } = p;
+  const { tag, roll } = await params;
+
   const blogConfig = getSeoPyramidsConfig().blogConfig;
   const allPosts = await getSortedPostsData(blogConfig);
   const posts = getPostsByTag(tag, allPosts);
 
   const size = blogConfig.rollSize;
-
-  const currentPage = 1;
+  const currentPage = parseInt(roll, 10);
 
   const rollContext: TagRollContext = {
     ...getRollContext(posts, size, currentPage),

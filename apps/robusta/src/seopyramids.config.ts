@@ -28,7 +28,7 @@ const robustaPyramidsConfig: SeoPyramidsConfig = {
     defaultLocale: 'en',
     debugImagePath: true,
     mandatoryKeywords: ['robusta build', 'freelance'],
-    rollSize: 6,
+    rollSize: 12,
     otherLocales: ['fr'],
     author: 'Nicolas Zozol',
     getCategories,

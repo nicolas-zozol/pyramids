@@ -31,7 +31,6 @@ export async function generateMetadata({
   const blogConfig = getSeoPyramidsConfig().blogConfig;
   const allPosts = await getSortedPostsData(blogConfig);
   const p = await params;
-  console.log('metadata: route params', p);
   const size = blogConfig.rollSize;
   const currentPage = parseInt(p.roll, 10);
   const totalPages = Math.ceil(allPosts.length / size);
@@ -53,24 +52,14 @@ export default async function BlogRollPage({
 }: {
   params: Promise<RouteParams>;
 }) {
-  const blogConfig = getSeoPyramidsConfig().blogConfig;
-
-  const allPosts = await getSortedPostsData(blogConfig);
-  const size = blogConfig.rollSize;
-
   const routeParams = await params;
+
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+
+  const size = blogConfig.rollSize;
   const currentPage = parseInt(routeParams.roll, 10);
-  const start = size * (currentPage - 1);
-  const end = start + size;
-
-  const context = getRollContext(allPosts, size, currentPage);
-
-  const rollContext = {
-    currentPage,
-    rollSize: size,
-    numberOfPages: Math.ceil(allPosts.length / size),
-    roll: allPosts.slice(start, end),
-  };
+  const rollContext = getRollContext(allPosts, size, currentPage);
 
   const parsedRoute: ParsedRoute = {
     url: '/learn/page/' + currentPage,
