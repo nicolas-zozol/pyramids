@@ -65,7 +65,11 @@ export default async function BlogPostPage({
   if (route.type === 'BLOG_ROLL') {
     const rollSize = blogConfig.rollSize;
     const rollContext = getRollContext(posts, rollSize, route.page || 1);
-    return <BlogRoll rollContext={rollContext} route={route} />;
+    return (
+      <div className={'bg-base-200 py-10'}>
+        <BlogRoll rollContext={rollContext} route={route} />
+      </div>
+    );
   }
 
   if (route.type === 'CATEGORY') {
@@ -76,7 +80,11 @@ export default async function BlogPostPage({
       ...getRollContext(categoryPosts, rollSize, route.page || 1),
       categories: route.categories!,
     };
-    return <CategoryRoll pageContext={rollContext} route={route} />;
+    return (
+      <div className={'bg-base-200 py-10'}>
+        <CategoryRoll rollContext={rollContext} route={route} />
+      </div>
+    );
   }
 
   if (urlSegmentParts.length === 1) {
@@ -88,7 +96,11 @@ export default async function BlogPostPage({
     const filteredPost = uniqueBy([tagPosts, categoryPost], 'slug');
     const rollSize = blogConfig.rollSize;
     const rollContext = getRollContext(filteredPost, rollSize, 1);
-    return <BlogRoll rollContext={rollContext} route={route} />;
+    return (
+      <div className={'bg-base-200 py-10'}>
+        <BlogRoll rollContext={rollContext} route={route} />
+      </div>
+    );
   }
 
   const slug = route.slug!; // Extract the last part as the slug

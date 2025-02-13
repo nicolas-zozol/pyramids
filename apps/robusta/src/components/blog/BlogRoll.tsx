@@ -2,6 +2,8 @@ import { Post, RollContext } from '@/logic/posts';
 import { PostCard } from './PostCard';
 import { BlogPaginationLinks } from '@/components/blog/BlogPaginationLinks';
 import { ParsedRoute } from '@/logic/routing/parse-url';
+import { BreadCrumb } from '@/components/blog/breadcrumb/BreadCrumb';
+import { EmptyLine } from '@robusta/pyramids-layouts';
 
 type RollProps = {
   rollContext: RollContext;
@@ -22,6 +24,8 @@ export const BlogRoll = ({ rollContext, route }: RollProps) => {
 
   return (
     <article className={'main-container'}>
+      <EmptyLine />
+
       <div className={'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'}>
         {roll.map((post: Post) => (
           <PostCard key={post.slug} post={post} />

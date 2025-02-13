@@ -1,12 +1,12 @@
 // BreadCrumb.tsx
 import Link from 'next/link';
-import React from 'react';
+import React, { FC } from 'react';
+import { cleanUrl, ParsedRoute } from '@/logic/routing/parse-url';
+import { twCss } from '@robusta/pyramids-helpers';
 
 export interface BreadCrumbProps {
-  locale: string;
-  defaultLocale: boolean;
-  categories?: string[];
-  homeUrl: string;
+  route: ParsedRoute;
+  className?: string;
 }
 
 /**
@@ -15,12 +15,7 @@ export interface BreadCrumbProps {
  * If 'defaultLocale' is false (e.g. 'fr'), we insert that into the path.
  * Each category is appended to build a nested path.
  */
-export function BreadCrumb({
-  locale,
-  defaultLocale,
-  categories = [],
-  homeUrl,
-}: BreadCrumbProps) {
+export const BreadCrumb: FC<BreadCrumbProps> = ({ route, className }) => {
   // This array will hold each "segment" for the breadcrumb.
   // Example: if homeUrl = "/blog", locale = "fr", categories=["blockchain","security"]
   // We'll build segment links for:
@@ -28,11 +23,12 @@ export function BreadCrumb({
   //    "/blog/fr/blockchain" => "blockchain"
   //    "/blog/fr/blockchain/security" => "security"
 
+  const { locale, isDefaultLocale, categories = [], home } = route;
   const segments = [];
-  let path = homeUrl.replace(/\/+$/, ''); // ensure no trailing slash
+  let path = cleanUrl(home); // ensure no trailing slash
 
   // Insert locale if it's NOT the default
-  if (!defaultLocale) {
+  if (!isDefaultLocale) {
     path += `/${locale}`;
   }
 
@@ -46,8 +42,13 @@ export function BreadCrumb({
   }
 
   return (
-    <div className="breadcrumbs mb-4 text-sm">
-      <ul>
+    <div
+      className={twCss(
+        'breadcrumbs rb-breadcrumb text-primary text-sm',
+        className,
+      )}
+    >
+      <ul className={'m-0'}>
         {segments.map((seg, index) => (
           <li key={index}>
             <Link href={seg.href}>{seg.name}</Link>
@@ -56,4 +57,4 @@ export function BreadCrumb({
       </ul>
     </div>
   );
-}
+};
