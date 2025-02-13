@@ -238,6 +238,12 @@ export async function getSortedPostsData(config: BlogConfig): Promise<Post[]> {
     postsGenerated = true;
   }
   let i = 0;
+  traverseDir('', (path) => {
+    if (path.includes('content/blog')) {
+      console.log('>>>>>', path);
+    }
+  });
+
   traverseDir('content/blog', (path) => {
     if (path.includes('.md')) {
       const fileContents = fs.readFileSync(path, 'utf8');
