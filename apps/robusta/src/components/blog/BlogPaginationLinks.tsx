@@ -4,9 +4,14 @@ import { SimpleLink } from '@robusta/pyramids-links';
 type Props = {
   currentPage: number;
   numberOfPages: number;
+  baseUrl: string;
 };
 
-export const BlogPaginationLinks = ({ currentPage, numberOfPages }: Props) => {
+export const BlogPaginationLinks = ({
+  currentPage,
+  numberOfPages,
+  baseUrl,
+}: Props) => {
   // CSS classes for different states:
   const disabledLinkClasses =
     'text-light-grey m-2 p-2 px-4 font-normal opacity-50';
@@ -22,10 +27,12 @@ export const BlogPaginationLinks = ({ currentPage, numberOfPages }: Props) => {
   // Calculate the URL for the previous page.
   // Note: if the previous page is the first page, we use '/blog'
   const previousPage =
-    currentPage - 1 === 1 ? '/learn' : `/learn/page/${currentPage - 1}`;
+    currentPage - 1 === 1
+      ? `/${baseUrl}`
+      : `/${baseUrl}/page/${currentPage - 1}`;
 
   // Calculate the URL for the next page.
-  const nextPage = `/learn/page/${currentPage + 1}`;
+  const nextPage = `/${baseUrl}/page/${currentPage + 1}`;
 
   return (
     <div className="mt-8">
@@ -47,12 +54,12 @@ export const BlogPaginationLinks = ({ currentPage, numberOfPages }: Props) => {
        * - For each page, we render an element:
        *   - If it's the current page, show it as disabled (non-clickable) with a border.
        *   - Otherwise, render a clickable link to that page.
-       * - For page 1, we use the URL '/learn' instead of '/learn/page/1'.
+       * - For page 1, we use the URL '/${baseUrl}' instead of '/${baseUrl}/page/1'.
        */}
       {Array.from({ length: numberOfPages }, (_, i) => {
         const page = i + 1;
         const isCurrent = page === currentPage;
-        const href = page === 1 ? '/learn' : `/learn/page/${page}`;
+        const href = page === 1 ? `/${baseUrl}` : `/${baseUrl}/page/${page}`;
 
         return isCurrent ? (
           <span key={page} className={currentPageClasses}>

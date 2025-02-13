@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { setRouterPath } from '@robusta/pyramids-helpers';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { getSeoPyramidsConfig } from '@/seopyramids.config';
+import { ParsedRoute } from '@/logic/routing/parse-url';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
 
@@ -71,9 +72,18 @@ export default async function BlogRollPage({
     roll: allPosts.slice(start, end),
   };
 
+  const parsedRoute: ParsedRoute = {
+    url: '/learn/page/' + currentPage,
+    home: '/learn',
+    type: 'BLOG_ROLL',
+    isDefaultLocale: true,
+    locale: 'en',
+    page: currentPage,
+  };
+
   return (
     <div className="bg-base-200 py-10">
-      <BlogRoll pageContext={rollContext} />
+      <BlogRoll rollContext={rollContext} route={parsedRoute} />
     </div>
   );
 }

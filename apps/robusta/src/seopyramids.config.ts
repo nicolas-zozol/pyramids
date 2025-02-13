@@ -1,4 +1,5 @@
 import { BlogConfig } from '@/logic/posts';
+import { getCategories } from '@/logic/categories/robusta-categories';
 
 const mission = 'Building Internet the right way';
 const url = 'https://www.robusta.build';
@@ -27,8 +28,10 @@ const robustaPyramidsConfig: SeoPyramidsConfig = {
     defaultLocale: 'en',
     debugImagePath: true,
     mandatoryKeywords: ['robusta build', 'freelance'],
-    rollSize: 4,
+    rollSize: 6,
+    otherLocales: ['fr'],
     author: 'Nicolas Zozol',
+    getCategories,
   },
 };
 
