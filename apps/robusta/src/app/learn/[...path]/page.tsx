@@ -4,11 +4,7 @@ import {
   getRollContext,
   getSortedPostsData,
 } from '@/logic/posts';
-import {
-  getPostsByCategory,
-  getPostsByTag,
-  getValuableTags,
-} from '@/logic/tags';
+import { getPostsByTag, getValuableTags } from '@/logic/tags';
 import { Article } from '@/components/blog/article/Article';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { setRouterPath, uniqueBy } from '@robusta/pyramids-helpers';
@@ -17,8 +13,57 @@ import { BlogRoll } from '@/components/blog/BlogRoll';
 import { getSeoPyramidsConfig } from '@/seopyramids.config';
 import { parseUrl } from '@/logic/routing/parse-url';
 import { CategoryRoll } from '@/components/blog/categories/CategoryRoll';
+import { getPostsByCategory } from '@/logic/categories/robusta-categories';
+
+type RouteParams = {
+  path: string[];
+};
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_POST);
+
+export const dynamic = 'force-static';
+export const revalidate = false;
+
+export async function generateStaticParams(): Promise<RouteParams[]> {
+  const result: RouteParams[] = [];
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+
+  const allCategories = await blogConfig.getCategories();
+  const allCategoryPaths = allCategories.map((category) => ({
+    path: category,
+  }));
+
+  // Adding home page of each category roll
+  allCategoryPaths.forEach((category) => {
+    result.push(category);
+  });
+
+  // Adding additional pages of each category roll
+  for (const category of allCategories) {
+    const categoryPath = category.join('/');
+    const categoryPosts = getPostsByCategory(categoryPath, allPosts);
+    const rollSize = blogConfig.rollSize;
+    const numberOfPages = Math.ceil(categoryPosts.length / rollSize);
+    if (numberOfPages > 1) {
+      for (let i = 2; i <= numberOfPages; i++) {
+        result.push({
+          path: category.concat(['page', i.toString()]),
+        });
+      }
+    }
+  }
+
+  // Adding post page
+  const allPostsPaths = allPosts.map((post) => ({
+    path: [post.category, 's', post.slug],
+  }));
+  allPostsPaths.forEach((post) => {
+    result.push(post);
+  });
+  return result;
+}
+
 export const metadata: Metadata = {
   //title: 'My Page',
   //description: 'This page includes external scripts',

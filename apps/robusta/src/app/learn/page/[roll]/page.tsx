@@ -8,8 +8,8 @@ import { ParsedRoute } from '@/logic/routing/parse-url';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
 
-// Revalidation time for incremental static regeneration
-export const revalidate = 300;
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 /**
  * route is /page/[roll]/page.tsx
@@ -17,6 +17,21 @@ export const revalidate = 300;
 type RouteParams = {
   roll: string;
 };
+
+export async function generateStaticParams(): Promise<RouteParams[]> {
+  const result: RouteParams[] = [];
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+
+  const size = blogConfig.rollSize;
+  const totalPages = Math.ceil(allPosts.length / size);
+  if (totalPages > 1) {
+    for (let i = 2; i <= totalPages; i++) {
+      result.push({ roll: i.toString() });
+    }
+  }
+  return result;
+}
 
 /**
  * Generate dynamic metadata for each blog roll page.

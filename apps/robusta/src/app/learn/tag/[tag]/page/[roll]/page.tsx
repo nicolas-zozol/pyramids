@@ -10,8 +10,8 @@ import { getPostsByTag } from '@/logic/tags';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
 
-// Revalidation time for incremental static regeneration
-export const revalidate = 300;
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 /**
  * route is /tag/[tag]
@@ -21,6 +21,39 @@ type RouteParams = {
   roll: string;
 };
 
+// e.g. /learn/tag/[tag]/page/[roll]
+export async function generateStaticParams(): Promise<RouteParams[]> {
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+  const rollSize = blogConfig.rollSize;
+
+  // 1. Group posts by tag so we can figure out how many pages each tag needs
+  const postsByTag: Record<string, number> = {};
+
+  for (const post of allPosts) {
+    for (const t of post.tags) {
+      if (!postsByTag[t]) {
+        postsByTag[t] = 0;
+      }
+      postsByTag[t]++;
+    }
+  }
+
+  const result: RouteParams[] = [];
+
+  // 2. For each tag, figure out how many pages are needed
+  for (const [tag, count] of Object.entries(postsByTag)) {
+    const numberOfPages = Math.ceil(count / rollSize);
+    // We often consider page=1 in /learn/tag/[tag], so we only generate pages 2..n here
+    for (let pageNum = 2; pageNum <= numberOfPages; pageNum++) {
+      result.push({ tag, roll: pageNum.toString() });
+    }
+  }
+
+  console.log('>>> ', result);
+
+  return result;
+}
 /**
  * Generate dynamic metadata for each blog roll page.
  *

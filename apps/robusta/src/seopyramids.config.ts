@@ -26,7 +26,7 @@ const robustaPyramidsConfig: SeoPyramidsConfig = {
   otherLocales: ['fr'],
   blogConfig: {
     defaultLocale: 'en',
-    debugImagePath: true,
+    debugImagePath: false,
     mandatoryKeywords: ['robusta build', 'freelance'],
     rollSize: 12,
     otherLocales: ['fr'],
