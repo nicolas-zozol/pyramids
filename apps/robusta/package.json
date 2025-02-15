@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "nextstart",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -28,7 +28,10 @@
     "prosemirror-keymap": "^1.0.0",
     "prosemirror-history": "^1.0.0",
     "prosemirror-commands": "^1.6.2",
-    "prosemirror-schema-basic": "^1.2.3"
+    "prosemirror-schema-basic": "^1.2.3",
+    "slugify": "1.6.6",
+    "@masala/parser": "^1.0.0",
+    "@masala/x": "^0.1.7"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -41,6 +44,8 @@
     "daisyui": "^4.12.23",
     "gray-matter": "^4.0.3",
     "remark": "^15.0.1",
-    "remark-html": "^16.0.1"
+    "remark-html": "^16.0.1",
+    "vitest": "^3.0.5",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

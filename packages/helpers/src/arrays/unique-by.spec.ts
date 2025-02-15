@@ -1,6 +1,6 @@
 // uniqueBy.test.ts
 import { describe, it, expect } from 'vitest';
-import { uniqueBy } from './unique-by'; // Adjust the path as necessary
+import { uniqueBy } from './unique'; // Adjust the path as necessary
 
 interface TestItem {
   id: number;

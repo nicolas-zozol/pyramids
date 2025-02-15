@@ -121,3 +121,7 @@ code:not([class*='language-']) {
   display: flex;
   flex-direction: column;
 }
+
+.rb-breadcrumb {
+  margin: 0 !important;
+}

@@ -53,7 +53,7 @@ jouer leur rôle défini dans le code de ce smart contract.
 Techniquement, vous transmettez vos tokens à l'adresse de ce smart contract et espérez que le code est suffisamment bien 
 écrit pour pouvoir récupérer ces tokens quand vous le décidez.
 
-![Staking ethers](./images/staking-eth.png)
+![Staking ethers](images/staking-eth.png)
 
 Dans le staking d'Ethereum 2.0, la raison pour laquelle vous gagnez de l'argent est simple. Le réseau a besoin d'un ordinateur bien configuré pour créer une chaîne sécurisée pour tous.
 Les utilisateurs de la blockchain payent des frais de transaction et des ethers sont créés à chaque nouveau bloc, créant ainsi une légère inflation. Si vous parvenez à sécuriser le réseau, vous gagnez votre part.
@@ -69,7 +69,7 @@ Dans la DeFi, vous gagnez des revenus en partageant vos liquidités. Avec un tok
 token nommé `LP A/B` (LP pour *Liquidity Pool*) et fournissez une *Farm* avec ce *LP Token*.
 Vous pourrez voir les mots *Pool,* *Vault* ou *Farm* - chaque plateforme a son vocabulaire et ses subtilités.
 
-![Fournir des liquidités sur la BSC](./images/swap-bsc.png)
+![Fournir des liquidités sur la BSC](images/swap-bsc.png)
 
 *Fournir des liquidités pour  LP BNB/Cake dans une Farm PancakeSwap*
 
@@ -80,7 +80,7 @@ Cela crée cependant un risque d'une couche de confiance ou de bug supplémentai
 En cliquant ou en appelant vous-même le web3 avec votre code, vous récupererez les tokens `$A` et `$B`. La plateforme centralisée leader Binance
 reproduit cela en off-chain, puisqu'ils ont eux aussi besoin de liquidités pour faire fonctionner leurs marchés.
 
-![Liquidités sur Binance](./images/matic-usdt.png)
+![Liquidités sur Binance](images/matic-usdt.png)
 
 Dans l'exemple ci-dessus, le *stacker* gagne de l'argent provenant des utilisateurs de Binance faisant la conversion (*swap*) 
 des `$MATIC` en `$USDT`, ou de l'`$USDT` vers `$MATIC`. Ces utilisateurs peuvent lui payer 0.2% des frais de transaction, plus 0.1% de frais vers la plateforme.
@@ -92,7 +92,7 @@ des frais de transaction au stackers ETH 2.0.
 La seconde partie des revenus sont les récompenses, ou *rewards*. Elles sont de 4.11% dans l'exemple précédent et au final
 elles peuvent dépasser les gains des frais de swap. Voici un exemple du couple `AAVE/ETH` sur Binance :
 
-![Sawp fees](./images/swap-fees.png)
+![Sawp fees](images/swap-fees.png)
 
 
 Ces rewards sont souvent payées en token du protocole. Vous êtes récompensés en `$SUSHI` sur SushiSwap, en `$CAKE` sur PancakeSwap...
@@ -109,7 +109,7 @@ Et tout le monde y trouve son compte... À condition qu'il y ait le moindre int�
 Il est possible, et c'est un peu le but du jeu, de trouver de meilleures opportunités dans le spectre de la DeFi. Sur le réseau Polygon de SushiSwap, j'ai 
 un rendement de 35% annuel pour un `LP USDC/ETH` qui sont probablement deux des trois tokens les plus sûrs avec le `$DAI` (not an advice !).
 
-![Meilleur rendement sur SushiSwap](./images/sushi-swap.png)
+![Meilleur rendement sur SushiSwap](images/sushi-swap.png)
 
 
 La blockchain est une base de donnée ouverte en temps réel. Et donc en fonction des fees et des rewards proposées à un instant t,
@@ -130,7 +130,7 @@ Le problème est que cette valeur est déclarée en tokens `$MEX`, Elrond n'a pa
 Chaque heure, 2493$ investi rapporte 11$ en intérêt, jour et nuit, week-ends inclus. Après un an, le total gagné en `$MEX`
 *serait* supérieur à un million de dollars - ce n'est pas un conseil, lisez plus bas !
 
-![Elrond et EGLD-MEX](./images/egld-mex.png)
+![Elrond et EGLD-MEX](images/egld-mex.png)
 
 
 Malheureusement - ou plutôt, logiquement - plus nombreux sont les `$MEX` délivrés, plus faible est leur valeur. 
@@ -139,7 +139,7 @@ Et la valeur des `LP EGLD-MEX` stackés peut décroître bien plus vite que les 
 La mise initiale d'un milliard de dollar en `$MEX` pourrait valoir une cacahuète un an plus tard. Ce pattern s'est déjà 
 vu avec Goose Finance, PolyWhale (token `$KRILL`) et bien d'autres.
 
-![Shitcoins](./images/shit-coins.png)
+![Shitcoins](images/shit-coins.png)
 
 
 S'il n'y a aucun utilisateur pour swapper des actifs sur la plateforme, ces tokens n'ont aucune valeur. Cependant quelques
@@ -171,7 +171,7 @@ C'est une vue de l'esprit, et je ferai prochainement un article pour expliquer q
 
 Il y a également un gain de trading immédiat si l'on regarde ce cas sur l'application leader Aave :
 
-![Prêter et emprunter sur la blockchain](./images/aave.png)
+![Prêter et emprunter sur la blockchain](images/aave.png)
 
 
 Supposons que j'ai 8k$ en `$USDT`, avec l'ether évalué à 4k$. Je dépose 8k$ en `$USDT` et gagne (16.12+4.6) = 20.7 % de gain par an (1656 $).
@@ -213,7 +213,7 @@ Plus de personnes entendent parler de ce token, plus nombreux seront ceux qui y 
 
 Prenons l'exemple de l'[IFO actuelle du club de football FC Porto](https://pancakeswap.finance/ifo), sur PancakeSwap.
 
-![IFO PancakeSwap](./images/ifo.png)
+![IFO PancakeSwap](images/ifo.png)
 
 
 250,000 token `$PORTO` seront vendu au prix fixe de 2$ pour un total de 500k$. Un demi-milliard est déjà levé par la foule,

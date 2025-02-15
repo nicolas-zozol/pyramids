@@ -1,10 +1,10 @@
 ---
 title: "Ledger versus Metamask"
 tags: ["blockchain", "security"]
-lang: "en"
+locale: "en"
 date: "2022-01-20"
 image: ./images/ledger-vs-metamask.png
-category: blockchain
+categoryPath: blockchain
 author: Nicolas Zozol
 featured: true
 ---

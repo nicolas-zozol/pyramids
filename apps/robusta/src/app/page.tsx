@@ -5,11 +5,13 @@ import { setRouterPath } from '@robusta/pyramids-helpers';
 import { Footer } from '@/components/footer/Footer';
 import { getSortedPostsData } from '@/logic/posts';
 import { pickFeatured } from '@/logic/posts/pick-featured';
+import { getSeoPyramidsConfig } from '@/seopyramids.config';
 
 setRouterPath<AppRouterPage>(PAGES.HOME);
 
 export default async function Home() {
-  const allPosts = await getSortedPostsData();
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
   const featured = pickFeatured(allPosts);
 
   return (

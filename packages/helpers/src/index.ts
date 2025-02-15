@@ -4,3 +4,4 @@ export * from './theme/index';
 export * from './router/index';
 export * from './debug/index';
 export * from './react/index';
+export * from './arrays/index';

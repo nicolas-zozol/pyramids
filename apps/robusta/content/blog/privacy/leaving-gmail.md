@@ -1,10 +1,10 @@
 ---
 title: "Leaving Gmail"
 tags: ["web", "tech"]
-lang: "en"
+locale: "en"
 date: "2019-05-24"
 image: ./images/gmail.png
-category: privacy
+categoryPath: privacy
 ---
 
 GMail was a revolution in 2004. Is Google too big now ?

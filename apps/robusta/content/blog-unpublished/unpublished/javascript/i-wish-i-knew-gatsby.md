@@ -1,10 +1,10 @@
 ---
 title: "What I wish I knew when starting Gatsby"
 tags: ["gatsby", "javascript"]
-lang: fr
+locale: fr
 date: "2020-09-07"
 image: ../images/javascript.jpg
-category: theory
+categoryPath: theory
 ---
 
 Solid principles are important for writing maintainable code.

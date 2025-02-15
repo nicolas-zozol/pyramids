@@ -1,12 +1,16 @@
 import { Post, RollContext } from '@/logic/posts';
 import { PostCard } from './PostCard';
-import { PaginationLinks } from '@/components/blog/PaginationLinks';
+import { BlogPaginationLinks } from '@/components/blog/BlogPaginationLinks';
+import { ParsedRoute } from '@/logic/routing/parse-url';
+import { BreadCrumb } from '@/components/blog/breadcrumb/BreadCrumb';
+import { EmptyLine } from '@robusta/pyramids-layouts';
 
 type RollProps = {
-  pageContext: RollContext;
+  rollContext: RollContext;
+  route: ParsedRoute;
 };
-export const BlogRoll = ({ pageContext }: RollProps) => {
-  const { currentPage, roll, numberOfPages } = pageContext;
+export const BlogRoll = ({ rollContext, route }: RollProps) => {
+  const { currentPage, roll, numberOfPages } = rollContext;
 
   if (roll.length === 0) {
     return (
@@ -20,13 +24,16 @@ export const BlogRoll = ({ pageContext }: RollProps) => {
 
   return (
     <article className={'main-container'}>
+      <EmptyLine />
+
       <div className={'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'}>
         {roll.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
         ))}
       </div>
       {numberOfPages > 1 && (
-        <PaginationLinks
+        <BlogPaginationLinks
+          baseUrl={'/learn'}
           currentPage={currentPage}
           numberOfPages={numberOfPages}
         />

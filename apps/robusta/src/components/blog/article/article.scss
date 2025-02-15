@@ -1,7 +1,17 @@
-@import '../../app/media-queries';
-@import '../../app/colors';
+// Use the Sass module system instead of @import
+@use '../../../app/media-queries' as *;
+@use '../../../app/colors' as *;
+
+// Keep external CSS import for Google Fonts as-is
+@import url('https://fonts.googleapis.com/css?family=Merriweather:300italic,300');
 
 article.blogpost {
+  /* Moved these two declarations here to avoid the prior warning */
+  font-size: 1.1rem;
+  line-height: 1.6rem;
+  color: #444;
+  font-family: 'Merriweather', Georgia, serif;
+
   @media screen and (min-width: 800px) {
     pre,
     code,
@@ -15,12 +25,6 @@ article.blogpost {
     font-size: 1.2rem;
     line-height: 2rem;
   }
-  font-size: 1.1rem;
-  line-height: 1.6rem;
-
-  @import url(https://fonts.googleapis.com/css?family=Merriweather:300italic,300);
-  color: #444;
-  font-family: 'Merriweather', Georgia, serif;
 
   h1 {
   }
@@ -92,6 +96,7 @@ article.blogpost {
     padding: 1.125em;
   }
 
+  // Mixin calls remain unchanged:
   @include respond-to(mobile) {
     pre {
       margin-left: 5px;
@@ -144,7 +149,6 @@ article.blogpost {
   h3 {
     margin-top: 4rem;
     margin-bottom: 2rem;
-
     font-weight: bold;
   }
 

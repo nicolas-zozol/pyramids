@@ -1,40 +1,36 @@
-import { getSortedPostsData } from '@/logic/posts';
-import { seoPyramidsConfig } from '@/seopyramids.config';
-import { BlogRoll } from '@/components/blog/blog-roll';
+import { getRollContext, getSortedPostsData } from '@/logic/posts';
+import { BlogRoll } from '@/components/blog/BlogRoll';
 import type { Metadata } from 'next';
 import { setRouterPath } from '@robusta/pyramids-helpers';
 import { AppRouterPage, PAGES } from '@/app/router';
+import { getSeoPyramidsConfig } from '@/seopyramids.config';
+import { ParsedRoute } from '@/logic/routing/parse-url';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
 
-// Revalidation time for incremental static regeneration
-export const revalidate = 300;
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 /**
- * Define the type for our dynamic route parameters.
- * This ensures consistency between the functions that use them.
+ * route is /page/[roll]/page.tsx
  */
-export type BlogRollParams = {
+type RouteParams = {
   roll: string;
 };
 
-/**
- * Generate all dynamic paths for the blog roll.
- *
- * We return an array of objects of type BlogRollParams.
- * For example: [ { roll: "1" }, { roll: "2" }, ... ]
- */
-export async function generateStaticParams(): Promise<BlogRollParams[]> {
-  const allPosts = await getSortedPostsData();
-  const size = seoPyramidsConfig.rollSize;
-  const numberOfPages = Math.ceil(allPosts.length / size);
+export async function generateStaticParams(): Promise<RouteParams[]> {
+  const result: RouteParams[] = [];
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
 
-  const paths: BlogRollParams[] = [];
-  for (let i = 1; i <= numberOfPages; i++) {
-    paths.push({ roll: `${i}` });
+  const size = blogConfig.rollSize;
+  const totalPages = Math.ceil(allPosts.length / size);
+  if (totalPages > 1) {
+    for (let i = 2; i <= totalPages; i++) {
+      result.push({ roll: i.toString() });
+    }
   }
-
-  return paths;
+  return result;
 }
 
 /**
@@ -45,11 +41,13 @@ export async function generateStaticParams(): Promise<BlogRollParams[]> {
 export async function generateMetadata({
   params,
 }: {
-  params: BlogRollParams;
+  params: Promise<RouteParams>;
 }): Promise<Metadata> {
-  const allPosts = await getSortedPostsData();
-  const size = seoPyramidsConfig.rollSize;
-  const currentPage = parseInt(params.roll, 10);
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+  const p = await params;
+  const size = blogConfig.rollSize;
+  const currentPage = parseInt(p.roll, 10);
   const totalPages = Math.ceil(allPosts.length / size);
 
   return {
@@ -67,25 +65,29 @@ export async function generateMetadata({
 export default async function BlogRollPage({
   params,
 }: {
-  params: BlogRollParams;
+  params: Promise<RouteParams>;
 }) {
-  const allPosts = await getSortedPostsData();
-  const size = seoPyramidsConfig.rollSize;
+  const routeParams = await params;
 
-  const currentPage = parseInt(params.roll, 10);
-  const start = size * (currentPage - 1);
-  const end = start + size;
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
 
-  const rollContext = {
-    currentPage,
-    rollSize: size,
-    numberOfPages: Math.ceil(allPosts.length / size),
-    roll: allPosts.slice(start, end),
+  const size = blogConfig.rollSize;
+  const currentPage = parseInt(routeParams.roll, 10);
+  const rollContext = getRollContext(allPosts, size, currentPage);
+
+  const parsedRoute: ParsedRoute = {
+    url: '/learn/page/' + currentPage,
+    home: '/learn',
+    type: 'BLOG_ROLL',
+    isDefaultLocale: true,
+    locale: 'en',
+    page: currentPage,
   };
 
   return (
     <div className="bg-base-200 py-10">
-      <BlogRoll pageContext={rollContext} />
+      <BlogRoll rollContext={rollContext} route={parsedRoute} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FaTwitter, FaLinkedin, FaFacebook } from 'react-icons/fa';
 
-import { getPostUrl } from '@/logic/url';
+import { getPostUrl } from '@/logic/routing/segments';
 import { Post } from '@/logic/posts';
 
 export interface Social {

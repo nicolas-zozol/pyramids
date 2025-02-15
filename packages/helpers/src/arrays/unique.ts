@@ -19,3 +19,7 @@ export function uniqueBy<T, K extends keyof T>(arrays: T[][], key: K): T[] {
   // Return the unique items
   return Array.from(map.values());
 }
+
+export function uniqueValues<T>(array: T[]): T[] {
+  return Array.from(new Set(array));
+}

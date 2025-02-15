@@ -1,10 +1,10 @@
 ---
 title: "Javascript Build"
 tags: ["javascript", "hard", "back", "front"]
-lang: "fr"
+locale: "fr"
 date: "2018-05-07"
 image: ../images/javascript.jpg
-category: javascript
+categoryPath: javascript
 ---
 
 Javascript Build is a pack of technologies working together to make your code available as a product

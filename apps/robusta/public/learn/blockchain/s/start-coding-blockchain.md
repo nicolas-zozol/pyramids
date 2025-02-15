@@ -29,12 +29,12 @@ with it. It's yet another shitcoin, but you can buy some to tip me 😊
 
 To deploy the RBTA token, I used this tutorial [by Ivan on Tech](https://www.youtube.com/watch?v=h4gQD7R1r94&t=298s)
 
-![Remix Ide](./images/remix.png)
+![Remix Ide](images/remix.png)
 
 You can also learn solidity and web3js with Cryptozombies. It's quite deep by the way, but there is no 
 creativity as you must exactly type the correct line.
 
-![Cryptozombies](./images/cryptozombies.png)
+![Cryptozombies](images/cryptozombies.png)
 
 
 Use a local IDE

@@ -1,10 +1,10 @@
 ---
 title: "The source of Yield Farming profits"
 tags: ["blockchain", "DeFi"]
-lang: "fr"
+locale: "fr"
 date: "2021-11-30"
 image: ./images/aave-small.png
-category: blockchain
+categoryPath: blockchain
 author: Nicolas Zozol
 featured: true
 ---

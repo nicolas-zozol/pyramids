@@ -10,7 +10,7 @@ type PostCardProps = {
 
 export const PostCard = ({ post }: PostCardProps) => {
   return (
-    <Link href={`/learn/${post.category}/${post.slug}`}>
+    <Link href={`/learn/${post.categoryPath}/s/${post.slug}`}>
       <SimpleCardComponent
         className={'bg-base-100 relative mb-8 flex w-80 flex-col'}
         effects={['reveal', 'fadeUp', 'shadowPop']}

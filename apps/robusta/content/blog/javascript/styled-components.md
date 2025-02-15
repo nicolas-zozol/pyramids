@@ -1,10 +1,10 @@
 ---
 title: "Applying correctly className with Styled components"
 tags: ["javascript", "front"]
-lang: "en"
+locale: "en"
 date: "2020-11-05"
 image: ../images/styled-logo.png
-category: javascript
+categoryPath: javascript
 published: true
 author: Nicolas Zozol
 ---

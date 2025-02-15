@@ -1,10 +1,10 @@
 ---
 title: "Quel langage pour progresser dans sa carrière ?"
 tags: ["language", "state-of-the-art"]
-lang: "fr"
+locale: "fr"
 date: "2020-12-13"
 image: ./images/all-languages-2021-small.png
-category: theory
+categoryPath: theory
 published: true
 author: Nicolas Zozol
 featured: true

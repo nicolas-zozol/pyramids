@@ -49,7 +49,7 @@ Le défaut de la JVM est que beaucoup de sa vitesse vient d'un trade-off sur l'u
 
 Par rapport aux autres langages, Java a le plus d'outils et une meilleure lecture des stacktrace. Un bug n'est pas toujours bienvenu. Avec une stacktrace contenant surtout des méta-informations générées par Groovy, c'est vite énervant.
 
-![Stacktrace générée par Groovy](./images/stacktrace-groovy.png)  
+![Stacktrace générée par Groovy](s/images/stacktrace-groovy.png)  
 
 Par contre Java est assez verbeux pour un langage moderne. Une seule classe par fichier, des getter/setter qui prennent toute la page... Toutefois depuis Java 11, il y a l'inférence des variables ce qui simplifie un peu l'écriture
 
@@ -179,7 +179,7 @@ Les performances de Python sont difficiles à juger. C'est un langage très lent
 
 Pour information, M87 a été calculé en Python.
 
-![Trou noir M87](./images/M87.jpg)
+![Trou noir M87](s/images/M87.jpg)
 
 
 
@@ -195,7 +195,7 @@ Python a un typage dynamique fort. Moins typé que Java, plus que Javascript, c'
 
 Pour une raison que je ne m'explique pas mais que l'on doit constater, PHP est toujours la place-forte des plateformes de **CMS** ([Wordpress](https://www.commitstrip.com/fr//2020/12/01/the-best-bet-for-2030)) et encore plus d'**E-Commerce** (Prestashop, Magento, Thelia). Toutefois ces vieux châteaux sont assiégées par les modules **Saas** plus léger et connectés par des api Http (Shopify, Stripe...), et donc accessibles par tout langages. 
 
-![](./images/shopify-trends.png)
+![](s/images/shopify-trends.png)
 
 Vous lisez un site en Gatsby, et son concurrent NextJS attaque également l'angle CMS.
 
@@ -207,7 +207,7 @@ Alors faut-il se lancer dans PHP ? Je ne dénigre pas du tout ce langage qui fai
 
 J'ai utilisé professionnellement et avec succès tous les langages décrit au-dessus. Ci-dessous, je me suis contenté de quelques tutoriels Haskell, et du C nécessaire à l'acquisition d'une licence en Informatique.
 
-![](./images/no-idea.png)
+![](s/images/no-idea.png)
 
 ## Rust
 
