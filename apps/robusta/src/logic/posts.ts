@@ -118,7 +118,6 @@ export interface PostMetaData {
 function traverseDir(dir: string, action: (path: string) => void) {
   const home = process.cwd();
   const dirPath = path.join(home, dir);
-  console.log({ dirPath, home, cwd: process.cwd() });
   fs.readdirSync(dirPath).forEach((file) => {
     let fullPath = path.join(dir, file);
     if (fs.lstatSync(fullPath).isDirectory()) {
@@ -240,7 +239,6 @@ export async function getSortedPostsData(config: BlogConfig): Promise<Post[]> {
   let i = 0;
   traverseDir('', (path) => {
     if (path.includes('content/blog')) {
-      console.log('>>>>>', path);
     }
   });
 

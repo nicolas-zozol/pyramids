@@ -7,15 +7,14 @@ const silentTags = [
   'tech', // too mainstream, not the target
 ];
 
-export function getAllTags(posts: Post[]) {
-  return posts.reduce((tags: Tag[], post) => {
-    post.tags.forEach((t) => {
-      if (!tags.includes(t)) {
-        tags.push(t);
-      }
-    });
-    return tags;
-  }, []);
+export function getAllTags(allPosts: Post[]) {
+  const tagsSet = new Set<string>();
+  for (const post of allPosts) {
+    for (const t of post.tags) {
+      tagsSet.add(t);
+    }
+  }
+  return Array.from(tagsSet);
 }
 
 // TODO: cache this
@@ -39,13 +38,4 @@ export function getValuableTags(posts: Post[]) {
 
 export function getPostsByTag(tag: Tag, allPosts: Post[]) {
   return allPosts.filter((p) => p.tags.includes(tag));
-}
-
-export function getPostsByCategory(categoryPath: string, allPosts: Post[]) {
-  const categories = categoryPath.split('/');
-
-  return allPosts.filter((p) => {
-    const postCategories = p.category.split('/');
-    return categories.some((c) => postCategories.includes(c));
-  });
 }

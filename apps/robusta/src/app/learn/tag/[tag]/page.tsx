@@ -6,12 +6,12 @@ import { AppRouterPage, PAGES } from '@/app/router';
 import { getSeoPyramidsConfig } from '@/seopyramids.config';
 import { ParsedRoute } from '@/logic/routing/parse-url';
 import { TagRoll, TagRollContext } from '@/components/blog/tag/TagRoll';
-import { getPostsByTag } from '@/logic/tags';
+import { getAllTags, getPostsByTag } from '@/logic/tags';
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_ROLL);
 
-// Revalidation time for incremental static regeneration
-export const revalidate = 300;
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 /**
  * route is /tag/[tag]
@@ -20,6 +20,12 @@ type RouteParams = {
   tag: string;
 };
 
+// generateStaticParams for /learn/tag/[tag]
+export async function generateStaticParams(): Promise<RouteParams[]> {
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+  return getAllTags(allPosts).map((tag) => ({ tag }));
+}
 /**
  * Generate dynamic metadata for each blog roll page.
  *
