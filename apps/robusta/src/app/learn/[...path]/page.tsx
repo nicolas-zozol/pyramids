@@ -4,10 +4,10 @@ import {
   getRollContext,
   getSortedPostsData,
 } from '@/logic/posts';
-import { getPostsByTag, getValuableTags } from '@/logic/tags';
+import { getValuableTags } from '@/logic/tags';
 import { Article } from '@/components/blog/article/Article';
 import { AppRouterPage, PAGES } from '@/app/router';
-import { setRouterPath, uniqueBy } from '@robusta/pyramids-helpers';
+import { setRouterPath } from '@robusta/pyramids-helpers';
 import { Metadata } from 'next';
 import { BlogRoll } from '@/components/blog/BlogRoll';
 import { getSeoPyramidsConfig } from '@/seopyramids.config';
@@ -40,15 +40,14 @@ export async function generateStaticParams(): Promise<RouteParams[]> {
   });
 
   // Adding additional pages of each category roll
-  for (const category of allCategories) {
-    const categoryPath = category.join('/');
-    const categoryPosts = getPostsByCategory(categoryPath, allPosts);
+  for (const categories of allCategories) {
+    const categoryPosts = getPostsByCategory(categories, allPosts);
     const rollSize = blogConfig.rollSize;
     const numberOfPages = Math.ceil(categoryPosts.length / rollSize);
     if (numberOfPages > 1) {
       for (let i = 2; i <= numberOfPages; i++) {
         result.push({
-          path: category.concat(['page', i.toString()]),
+          path: categories.concat(['page', i.toString()]),
         });
       }
     }
@@ -56,7 +55,8 @@ export async function generateStaticParams(): Promise<RouteParams[]> {
 
   // Adding post page
   const allPostsPaths = allPosts.map((post) => ({
-    path: [post.category, 's', post.slug],
+    //TODO: Not great at all, ok for now
+    path: [...post.categories, 's', post.slug],
   }));
   allPostsPaths.forEach((post) => {
     result.push(post);
@@ -116,8 +116,7 @@ export default async function BlogPostPage({
   }
 
   if (route.type === 'CATEGORY') {
-    const categoryPath = route.categories!.join('/');
-    const categoryPosts = getPostsByCategory(categoryPath, posts);
+    const categoryPosts = getPostsByCategory(route.categories!, posts);
     const rollSize = blogConfig.rollSize;
     const rollContext = {
       ...getRollContext(categoryPosts, rollSize, route.page || 1),
@@ -130,27 +129,15 @@ export default async function BlogPostPage({
     );
   }
 
-  if (urlSegmentParts.length === 1) {
-    const tagOrCategory = urlSegmentParts[0];
-    const tagPosts = getPostsByTag(tagOrCategory, posts);
-    const categoryPost = getPostsByCategory(tagOrCategory, posts);
-
-    // make Post unique by slug
-    const filteredPost = uniqueBy([tagPosts, categoryPost], 'slug');
-    const rollSize = blogConfig.rollSize;
-    const rollContext = getRollContext(filteredPost, rollSize, 1);
-    return (
-      <div className={'bg-base-200 py-10'}>
-        <BlogRoll rollContext={rollContext} route={route} />
-      </div>
-    );
-  }
-
   const slug = route.slug!; // Extract the last part as the slug
-  const categoryPath = route.categories!.join('/'); // Remaining parts form the category path
 
-  const post = await getPostByCategoryAndSlug(blogConfig, categoryPath, slug);
+  const post = await getPostByCategoryAndSlug(
+    blogConfig,
+    route.categories!,
+    slug,
+  );
   if (!post) {
+    const categoryPath = route.categories!.join('/'); // Remaining parts form the category path
     console.log('No post found, 404', categoryPath, slug);
     return notFound();
   }

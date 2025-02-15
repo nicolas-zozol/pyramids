@@ -4,7 +4,7 @@ tags: ["javascript", "hard", "front", "react"]
 locale: "en"
 date: "2018-11-17"
 image: ../images/redux.png
-category: javascript
+categoryPath: javascript
 ---
 
 3 principles in Redux

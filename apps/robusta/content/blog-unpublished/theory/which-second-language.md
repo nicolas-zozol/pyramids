@@ -4,7 +4,7 @@ tags: ["langages"]
 locale: "en"
 date: "2020-12-13"
 image: ../images/all-langages.png
-category: theory
+categoryPath: theory
 published: false
 author: Nicolas Zozol
 ---

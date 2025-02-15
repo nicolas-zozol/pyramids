@@ -4,7 +4,7 @@ tags: ['web', 'tech', 'iot']
 locale: 'en'
 date: '2021-01-04'
 image: ./images/lili-sonoff.jpg
-category: web
+categoryPath: web
 featured: true
 ---
 

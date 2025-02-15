@@ -4,7 +4,7 @@ tags: ['javascript', 'rxjs', 'back', 'front']
 locale: 'en'
 date: '2021-05-23'
 image: ./images/stop.png
-category: 'javascript/typescript'
+categoryPath: 'javascript/typescript'
 author: Nicolas Zozol
 featured: true
 ---

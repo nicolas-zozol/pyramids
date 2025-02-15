@@ -14,11 +14,9 @@ export async function getCategories(): Promise<string[][]> {
   return Promise.resolve(robustaCategoriesArray);
 }
 
-export function getPostsByCategory(categoryPath: string, allPosts: Post[]) {
-  const categories = categoryPath.split('/');
-
+export function getPostsByCategory(categories: string[], allPosts: Post[]) {
   return allPosts.filter((p) => {
-    const postCategories = p.category.split('/');
+    const postCategories = p.categories;
     return (
       categories.every((c) => postCategories.includes(c)) &&
       categories.length === postCategories.length

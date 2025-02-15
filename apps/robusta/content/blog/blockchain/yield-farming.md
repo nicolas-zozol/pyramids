@@ -4,7 +4,7 @@ tags: ["blockchain", "DeFi"]
 locale: "fr"
 date: "2021-11-30"
 image: ./images/aave-small.png
-category: blockchain
+categoryPath: blockchain
 author: Nicolas Zozol
 featured: true
 ---

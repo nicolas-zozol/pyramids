@@ -4,7 +4,7 @@ tags: ["theory", "hard", "clean-code", "architecture", "java"]
 locale: fr
 date: "2016-11-07"
 image: ../images/javascript.jpg
-category: theory
+categoryPath: theory
 ---
 
 Solid principles are important for writing maintainable code.
