@@ -29,7 +29,7 @@ This blogpost will present [Skydiver's ewelink npm module](https://github.com/sk
 
 Because I work on the heater, I bought the [TH-16](https://amzn.to/3bcx97P) version : with a 16 Amperes capacity  with temperature sensor for 15$. Be careful to use the [Sonoff TH Sensor-AM2301](https://amzn.to/38ihMc2), other sensors are not working as well.
 
-![Sonoff basic](./images/sonoff.png)
+![Sonoff basic](s/images/sonoff.png)
 
 ## eWeLink, IFTTT, Alexa...
 
@@ -39,7 +39,7 @@ The ewelink app (android or iOS) is needed and allows the Internet to find your 
 
 My android phone and iPad have both eWeLink installed. 
 
-![Both Sonoff tempratures differs](images/sonoff-both-temperatures.jpeg)
+![Both Sonoff tempratures differs](s/images/sonoff-both-temperatures.jpeg)
 
 Well, you understand why I don't want to lean on the app .... Hopefully the results I get from the code are more consistent. 
 
@@ -99,7 +99,7 @@ That's almost all the logic needed. More details are on [this gist](https://gist
 
 The device is far from the wi-fi box, but it's still working. 
 
-![up and running](./images/run-logs.png)
+![up and running](s/images/run-logs.png)
 
 Next step are to deploy this on [Clever Cloud](https://www.clever-cloud.com/en/) or similar. Maybe remove the loop from the setInterval function and run a [GCP Function](https://cloud.google.com/functions) (aka lambda) with a [cron](https://cloud.google.com/scheduler). 
 

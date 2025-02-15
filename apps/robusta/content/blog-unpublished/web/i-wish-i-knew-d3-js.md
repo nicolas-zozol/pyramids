@@ -1,10 +1,10 @@
 ---
 title: "What I wish I knew before starting D3 js"
 tags: ["web", "tech", "d3js", "I wish I knew"]
-lang: "en"
+locale: "en"
 date: "2021-01-04"
 image: ./images/d3js.png
-category: web
+categoryPath: web
 description: I explain the difficulties things I met with D3js. I will then explain and how to understand them.
 ---
 

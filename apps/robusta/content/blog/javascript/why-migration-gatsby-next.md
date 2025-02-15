@@ -1,10 +1,10 @@
 ---
 title: "Why I made the migration from Gatsby toward NextJS"
 tags: ["javascript", "react"]
-lang: "fr"
+locale: "fr"
 date: "2021-11-08"
 image: ./images/promo-gatsby-vs-next.png
-category: javascript
+categoryPath: javascript
 author: Nicolas Zozol
 featured: true
 ---
