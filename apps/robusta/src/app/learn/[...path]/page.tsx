@@ -4,19 +4,66 @@ import {
   getRollContext,
   getSortedPostsData,
 } from '@/logic/posts';
-import {
-  getPostsByCategory,
-  getPostsByTag,
-  getValuableTags,
-} from '@/logic/tags';
-import { Article } from '@/components/blog/Article';
+import { getValuableTags } from '@/logic/tags';
+import { Article } from '@/components/blog/article/Article';
 import { AppRouterPage, PAGES } from '@/app/router';
 import { setRouterPath } from '@robusta/pyramids-helpers';
 import { Metadata } from 'next';
-import { uniqueBy } from '@robusta/pyramids-helpers/dist/arrays/unique-by';
 import { BlogRoll } from '@/components/blog/BlogRoll';
+import { getSeoPyramidsConfig } from '@/seopyramids.config';
+import { parseUrl } from '@/logic/routing/parse-url';
+import { CategoryRoll } from '@/components/blog/categories/CategoryRoll';
+import { getPostsByCategory } from '@/logic/categories/robusta-categories';
+
+type RouteParams = {
+  path: string[];
+};
 
 setRouterPath<AppRouterPage>(PAGES.BLOG_POST);
+
+export const dynamic = 'force-static';
+export const revalidate = false;
+
+export async function generateStaticParams(): Promise<RouteParams[]> {
+  const result: RouteParams[] = [];
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const allPosts = await getSortedPostsData(blogConfig);
+
+  const allCategories = await blogConfig.getCategories();
+  const allCategoryPaths = allCategories.map((category) => ({
+    path: category,
+  }));
+
+  // Adding home page of each category roll
+  allCategoryPaths.forEach((category) => {
+    result.push(category);
+  });
+
+  // Adding additional pages of each category roll
+  for (const categories of allCategories) {
+    const categoryPosts = getPostsByCategory(categories, allPosts);
+    const rollSize = blogConfig.rollSize;
+    const numberOfPages = Math.ceil(categoryPosts.length / rollSize);
+    if (numberOfPages > 1) {
+      for (let i = 2; i <= numberOfPages; i++) {
+        result.push({
+          path: categories.concat(['page', i.toString()]),
+        });
+      }
+    }
+  }
+
+  // Adding post page
+  const allPostsPaths = allPosts.map((post) => ({
+    //TODO: Not great at all, ok for now
+    path: [...post.categories, 's', post.slug],
+  }));
+  allPostsPaths.forEach((post) => {
+    result.push(post);
+  });
+  return result;
+}
+
 export const metadata: Metadata = {
   //title: 'My Page',
   //description: 'This page includes external scripts',
@@ -32,33 +79,70 @@ export default async function BlogPostPage({
   params: Promise<{ path: string[] }>;
 }) {
   const { path } = await params; // ['blockchain', 'tools', 'tooling-for-solidity-coders']
-  const pathParts = path;
-  if (pathParts.length === 0) {
+
+  const url = '/learn/' + path.join('/');
+
+  const urlSegmentParts = path;
+  if (urlSegmentParts.length === 0) {
+    console.log('No path, 404');
     return notFound();
   }
-  const posts = await getSortedPostsData();
+  const blogConfig = getSeoPyramidsConfig().blogConfig;
+  const posts = await getSortedPostsData(blogConfig);
   const tags = getValuableTags(posts);
+  const allCategories = await blogConfig.getCategories();
 
-  if (pathParts.length === 1) {
-    const tagOrCategory = pathParts[0];
-    const tagPosts = getPostsByTag(tagOrCategory, posts);
-    const categoryPost = getPostsByCategory(tagOrCategory, posts);
+  const route = parseUrl(
+    url,
+    '/learn',
+    blogConfig.defaultLocale,
+    blogConfig.otherLocales,
+    allCategories,
+  );
 
-    // make Post unique by slug
-    const filteredPost = uniqueBy([tagPosts, categoryPost], 'slug');
-    const rollContext = getRollContext(filteredPost, 1);
-    return <BlogRoll pageContext={rollContext} />;
+  if (!route) {
+    console.log('No route, 404', url);
+    return notFound();
   }
 
-  const slug = pathParts.pop()!; // Extract the last part as the slug
-  const category = pathParts.join('/'); // Remaining parts form the category path
+  if (route.type === 'BLOG_ROLL') {
+    const rollSize = blogConfig.rollSize;
+    const rollContext = getRollContext(posts, rollSize, route.page || 1);
+    return (
+      <div className={'bg-base-200 py-10'}>
+        <BlogRoll rollContext={rollContext} route={route} />
+      </div>
+    );
+  }
 
-  const post = await getPostByCategoryAndSlug(category, slug);
+  if (route.type === 'CATEGORY') {
+    const categoryPosts = getPostsByCategory(route.categories!, posts);
+    const rollSize = blogConfig.rollSize;
+    const rollContext = {
+      ...getRollContext(categoryPosts, rollSize, route.page || 1),
+      categories: route.categories!,
+    };
+    return (
+      <div className={'bg-base-200 py-10'}>
+        <CategoryRoll rollContext={rollContext} route={route} />
+      </div>
+    );
+  }
+
+  const slug = route.slug!; // Extract the last part as the slug
+
+  const post = await getPostByCategoryAndSlug(
+    blogConfig,
+    route.categories!,
+    slug,
+  );
   if (!post) {
+    const categoryPath = route.categories!.join('/'); // Remaining parts form the category path
+    console.log('No post found, 404', categoryPath, slug);
     return notFound();
   }
 
   const valuableTags = post.tags.filter((t) => tags.includes(t));
 
-  return <Article post={post} valuableTags={valuableTags} />;
+  return <Article post={post} valuableTags={valuableTags} route={route} />;
 }

@@ -1,10 +1,10 @@
 ---
 title: 'Easy automation with Sonoff and Javascript'
 tags: ['web', 'tech', 'iot']
-lang: 'en'
+locale: 'en'
 date: '2021-01-04'
 image: ./images/lili-sonoff.jpg
-category: web
+categoryPath: web
 featured: true
 ---
 

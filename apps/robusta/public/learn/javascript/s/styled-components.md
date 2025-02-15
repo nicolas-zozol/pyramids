@@ -99,7 +99,7 @@ const MyTomatoButton = styled(MyStyledButton)`
 Now StyleComponent will create some classes and apply them to your component, making it a styled
  component.
  
-![ClassName applied to styled component](./images/styled-classname.png)
+![ClassName applied to styled component](images/styled-classname.png)
  
 *No className, no style*. When using `styled.div`, then StyledComponent has 
 already applied the `className` trick. 
@@ -133,7 +133,7 @@ const Child = styled(GreenAttachingComp)`
 
 ```
 
-![Restyling from another component](./images/restyle.png)
+![Restyling from another component](images/restyle.png)
 
 ### Nesting components
 
