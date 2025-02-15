@@ -5,7 +5,7 @@ locale: "en"
 date: "2018-11-07"
 author: "Nicolas Zozol"
 image: ../images/javascript.jpg
-category: blockchain
+categoryPath: blockchain
 ---
 
 HyperLedger, powered by IBM, is a set of tools for creating your own blockchain.

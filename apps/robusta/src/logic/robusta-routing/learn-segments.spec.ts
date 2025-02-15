@@ -15,7 +15,8 @@ describe('RobustaBlogSegmentsResolver', () => {
       {
         date: '2023-01-01',
         title: 'English Blockchain Post',
-        category: 'blockchain',
+        categoryPath: 'blockchain',
+        categories: ['blockchain'],
         tags: ['crypto'],
         locale: 'en',
         image: '...',
@@ -33,7 +34,8 @@ describe('RobustaBlogSegmentsResolver', () => {
       {
         date: '2023-01-02',
         title: 'French Blockchain Post',
-        category: 'blockchain',
+        categoryPath: 'blockchain',
+        categories: ['blockchain'],
         tags: ['crypto'],
         locale: 'fr',
         image: '...',

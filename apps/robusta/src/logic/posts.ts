@@ -5,6 +5,7 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import { immutableSlugify } from '@/logic/routing/slugify';
 import { PageRoute } from 'next/dist/server/dev/turbopack/types';
+import { getPostsByCategory } from '@/logic/categories/robusta-categories';
 
 // TODO: some or all are mandatory
 // frontMatter should have not mandatories, and we should create post from frontmatter
@@ -12,7 +13,7 @@ export interface PostFrontMatter {
   date: string;
   modified?: string;
   title: string;
-  category: string;
+  categoryPath: string;
   tags: string[];
   locale?: string;
   image?: string;
@@ -29,7 +30,8 @@ export interface IPost {
   date: string;
   modified?: string;
   title: string;
-  category: string;
+  categories: string[];
+  categoryPath: string;
   tags: string[];
   locale: string;
   image?: string;
@@ -47,7 +49,8 @@ export class Post implements IPost {
   date!: string;
   modified?: string;
   title!: string;
-  category!: string;
+  categories!: string[];
+  categoryPath!: string;
   tags!: string[];
   locale!: string;
   image!: string;
@@ -66,10 +69,12 @@ export class Post implements IPost {
     protected isDefaultLocale: boolean,
   ) {
     Object.assign(this, p);
+    this.categoryPath = this.categories.join('/');
   }
 
   getFilePath(): string {
-    return `/${this.category}/${this.slug}`;
+    const categoryPath = this.categories.join('/');
+    return `/${this.categoryPath}/${this.slug}`;
   }
 
   /**
@@ -78,7 +83,7 @@ export class Post implements IPost {
    */
   getImmutableUrl(): string {
     const localeSegment = this.isDefaultLocale ? '' : `/${this.locale}`;
-    return `/${this.blogHome}/${localeSegment}/${this.category}/${this.slug}`;
+    return `/${this.blogHome}/${localeSegment}/${this.categoryPath}/${this.slug}`;
   }
 }
 
@@ -155,16 +160,17 @@ function validateFrontMatter(
   if (!frontMatter.title) {
     throw 'No title: ' + filePath;
   }
-  if (!frontMatter.category) {
+  if (!frontMatter.categoryPath) {
     throw 'No category: ' + filePath;
   }
-  if (!filePath.includes(frontMatter.category)) {
-    throw `Wrong category ${frontMatter.category} from path: ${filePath}`;
+  if (!filePath.includes(frontMatter.categoryPath)) {
+    throw `Wrong category ${frontMatter.categoryPath} from path: ${filePath}`;
   }
 
   // -- END OF MANDATORY DATA
 
   iPost = { ...frontMatter };
+  iPost.categories = frontMatter.categoryPath.split('/');
 
   if (!frontMatter.tags) {
     iPost.tags = [];
@@ -284,15 +290,14 @@ export function sortPostsByDate(posts: Post[]): Post[] {
 
 export async function getPostByCategoryAndSlug(
   blogConfig: BlogConfig,
-  categoryPath: string,
+  categories: string[],
   slug: string,
 ): Promise<Post | undefined> {
-  const posts = await getSortedPostsData(blogConfig);
+  const allPosts = await getSortedPostsData(blogConfig);
+  const postsByCategory = getPostsByCategory(categories, allPosts);
 
-  return posts.find(
+  return postsByCategory.find(
     (post) =>
-      trimSlash(post.category).toLowerCase() ===
-        trimSlash(categoryPath).toLowerCase() &&
       trimSlash(post.slug).toLowerCase() === trimSlash(slug).toLowerCase(),
   );
 }

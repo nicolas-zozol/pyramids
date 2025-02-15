@@ -4,7 +4,7 @@ tags: ["language", "state-of-the-art"]
 locale: "fr"
 date: "2020-12-13"
 image: ./images/all-languages-2021-small.png
-category: theory
+categoryPath: theory
 published: true
 author: Nicolas Zozol
 featured: true

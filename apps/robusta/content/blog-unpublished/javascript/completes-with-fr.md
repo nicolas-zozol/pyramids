@@ -5,7 +5,7 @@ locale: "fr"
 enVersion: "completing-a-rxjs-observable-with-another"
 date: "2021-08-23"
 image: ./images/stop.png
-category: javascript
+categoryPath: javascript
 author: Nicolas Zozol
 ---
 

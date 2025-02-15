@@ -58,14 +58,14 @@ export function getPostUrl(post: Post): string {
     return joinSegments([
       getSeoPyramidsConfig().domain,
       'blog',
-      post.category,
+      post.categoryPath,
       oldUrlMap.get(post.slug)!,
     ]);
   } else {
     return joinSegments([
       getSeoPyramidsConfig().domain,
       'blog',
-      post.category,
+      post.categoryPath,
       post.slug,
     ]);
   }

@@ -4,7 +4,7 @@ tags: ["gatsby", "javascript"]
 locale: fr
 date: "2020-09-07"
 image: ../images/javascript.jpg
-category: theory
+categoryPath: theory
 ---
 
 Solid principles are important for writing maintainable code.
