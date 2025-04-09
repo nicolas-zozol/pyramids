@@ -42,12 +42,7 @@ export const BreadCrumb: FC<BreadCrumbProps> = ({ route, className }) => {
   }
 
   return (
-    <div
-      className={twCss(
-        'breadcrumbs rb-breadcrumb text-primary text-sm',
-        className,
-      )}
-    >
+    <div className={'breadcrumbs text-primary text-sm'}>
       <ul className={'m-0'}>
         {segments.map((seg, index) => (
           <li key={index}>
