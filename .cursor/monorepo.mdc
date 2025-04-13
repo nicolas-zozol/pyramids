@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+I want to build multiple SEO content websites that are similar.
+So my current tech stack is a monorepo with yarn workspaces, and next.js deployed with SSR with React Server Components (RSC). We use typescript over javascript almost everywhere.
+It is deployed on Vercel
+
+VERY important: When adding a local file import, always import typescript files using '.js' extension. If you touch a file that contains an typescript import without '.js', don't add it yourself, but put a warning.
+Example:
+
+```ts
+import dotenv from 'dotenv'; // not local
+import { getOpenAiKey } from '../api/get-open-ai-key.js'; // local, add .js
+```
+
+
+For the Seo Pyramids project, it will make many websites, starting with dakar.surf and robusta.build.
+
+Components are made with react, typescript and tailwind.
+
+The sites are in /pyramids/apps
+So we have /pyramids/apps/dakar and /pyramids/apps/robusta. Then package.json goes into each directory
+
+The shared components across all sites (buttons, column-layouts, cta..) are in /pyramids/packages
+
+So we have /pyramids/packages/layouts and /pyramids/packages/ctas.  Then package.json goes into each directory.
+
+/pyramids/packages/imagine is a package that is used to generate images with openai. It is a wrapper around the openai api.
+NEVER execute a script by yourself in /imagine/script. It costs AI token, it's expensive
+
+The structure of packages/ will probably change it the time: some package will be merged, other will appear.
+
+
