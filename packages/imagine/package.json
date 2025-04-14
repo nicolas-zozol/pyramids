@@ -10,15 +10,18 @@
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts src/**/*.tsx",
     "watch": "tsc -p . --watch",
-    "haiku": "vite-node src/script/run-script.ts"
+    "haiku": "vite-node src/script/run-script.ts",
+    "puppets": "vite-node src/puppets/index.ts"
   },
   "dependencies": {
     "openai": "^4.93.0",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "puppeteer": "^21.7.0"
   },
   "devDependencies": {
     "typescript": "^5",
     "@types/node": "^20",
-    "vite-node": "^3.1.1"
+    "vite-node": "^3.1.1",
+    "@types/puppeteer": "^7.0.4"
   }
 }
