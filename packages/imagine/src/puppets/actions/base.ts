@@ -39,7 +39,7 @@ export abstract class BaseAction implements ActionHandler {
 
   protected async cleanup(): Promise<void> {
     const shouldKeepOpen = this.options.keepOpen ?? this.config.defaultKeepOpen;
-
+    console.log(shouldKeepOpen);
     if (!shouldKeepOpen) {
       await this.browserManager.close();
     } else {

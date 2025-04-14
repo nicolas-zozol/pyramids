@@ -34,7 +34,7 @@ export class OpenAction extends BaseAction {
         message: `Error opening ${url}: ${error instanceof Error ? error.message : 'Unknown error'}`,
       });
     } finally {
-      await this.cleanup();
+      //await this.cleanup();
     }
   }
 }
