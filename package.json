@@ -23,7 +23,7 @@
   },
   "workspaces": [
     "apps/*",
-    "apps/telemetry-demo/*",
+    "services/*",
     "packages/*"
   ],
   "devDependencies": {

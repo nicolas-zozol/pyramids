@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@robusta/telemetry": "1.0.0"
+    "@robusta/scribe-intel": "1.0.0"
   },
   "devDependencies": {
     "typescript": "~5.7.2",

@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+ScribeIntel is a project by Robusta Build that allow observability for 
+non-technical persons, including Marketing, Product and casual vibe coders.
+
+# Telemetry System
+
+This project is an Express server that receive logs from ScribeIntelSDK and send them 
+to the backend, which by default is a Loki instance.
+
+The Log format is defined in @robusta/scribe-intel-sdk named IntelLog.
+
+# Axios instead of Fetch
+
+Don't use node-fetch, rely on axios instead.

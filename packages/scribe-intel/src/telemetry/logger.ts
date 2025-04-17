@@ -1,3 +1,18 @@
+import { z } from 'zod';
+
+export const intelLogSchema = z.object({
+  timestamp: z.string(),
+  timestampNS: z.number(),
+  receivedAtNS: z.number(),
+  level: z.string(),
+  message: z.string(),
+  component: z.string(),
+  labels: z.record(z.string()).optional(),
+  data: z.record(z.unknown()).optional()
+});
+
+export type IntelLog = z.infer<typeof intelLogSchema>;
+
 /**
  * Logger - Handles structured logging with consistent formatting
  *
@@ -14,7 +29,7 @@ export class Logger {
   static log(
     message: string,
     component: string,
-    data?: Record<string, any>
+    data?: Record<string, any>,
   ): void {
     //console.info(message, JSON.stringify({ ...(data && { data }) }));
   }
@@ -28,7 +43,7 @@ export class Logger {
   static error(
     message: string,
     component: string,
-    error?: Error | unknown
+    error?: Error | unknown,
   ): void {
     console.error(
       JSON.stringify({
@@ -38,14 +53,14 @@ export class Logger {
         component,
         error: error instanceof Error ? error.message : String(error || ''),
         stack: error instanceof Error ? error.stack : undefined,
-      })
+      }),
     );
   }
 
   static warn(
     message: string,
     component: string,
-    error?: Error | unknown
+    error?: Error | unknown,
   ): void {
     console.warn(
       JSON.stringify({
@@ -55,7 +70,7 @@ export class Logger {
         component,
         error: error instanceof Error ? error.message : String(error || ''),
         stack: error instanceof Error ? error.stack : undefined,
-      })
+      }),
     );
   }
 
@@ -68,7 +83,7 @@ export class Logger {
   static debug(
     message: string,
     component: string,
-    data?: Record<string, any>
+    data?: Record<string, any>,
   ): void {
     // Only log in development or when debug is enabled
     if (
@@ -82,7 +97,7 @@ export class Logger {
           message,
           component,
           ...(data && { data: JSON.stringify(data) }),
-        })
+        }),
       );
     }
   }

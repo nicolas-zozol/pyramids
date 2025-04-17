@@ -3,7 +3,10 @@ description:
 globs: 
 alwaysApply: false
 ---
-# Telemetry System
+# Scribe INTEL Telemetry System
+
+INTEL stand for INTent Elegant Logger
+It's also using Open TELemetry standard, and is a Intelligence tool for the whole team (Product, Marketing, non infra Devs)
 
 This directory contains a structured logging and tracing system for the
 application using OpenTelemetry. The system is designed to provide consistent,
@@ -28,19 +31,21 @@ yarn add @opentelemetry/api @opentelemetry/sdk-node @opentelemetry/auto-instrume
 
 ## Usage
 
+WARNING: This documentation BELOW is absolutely not up to date. 
+
 ### Basic Logging
 
 ```typescript
 import { Telemetry } from '../libs/telemetry';
 
 // Create a component identifier
-const COMPONENT = Telemetry.component('Component', 'LoginForm');
+const telemetry = Telemetry.factory('Component', 'LoginForm');
 
 // Log an informational message
-Telemetry.log('User clicked login button', COMPONENT);
+telemetry.log('User clicked login button', COMPONENT);
 
 // Log with additional data
-Telemetry.log('Form submitted', COMPONENT, {
+telemetry.log('Form submitted', COMPONENT, {
   email: 'user@example.com',
   rememberMe: true,
 });
@@ -49,11 +54,11 @@ Telemetry.log('Form submitted', COMPONENT, {
 try {
   // Some code that might throw
 } catch (error) {
-  Telemetry.error('Failed to authenticate user', COMPONENT, error);
+  telemetry.error('Failed to authenticate user', COMPONENT, error);
 }
 
 // Debug logging (only shown in development)
-Telemetry.debug('Form validation details', COMPONENT, {
+telemetry.debug('Form validation details', COMPONENT, {
   validationResults: { email: true, password: false },
 });
 ```
@@ -71,20 +76,20 @@ const span = Telemetry.startSpan('login_process', {
 });
 
 // Add events to the span
-Telemetry.addEvent(span, 'validation_started');
+telemetry.addEvent(span, 'validation_started');
 
 // Add attributes to the span
-Telemetry.setAttribute(span, 'validation.success', true);
+telemetry.setAttribute(span, 'validation.success', true);
 
 // Record errors on the span
 try {
   // Some code that might throw
 } catch (error) {
-  Telemetry.recordError(span, error);
+  telemetry.recordError(span, error);
 }
 
 // End the span
-Telemetry.endSpan(span);
+telemetry.endSpan(span);
 ```
 
 ### Using withSpan for Automatic Span Management
@@ -97,13 +102,13 @@ async function authenticateUser(email: string, password: string) {
     'authenticate_user',
     async (span) => {
       // This code is executed within the span
-      Telemetry.setAttribute(span, 'user.email', email);
+      telemetry.setAttribute(span, 'user.email', email);
 
       // Do authentication
       const result = await api.authenticate(email, password);
 
       // Add more attributes
-      Telemetry.setAttribute(span, 'auth.success', result.success);
+      telemetry.setAttribute(span, 'auth.success', result.success);
 
       return result;
     },
@@ -130,11 +135,11 @@ parameter:
 - API Routes: `API: /path/to/route` (e.g., `API: /api/auth/login`)
 - Middleware: `Middleware: middlewareName` (e.g., `Middleware: authGuard`)
 
-The `Telemetry.component()` helper method can be used to create these
+The `Telemetry.factory()` helper method can be used to create these
 identifiers:
 
 ```typescript
-const COMPONENT = Telemetry.component('API', '/user/me');
+const telemetry = telemetry.component('API', '/user/me');
 ```
 
 ## Setup
