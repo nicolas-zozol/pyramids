@@ -1,0 +1,30 @@
+{
+  "name": "@robusta/telemetry",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint src/**/*.ts src/**/*.tsx",
+    "watch": "tsc -p . --watch"
+  },
+  "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.40.3",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.46.0",
+    "@opentelemetry/resources": "^1.19.0",
+    "@opentelemetry/sdk-node": "^0.46.0",
+    "@opentelemetry/semantic-conventions": "^1.19.0"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/hapi__shot": "4.1.6",
+    "vitest": "^3.0.4",
+    "vite-node": "^3.1.1"
+  },
+  "resolutions": {
+    "@types/hapi__shot": "4.1.6"
+  }
+}
