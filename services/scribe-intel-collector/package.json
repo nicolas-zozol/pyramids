@@ -6,7 +6,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "vite-node src/app.ts",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "play": "vite-node src/script/play.ts"
   },
   "dependencies": {
     "@robusta/scribe-intel": "1.0.0",
