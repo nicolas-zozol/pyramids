@@ -14,6 +14,7 @@ to the backend, which by default is a Loki instance.
 
 The Log format is defined in @robusta/scribe-intel-sdk named IntelLog.
 
-# Axios instead of Fetch
+# use Fetch
 
-Don't use node-fetch, rely on axios instead.
+Use native nodeJS fetch, not node-fetch, until we replace it with something more solid
+like tanstack query for specific usage

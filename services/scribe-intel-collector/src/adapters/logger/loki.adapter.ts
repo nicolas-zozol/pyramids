@@ -6,7 +6,10 @@ export class LokiAdapter implements IntelLogAdapter {
   private readonly lokiUrl: string;
   private readonly headers: Record<string, string>;
 
-  constructor(config: { url: string; auth?: { username: string; password: string } }) {
+  constructor(config: {
+    url: string;
+    auth?: { username: string; password: string };
+  }) {
     this.lokiUrl = `${config.url}/loki/api/v1/push`;
     this.headers = {
       'Content-Type': 'application/json',
@@ -14,7 +17,7 @@ export class LokiAdapter implements IntelLogAdapter {
 
     if (config.auth) {
       const authString = Buffer.from(
-        `${config.auth.username}:${config.auth.password}`
+        `${config.auth.username}:${config.auth.password}`,
       ).toString('base64');
       this.headers['Authorization'] = `Basic ${authString}`;
     }
@@ -22,24 +25,28 @@ export class LokiAdapter implements IntelLogAdapter {
 
   private formatLogForLoki(log: IntelLog): object {
     return {
-      streams: [{
-        stream: log.labels || {},
-        values: [[
-          log.timestampNS.toString(),
-          JSON.stringify({
-            level: log.level,
-            message: log.message,
-            component: log.component,
-            ...log.data
-          })
-        ]]
-      }]
+      streams: [
+        {
+          stream: log.labels || {},
+          values: [
+            [
+              log.timestampNS.toString(),
+              JSON.stringify({
+                level: log.level,
+                message: log.message,
+                component: log.component,
+                ...log.data,
+              }),
+            ],
+          ],
+        },
+      ],
     };
   }
 
   async sendLog(log: IntelLog): Promise<void> {
     const body = this.formatLogForLoki(log);
-    
+
     const response = await fetch(this.lokiUrl, {
       method: 'POST',
       headers: this.headers,
@@ -56,11 +63,11 @@ export class LokiAdapter implements IntelLogAdapter {
     try {
       const response = await fetch(
         `${this.lokiUrl.replace('/push', '/ready')}`,
-        { headers: this.headers }
+        { headers: this.headers },
       );
       return response.ok;
     } catch (error) {
       return false;
     }
   }
-} 
+}

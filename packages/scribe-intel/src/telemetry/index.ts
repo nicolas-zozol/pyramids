@@ -1,5 +1,5 @@
-import { Logger } from './logger';
-import { Tracer } from './tracer';
+import { Logger } from './logger.js';
+import { Tracer } from './tracer.js';
 import type { Span, SpanStatusCode } from '@opentelemetry/api';
 
 export type TelemetryComponentType =
