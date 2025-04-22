@@ -1,6 +1,3 @@
-import * as console from 'node:console';
-import { undefined } from 'zod';
-
 type MetricValue = string | number | boolean | undefined;
 type MetricRecord = Record<string, string | number | boolean | undefined>;
 
@@ -144,12 +141,18 @@ export class Intent extends EmptyIntent implements IntentInterface {
     // TODO: Replace with this.sender.send({...})
   }
 
-  cancel(valueOrComment?: MetricValue | undefined, data?: MetricRecord | undefined): void {
+  cancel(
+    valueOrComment?: MetricValue | undefined,
+    data?: MetricRecord | undefined,
+  ): void {
     console.log('CancelIntent:', this.getName(), valueOrComment, data);
     // TODO: Replace with this.sender.send({...})
   }
 
-  fail(valueOrComment?: MetricValue | undefined, data?: MetricRecord | undefined): void {
+  fail(
+    valueOrComment?: MetricValue | undefined,
+    data?: MetricRecord | undefined,
+  ): void {
     console.log('FailIntent:', this.getName(), valueOrComment, data);
     // TODO: Replace with this.sender.send({...})
   }
@@ -208,10 +211,20 @@ export class IntelClient implements IntelInterface {
   }
 }
 
+let mainIntelInstance: IntelInterface | undefined = undefined;
+
 // Replace EasyIntelFactory class with a setup function
 export function createIntelInstance(collectorUrl: string): IntelInterface {
+  if (mainIntelInstance) {
+    console.warn(
+      'Intel instance already created. Returning existing instance.',
+    );
+    return mainIntelInstance;
+  }
+
   const sender: IntentSender = {
-    send: async (payload: any) => { // Accept a generic payload
+    send: async (payload: any) => {
+      // Accept a generic payload
       try {
         // Basic validation
         if (!collectorUrl) {
@@ -219,8 +232,8 @@ export function createIntelInstance(collectorUrl: string): IntelInterface {
           return;
         }
         if (!payload) {
-            console.error('Intel payload is empty.');
-            return;
+          console.error('Intel payload is empty.');
+          return;
         }
 
         const response = await fetch(collectorUrl, {
@@ -238,18 +251,30 @@ export function createIntelInstance(collectorUrl: string): IntelInterface {
           const responseBody = await response.text(); // Read body for context
           console.error(
             `Intel Send Error: ${response.status} ${response.statusText}`,
-            { url: collectorUrl, body: responseBody }
+            { url: collectorUrl, body: responseBody },
           );
         }
         // Optionally log success for debugging
         // else { console.log('Intel Send Success', payload); }
-
       } catch (error) {
         // Catch network errors or issues with fetch itself
-        console.error('Intel Send Network Error:', { url: collectorUrl, error });
+        console.error('Intel Send Network Error:', {
+          url: collectorUrl,
+          error,
+        });
       }
     },
   };
 
-  return new IntelClient(sender);
+  mainIntelInstance = new IntelClient(sender);
+  return mainIntelInstance;
+}
+
+export function getIntelInstance(): IntelInterface {
+  if (!mainIntelInstance) {
+    throw new Error(
+      'Intel instance not created. Call createIntelInstance first.',
+    );
+  }
+  return mainIntelInstance;
 }
