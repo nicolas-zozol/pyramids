@@ -1,8 +1,12 @@
-import { EasyIntentFactory } from './intent.js';
+import { createIntelInstance } from './intent.js';
 
 export function testIntentFlow() {
-  const intentFactory = new EasyIntentFactory('http://localhost:6000');
-  const intent = intentFactory.createIntent();
+  const intel = createIntelInstance('http://localhost:6000');
+  const intent = intel.createIntent('test');
 
-  intent.start('test', 1, { key: 'value' });
+  intent.start('easy going', { key: 'value' });
+  intent.continue('easy going', { key: 'value' });
+  intent.fail();
+  const tata = intent.sub('tata');
+  tata.cancel();
 }
