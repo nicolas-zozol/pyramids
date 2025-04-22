@@ -1,7 +1,11 @@
+import * as console from 'node:console';
+import { undefined } from 'zod';
+import * as console from 'node:console';
+
 type MetricValue = string | number | boolean | undefined;
 type MetricRecord = Record<string, string | number | boolean | undefined>;
 
-export interface ObserverInterface {
+export interface IntelInterface {
   identify: (key: string, user: any, data?: MetricRecord) => void;
   page: (name: string, data?: MetricRecord) => void;
   instantIntent: (
@@ -13,6 +17,17 @@ export interface ObserverInterface {
   error(name: string, component: string, data?: MetricRecord): void;
   warning(name: string, component: string, data?: MetricRecord): void;
   createIntent: (name: string) => IntentInterface;
+}
+
+interface WebIdentifier {
+  identify: (key: string, user: any, data?: MetricRecord) => void;
+  page: (name: string, data?: MetricRecord) => void;
+}
+
+interface IntelLogger {
+  log: (name: string, component: string, data?: MetricRecord) => void;
+  error: (name: string, component: string, data?: MetricRecord) => void;
+  warning: (name: string, component: string, data?: MetricRecord) => void;
 }
 
 export interface IntentInterface {
@@ -27,14 +42,6 @@ export interface IntentInterface {
 }
 
 export abstract class EmptyIntent implements IntentInterface {
-  identify(key: string, user: any, data?: MetricRecord): void {
-    // No operation
-  }
-
-  page(name: string, data?: MetricRecord): void {
-    // No operation
-  }
-
   start(value?: MetricValue, data?: MetricRecord): void {
     // No operation
   }
@@ -49,20 +56,32 @@ export abstract class EmptyIntent implements IntentInterface {
   instant(value?: MetricValue, data?: MetricRecord): void {
     // No operation
   }
+
+  cancel(value?: MetricValue, data?: MetricRecord): void {
+    // No operation
+  }
+
+  fail(value?: MetricValue, data?: MetricRecord): void {
+    // No operation
+  }
+
+  abstract getName(): string;
+
+  abstract sub(name: string): this;
 }
 
 export interface IntentSender {
   send: (intent: IntentInterface) => void;
 }
 
-export class IdentifyIntent extends EmptyIntent implements IntentInterface {
-  constructor(public sender: IntentSender) {
-    super();
-  }
+export class Identifier implements WebIdentifier {
+  constructor(public sender: IntentSender) {}
 
   identify(key: string, user: any, data?: MetricRecord): void {
     console.log('IdentifyIntent:', key, user, data);
   }
+
+  page(name: string, data: MetricRecord | undefined): void {}
 }
 
 export class PageIntent extends EmptyIntent implements IntentInterface {
@@ -101,24 +120,27 @@ export interface IntentFactory {
   createIntent: (sender: IntentSender) => IntentInterface;
 }
 
-export class DefaultIntentFactory implements IntentFactory {
+export class DefaultIntentFactory implements IntelInterface {
   constructor(public sender: IntentSender) {}
-  createIntent(sender: IntentSender): IntentInterface {
-    return new Intent(sender);
+
+  createIntent(): IntentInterface {
+    return new Intent(this.sender);
+  }
+
+  getSender(): IntentSender {
+    return this.sender;
   }
 }
 
-export class EasyIntentFactory implements IntentFactory {
-  public sender: IntentSender;
-
+export class EasyIntentFactory extends DefaultIntentFactory {
   constructor(public collectorUrl: string) {
-    this.sender = {
+    super({
       send: (intent: IntentInterface) => {
         // fetch + collectorUrl
         console.log('Sending intent:', intent);
         // Implement the logic to send the intent to the collector URL
       },
-    };
+    });
   }
   createIntent(): IntentInterface {
     return new Intent(this.sender);
