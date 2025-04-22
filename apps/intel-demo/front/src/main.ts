@@ -1,4 +1,4 @@
-import { setupTelemetry, Telemetry } from '@robusta/telemetry';
+import { setupTelemetry, Telemetry } from '@robusta/scribe-intel';
 
 // Initialize telemetry with proper configuration
 setupTelemetry();
