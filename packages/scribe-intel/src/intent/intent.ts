@@ -95,32 +95,38 @@ export class PageIntent extends EmptyIntent implements IntentInterface {
 }
 
 export class Intent extends EmptyIntent implements IntentInterface {
-  constructor(public sender: IntentSender) {
+  constructor(
+    public name: string,
+    public sender: IntentSender,
+  ) {
     super();
   }
 
+  getName(): string {
+    return this.name;
+  }
   start(value?: MetricValue, data?: MetricRecord): void {
-    console.log('StartIntent:', name, value, data);
+    console.log('StartIntent:', this.getName(), value, data);
   }
 
   continue(value?: MetricValue, data?: MetricRecord): void {
-    console.log('ContinueIntent:', name, value, data);
+    console.log('ContinueIntent:', this.getName(), value, data);
   }
 
   end(value?: MetricValue, data?: MetricRecord): void {
-    console.log('EndIntent:', name, value, data);
+    console.log('EndIntent:', this.getName(), value, data);
   }
 
   instant(value?: MetricValue, data?: MetricRecord): void {
-    console.log('InstantIntent:', name, value, data);
+    console.log('InstantIntent:', this.getName(), value, data);
   }
 }
 
 export interface IntentFactory {
-  createIntent: (sender: IntentSender) => IntentInterface;
+  createIntel: (sender: IntentSender) => IntelInterface;
 }
 
-export class DefaultIntentFactory implements IntelInterface {
+export class DefaultIntelFactory implements IntelInterface {
   constructor(public sender: IntentSender) {}
 
   createIntent(): IntentInterface {
@@ -132,7 +138,7 @@ export class DefaultIntentFactory implements IntelInterface {
   }
 }
 
-export class EasyIntentFactory extends DefaultIntentFactory {
+export class EasyIntelFactory extends DefaultIntelFactory {
   constructor(public collectorUrl: string) {
     super({
       send: (intent: IntentInterface) => {
