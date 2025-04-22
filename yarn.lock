@@ -363,11 +363,6 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.3.0.tgz#8368869dcb735be2e7f5cb7647de78e167a251fb"
   integrity sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==
 
-"@hapi/hoek@^11.0.2":
-  version "11.0.7"
-  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-11.0.7.tgz#56a920793e0a42d10e530da9a64cc0d3919c4002"
-  integrity sha512-HV5undWkKzcB4RZUusqOpcgxOaq6VOAH7zhhIr2g3G8NF/MlFO75SjOr2NfuSx0Mh40+1FqCkagKLJRykUWoFQ==
-
 "@hapi/iron@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@hapi/iron/-/iron-6.0.0.tgz#ca3f9136cda655bdd6028de0045da0de3d14436f"
@@ -388,14 +383,6 @@
     "@hapi/teamwork" "5.x.x"
     "@hapi/validate" "1.x.x"
 
-"@hapi/shot@*":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@hapi/shot/-/shot-6.0.1.tgz#ea84d1810b7c8599d5517c23b4ec55a529d7dc16"
-  integrity sha512-s5ynMKZXYoDd3dqPw5YTvOR/vjHvMTxc388+0qL0jZZP1+uwXuUD32o9DuuuLsmTlyXCWi02BJl1pBpwRuUrNA==
-  dependencies:
-    "@hapi/hoek" "^11.0.2"
-    "@hapi/validate" "^2.0.1"
-
 "@hapi/teamwork@5.x.x":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@hapi/teamwork/-/teamwork-5.1.1.tgz#4d2ba3cac19118a36c44bf49a3a47674de52e4e4"
@@ -408,13 +395,6 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@hapi/topo@^6.0.1":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-6.0.2.tgz#f219c1c60da8430228af4c1f2e40c32a0d84bbb4"
-  integrity sha512-KR3rD5inZbGMrHmgPxsJ9dbi6zEK+C3ZwUwTa+eMwWLz7oijWUTWD2pMSNNYJAU6Qq+65NkxXjqHr/7LM2Xkqg==
-  dependencies:
-    "@hapi/hoek" "^11.0.2"
-
 "@hapi/validate@1.x.x":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@hapi/validate/-/validate-1.1.3.tgz#f750a07283929e09b51aa16be34affb44e1931ad"
@@ -422,14 +402,6 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
     "@hapi/topo" "^5.0.0"
-
-"@hapi/validate@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@hapi/validate/-/validate-2.0.1.tgz#45cf228c4c8cfc61ba2da7e0a5ba93ff3b9afff1"
-  integrity sha512-NZmXRnrSLK8MQ9y/CMqE9WSspgB9xA41/LlYR0k967aSZebWr4yNrpxIbov12ICwKy4APSlWXZga9jN5p6puPA==
-  dependencies:
-    "@hapi/hoek" "^11.0.2"
-    "@hapi/topo" "^6.0.1"
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
@@ -2238,14 +2210,7 @@
   dependencies:
     "@types/mime-db" "*"
 
-"@types/hapi__shot@*":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@types/hapi__shot/-/hapi__shot-6.0.0.tgz#3496fa7739e0f3cb9e74b44d5750003645c8742a"
-  integrity sha512-CUxk0AEQRpIT2cx7EYXkqaXm60LP46ZyEhr/7uov7D/ZLysA5DKkfBtPIYnoWvn8qfcFV/7YHLd3U9gThuhb0A==
-  dependencies:
-    "@hapi/shot" "*"
-
-"@types/hapi__shot@4.1.6":
+"@types/hapi__shot@*", "@types/hapi__shot@4.1.6":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@types/hapi__shot/-/hapi__shot-4.1.6.tgz#ee45d9a4a4e109a8d623e4f5f58ae2d8bd7c0773"
   integrity sha512-h33NBjx2WyOs/9JgcFeFhkxnioYWQAZxOHdmqDuoJ1Qjxpcs+JGvSjEEoDeWfcrF+1n47kKgqph5IpfmPOnzbg==
@@ -2493,6 +2458,11 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-3.0.3.tgz#acaab0f919ce69cce629c2d4ed2eb4adc1b6c20c"
   integrity sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==
+
+"@types/uuid@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-10.0.0.tgz#e9c07fe50da0f53dc24970cca94d619ff03f6f6d"
+  integrity sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==
 
 "@types/yauzl@^2.9.1":
   version "2.10.3"
@@ -7524,6 +7494,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
+
+uuid@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.1.0.tgz#9549028be1753bb934fc96e2bca09bb4105ae912"
+  integrity sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==
 
 uuid@^9.0.1:
   version "9.0.1"
