@@ -1,7 +1,7 @@
 import {
+  EmptyIntent,
   getIntelInstance,
   IntelInterface,
-  Intent,
   IntentInterface,
   IntentSender,
   MetricRecord,
@@ -9,10 +9,69 @@ import {
   setMainIntelInstance,
 } from '../intent.js';
 
+export class GarboIntent extends EmptyIntent implements IntentInterface {
+  constructor(
+    public name: string,
+    public sender: IntentSender,
+  ) {
+    super();
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
+  sub(subName: string): this {
+    // Create a new Intent instance with a hierarchical name
+    // Note: This creates a *new* instance. If state needs to be shared,
+    // this approach might need adjustment.
+    const hierarchicalName = `${this.name}.${subName}`;
+    // We need to cast to 'this' type, which might be restrictive.
+    // Consider if Intent should return IntentInterface or a new Intent.
+    return new GarboIntent(hierarchicalName, this.sender) as this;
+  }
+
+  start(value?: MetricValue, data?: MetricRecord): void {
+    console.log('StartIntent:', this.getName(), value, data);
+    // TODO: Replace with this.sender.send({...})
+  }
+
+  continue(value?: MetricValue, data?: MetricRecord): void {
+    console.log('ContinueIntent:', this.getName(), value, data);
+    // TODO: Replace with this.sender.send({...})
+  }
+
+  end(value?: MetricValue, data?: MetricRecord): void {
+    console.log('EndIntent:', this.getName(), value, data);
+    // TODO: Replace with this.sender.send({...})
+  }
+
+  instant(value?: MetricValue, data?: MetricRecord): void {
+    console.log('InstantIntent:', this.getName(), value, data);
+    // TODO: Replace with this.sender.send({...})
+  }
+
+  cancel(
+    valueOrComment?: MetricValue | undefined,
+    data?: MetricRecord | undefined,
+  ): void {
+    console.log('CancelIntent:', this.getName(), valueOrComment, data);
+    // TODO: Replace with this.sender.send({...})
+  }
+
+  fail(
+    valueOrComment?: MetricValue | undefined,
+    data?: MetricRecord | undefined,
+  ): void {
+    console.log('FailIntent:', this.getName(), valueOrComment, data);
+    // TODO: Replace with this.sender.send({...})
+  }
+}
+
 /**
  * Juan Pujol Garcia aka Garbo is one of the main agent of Fortitude operation
  */
-export class IntelClient implements IntelInterface {
+export class GarboIntelClient implements IntelInterface {
   constructor(public sender: IntentSender) {}
 
   identify(key: string, user: any, data?: MetricRecord): void {
@@ -47,13 +106,13 @@ export class IntelClient implements IntelInterface {
 
   createIntentInstance(name: string): IntentInterface {
     // Linter Error: Expected 2 arguments, but got 1. - Needs name!
-    return new Intent(name, this.sender);
+    return new GarboIntent(name, this.sender);
   }
 
   createIntent(name: string): IntentInterface {
     // Linter Error: Expected 2 arguments, but got 1. - Needs name!
     // This implementation fulfills the IntelInterface requirement
-    return new Intent(name, this.sender);
+    return new GarboIntent(name, this.sender);
   }
 
   getSender(): IntentSender {
@@ -113,7 +172,7 @@ export function createIntelInstance(collectorUrl: string): IntelInterface {
     },
   };
 
-  const garboIntelInstance = new IntelClient(sender);
+  const garboIntelInstance = new GarboIntelClient(sender);
   setMainIntelInstance(garboIntelInstance);
   return garboIntelInstance;
 }
