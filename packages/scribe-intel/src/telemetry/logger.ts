@@ -8,7 +8,7 @@ export const intelLogSchema = z.object({
   message: z.string(),
   component: z.string(),
   labels: z.record(z.string()).optional(),
-  data: z.record(z.unknown()).optional()
+  data: z.record(z.unknown()).optional(),
 });
 
 export type IntelLog = z.infer<typeof intelLogSchema>;
@@ -16,7 +16,7 @@ export type IntelLog = z.infer<typeof intelLogSchema>;
 /**
  * Logger - Handles structured logging with consistent formatting
  *
- * Provides methods for logging at different levels (INFO, ERROR, DEBUG)
+ * Provides methods for logging at different levels (INFO, WARN, ERROR, DEBUG)
  * with consistent structure and minimal nesting.
  */
 export class Logger {

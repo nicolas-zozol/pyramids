@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { getSafeLocalStorage } from '../../../utils/localstorage/safe-local-storage.js';
-import { deobfuscateData, obfuscateData } from '../../../utils/obfuscator.js';
+import { getSafeLocalStorage } from '../utils/localstorage/safe-local-storage.js';
+import { deobfuscateData, obfuscateData } from '../utils/obfuscator.js'; // Use uuid for robust anonymous IDs
 // Reminder: Run `yarn add -D @types/uuid` in this package
 
 const USER_ID_KEY = 'saas_intel_user_id';
@@ -8,14 +8,14 @@ const USER_ID_KEY = 'saas_intel_user_id';
 // Helper to safely access localStorage
 const safeLocalStorage = getSafeLocalStorage();
 
-export class HoriIdentifier {
+export class IdentityManager {
   // obfuscated user ID
   private obfuscatedUserId: string | null = null;
 
   constructor() {
     let id = safeLocalStorage.getItem(USER_ID_KEY);
     if (id) {
-      this.obfuscatedUserId = id;
+      this.obfuscatedUserId = deobfuscateData(id);
     }
   }
 

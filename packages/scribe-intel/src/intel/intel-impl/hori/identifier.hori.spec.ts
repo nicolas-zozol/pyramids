@@ -42,7 +42,7 @@ describe('HoriIdentifier', () => {
     const specificUserId: string = 'specific-user-abc';
     const identifier = new HoriIdentifier();
 
-    identifier.setUserId(specificUserId);
+    identifier.identify(specificUserId);
 
     const userId: string = identifier.getUserId();
     expect(userId).toBe(specificUserId);
@@ -64,7 +64,7 @@ describe('HoriIdentifier', () => {
     );
 
     const newSpecificId: string = 'overwritten-user-456';
-    identifier.setUserId(newSpecificId);
+    identifier.identify(newSpecificId);
 
     const userId: string = identifier.getUserId();
     expect(userId).toBe(newSpecificId);
@@ -75,7 +75,7 @@ describe('HoriIdentifier', () => {
   test('reset should generate and store a new obfuscated anonymous ID', () => {
     const initialId: string = 'user-to-reset';
     const identifier = new HoriIdentifier();
-    identifier.setUserId(initialId);
+    identifier.identify(initialId);
     expect(identifier.getUserId()).toBe(initialId);
 
     (vi.mocked(uuidv4) as Mock<() => string>).mockReturnValueOnce(MOCK_UUID_2);
@@ -97,7 +97,7 @@ describe('HoriIdentifier', () => {
     const persistentId: string = 'persist-me';
 
     const identifier1 = new HoriIdentifier();
-    identifier1.setUserId(persistentId);
+    identifier1.identify(persistentId);
     const storedValue1 = safeLocalStorage.getItem(USER_ID_KEY);
     expect(storedValue1).toBe(obfuscateData(persistentId));
 

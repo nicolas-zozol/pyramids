@@ -3,10 +3,10 @@ description:
 globs: 
 alwaysApply: false
 ---
-# Scribe INTEL Telemetry System
+# Saas INTEL Telemetry System
 
 INTEL stand for INTent Elegant Logger
-It's also using Open TELemetry standard, and is a Intelligence tool for the whole team (Product, Marketing, non infra Devs)
+It's also using Open TELemetry standard, and is an Intelligence tool for the whole team (Product, Marketing, non infra Devs)
 
 This directory contains a structured logging and tracing system for the
 application using OpenTelemetry. The system is designed to provide consistent,

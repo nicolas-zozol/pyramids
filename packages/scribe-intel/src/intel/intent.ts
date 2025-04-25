@@ -18,11 +18,6 @@ export interface IntelInterface {
   createIntent: (name: string) => IntentInterface;
 }
 
-interface WebIdentifier {
-  identify: (key: string, user: any, data?: MetricRecord) => void;
-  page: (name: string, data?: MetricRecord) => void;
-}
-
 interface IntelLogger {
   log: (name: string, component: string, data?: MetricRecord) => void;
   error: (name: string, component: string, data?: MetricRecord) => void;
@@ -71,16 +66,6 @@ export abstract class EmptyIntent implements IntentInterface {
 
 export interface IntentSender {
   send: (intent: IntentInterface) => void;
-}
-
-export class Identifier implements WebIdentifier {
-  constructor(public sender: IntentSender) {}
-
-  identify(key: string, user: any, data?: MetricRecord): void {
-    console.log('IdentifyIntent:', key, user, data);
-  }
-
-  page(name: string, data: MetricRecord | undefined): void {}
 }
 
 export class PageIntent extends EmptyIntent implements IntentInterface {
