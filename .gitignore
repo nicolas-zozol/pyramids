@@ -1,3 +1,5 @@
+.env
+
 # Logs
 logs
 *.log
@@ -23,4 +25,12 @@ dist-ssr
 *.sln
 *.sw?
 
-.env
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# public
+public/robots.txt
+public/sitemap.xml
+public/sitemap-0.xml
