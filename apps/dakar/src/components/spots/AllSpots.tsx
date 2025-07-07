@@ -12,7 +12,7 @@ import fakeYoff from './images/small-fake-yoff-640-401.jpg';
 
 export const AllSpots = () => {
   return (
-    <section className="text-main bg-background-body mt-16">
+    <section className="mt-16">
       <h2>Surf Spots</h2>
       <SimpleGridLayout items={getSpotItems()} />
     </section>
@@ -171,7 +171,7 @@ function getSpotContentWithImages(spot: SpotProps) {
   // with float:right css
   return (
     <div>
-      <div className="floaterRight pl-4 pb-4 max-w-[40%]">
+      <div className="floaterRight max-w-[40%] pb-4 pl-4">
         {spot.image && (
           <Image
             src={spot.image}
