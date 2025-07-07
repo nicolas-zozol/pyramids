@@ -2,16 +2,16 @@ import Link from 'next/link';
 
 export const Header = () => {
   return (
-    <header className="bg-background-hero text-white p-4">
-      <nav className=" flex justify-between items-center">
+    <header className="bg-base-100 text-base-content p-4">
+      <nav className="flex items-center justify-between">
         <div className="text-xl font-bold">Dakar.🏄‍</div>
         <ul className="flex space-x-4">
           <li>
-            <Link href="/apps/dakar/public" className="hover:text-gray-400">
+            <Link href="/" className="hover:text-gray-400">
               Home
             </Link>
           </li>
-          <li>
+          {/*<li>
             <Link href="/about" className="hover:text-gray-400">
               About
             </Link>
@@ -20,7 +20,7 @@ export const Header = () => {
             <Link href="/contact" className="hover:text-gray-400">
               Contact
             </Link>
-          </li>
+          </li>*/}
         </ul>
       </nav>
     </header>

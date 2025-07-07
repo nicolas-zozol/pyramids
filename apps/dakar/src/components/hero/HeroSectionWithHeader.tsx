@@ -1,45 +1,25 @@
 import { EmptyLine } from '@robusta/pyramids-layouts';
 import { Header } from '../header/Header';
-import hero from './hero.png'; // Use Next.js asset imports
+import hero from './secret-llm.png'; // Use Next.js asset imports
 
 export const HeroSectionWithHeader = () => {
   return (
-    <section className="relative bg-background-hero bg-cover bg-center w-full">
+    <section className="bg-base-100 text-base-content relative w-full bg-cover bg-center">
       <Header />
-      <EmptyLine size={2} />
-      <h1 className="text-white text-4xl mx-10">
-        The best guide to 🏄 in Dakar 🌊
-      </h1>
-      <EmptyLine size={2} />
 
-      <div className="relative h-[400px]  w-full ">
-        <div className="absolute  mx-auto h-[400px] w-full z-10 ">
-          <div className="w-[70%] mx-auto">
-            <div
-              className="h-[400px] bg-cover bg-center w-full top-40"
-              style={{ backgroundImage: `url(${hero.src})` }}
-            ></div>
+      <div className="hero relative h-[400px] w-full">
+        <div className="absolute z-10 mx-auto h-[400px] w-full">
+          <div
+            className="h-[400px] w-full bg-black bg-cover bg-center opacity-70"
+            style={{ backgroundImage: `url(${hero.src})` }}
+          >
+            {/* Opacity overlay */}
           </div>
         </div>
-
-        <div className="relative h-[100px] bg-background-hero"></div>
-        <div className="relative h-[200px] bg-background-hero  w-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%"
-            height="200"
-            viewBox="0 0 1024 200"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,200 L1024,0 L1024,200  Z"
-              stroke="white"
-              strokeWidth="2"
-              fill="white"
-            />
-          </svg>
+        <div className="rounded-lg absolute left-2 top-5 z-20 mt-2 bg-neutral-200 p-2 opacity-90">
+          <h1 className="mx-10 text-2xl">The best guide to Surf in Dakar 🏄</h1>
         </div>
-        <div className="h-[100px] bg-background-body"></div>
+        <div className="h-[100px]"></div>
       </div>
     </section>
   );

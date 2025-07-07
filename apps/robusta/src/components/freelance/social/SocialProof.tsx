@@ -36,11 +36,11 @@ export const SocialProof: FC<{}> = ({}) => {
         </div>
 
         {/* GitHub Calendar */}
-        <div className="md:hidden">
+        <EmptyLine size={2} />
+
+        <div>
           <GitHubCalendar username="nicolas-zozol" colorScheme={'light'} />
         </div>
-
-        <EmptyLine size={2} />
         <h2>They worked with me</h2>
 
         {/* Enterprise Logos */}

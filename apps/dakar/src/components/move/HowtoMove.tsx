@@ -6,7 +6,7 @@ import Pistard from './pistard.png';
 
 export const HowToMove = () => {
   return (
-    <section className="text-main bg-background-body mt-16">
+    <section className="bg-base-200 mt-16 p-2">
       <h2>How to Move Around Dakar</h2>
 
       <TwoColumn
@@ -28,7 +28,7 @@ const PistardComponent = () => {
 
 const HailText = () => {
   return (
-    <div className="prose text-text-main">
+    <div className="prose">
       <h3>From the airport to Dakar</h3>
       <p>
         Upon arrival at Blaise Diagne International Airport, it's advisable to

@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'scribe-intel-collector'
+    # Assuming collector runs on the host machine
+    # Use host.docker.internal for Docker Desktop (Mac/Windows)
+    # On Linux, might need host-gateway or host IP
+    static_configs:
+      - targets: ['host.docker.internal:9464']

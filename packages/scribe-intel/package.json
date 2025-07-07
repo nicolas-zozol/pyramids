@@ -1,0 +1,34 @@
+{
+  "name": "@robusta/scribe-intel",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint src/**/*.ts src/**/*.tsx",
+    "watch": "tsc -p . --watch"
+  },
+  "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.40.3",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.46.0",
+    "@opentelemetry/resources": "^1.19.0",
+    "@opentelemetry/sdk-node": "^0.200.0",
+    "@opentelemetry/semantic-conventions": "^1.19.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/hapi__shot": "4.1.6",
+    "@types/node": "^20",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5",
+    "vite-node": "^3.1.1",
+    "vitest": "^3.0.4",
+    "jsdom": "^26.1.0"
+  },
+  "resolutions": {
+    "@types/hapi__shot": "4.1.6"
+  }
+}

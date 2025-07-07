@@ -1,0 +1,170 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Saas INTEL Telemetry System
+
+INTEL stand for INTent Elegant Logger
+It's also using Open TELemetry standard, and is an Intelligence tool for the whole team (Product, Marketing, non infra Devs)
+
+This directory contains a structured logging and tracing system for the
+application using OpenTelemetry. The system is designed to provide consistent,
+structured logs and distributed tracing with minimal impact on the main
+application flow.
+
+## Overview
+
+The telemetry system consists of three main components:
+
+1. **Telemetry**: High-level API combining logging and tracing
+2. **Logger**: Manages structured logs with INFO, ERROR, and DEBUG levels
+3. **Tracer**: Handles spans, trace context, and distributed tracing
+
+## Installation
+
+To use the telemetry system, you need to install the required dependencies:
+
+```bash
+yarn add @opentelemetry/api @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/exporter-trace-otlp-http @opentelemetry/resources @opentelemetry/semantic-conventions
+```
+
+## Usage
+
+WARNING: This documentation BELOW is absolutely not up to date. 
+
+### Basic Logging
+
+```typescript
+import { Telemetry } from '../libs/telemetry';
+
+// Create a component identifier
+const telemetry = Telemetry.factory('Component', 'LoginForm');
+
+// Log an informational message
+telemetry.log('User clicked login button', COMPONENT);
+
+// Log with additional data
+telemetry.log('Form submitted', COMPONENT, {
+  email: 'user@example.com',
+  rememberMe: true,
+});
+
+// Log an error
+try {
+  // Some code that might throw
+} catch (error) {
+  telemetry.error('Failed to authenticate user', COMPONENT, error);
+}
+
+// Debug logging (only shown in development)
+telemetry.debug('Form validation details', COMPONENT, {
+  validationResults: { email: true, password: false },
+});
+```
+
+### Tracing
+
+```typescript
+import { Telemetry } from '../libs/telemetry';
+
+// Start a span for an operation
+const span = Telemetry.startSpan('login_process', {
+  attributes: {
+    'user.email': 'user@example.com',
+  },
+});
+
+// Add events to the span
+telemetry.addEvent(span, 'validation_started');
+
+// Add attributes to the span
+telemetry.setAttribute(span, 'validation.success', true);
+
+// Record errors on the span
+try {
+  // Some code that might throw
+} catch (error) {
+  telemetry.recordError(span, error);
+}
+
+// End the span
+telemetry.endSpan(span);
+```
+
+### Using withSpan for Automatic Span Management
+
+```typescript
+import { Telemetry } from '../libs/telemetry';
+
+async function authenticateUser(email: string, password: string) {
+  return Telemetry.withSpan(
+    'authenticate_user',
+    async (span) => {
+      // This code is executed within the span
+      telemetry.setAttribute(span, 'user.email', email);
+
+      // Do authentication
+      const result = await api.authenticate(email, password);
+
+      // Add more attributes
+      telemetry.setAttribute(span, 'auth.success', result.success);
+
+      return result;
+    },
+    {
+      // Initial attributes
+      attributes: {
+        'auth.method': 'password',
+      },
+    }
+  );
+}
+```
+
+## Component Naming Conventions
+
+For consistent logging, use the following conventions for the component
+parameter:
+
+- React Components: `Component: ComponentName` (e.g., `Component: LoginForm`)
+- Functions: `Function: functionName` (e.g., `Function: validateUser`)
+- Class Methods: `Class: ClassName.methodName` (e.g.,
+  `Class: User.validateUser`)
+- Database Models: `DB: ModelName` (e.g., `DB: User`)
+- API Routes: `API: /path/to/route` (e.g., `API: /api/auth/login`)
+- Middleware: `Middleware: middlewareName` (e.g., `Middleware: authGuard`)
+
+The `Telemetry.factory()` helper method can be used to create these
+identifiers:
+
+```typescript
+const telemetry = telemetry.component('API', '/user/me');
+```
+
+## Setup
+
+To initialize OpenTelemetry in your application, import the setup function in
+your application entry point (e.g., `_app.tsx`):
+
+```typescript
+import { setupTelemetry } from '../libs/telemetry/setup';
+
+// Initialize telemetry
+setupTelemetry().catch(console.error);
+```
+
+## Configuration
+
+The telemetry system can be configured through environment variables:
+
+- `NODE_ENV=development`: Enables debug logs and uses mock telemetry
+- `DEBUG=true`: Enables debug logs in any environment
+- `OTEL_EXPORTER_OTLP_ENDPOINT`: Sets the OpenTelemetry collector endpoint
+  (default: `http://localhost:4318/v1/traces`)
+
+## Development
+
+During development, a mock implementation of OpenTelemetry is used to avoid the
+need for a running collector. This is automatically set up when `NODE_ENV` is
+`development`.

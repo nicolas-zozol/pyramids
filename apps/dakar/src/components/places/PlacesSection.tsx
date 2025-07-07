@@ -5,7 +5,7 @@ import Almadies from './almadies-small.png';
 
 export const PlacesToStay = () => {
   return (
-    <section className="text-main bg-background-body mt-16">
+    <section className="mt-16">
       <h2>Best Places to Stay in Dakar</h2>
 
       <TwoColumn
@@ -19,7 +19,7 @@ export const PlacesToStay = () => {
 
 const MaremeText = () => {
   return (
-    <div className="flex flex-col center">
+    <div className="center flex flex-col">
       <div>
         You need a place close to the surf spots in Dakar. And it must not be a
         fake place with fake ratings - which was my first experience !
@@ -47,7 +47,7 @@ const MaremeText = () => {
 
 const AlmadiesMap = () => {
   return (
-    <div className="relative w-full h-[400px]">
+    <div className="relative h-[400px] w-full">
       {/* Google Map Image */}
       <Image src={Almadies} alt="Map" className="h-[400px] object-cover" />
       {/* Pinpoint */}
