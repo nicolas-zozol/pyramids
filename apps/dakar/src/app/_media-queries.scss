@@ -1,0 +1,114 @@
+// Using media-query to generate some common hide/show css classes.
+// Work in Progress, works with my projects.
+// !important is sometimes needed with bootstrap, you should try to remove it first.
+// Most of the time, I just pick one between laptop or desktop
+
+// Extra small screen / phone ;
+$mobileMax: 480px;
+// Small screen / tablet
+$tabletMax: 850px;
+// laptops :
+$laptopMax: 1440px;
+// bigger than 1440: desktops
+
+// So media queries don't overlap when required, provide a maximum
+$tablet-max: ($tabletMax - 1);
+$laptop-max: ($laptopMax - 1);
+
+/*** Responsive reusable  respond-to() ***/
+
+@mixin respond-to($media) {
+  @if $media == mobile {
+    // iphone with 320px, 375px will be below
+    @media (max-width: $mobileMax) {
+      @content
+    }
+  } @else if $media == tablet {
+    @media (min-width: $mobileMax+1) and (max-width: $tabletMax) {
+      @content
+    }
+  } @else if $media == laptop {
+    @media (min-width: $tabletMax+1) and (max-width: $laptopMax) {
+      @content
+    }
+  } @else if $media == desktop {
+    @media (min-width: $laptopMax) {
+      @content
+    }
+  }
+}
+
+@mixin when-less-than($media) {
+  @if $media == tablet {
+    @media (max-width: $mobileMax) {
+      @content;
+    }
+  } @else if $media == laptop {
+    @media (max-width: $tabletMax) {
+      @content;
+    }
+  } @else if $media == desktop {
+    @media (max-width: $laptopMax) {
+      @content;
+    }
+  }
+}
+
+@mixin when-bigger-than($media) {
+  @if $media == tablet {
+    @media (min-width: $mobileMax) {
+      @content
+    }
+  } @else if $media == laptop {
+    @media (min-width: $tabletMax) {
+      @content
+    }
+  } @else if $media == dektop {
+    @media (min-width: $laptopMax) {
+      @content
+    }
+  }
+}
+
+.hide-mobile {
+  @include when-less-than(mobile) {
+    display: none !important;
+  }
+}
+
+.hide-smaller-than-tablet {
+  @include when-less-than(tablet) {
+    display: none !important;
+  }
+}
+
+.hide-smaller-than-laptop {
+  @include when-less-than(laptop) {
+    display: none !important;
+  }
+}
+.hide-smaller-than-desktop {
+  @include when-less-than(desktop) {
+    display: none !important;
+  }
+}
+
+.hide-bigger-than-mobile {
+  @include when-bigger-than(mobile) {
+    display: none !important;
+  }
+}
+
+.hide-bigger-than-tablet {
+  @include when-bigger-than(tablet) {
+    display: none !important;
+  }
+}
+
+.hide-bigger-than-laptop {
+  @include when-bigger-than(laptop) {
+    display: none !important;
+  }
+}
+
+$blog-container-width: 1152px; // width of the whole content for blog like. Taken from lemonde.fr
