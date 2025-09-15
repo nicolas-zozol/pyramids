@@ -1,0 +1,19 @@
+# Vivier left and right
+
+Je crois que je parlais juste de Vivier et je n'ai pas encore déclaré la différence entre Vivier gauche et Vivier droite.
+
+Exactement ! Donc on va continuer là-dessus. Pour Vivier Left et Vivier Right, on va bien différencier les deux. Comme tu le disais, on va expliquer les spécificités de chaque vague, et puis on va détailler ce qui les différencie. Donc allons-y !
+
+
+Alors, comme pour les vagues du sud des Almadies, c'est assez compliqué de se mettre à l'eau. Une bonne possibilité, en fait, c'est de se mettre à l'eau à Sicret, et de s'amuser à prendre une petite vague à Sicret pour se mettre en jambes, et éventuellement d'aller très rapidement rejoindre Vivier depuis Sicret. Ça prend 10 minutes de nage, ce qui permet de faire son échauffement, et on arrive sur Vivier gauche, Vivier droite, et à peine 3 minutes plus loin. C'est très intéressant parce qu'il y a une vague qui marche bien à marée haute, et l'autre qui marche à marée basse. Je ne sais plus exactement lesquelles, il faudra vérifier avant d'écrire l'article. Donc, Vivier gauche se trouve exactement à gauche de la plage. Il faut faire attention, il y a des cailloux avec des oursins au pic de la vague, donc il faut faire attention de ne pas laisser traîner sa jambe, parce qu'en fait le pic se prend vraiment là où il y a un gros téton avec des oursins dessus, et ça fait mal. La vague défile moins longtemps que sur Angor, mais c'est quand même une vague de qualité qui est assez agréable à prendre, et il y a une belle fréquence. En général, il n'y a pas trop de monde, que ce soit sur Vivier gauche ou sur Vivier droite. Ce qui est intéressant, c'est que quand il y a Vivier gauche qui commence à ne pas fonctionner parce que la marée monte, on peut aller à Vivier droite. C'est une vague qui est un petit peu moins agréable que Vivier gauche, mais qui fonctionne très bien quand même en général. Les deux fonctionnent bien dès que la houle est grosse quand elle vient du nord, ou bien s'il y a de la houle qui vient du sud.
+
+Oui, exactement, c’est une bonne façon de le présenter. Donc on va résumer ça dans le brief en expliquant que pour Vivier Left et Vivier Right, on a deux vagues complémentaires. L’une marche mieux à marée haute, l’autre à marée basse, donc on peut alterner. Il faut simplement faire attention aux oursins sur certains cailloux, notamment sur le pic de Vivier Left. Mais globalement, ce sont des vagues de qualité, pas trop fréquentées, et qui se complètent bien. Comme ça, on aura une section claire et on pourra passer au spot suivant.
+
+
+Il est également possible de se mettre directement à l'eau à Vivier, mais encore une fois, l'entrée est assez délicate et la sortie est encore plus difficile. Mais il y a un chemin d'accès direct à la plage sans passer par Sicrete et faire le tour. Moi personnellement, je préfère faire le tour. On peut, comme c'est vraiment proche de Sicrete, c'est le même principe, on peut déposer sa clé dans un des barres et c'est facile de garer sa voiture. On peut également cacher sa clé sur un caillou, mais alors attention parce que la marée peut monter et emporter la clé. Il faut vraiment faire attention si on prend cette technique-là. Ensuite, on est quand même en vue des gens, vu qu'il y a pas mal de barres autour, ils peuvent vous voir déposer la clé, donc ce n'est pas très prudent.
+
+Oui, c’est un bon point à souligner. Donc on ajoutera aussi dans le brief que même si on peut entrer directement à l’eau depuis Vivier, c’est effectivement un peu plus délicat, surtout pour ressortir. Et comme on est visible depuis les bars autour, ce n’est pas forcément très prudent de cacher sa clé sous un caillou à cause de la marée montante. Donc c’est souvent plus simple et plus sûr de faire le petit détour par Secret, de profiter de la facilité de stationnement et de laisser ses affaires dans un endroit un peu plus sûr. Comme ça, on a une approche bien complète pour ce spot aussi.
+
+
+
+
