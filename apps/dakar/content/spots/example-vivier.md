@@ -3,8 +3,8 @@ title: 'Vivier left and right'
 tags: []
 lang: 'fr'
 date: '2025-08-24'
-image: /images/small-fake-vivier-640-369.png
-category: privacy
+image: /images/small-fake-vivier-640-369.jpg
+category: surf spot
 ---
 
 Vivier spot is split in two main sections: the left and the right. Both sections offer unique surfing experiences suitable for different skill levels.

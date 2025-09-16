@@ -1,10 +1,10 @@
 ---
 title: 'Ngor right'
-tags: []
-lang: 'fr'
+tags: ['surf spot', 'ngor', 'dakar', 'senegal']
+lang: 'en'
 date: '2025-08-24'
-image: ./images/gmail.png
-category: privacy
+image: ./images/small-fake-ngor-right-640-360.jpg
+category: surf spot
 ---
 
 

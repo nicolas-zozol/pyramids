@@ -4,4 +4,5 @@ export default {
   trailingComma: 'all',
   printWidth: 80,
   plugins: ['prettier-plugin-tailwindcss'],
+  proseWrap: 'always',
 };
