@@ -1,0 +1,127 @@
+h1 {
+  font-size: 32px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+h2 {
+  font-size: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+ul {
+}
+
+$large-hero-container: 1400px;
+$standard-hero-container: 1152px;
+$main-container-width: 1152px;
+$text-container-width: 670px;
+
+.large-hero-container {
+  max-width: $large-hero-container;
+  margin: auto;
+  @media (max-width: $large-hero-container) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.standard-hero-container {
+  max-width: $standard-hero-container;
+  margin: auto;
+  @media (max-width: $standard-hero-container) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.full-container {
+  width: 100%;
+  margin: auto;
+
+  @media (max-width: $main-container-width) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.main-container {
+  max-width: $main-container-width;
+  margin: auto;
+
+  @media (max-width: $main-container-width) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.blog-container {
+  max-width: $text-container-width;
+  margin: auto;
+
+  @media (max-width: $text-container-width) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+a:active {
+  color: var(--my-secondary) !important;
+}
+
+section {
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+p {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+pre code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+}
+
+code:not([class*='language-']) {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #efefef;
+  border: thin solid lightgrey;
+  border-radius: 5px;
+  word-break: break-word;
+  padding: 1px 4px;
+  font-size: 0.75rem;
+}
+
+.gapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.rb-breadcrumb {
+  margin: 0 !important;
+}
