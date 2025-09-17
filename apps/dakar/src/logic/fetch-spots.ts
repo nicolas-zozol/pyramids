@@ -116,6 +116,7 @@ function validateFrontMatter(
   config: BlogConfig,
   frontMatter: Partial<PostFrontMatter>,
   filePath: string,
+  requestedLocale: string,
 ): Post {
   let iPost: Partial<IPost> = {};
   if (!frontMatter.date) {
@@ -138,7 +139,7 @@ function validateFrontMatter(
   }
 
   if (!frontMatter.locale) {
-    iPost.locale = 'fr';
+    iPost.locale = requestedLocale;
   }
 
   if (!frontMatter.author) {
@@ -185,61 +186,62 @@ function validateFrontMatter(
   );
 }
 
-const spots: Post[] = [];
-let spotsGenerated = false;
+const spotsCache = new Map<string, Post[]>();
 
 // TODO: this is awful and should be refactored
 // TODO: it does at the same time frontMatter validation and mapping to post creation
 // TODO: but also file traversing, which is a configuration job
-export async function getSortedSpots(config: BlogConfig): Promise<Post[]> {
-  // Get file names under /posts
-  //const skipPrism = process.env.SKIP_PRISM === 'true'
-  // console.log({skipPrism})
-  const pendings: Promise<any>[] = [];
-  if (spotsGenerated) {
-    console.log('+++++ Using cache ');
-    return sortPostsByDate(spots);
-  } else {
-    console.log('==== Calculating all');
-    spotsGenerated = true;
+export async function getSortedSpots(
+  config: BlogConfig,
+  locale: string,
+): Promise<Post[]> {
+  const key = (locale || config.defaultLocale).toLowerCase();
+  if (spotsCache.has(key)) {
+    return sortPostsByDate(spotsCache.get(key)!);
   }
+
+  const pendings: Promise<any>[] = [];
+  const posts: Post[] = [];
+  const baseDir = `content/spots/${key}`;
+
+  // If locale folder does not exist, return empty list
+  const baseAbs = path.join(process.cwd(), baseDir);
+  if (!fs.existsSync(baseAbs)) {
+    spotsCache.set(key, posts);
+    return posts;
+  }
+
   let i = 0;
-
-  traverseDir('content/spots', (path) => {
-    console.log(`>>>> Processing ${i} - ${path}`);
-    if (path.includes('.md')) {
-      const fileContents = fs.readFileSync(path, 'utf8');
-
-      // Use gray-matter to parse the post metadata section
+  traverseDir(baseDir, (p) => {
+    if (p.endsWith('.md')) {
+      const fileContents = fs.readFileSync(p, 'utf8');
 
       const matterResult = matter(fileContents, {
         excerpt: true,
       });
       const frontMatter: PostFrontMatter = matterResult.data as PostFrontMatter;
-      const post = validateFrontMatter(config, frontMatter, path);
+      const post = validateFrontMatter(config, frontMatter, p, key);
       if (!matterResult.excerpt) {
-        throw 'Error reading frontMatter content: No excerpt: ' + path;
+        throw 'Error reading frontMatter content: No excerpt: ' + p;
       }
       frontMatter.excerpt = matterResult.excerpt;
 
-      let parser = remark().use(html);
-
-      const processedContentPromise = parser.process(matterResult.content);
+      const processedContentPromise = remark().use(html).process(matterResult.content);
       pendings.push(processedContentPromise);
 
       processedContentPromise.then((content) => {
         const contentHtml = content.toString();
         post.slug = immutableSlugify(frontMatter.title, post.locale);
         post.content = contentHtml;
-        spots.push(post);
+        posts.push(post);
       });
-
       i++;
     }
   });
 
   await Promise.all(pendings);
-  return sortPostsByDate(spots);
+  spotsCache.set(key, posts);
+  return sortPostsByDate(posts);
 }
 
 export function sortPostsByDate(posts: Post[]): Post[] {
@@ -248,13 +250,12 @@ export function sortPostsByDate(posts: Post[]): Post[] {
 
 export async function fetchSpotBySlug(
   blogConfig: BlogConfig,
+  locale: string,
   slug: string,
 ): Promise<Post | undefined> {
-  const allPosts = await getSortedSpots(blogConfig);
-
+  const allPosts = await getSortedSpots(blogConfig, locale);
   return allPosts.find(
-    (post) =>
-      trimSlash(post.slug).toLowerCase() === trimSlash(slug).toLowerCase(),
+    (post) => trimSlash(post.slug).toLowerCase() === trimSlash(slug).toLowerCase(),
   );
 }
 
