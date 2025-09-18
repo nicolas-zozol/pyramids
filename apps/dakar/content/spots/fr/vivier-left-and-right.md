@@ -5,6 +5,7 @@ lang: 'fr'
 date: '2025-09-15'
 image: ./images/small-fake-vivier-640-369.jpg
 category: surf spot
+slug: vivier-left-and-right
 ---
 
 Deux vagues complémentaires près de Secret. La gauche présente un take‑off rocheux avec des oursins ; la droite fonctionne souvent quand la gauche faiblit. Entrées/sorties délicates — beaucoup préfèrent ramer depuis Secret (~10 min).

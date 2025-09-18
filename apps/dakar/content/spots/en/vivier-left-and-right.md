@@ -5,6 +5,7 @@ lang: 'en'
 date: '2025-09-15'
 image: ./images/small-fake-vivier-640-369.jpg
 category: surf spot
+slug: vivier-left-and-right
 ---
 
 Two complementary waves near Secret. Left features a rocky, urchin‑studded takeoff; Right often works when Left fades. Entries/exits are delicate—consider paddling from Secret (~10 min).

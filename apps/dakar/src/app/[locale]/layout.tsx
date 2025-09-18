@@ -16,6 +16,8 @@ export default function SpotsLayout({
 }>) {
   return (
     <div>
+      {/* Map is now rendered per page via MapLibre client component */}
+
       <Header />
       <div>{children}</div>
     </div>

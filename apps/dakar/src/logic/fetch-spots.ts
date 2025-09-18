@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { immutableSlugify } from '@robusta/pyramids-helpers';
+import { getSpotBySlug, Spot } from '@/logic/spots/spot';
 
 // TODO: some or all are mandatory
 // frontMatter should have not mandatories, and we should create post from frontmatter
@@ -22,6 +23,8 @@ export interface PostFrontMatter {
   frVersion?: string;
   featured?: boolean;
   keywords?: string[];
+  lat?: number;
+  lng?: number;
 }
 
 export interface IPost {
@@ -43,6 +46,10 @@ export interface IPost {
   keywords: string[];
 }
 
+export interface ISpotPost extends IPost {
+  spot: Spot;
+}
+
 export class Post implements IPost {
   date!: string;
   modified?: string;
@@ -60,11 +67,13 @@ export class Post implements IPost {
   featured: boolean = false;
   content!: string;
   keywords: string[] = [];
+  lat?: number;
+  lng?: number;
 
   constructor(
     p: IPost,
-    protected blogHome: string,
-    protected isDefaultLocale: boolean,
+    public blogHome: string,
+    public isDefaultLocale: boolean,
   ) {
     Object.assign(this, p);
   }
@@ -81,6 +90,18 @@ export class Post implements IPost {
   getImmutableUrl(): string {
     const localeSegment = this.isDefaultLocale ? '' : `/${this.locale}`;
     return `/${this.blogHome}/${localeSegment}/${this.categoryPath}/${this.slug}`;
+  }
+}
+
+export class SpotPost extends Post implements ISpotPost {
+  spot!: Spot;
+
+  constructor(p: Post) {
+    super(p, p.blogHome, p.isDefaultLocale);
+    Object.assign(this, p);
+  }
+  setSpot(spot: Spot) {
+    this.spot = spot;
   }
 }
 
@@ -117,7 +138,7 @@ function validateFrontMatter(
   frontMatter: Partial<PostFrontMatter>,
   filePath: string,
   requestedLocale: string,
-): Post {
+): SpotPost {
   let iPost: Partial<IPost> = {};
   if (!frontMatter.date) {
     throw 'No date: ' + filePath;
@@ -129,6 +150,7 @@ function validateFrontMatter(
   if (!frontMatter.title) {
     throw 'No title: ' + filePath;
   }
+  iPost.title = frontMatter.title;
 
   // -- END OF MANDATORY DATA
 
@@ -167,6 +189,7 @@ function validateFrontMatter(
   if (!frontMatter.featured) {
     iPost.featured = false;
   }
+
   if (!frontMatter.slug) {
     const locale = iPost.locale!.toLowerCase();
     iPost.slug = immutableSlugify(frontMatter.title, locale);
@@ -179,14 +202,22 @@ function validateFrontMatter(
     iPost.keywords = [...frontMatter.keywords, ...config.mandatoryKeywords];
   }
 
-  return new Post(
+  const post = new Post(
     iPost as IPost,
     'spots',
     iPost.locale?.toLowerCase() === config.defaultLocale.toLowerCase(),
   );
+  const spotPost = new SpotPost(post);
+  const spotSlug = spotPost.slug.toLowerCase();
+  const spot = getSpotBySlug(spotSlug);
+  if (!spot) {
+    throw `No spot found for ${spotPost.title}, ${spotPost.slug} `;
+  }
+  spotPost.setSpot(spot);
+  return spotPost;
 }
 
-const spotsCache = new Map<string, Post[]>();
+const spotsByLocaleCache = new Map<string, SpotPost[]>();
 
 // TODO: this is awful and should be refactored
 // TODO: it does at the same time frontMatter validation and mapping to post creation
@@ -194,20 +225,20 @@ const spotsCache = new Map<string, Post[]>();
 export async function getSortedSpots(
   config: BlogConfig,
   locale: string,
-): Promise<Post[]> {
-  const key = (locale || config.defaultLocale).toLowerCase();
-  if (spotsCache.has(key)) {
-    return sortPostsByDate(spotsCache.get(key)!);
+): Promise<SpotPost[]> {
+  const localeKey = (locale || config.defaultLocale).toLowerCase();
+  if (spotsByLocaleCache.has(localeKey)) {
+    return sortPostsByDate(spotsByLocaleCache.get(localeKey)!);
   }
 
   const pendings: Promise<any>[] = [];
-  const posts: Post[] = [];
-  const baseDir = `content/spots/${key}`;
+  const posts: SpotPost[] = [];
+  const baseDir = `content/spots/${localeKey}`;
 
   // If locale folder does not exist, return empty list
   const baseAbs = path.join(process.cwd(), baseDir);
   if (!fs.existsSync(baseAbs)) {
-    spotsCache.set(key, posts);
+    spotsByLocaleCache.set(localeKey, posts);
     return posts;
   }
 
@@ -220,18 +251,21 @@ export async function getSortedSpots(
         excerpt: true,
       });
       const frontMatter: PostFrontMatter = matterResult.data as PostFrontMatter;
-      const post = validateFrontMatter(config, frontMatter, p, key);
+
+      const post = validateFrontMatter(config, frontMatter, p, localeKey);
       if (!matterResult.excerpt) {
         throw 'Error reading frontMatter content: No excerpt: ' + p;
       }
       frontMatter.excerpt = matterResult.excerpt;
 
-      const processedContentPromise = remark().use(html).process(matterResult.content);
+      const processedContentPromise = remark()
+        .use(html)
+        .process(matterResult.content);
       pendings.push(processedContentPromise);
 
       processedContentPromise.then((content) => {
         const contentHtml = content.toString();
-        post.slug = immutableSlugify(frontMatter.title, post.locale);
+        //post.slug = immutableSlugify(frontMatter.title, post.locale);
         post.content = contentHtml;
         posts.push(post);
       });
@@ -240,22 +274,23 @@ export async function getSortedSpots(
   });
 
   await Promise.all(pendings);
-  spotsCache.set(key, posts);
+  spotsByLocaleCache.set(localeKey, posts);
   return sortPostsByDate(posts);
 }
 
-export function sortPostsByDate(posts: Post[]): Post[] {
+function sortPostsByDate(posts: SpotPost[]): SpotPost[] {
   return posts.sort(({ date: a }, { date: b }) => (a < b ? 1 : -1));
 }
 
-export async function fetchSpotBySlug(
+export async function fetchSpotPostBySlug(
   blogConfig: BlogConfig,
   locale: string,
   slug: string,
-): Promise<Post | undefined> {
+): Promise<SpotPost | undefined> {
   const allPosts = await getSortedSpots(blogConfig, locale);
   return allPosts.find(
-    (post) => trimSlash(post.slug).toLowerCase() === trimSlash(slug).toLowerCase(),
+    (post) =>
+      trimSlash(post.slug).toLowerCase() === trimSlash(slug).toLowerCase(),
   );
 }
 

@@ -1,11 +1,13 @@
 import './article.scss';
 import { EmptyLine } from '@robusta/pyramids-layouts';
 import { Post } from '@/logic/fetch-spots';
+import { ReactNode } from 'react';
 
 interface ArticleProps {
   post: Post;
+  feat?: ReactNode;
 }
-export const Article = ({ post }: ArticleProps) => {
+export const Article = ({ post, feat }: ArticleProps) => {
   return (
     <div>
       <div className={'blog-container'}></div>
@@ -25,6 +27,8 @@ export const Article = ({ post }: ArticleProps) => {
           alt={'thumbnail'}
         />*/}
         <EmptyLine size={2} />
+
+        {feat && <div className="mb-6">{feat}</div>}
 
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
 

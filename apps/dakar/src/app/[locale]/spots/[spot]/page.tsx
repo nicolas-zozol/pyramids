@@ -1,8 +1,11 @@
 import { getSeoPyramidsConfig } from '@/seopyramids.config';
-import { fetchSpotBySlug, getSortedSpots } from '@/logic/fetch-spots';
+import { fetchSpotPostBySlug, getSortedSpots } from '@/logic/fetch-spots';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Article } from '@/components/article/Article';
+import { MapLibre } from '@/components/map/MapLibre';
+import { ReactElement } from 'react';
+import { Spot } from '@/logic/spots/spot.js';
 
 export const dynamic = 'force-static';
 export const revalidate = false;
@@ -36,6 +39,13 @@ export async function generateMetadata({
   };
 }
 
+function buildMapFeature(spot: Spot): ReactElement {
+  // Default to Ngor village if no coordinates are provided in post
+  const latitude = spot.latitude;
+  const longitude = spot.longitude;
+  return <MapLibre latitude={latitude} longitude={longitude} height={240} />;
+}
+
 export default async function SpotPage({
   params,
 }: {
@@ -47,12 +57,12 @@ export default async function SpotPage({
     return notFound();
   }
   const { blogConfig } = getSeoPyramidsConfig();
-  const spotPost = await fetchSpotBySlug(blogConfig, locale, spot);
+  const spotPost = await fetchSpotPostBySlug(blogConfig, locale, spot);
   if (!spotPost) {
     return notFound();
   }
 
-  return <Article post={spotPost} />;
+  // If posts carry coordinates, use them; otherwise fall back to defaults
+  const feat = buildMapFeature(spotPost.spot);
+  return <Article post={spotPost} feat={feat} />;
 }
-
-

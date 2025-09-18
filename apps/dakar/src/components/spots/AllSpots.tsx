@@ -51,8 +51,8 @@ const dakarSpots: SpotProps[] = [
     name: 'Yoff Beach',
     description: (
       <>
-        Yoff Beach, much appreciated by locals and relatively untouched by
-        tourism, is a beach break accessible to all levels, offering several
+        BCEAO Beach in Yoff, much appreciated by locals and relatively untouched
+        by tourism, is a beach break accessible to all levels, offering several
         peaks along the shoreline. It works particularly well in light winds
         with a northwest swell.
       </>
