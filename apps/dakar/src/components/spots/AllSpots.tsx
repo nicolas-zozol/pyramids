@@ -124,7 +124,7 @@ const dakarSpots: SpotProps[] = [
   },
 
   {
-    name: 'Secret Spot',
+    name: 'Secret',
     description: (
       <>
         Located in the heart of the Almadies Riviera, “Secret Spot” is no longer
@@ -134,7 +134,7 @@ const dakarSpots: SpotProps[] = [
         surfers come to show off and impress one another.
       </>
     ),
-    anchor: 'secret-spot',
+    anchor: 'secret',
 
     image: fakeSecret,
     imageWidth: 640,
