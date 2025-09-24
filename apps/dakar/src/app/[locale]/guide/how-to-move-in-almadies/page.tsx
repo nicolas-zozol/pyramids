@@ -4,7 +4,7 @@ import { fetchPageByFilename } from '@/logic/fetch-page';
 
 export const dynamic = 'force-static';
 export const revalidate = false;
-const filePath = 'guide/how-to-move-in-dakar';
+const filePath = 'guide/how-to-move-in-almadies';
 
 export default async function HowToMovePage({
   params,

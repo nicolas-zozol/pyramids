@@ -63,6 +63,10 @@ const HailText = () => {
         such as Heetch and Yango operate in the area. However, their service
         quality may not match that of Uber in larger cities.
       </p>
+
+      <a href={'en/guide/how-to-move-in-almadies'}>
+        🚕 Learn more how to move to Almadies
+      </a>
     </div>
   );
 };

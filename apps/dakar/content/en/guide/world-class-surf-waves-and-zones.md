@@ -235,10 +235,7 @@ primers.
 
 <!-- CTA: Replace with your newsletter/signup or “Plan your next surf trip with us” link -->
 
-\[Insérer image de fin/illustration – alt: Travel boardbag on a small scooter
-parked above a peeling point break at golden hour]
-
----
+![Surfers paddling around Ngor island](/images/guide/surfers-paddling.png)
 
 <!--
 ### Suggested internal links

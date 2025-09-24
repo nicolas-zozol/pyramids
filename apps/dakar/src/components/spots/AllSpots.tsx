@@ -32,6 +32,12 @@ export const AllSpots = () => {
       </div>
 
       <SimpleGridLayout items={getSpotItems()} />
+
+      <div className={'prose m-4'}>
+        <a href={'/en/guide/world-class-surf-waves-and-zones'}>
+          🌍 Learn more on other destinations for world-class waves
+        </a>
+      </div>
     </section>
   );
 };
