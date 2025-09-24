@@ -1,0 +1,88 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Best Surfing Zones in the World: When to Go, What to Expect (2025 Guide)",
+      "datePublished": "2025-09-24",
+      "dateModified": "2025-09-24",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "name": "Nicolas Z. (field notes)"
+      },
+      "image": "./images/best-surf-zones-cover.jpg",
+      "articleSection": [
+        "What makes a best surf zone",
+        "Quick picks by level & season",
+        "Europe picks",
+        "Asia & Indian Ocean",
+        "Africa highlights",
+        "Pacific & the Americas",
+        "Trip planning essentials",
+        "Frequent mistakes",
+        "FAQ"
+      ],
+      "keywords": "best surfing spots, best surf zones, surf areas, world-class waves",
+      "publisher": {
+        "@type": "Organization",
+        "name": "YourSite",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "./images/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": ""
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What month is “best” for Bali?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Typically the dry-season window offers more favorable winds for many west-coast reefs, with shoulder seasons balancing crowds and quality. Always check current local forecasts before booking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where should a beginner book their first overseas surf trip?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zones with forgiving points/beaches and schools nearby: Sri Lanka, Costa Rica, some Canary Islands and Algarve options—ideally during their calmer seasonal windows."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I escape crowds at world-class zones?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Go early, aim for shoulder seasons, and surf B-tier peaks a headland away. A zone with multiple aspects (e.g., Peniche, Almadies) lets you pivot with wind and tide."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "" },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Surf Guides",
+          "item": ""
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Best Surfing Zones in the World",
+          "item": ""
+        }
+      ]
+    }
+  ]
+}
