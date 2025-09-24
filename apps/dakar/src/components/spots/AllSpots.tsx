@@ -14,7 +14,30 @@ export const AllSpots = () => {
   return (
     <section className="mt-16">
       <h2>Surf Spots</h2>
+
+      <div>
+        <p className="mb-4 text-lg text-gray-700">
+          Dakar and its surroundings offer a variety of surf spots suitable for
+          all levels, from beginners to advanced surfers. Here are some of the
+          most popular spots:
+        </p>
+        <div className={'mb-4 flex justify-center'}>
+          <Image
+            src={'/images/spots/almadies-spots.png'}
+            alt={'Spot from North to South around Dakar'}
+            width={1000}
+            height={645}
+          />
+        </div>
+      </div>
+
       <SimpleGridLayout items={getSpotItems()} />
+
+      <div className={'prose m-4'}>
+        <a href={'/en/guide/world-class-surf-waves-and-zones'}>
+          🌍 Learn more on other destinations for world-class waves
+        </a>
+      </div>
     </section>
   );
 };
@@ -31,55 +54,11 @@ interface SpotProps {
 
 const dakarSpots: SpotProps[] = [
   {
-    name: 'Ngor Right',
-    description: (
-      <>
-        Ngor Right is a world-class reef break for intermediate to advanced
-        surfers. Known for its flawless rights, it offers powerful and
-        consistent waves. Pay attention to the reef and sea urchins. It can also
-        get very crowded.
-      </>
-    ),
-    anchor: 'ngor-right',
-    highlight: true,
-    image: fakeNgorRight,
-    imageWidth: 640,
-    imageHeight: 427,
-  },
-  {
-    name: 'Ngor Left',
-    description: (
-      <>
-        Located on the other side of the island, Ngor Left is a softer spot.
-        However, it requires a stronger swell and is less protected from the
-        wind. The sea urchins are still there...
-      </>
-    ),
-    anchor: 'ngor-left',
-    image: fakeNgorLeft,
-    imageWidth: 640,
-    imageHeight: 360,
-  },
-  {
-    name: 'Ouakam',
-    description: (
-      <>
-        Located in the heart of the city, Ouakam is a 5-star spot. Protected by
-        magnificent cliffs, the spot requires a significant ocean swell to work,
-        almost exclusively in winter.
-      </>
-    ),
-    anchor: 'ouakam',
-    image: fakeOuakam,
-    imageWidth: 640,
-    imageHeight: 426,
-  },
-  {
     name: 'Yoff Beach',
     description: (
       <>
-        Yoff Beach, much appreciated by locals and relatively untouched by
-        tourism, is a beach break accessible to all levels, offering several
+        BCEAO Beach in Yoff, much appreciated by locals and relatively untouched
+        by tourism, is a beach break accessible to all levels, offering several
         peaks along the shoreline. It works particularly well in light winds
         with a northwest swell.
       </>
@@ -103,38 +82,36 @@ const dakarSpots: SpotProps[] = [
     imageWidth: 640,
     imageHeight: 444,
   },
+
   {
-    name: 'Secret Spot',
+    name: 'Ngor Left',
     description: (
       <>
-        Located in the heart of the Almadies Riviera, “Secret Spot” is no longer
-        much of a secret. Despite a few sea urchins, access remains relatively
-        easy and even allows parents to keep an eye on their children. The wave
-        is fun yet very short and technical, attracting a crowd: it’s where
-        surfers come to show off and impress one another.
+        Located on the other side of the island, Ngor Left is a softer spot.
+        However, it requires a stronger swell and is less protected from the
+        wind. The sea urchins are still there...
       </>
     ),
-    anchor: 'secret-spot',
-
-    image: fakeSecret,
+    anchor: 'ngor-left',
+    image: fakeNgorLeft,
+    imageWidth: 640,
+    imageHeight: 360,
+  },
+  {
+    name: 'Ngor Right',
+    description: (
+      <>
+        Ngor Right is a world-class reef break for intermediate to advanced
+        surfers. Known for its flawless rights, it offers powerful and
+        consistent waves. Pay attention to the reef and sea urchins. It can also
+        get very crowded.
+      </>
+    ),
+    anchor: 'ngor-right',
+    highlight: true,
+    image: fakeNgorRight,
     imageWidth: 640,
     imageHeight: 427,
-  },
-
-  {
-    name: 'Vivier',
-    description: (
-      <>
-        Vivier offers two waves: a left and a right. The first works at low
-        tide, the other at high tide. It requires either a large north swell or
-        a south swell. At entrance and lower tide, beware of the sharp rocks.
-      </>
-    ),
-    anchor: 'vivier',
-    image: fakeVivier,
-    imageWidth: 640,
-    imageHeight: 369,
-    highlight: true,
   },
 
   {
@@ -151,18 +128,95 @@ const dakarSpots: SpotProps[] = [
     imageWidth: 640,
     imageHeight: 427,
   },
+
+  {
+    name: 'Secret',
+    description: (
+      <>
+        Located in the heart of the Almadies Riviera, “Secret Spot” is no longer
+        much of a secret. Despite a few sea urchins, access remains relatively
+        easy and even allows parents to keep an eye on their children. The wave
+        is fun yet very short and technical, attracting a crowd: it’s where
+        surfers come to show off and impress one another.
+      </>
+    ),
+    anchor: 'secret',
+
+    image: fakeSecret,
+    imageWidth: 640,
+    imageHeight: 427,
+  },
+  {
+    name: 'Vivier',
+    description: (
+      <>
+        Vivier offers two waves: a left and a right. The first works at low
+        tide, the other at high tide. It requires either a large north swell or
+        a south swell. At entrance and lower tide, beware of the sharp rocks.
+      </>
+    ),
+    anchor: 'vivier-left-and-right',
+    image: fakeVivier,
+    imageWidth: 640,
+    imageHeight: 369,
+    highlight: true,
+  },
+  {
+    name: 'Ouakam',
+    description: (
+      <>
+        Located in the heart of the city, Ouakam is a 5-star spot. Protected by
+        magnificent cliffs, the spot requires a significant ocean swell to work,
+        almost exclusively in winter.
+      </>
+    ),
+    anchor: 'ouakam',
+    image: fakeOuakam,
+    imageWidth: 640,
+    imageHeight: 426,
+  },
+
+  {
+    name: 'La petite côte',
+    description: (
+      <>
+        La Petite Côte, located south of Dakar, is renowned for its long sandy
+        beaches and consistent beach breaks. However, the swell are not
+        consistent.
+      </>
+    ),
+    anchor: 'la-petite-cote',
+    image: fakeClubMed,
+    imageWidth: 640,
+    imageHeight: 427,
+  },
+  {
+    name: 'Cap Skirring',
+    description: (
+      <>
+        Cap Skirring, located in the Casamance region of Senegal, is a hidden
+        gem for surfers. If the swell is there...
+      </>
+    ),
+    anchor: 'cap-skirring',
+    image: fakeClubMed,
+    imageWidth: 640,
+    imageHeight: 427,
+  },
 ];
 
 function getSpotItems() {
   return dakarSpots.map((spot, index) => (
-    <HighlightableCard
-      key={index}
-      content={getSpotContentWithImages(spot)}
-      title={spot.name}
-      highlight={spot.highlight}
-      highlightClass="border-2 border-separation-secondary"
-      highlightText="Favourite spot"
-    />
+    <a href={'/en/spots/' + spot.anchor} key={index}>
+      <HighlightableCard
+        key={index}
+        content={getSpotContentWithImages(spot)}
+        title={spot.name}
+        highlight={spot.highlight}
+        highlightClass="border-2 border-separation-secondary"
+        highlightText="Favourite spot"
+      />
+    </a>
   ));
 }
 

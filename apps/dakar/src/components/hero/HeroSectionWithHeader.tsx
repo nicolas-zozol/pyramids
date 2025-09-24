@@ -1,6 +1,6 @@
 import { EmptyLine } from '@robusta/pyramids-layouts';
 import { Header } from '../header/Header';
-import hero from './secret-llm.png'; // Use Next.js asset imports
+import hero from './secret-llm5.png'; // Use Next.js asset imports
 
 export const HeroSectionWithHeader = () => {
   return (
@@ -16,8 +16,8 @@ export const HeroSectionWithHeader = () => {
             {/* Opacity overlay */}
           </div>
         </div>
-        <div className="rounded-lg absolute left-2 top-5 z-20 mt-2 bg-neutral-200 p-2 opacity-90">
-          <h1 className="mx-10 text-2xl">The best guide to Surf in Dakar 🏄</h1>
+        <div className="absolute left-2 top-5 z-20 mt-2 rounded-lg bg-neutral-200/60 p-2">
+          <h1 className="mx-10 text-4xl">The best guide to Surf in Dakar 🏄</h1>
         </div>
         <div className="h-[100px]"></div>
       </div>

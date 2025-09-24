@@ -1,0 +1,54 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "How to Move for Surfing in Dakar (Almadies): From AIBD to the Line-Up",
+      "inLanguage": "en",
+      "datePublished": "2025-09-24",
+      "dateModified": "2025-09-24",
+      "author": {
+        "@type": "Person",
+        "name": "Nicolas Zozol"
+      },
+      "image": "./images/dakar-surf-mobility.jpg",
+      "keywords": [
+        "surf dakar",
+        "surf almadies",
+        "move in dakar",
+        "move in almadies",
+        "taxi dakar",
+        "yango dakar"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How long does it take from AIBD to Almadies?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Approximately 1 hour with light traffic and up to 2 hours with congestion, based on the author's experience."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I sort out a SIM at the airport (and still use WhatsApp)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Airport Wi-Fi usually supports WhatsApp on arrival. If you lack an international plan, disable roaming until you choose one. The author has used an Orange option around €30; details vary."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "My surfboard didn’t arrive. What should I do?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Wait at oversize. If the board is still missing after about one hour, obtain an official paper before leaving. Return daily to check; do not rely on a call and avoid delegating pickup to unknown third parties."
+          }
+        }
+      ]
+    }
+  ]
+}

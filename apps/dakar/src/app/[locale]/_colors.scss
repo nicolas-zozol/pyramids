@@ -1,0 +1,47 @@
+$black: #2c2c2c;
+$new-blue: #CCE2E7;
+$new-dark-blue: #1E2B2F;
+
+// Robusta
+
+$black: #2c2c2c;
+$lightGrey: #777;
+$grey: #808080;
+$secondary: #d4941f;
+$gold: #d4941f;
+$primary: #581287;
+$test:#862ebd;
+// rename in lightPrimary
+$lightSecondary: #67407f;
+// TODO NZ; check there
+$purple: #67407f;
+$lightPurple: #68109f;
+$backgroundGrey: #f5f5f5;
+$fullWhite:#fff;
+$brokenWhite:#f5f5f5;
+
+// theme
+$shyLink:$grey;
+$overShyLink:$lightGrey;
+
+// Diool
+$dark-blue: #191F3A;
+$light-blue: #2B6494;
+$yellow: #E2B136;
+$orange: #E56B36;
+$red: #CE315E;
+$green: #2BB596; // success
+
+
+$white: #FFFFFF;
+$grey: #828282;
+$light-grey: #BDBDBD;
+
+$background-grey: #E5E5E5;
+
+.grey-background{
+  background-color: $backgroundGrey;
+}
+.orange-background{
+  background-color: $orange;
+}
