@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nicolas Zozol — Senior fullstack engineer · robusta.build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="thumbs.jsx"></script>
+<script type="text/babel" src="post-figures.jsx"></script>
+<script type="text/babel" src="hero-diagram.jsx"></script>
+<script type="text/babel" src="hero.jsx"></script>
+<script type="text/babel" src="sections.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentHue": 40,
+  "accentChroma": 0.13,
+  "themeMode": "light",
+  "displayFont": "garamond",
+  "showHeroCode": true,
+  "heroVariant": "serious",
+  "useBrandColors": true
+}/*EDITMODE-END*/;
+
+const HERO_VARIANTS = {
+  serious: {
+    headline: <>I build the <em>serious</em> software<br />other teams are afraid to touch.</>,
+    sub: "I'm Nicolas Zozol. Fullstack engineer, parser author, Web3 veteran. I take on technical work that requires reading source code, drawing the right diagram, and staying until the system actually holds. Toptal top 3% · Oracle Certified Java Master.",
+  },
+  craft: {
+    headline: <>Software, written with <em>care</em>,<br />for teams that ship for a living.</>,
+    sub: "I'm Nicolas Zozol — a senior fullstack engineer based in Toulouse. I maintain Masala Parser, ship Web3 in production, and write essays for engineers. Twenty years of work, none of it accidental.",
+  },
+  trust: {
+    headline: <>The engineer your <em>staff+</em><br />would hire if they had time.</>,
+    sub: "I'm Nicolas Zozol. First engineer at Swaap Finance ($1B+ monthly volume). Toptal-screened since 2018. I take on the technical problems your team has been postponing — and leave behind code your next hire can read.",
+  },
+};
+
+const FONT_MAP = {
+  newsreader: '"Newsreader", "Source Serif Pro", Georgia, serif',
+  garamond: '"EB Garamond", Garamond, "Times New Roman", serif',
+  mono_display: '"JetBrains Mono", ui-monospace, monospace',
+};
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", tweaks.themeMode);
+    if (tweaks.useBrandColors) {
+      // Brand palette: purple ink + blue accent + yellow highlight
+      root.style.setProperty("--ink", tweaks.themeMode === "dark" ? "#f5e8ff" : "#562571");
+      root.style.setProperty("--accent", tweaks.themeMode === "dark" ? "#5DA8E8" : "#0B65C2");
+      root.style.setProperty("--accent-soft", tweaks.themeMode === "dark" ? "rgba(93,168,232,0.14)" : "rgba(11,101,194,0.10)");
+      root.style.setProperty("--highlight", "#FFCC3F");
+    } else {
+      // Neutral fallback: dark ink, slider-driven accent
+      root.style.setProperty("--ink", tweaks.themeMode === "dark" ? "#f0ece6" : "#1a1715");
+      const L = tweaks.themeMode === "dark" ? 0.72 : 0.55;
+      root.style.setProperty("--accent", `oklch(${L} ${tweaks.accentChroma} ${tweaks.accentHue})`);
+      root.style.setProperty("--accent-soft", `oklch(${L} ${tweaks.accentChroma} ${tweaks.accentHue} / 0.10)`);
+      root.style.setProperty("--highlight", `oklch(${L} ${tweaks.accentChroma} ${tweaks.accentHue})`);
+    }
+    root.style.setProperty("--font-display", FONT_MAP[tweaks.displayFont] || FONT_MAP.newsreader);
+  }, [tweaks]);
+
+  // Override headline based on variant
+  React.useEffect(() => {
+    const h1 = document.querySelector(".hero h1.display");
+    const sub = document.querySelector(".hero .hero-sub");
+    if (!h1 || !sub) return;
+    // Re-render handled by passing variant prop below
+  }, [tweaks.heroVariant]);
+
+  const variant = HERO_VARIANTS[tweaks.heroVariant] || HERO_VARIANTS.serious;
+
+  return (
+    <>
+      <TopBar tweaks={tweaks} />
+      <HeroLocal tweaks={tweaks} variant={variant} />
+      <Services />
+      <SelectedWork />
+      <OSS_Section />
+      <Writing />
+      <About />
+      <Contact />
+      <Foot />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection title="Hero">
+          <TweakRadio
+            label="Variant"
+            value={tweaks.heroVariant}
+            onChange={(v) => setTweak("heroVariant", v)}
+            options={[
+              { value: "serious", label: "Serious" },
+              { value: "craft", label: "Craft" },
+              { value: "trust", label: "Trust" },
+            ]}
+          />
+          <TweakToggle
+            label="Show fig. 01 diagram"
+            value={tweaks.showHeroCode}
+            onChange={(v) => setTweak("showHeroCode", v)}
+          />
+        </TweakSection>
+
+        <TweakSection title="Theme">
+          <TweakRadio
+            label="Mode"
+            value={tweaks.themeMode}
+            onChange={(v) => setTweak("themeMode", v)}
+            options={[
+              { value: "light", label: "Light" },
+              { value: "dark", label: "Dark" },
+            ]}
+          />
+          <TweakSelect
+            label="Display font"
+            value={tweaks.displayFont}
+            onChange={(v) => setTweak("displayFont", v)}
+            options={[
+              { value: "newsreader", label: "Newsreader" },
+              { value: "garamond", label: "EB Garamond (default)" },
+              { value: "mono_display", label: "JetBrains Mono" },
+            ]}
+          />
+          <TweakToggle
+            label="Use brand colors (purple/yellow/blue)"
+            value={tweaks.useBrandColors}
+            onChange={(v) => setTweak("useBrandColors", v)}
+          />
+          {!tweaks.useBrandColors && <>
+            <TweakSlider
+              label="Accent hue"
+              value={tweaks.accentHue}
+              onChange={(v) => setTweak("accentHue", v)}
+              min={0} max={360} step={5}
+              unit="°"
+            />
+            <TweakSlider
+              label="Accent saturation"
+              value={tweaks.accentChroma}
+              onChange={(v) => setTweak("accentChroma", v)}
+              min={0} max={0.25} step={0.01}
+            />
+          </>}
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+// Local Hero wrapper that respects variant tweaks (so we don't duplicate the layout above)
+function HeroLocal({ tweaks, variant }) {
+  return (
+    <section className="hero" data-screen-label="01 Hero">
+      <div className="container rail-grid">
+        <div className="rail-label">
+          §01 / Index<br />
+          Independent · since 2019
+        </div>
+        <div>
+          <div className="mono-label" style={{ marginBottom: 24, color: "var(--ink-3)" }}>
+            SENIOR FULLSTACK ENGINEER — TOULOUSE, FR · TOPTAL TOP 3% · ORACLE JAVA MASTER
+          </div>
+          <h1 className="display" style={{ fontSize: "clamp(44px, 6.5vw, 88px)", margin: "0 0 40px", maxWidth: "14ch", lineHeight: 1.05 }}>
+            {variant.headline}
+          </h1>
+          <p className="hero-sub">{variant.sub}</p>
+          <div className="hero-cta-row">
+            <a href={`https://${SITE.cal}`} className="btn">
+              Book a 30-min intro
+              <span className="arrow">→</span>
+            </a>
+            <a href="#work" className="btn btn-ghost">
+              See selected work
+            </a>
+          </div>
+
+          {tweaks.showHeroCode && <HeroDiagram />}
+
+          <div className="hero-meta">
+            <div className="meta-item">
+              <div className="meta-k">Years shipping</div>
+              <div className="meta-v">19<small>since 2007</small></div>
+            </div>
+            <div className="meta-item">
+              <div className="meta-k">Toptal screening</div>
+              <div className="meta-v">Top 3<small>%</small></div>
+            </div>
+            <div className="meta-item">
+              <div className="meta-k">Web3 volume shipped</div>
+              <div className="meta-v">$1B+<small>monthly · Swaap</small></div>
+            </div>
+            <div className="meta-item">
+              <div className="meta-k">Stack Overflow</div>
+              <div className="meta-v">7k<small>rep · since 2010</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroCodeCardLocal() {
+  return (
+    <div className="code-card" aria-hidden="true">
+      <div className="code-head">
+        <span>./engagement.toml</span>
+        <span>fit ✓</span>
+      </div>
+      <pre>{`[`}<span className="tok-fn">engagement</span>{`]
+`}<span className="tok-p">type</span>{`        = `}<span className="tok-s">"fractional"</span>{`   `}<span className="tok-c"># or "project", "advisory"</span>{`
+`}<span className="tok-p">commitment</span>{`  = `}<span className="tok-s">"2–4 days/week"</span>{`
+`}<span className="tok-p">duration</span>{`    = `}<span className="tok-s">"6 weeks → 12 months"</span>{`
+`}<span className="tok-p">stack</span>{`       = [`}<span className="tok-s">"go"</span>{`, `}<span className="tok-s">"rust"</span>{`, `}<span className="tok-s">"ts"</span>{`, `}<span className="tok-s">"postgres"</span>{`]
+`}<span className="tok-p">good_at</span>{`     = [`}<span className="tok-s">"distributed_systems"</span>{`, `}<span className="tok-s">"devtools"</span>{`]
+`}<span className="tok-p">not_for</span>{`     = [`}<span className="tok-s">"crud_dashboards"</span>{`, `}<span className="tok-s">"wordpress"</span>{`]
+`}<span className="tok-c">// reply within 24h ·</span>{` `}<span className="cursor"></span></pre>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+</body>
+</html>
