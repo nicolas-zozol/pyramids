@@ -1,0 +1,267 @@
+/* =========================================================
+   Robusta Build — Foundations
+   hand-drawn sketchnote system. lowercase, ink, paper.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap');
+
+:root {
+  /* -------- color: paper + ink -------- */
+  --paper:        #fafaf7;   /* off-white background, slightly warm */
+  --paper-2:      #f3f1ea;   /* slightly darker paper for panels */
+  --paper-edge:   #e8e4d6;   /* paper fold/edge tone */
+  --ink:          #1a1a1a;   /* primary stroke */
+  --ink-soft:     #2b2b2b;   /* body text */
+  --ink-mute:     #6b6b66;   /* secondary captions */
+  --ink-faint:    #a8a59a;   /* tertiary, dotted lines */
+
+  /* -------- brand: luxury palette --------
+     primary   = royal purple (Robusta plum)
+     secondary = champagne gold
+     accent    = signal blue, used sparingly for links / focus rings */
+  --brand-primary:        #562571;
+  --brand-primary-soft:   #e7d8f0;   /* tints — highlighter wash */
+  --brand-primary-deep:   #3a1850;   /* hover / pressed */
+  --brand-secondary:      #FFCC3F;
+  --brand-secondary-soft: #fff1c2;
+  --brand-secondary-deep: #d6a624;
+  --brand-accent:         #0B65C2;
+  --brand-accent-soft:    #cfe2f5;
+  --brand-accent-deep:    #074a8f;
+
+  /* -------- legacy accent aliases (kept for compatibility) --------
+     Old code still references --accent-blue/green/pink/yellow.
+     We point them at the new brand tokens so existing components shift palette. */
+  --accent-blue:        var(--brand-accent);
+  --accent-blue-soft:   var(--brand-accent-soft);
+  --accent-green:       var(--brand-primary);        /* re-mapped: "primary action" */
+  --accent-green-soft:  var(--brand-primary-soft);
+  --accent-pink:        var(--brand-secondary-deep); /* re-mapped: "warm highlight" */
+  --accent-pink-soft:   var(--brand-secondary-soft);
+  --accent-yellow-soft: var(--brand-secondary-soft);
+
+  /* -------- semantic -------- */
+  --fg-1:        var(--ink);
+  --fg-2:        var(--ink-soft);
+  --fg-3:        var(--ink-mute);
+  --fg-4:        var(--ink-faint);
+  --bg-1:        var(--paper);
+  --bg-2:        var(--paper-2);
+  --border:      var(--ink);
+  --border-soft: var(--ink-faint);
+
+  /* -------- type families --------
+     IBM Plex Sans is the single family for body, headings, UI.
+     Caveat is reserved for the logo wordmark and rare hand-drawn accents.
+     IBM Plex Mono for code. */
+  --font-sans:    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-sans);                       /* headings — same family */
+  --font-hand:    var(--font-sans);                       /* legacy alias for body */
+  --font-annot:   var(--font-sans);                       /* legacy alias for captions */
+  --font-script:  'Caveat', cursive;                      /* logo + rare accents only */
+  --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  /* -------- type scale --------
+     standard web sizes now that we're on a readable sans. */
+  --t-h1:   56px;
+  --t-h2:   40px;
+  --t-h3:   28px;
+  --t-h4:   20px;
+  --t-body: 16px;   /* readable floor */
+  --t-small:14px;
+  --t-tiny: 12px;
+  --t-code: 14px;
+
+  --lh-display: 1.0;
+  --lh-tight:   1.15;
+  --lh-body:    1.45;
+
+  /* -------- spacing (loose, hand-measured) -------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  48px;
+  --sp-8:  64px;
+  --sp-9:  96px;
+
+  /* -------- corner radii -------- *
+     real sketches don't have perfect curves; we keep
+     these tiny and combine with hand-drawn SVG borders */
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-lg: 10px;
+
+  /* -------- "shadows" -------- *
+     no drop shadows in this system. instead we use
+     offset double-strokes (see component examples).
+     these vars exist for the rare case we need depth. */
+  --shadow-offset: 4px 4px 0 0 var(--ink);   /* sticker offset */
+  --shadow-soft:   2px 2px 0 0 var(--ink);
+
+  /* -------- stroke widths -------- */
+  --stroke-thin:   1.5px;
+  --stroke:        2px;
+  --stroke-bold:   3px;
+  --stroke-heavy:  4px;
+}
+
+/* =========================================================
+   base resets / paper feel
+   ========================================================= */
+
+html, body {
+  background: var(--paper);
+  color: var(--fg-2);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* subtle paper grain — applied to body via class .paper */
+.paper {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.018) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 2px;
+}
+
+/* dotted-grid paper, like a bullet journal */
+.paper-grid {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--ink-faint) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  opacity: 1;
+}
+
+/* ruled paper, faint */
+.paper-ruled {
+  background-color: var(--paper);
+  background-image: linear-gradient(to bottom, transparent 27px, rgba(168,165,154,0.45) 28px);
+  background-size: 100% 28px;
+}
+
+/* =========================================================
+   typography — semantic
+   ========================================================= */
+
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h1);
+  line-height: var(--lh-display);
+  color: var(--fg-1);
+  letter-spacing: -1px;
+  margin: 0 0 var(--sp-5);
+}
+
+h2, .h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h2);
+  line-height: var(--lh-tight);
+  color: var(--fg-1);
+  letter-spacing: -0.5px;
+  margin: 0 0 var(--sp-4);
+}
+
+h3, .h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h3);
+  line-height: var(--lh-tight);
+  color: var(--fg-1);
+  letter-spacing: -0.3px;
+  margin: 0 0 var(--sp-3);
+}
+
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h4);
+  line-height: var(--lh-tight);
+  color: var(--fg-1);
+  margin: 0 0 var(--sp-3);
+}
+
+p, .p {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+  margin: 0 0 var(--sp-4);
+}
+
+.caption, small {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--fg-3);
+  line-height: 1.4;
+}
+
+.tiny {
+  font-family: var(--font-sans);
+  font-size: var(--t-tiny);
+  color: var(--fg-3);
+}
+
+/* annotation — used for arrow labels, side notes, "fyi" copy */
+.annot {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  font-style: normal;
+  line-height: 1.4;
+}
+
+/* script accent — handwritten, reserved for the logo & rare highlights */
+.script {
+  font-family: var(--font-script);
+  font-weight: 700;
+}
+
+/* code */
+code, .code {
+  font-family: var(--font-mono);
+  font-size: var(--t-code);
+  background: var(--paper-2);
+  padding: 2px 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--t-code);
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-5);
+  line-height: 1.5;
+  overflow: auto;
+}
+
+/* a real underline made of a wavy svg works too,
+   but a dashed bottom border is good enough as a primitive */
+.underline-hand {
+  background-image: linear-gradient(to right, var(--ink) 60%, transparent 60%);
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  background-size: 6px 2px;
+  padding-bottom: 2px;
+}
+
+/* highlighter wash behind text */
+.highlight-blue   { background: linear-gradient(transparent 55%, var(--accent-blue-soft)  55%); padding: 0 2px; }
+.highlight-green  { background: linear-gradient(transparent 55%, var(--accent-green-soft) 55%); padding: 0 2px; }
+.highlight-pink   { background: linear-gradient(transparent 55%, var(--accent-pink-soft)  55%); padding: 0 2px; }
+.highlight-yellow { background: linear-gradient(transparent 55%, var(--accent-yellow-soft)55%); padding: 0 2px; }

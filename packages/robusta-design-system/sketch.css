@@ -1,0 +1,240 @@
+/* =========================================================
+   sketch.css — hand-drawn primitives
+   wobbly borders, sticker-offset shadows, paper feel.
+   import after colors_and_type.css.
+   ========================================================= */
+
+/* ---------- rough box ----------
+   wobbly border drawn with svg + a tiny offset stamp behind. */
+.sk-box {
+  position: relative;
+  background: var(--paper);
+  padding: var(--sp-5) var(--sp-5);
+  border: none;
+  /* the "border" is an svg in ::before */
+}
+.sk-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M2,3 Q15,1.5 30,2.2 T60,2.5 Q80,1.8 98,3 Q97.5,20 97.8,40 Q98.2,60 97.5,80 Q98,90 97,98 Q80,97.5 60,98 T20,97.5 Q8,98 2.5,97.5 Q3,80 2.2,60 T2.5,30 Q1.8,15 2,3 Z' fill='none' stroke='%231a1a1a' stroke-width='0.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* sticker — offset stamp underneath gives 3d feel without shadow */
+.sk-sticker {
+  position: relative;
+  background: var(--paper);
+  padding: var(--sp-4) var(--sp-5);
+}
+.sk-sticker::after {
+  content: "";
+  position: absolute;
+  inset: 4px -4px -4px 4px;
+  background: var(--ink);
+  z-index: -1;
+}
+.sk-sticker > * { position: relative; z-index: 1; }
+
+/* filled colored sticker */
+.sk-sticker--blue   { background: var(--accent-blue-soft); }
+.sk-sticker--green  { background: var(--accent-green-soft); }
+.sk-sticker--pink   { background: var(--accent-pink-soft); }
+.sk-sticker--yellow { background: var(--accent-yellow-soft); }
+
+/* ---------- callout / speech bubble ---------- */
+.sk-callout {
+  position: relative;
+  background: var(--paper);
+  padding: var(--sp-4) var(--sp-5);
+  display: inline-block;
+}
+.sk-callout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'><path d='M5,8 Q40,3 100,5 T195,8 Q197,30 196,55 Q197,75 195,92 Q140,97 100,95 T20,95 Q6,96 5,92 Q3,70 4,50 T5,8 Z' fill='none' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ---------- divider — wavy hand-drawn line ---------- */
+.sk-divider {
+  display: block;
+  width: 100%;
+  height: 14px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M2,7 Q15,3 30,7 T60,7 T90,8 T120,6 T150,7 T180,7 T198,7' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.sk-divider--dashed {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 4' preserveAspectRatio='none'><path d='M2,2 L198,2' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-dasharray='5 4'/></svg>");
+  height: 4px;
+}
+
+/* ---------- arrow ---------- */
+.sk-arrow-right {
+  display: inline-block;
+  width: 80px; height: 24px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 24'><path d='M3,12 Q20,9 40,13 T70,12' fill='none' stroke='%231a1a1a' stroke-width='1.8' stroke-linecap='round'/><path d='M64,5 L72,12 L64,19' fill='none' stroke='%231a1a1a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  vertical-align: middle;
+}
+
+/* ---------- hand-drawn checkmark ---------- */
+.sk-check {
+  display: inline-block;
+  width: 22px; height: 22px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3,12 Q6,15 9,18 Q14,8 19,4' fill='none' stroke='%232e9c5e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  vertical-align: middle;
+}
+
+/* ---------- buttons ---------- */
+.sk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-annot);
+  font-size: 18px;
+  text-transform: lowercase;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px 22px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  transition: transform 90ms ease;
+  z-index: 0; /* button paints above its drop shadow */
+}
+.sk-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-btn::after {
+  content: "";
+  position: absolute;
+  inset: 3px -3px -3px 3px;
+  background: var(--ink);
+  z-index: -1;
+  transition: inset 90ms ease;
+}
+.sk-btn:hover::after { inset: 5px -5px -5px 5px; }
+.sk-btn:active        { transform: translate(3px,3px); }
+.sk-btn:active::after { inset: 0; opacity: 0; } /* shadow tucked away during press */
+
+/* primary: brand purple fill, paper text — wobbly white outline */
+.sk-btn--primary { background: var(--brand-primary); color: var(--paper); }
+.sk-btn--primary::before {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%23fafaf7' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+}
+.sk-btn--primary::after { background: var(--brand-primary-deep); }
+
+/* secondary: brand gold fill, ink text — for warmer secondary CTAs */
+.sk-btn--secondary { background: var(--brand-secondary); color: var(--ink); }
+.sk-btn--secondary::after { background: var(--brand-secondary-deep); }
+
+.sk-btn--ghost { background: transparent; }
+.sk-btn--ghost::after { display:none; }
+
+/* ---------- input ---------- */
+.sk-input {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  position: relative;
+}
+.sk-input-wrap {
+  position: relative;
+  background: var(--paper);
+}
+.sk-input-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'><path d='M3,5 Q50,3 100,4 T197,5 Q198,25 197,46 Q140,48 100,47 T5,46 Q2,25 3,5 Z' fill='none' stroke='%231a1a1a' stroke-width='1.3' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ---------- badge / tag ---------- */
+.sk-tag {
+  display: inline-block;
+  font-family: var(--font-annot);
+  font-size: 14px;
+  padding: 3px 10px;
+  background: var(--paper);
+  color: var(--ink);
+  position: relative;
+  text-transform: lowercase;
+}
+.sk-tag::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'><path d='M3,4 Q25,1 50,2.5 T97,4 Q98,15 97,26 Q60,28 50,27 T4,26 Q2,15 3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-tag--blue  { background: var(--accent-blue-soft); }
+.sk-tag--green { background: var(--accent-green-soft); }
+.sk-tag--pink  { background: var(--accent-pink-soft); }
+
+/* ---------- circle (for diagrams) ---------- */
+.sk-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  position: relative;
+  font-family: var(--font-annot);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><path d='M30,3 Q45,4 54,15 Q58,30 53,45 Q42,57 28,56 Q13,55 6,42 Q2,28 9,14 Q19,3 30,3 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5'/></svg>");
+  background-size: 100% 100%;
+}
+
+/* ---------- "scribble" emphasis ---------- */
+.sk-scribble {
+  display: inline-block;
+  position: relative;
+}
+.sk-scribble::after {
+  content: "";
+  position: absolute;
+  left: -4px; right: -4px;
+  bottom: -4px; height: 12px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,5 Q25,2 50,6 T100,5 T150,7 T198,4' fill='none' stroke='%23e94e8a' stroke-width='2.5' stroke-linecap='round'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* slight tape effect for stickers */
+.sk-tape {
+  position: relative;
+}
+.sk-tape::before {
+  content: "";
+  position: absolute;
+  top: -8px; left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px; height: 18px;
+  background: rgba(255, 240, 130, 0.55);
+  border-left: 1px dashed rgba(0,0,0,0.15);
+  border-right: 1px dashed rgba(0,0,0,0.15);
+}

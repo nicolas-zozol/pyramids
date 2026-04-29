@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>Robusta Build — senior engineering, hand-built</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="../../sketch.css">
+<style>
+  body { margin: 0; background: var(--paper);
+    background-image: radial-gradient(rgba(0,0,0,.025) 1px, transparent 1px),
+                      radial-gradient(rgba(0,0,0,.018) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 2px;
+  }
+  main { max-width: 1280px; margin: 0 auto; }
+  section { position: relative; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+  // Tweakable defaults — also live-edited via the Tweaks panel.
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "brandPrimary": "#562571",
+    "brandSecondary": "#FFCC3F",
+    "brandAccent": "#0B65C2"
+  }/*EDITMODE-END*/;
+  window.ROBUSTA_WORDMARK_SRC = '../../assets/robusta-build-wordmark.png';
+  window.__TWEAK_DEFAULTS = TWEAK_DEFAULTS;
+</script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="BrandLogo.jsx"></script>
+<script type="text/babel" src="SiteHeader.jsx"></script>
+<script type="text/babel" src="Hero.jsx"></script>
+<script type="text/babel" src="ServicesGrid.jsx"></script>
+<script type="text/babel" src="FlowDiagram.jsx"></script>
+<script type="text/babel" src="PrinciplesList.jsx"></script>
+<script type="text/babel" src="NotesPreview.jsx"></script>
+<script type="text/babel" src="CTA.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+
+<script type="text/babel">
+// Lightly mix a hex color toward white or black for soft / deep variants.
+function mix(hex, target, amount) {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.slice(0,2), 16), g = parseInt(h.slice(2,4), 16), b = parseInt(h.slice(4,6), 16);
+  const tr = target === 'white' ? 255 : 0;
+  const m = (c) => Math.round(c + (tr - c) * amount);
+  const toHex = (n) => n.toString(16).padStart(2, '0');
+  return '#' + toHex(m(r)) + toHex(m(g)) + toHex(m(b));
+}
+
+function applyBrandTokens({ brandPrimary, brandSecondary, brandAccent }) {
+  const root = document.documentElement;
+  root.style.setProperty('--brand-primary',        brandPrimary);
+  root.style.setProperty('--brand-primary-soft',   mix(brandPrimary, 'white', 0.82));
+  root.style.setProperty('--brand-primary-deep',   mix(brandPrimary, 'black', 0.30));
+  root.style.setProperty('--brand-secondary',      brandSecondary);
+  root.style.setProperty('--brand-secondary-soft', mix(brandSecondary, 'white', 0.78));
+  root.style.setProperty('--brand-secondary-deep', mix(brandSecondary, 'black', 0.30));
+  root.style.setProperty('--brand-accent',         brandAccent);
+  root.style.setProperty('--brand-accent-soft',    mix(brandAccent, 'white', 0.82));
+  root.style.setProperty('--brand-accent-deep',    mix(brandAccent, 'black', 0.30));
+}
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(window.__TWEAK_DEFAULTS);
+  React.useEffect(() => { applyBrandTokens(tweaks); }, [tweaks]);
+
+  return (
+    <>
+      <main data-screen-label="Robusta Build · Home">
+        <SiteHeader />
+        <Hero />
+        <ServicesGrid />
+        <FlowDiagram />
+        <PrinciplesList />
+        <NotesPreview />
+        <CTA />
+        <SiteFooter />
+      </main>
+      <TweaksPanel>
+        <TweakSection title="Brand colors">
+          <TweakColor label="Primary"   value={tweaks.brandPrimary}   onChange={(v) => setTweak('brandPrimary', v)} />
+          <TweakColor label="Secondary" value={tweaks.brandSecondary} onChange={(v) => setTweak('brandSecondary', v)} />
+          <TweakColor label="Accent"    value={tweaks.brandAccent}    onChange={(v) => setTweak('brandAccent', v)} />
+          <TweakButton onClick={() => {
+            setTweak({ brandPrimary: '#562571', brandSecondary: '#FFCC3F', brandAccent: '#0B65C2' });
+          }}>Reset to luxury (purple + gold)</TweakButton>
+          <TweakButton onClick={() => {
+            setTweak({ brandPrimary: '#1f4a7a', brandSecondary: '#c9a961', brandAccent: '#7a3a1f' });
+          }}>Try: navy + brass</TweakButton>
+          <TweakButton onClick={() => {
+            setTweak({ brandPrimary: '#2e6d4f', brandSecondary: '#e8b54f', brandAccent: '#a94442' });
+          }}>Try: forest + amber</TweakButton>
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
