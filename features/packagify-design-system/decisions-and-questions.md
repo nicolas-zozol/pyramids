@@ -332,4 +332,86 @@ different font family without updating these inlines.
 
 ## Implementation log
 
-(populated during Phase 5)
+- 13 source files written under `packages/robusta-design-system/src/`:
+  - 6 primitives (`BrandLogo`, `SkButton`, `SkCallout`, `SkTag`, `SkInput`, `SkArrowRight`)
+  - 8 marketing surfaces (`Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`,
+    `FlowDiagram`, `PrinciplesList`, `NotesPreview`, `CTA`)
+  - 3 barrel files (`src/index.ts`, `src/primitives/index.ts`, `src/marketing/index.ts`)
+- `package.json` and `tsconfig.json` written.
+- Root `package.json` `build:deps` updated to include
+  `@robusta/pyramids-design-system` after `pyramids-themes`. Added
+  `w:design-system` watcher script.
+- `apps/robusta/package.json` adds `@robusta/pyramids-design-system: 1.0.0`.
+- Smoke-test page added at `apps/robusta/src/app/_design-test/page.tsx`.
+
+### Build verification
+
+- ✅ `yarn install` from worktree — succeeded (16.30s).
+- ✅ `yarn workspace @robusta/pyramids-design-system run build` — produced
+  `dist/index.{js,d.ts}` plus per-component `.js`/`.d.ts` files under
+  `dist/primitives/` and `dist/marketing/`.
+- ✅ Build output verified — every primitive and marketing surface emitted
+  cleanly under `tsc` strict mode.
+
+### Pre-existing build issues (NOT introduced by this feature)
+
+⚠️ **F5: `pyramids-links` `tsc` error in fresh worktrees.** When run in a
+freshly-installed worktree where `next` is not hoisted to the root
+`node_modules`, `pyramids-links` `tsc` fails with `Cannot find module 'next/link'`
+/ `'next/navigation'`. This is a latent monorepo bug — `pyramids-links` should
+declare `next` as a `peerDependency` (it's a `devDependency` of nowhere right
+now). It works on the user's `dev` tree because Yarn 1 happened to hoist `next`
+high enough. **Boss did not fix this** — out of scope for the design-system
+feature. Suggested follow-up: add `"peerDependencies": { "next": ">=14" }` to
+`packages/links/package.json`.
+
+⚠️ **F6: `apps/robusta` `next build` worker crash.** Running `yarn build:robusta`
+on the user's current `dev` branch (without any of this feature's changes)
+fails during static page generation with "Next.js build worker exited with
+code: 1". Pre-existing condition. Boss did not investigate.
+
+### Smoke-test page validation
+
+`apps/robusta/src/app/_design-test/page.tsx` was added. It imports:
+- `@robusta/pyramids-design-system/colors_and_type.css`
+- `@robusta/pyramids-design-system/sketch.css`
+- `@robusta/pyramids-design-system/assets/robusta-build-wordmark.png`
+- `{ BrandLogo, SkButton, SkTag }` from `@robusta/pyramids-design-system`
+
+A direct `next build` of the robusta app cannot complete due to the two
+pre-existing failures above (F5, F6). The page's import shape is identical
+to existing PNG imports throughout `apps/robusta/src/components/freelance/`,
+so it will resolve at runtime under `next dev` once the F5/F6 blockers are
+addressed in a separate feature. The package itself is fully wired.
+
+### Files written / changed
+
+```
+NEW (19):
+  packages/robusta-design-system/package.json
+  packages/robusta-design-system/tsconfig.json
+  packages/robusta-design-system/design-system.archi.md
+  packages/robusta-design-system/src/index.ts
+  packages/robusta-design-system/src/primitives/index.ts
+  packages/robusta-design-system/src/primitives/BrandLogo.tsx
+  packages/robusta-design-system/src/primitives/SkButton.tsx
+  packages/robusta-design-system/src/primitives/SkCallout.tsx
+  packages/robusta-design-system/src/primitives/SkTag.tsx
+  packages/robusta-design-system/src/primitives/SkInput.tsx
+  packages/robusta-design-system/src/primitives/SkArrowRight.tsx
+  packages/robusta-design-system/src/marketing/index.ts
+  packages/robusta-design-system/src/marketing/Hero.tsx
+  packages/robusta-design-system/src/marketing/SiteHeader.tsx
+  packages/robusta-design-system/src/marketing/SiteFooter.tsx
+  packages/robusta-design-system/src/marketing/ServicesGrid.tsx
+  packages/robusta-design-system/src/marketing/FlowDiagram.tsx
+  packages/robusta-design-system/src/marketing/PrinciplesList.tsx
+  packages/robusta-design-system/src/marketing/NotesPreview.tsx
+  packages/robusta-design-system/src/marketing/CTA.tsx
+  apps/robusta/src/app/_design-test/page.tsx
+
+EDITED (3):
+  package.json (root)            — build:deps + w:design-system
+  packages/robusta-design-system/README.md  — Install/Import section prepended
+  apps/robusta/package.json      — added @robusta/pyramids-design-system dep
+```
