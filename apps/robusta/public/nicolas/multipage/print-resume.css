@@ -1,0 +1,89 @@
+body {
+}
+
+h2 {
+  font-size: 2.4rem;
+}
+
+div.cv-page {
+  margin: 0 auto;
+  min-height: 270mm; /* fills the A4 print area so aside gray reaches bottom */
+}
+
+/* Ensures each project gets individual layout treatment */
+.project {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+aside section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.project,
+.item {
+  margin: 10px 0 20px;
+}
+
+.project p,
+.project ul,
+.skill-list {
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+}
+
+/* Page jump after 5 projects */
+hr.jump {
+  page-break-after: always;
+  height: 0;
+  visibility: hidden;
+}
+
+aside h3 {
+  margin-top: 10px;
+  line-height: 1.8rem;
+}
+
+/* ==========================================================================
+     Print-only spacer utilities.
+     Add to an aside section to push it down so it lands on the right page
+     after a main-column page break (hr.jump). Adjust by trial.
+     Hidden in screen mode — only effective when printing.
+     ========================================================================== */
+.m10 {
+  padding-top: 20mm !important;
+}
+.m20 {
+  padding-top: 20mm !important;
+}
+.m25 {
+  padding-top: 25mm !important;
+}
+.m30 {
+  padding-top: 30mm !important;
+}
+.m32 {
+  padding-top: 35mm !important;
+}
+.m40 {
+  padding-top: 40mm !important;
+}
+.m60 {
+  padding-top: 60mm !important;
+}
+.m80 {
+  padding-top: 80mm !important;
+}
+.m100 {
+  padding-top: 100mm !important;
+}
+.m120 {
+  padding-top: 120mm !important;
+}
+.m140 {
+  padding-top: 140mm !important;
+}
+.m160 {
+  padding-top: 160mm !important;
+}
