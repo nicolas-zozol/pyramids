@@ -7,7 +7,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "resume:en": "bash public/nicolas/multipage/combine-pdfs.sh --first-only",
+    "resume:fr": "bash public/nicolas/multipage/combine-pdfs.sh --fr --first-only"
   },
   "dependencies": {
     "react": "19.0.0-rc-66855b96-20241106",

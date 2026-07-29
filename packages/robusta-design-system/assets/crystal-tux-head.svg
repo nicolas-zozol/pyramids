@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none" stroke-linejoin="round" stroke-linecap="round">
+  
+
+  
+  <path d="M90,18&#xA;           Q140,22 156,70&#xA;           Q160,118 138,150&#xA;           Q120,162 90,162&#xA;           Q60,162 42,150&#xA;           Q20,118 24,70&#xA;           Q40,22 90,18 Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"></path>
+
+  
+  <path d="M90,52&#xA;           Q124,56 128,98&#xA;           Q126,128 110,140&#xA;           Q90,144 70,140&#xA;           Q54,128 52,98&#xA;           Q56,56 90,52 Z" fill="#fafaf7" stroke="#1a1a1a" stroke-width="1.8"></path>
+
+  
+  <ellipse cx="74" cy="88" rx="13" ry="15" fill="#fafaf7" stroke="#1a1a1a" stroke-width="2"></ellipse>
+  <ellipse cx="106" cy="88" rx="13" ry="15" fill="#fafaf7" stroke="#1a1a1a" stroke-width="2"></ellipse>
+
+  
+  <circle cx="82" cy="90" r="4.2" fill="#1a1a1a"></circle>
+  <circle cx="98" cy="90" r="4.2" fill="#1a1a1a"></circle>
+  <circle cx="83.2" cy="88" r="1.1" fill="#fafaf7"></circle>
+  <circle cx="99.2" cy="88" r="1.1" fill="#fafaf7"></circle>
+
+  
+  <path d="M78,108 Q90,104 102,108 Q98,118 90,120 Q82,118 78,108 Z" fill="#e94e8a" stroke="#1a1a1a" stroke-width="1.8"></path>
+  <path d="M78,108 Q90,114 102,108" stroke="#1a1a1a" stroke-width="1.5" fill="none"></path>
+
+  
+  <path d="M90,18 Q88,8 94,4" stroke="#1a1a1a" stroke-width="1.8" fill="none"></path>
+  <path d="M94,2 L94,8 M91,5 L97,5" stroke="#3b6ef0" stroke-width="2" stroke-linecap="round"></path>
+</svg>

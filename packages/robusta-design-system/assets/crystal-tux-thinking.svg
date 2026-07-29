@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none" stroke-linejoin="round" stroke-linecap="round">
+  
+
+  
+  <path d="M14,26 Q22,12 40,16 Q50,4 72,10 Q90,2 106,18 Q124,16 130,32 Q138,46 124,56 Q106,62 90,58 Q74,64 56,58 Q40,62 26,54 Q10,46 14,26 Z" fill="#fafaf7" stroke="#1a1a1a" stroke-width="1.8"></path>
+  <text x="46" y="40" font-family="Architects Daughter,Kalam,cursive" font-size="18" fill="#1a1a1a">hmm…</text>
+  
+  <circle cx="56" cy="74" r="6" fill="#fafaf7" stroke="#1a1a1a" stroke-width="1.6"></circle>
+  <circle cx="62" cy="88" r="3.5" fill="#fafaf7" stroke="#1a1a1a" stroke-width="1.4"></circle>
+
+  
+  <path d="M70,206 Q62,212 72,216 Q90,218 104,214 Q110,210 102,204" fill="#fff3b0" stroke="#1a1a1a" stroke-width="2"></path>
+  <path d="M120,206 Q114,210 120,214 Q138,218 156,216 Q162,212 154,206" fill="#fff3b0" stroke="#1a1a1a" stroke-width="2"></path>
+
+  
+  <path d="M110,30&#xA;           Q146,32 158,72&#xA;           Q164,108 156,148&#xA;           Q148,192 128,206&#xA;           Q108,212 88,206&#xA;           Q66,192 58,148&#xA;           Q50,108 56,72&#xA;           Q72,32 110,30 Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"></path>
+
+  
+  <path d="M110,76&#xA;           Q132,78 136,118&#xA;           Q138,154 128,184&#xA;           Q116,196 110,196&#xA;           Q104,196 92,184&#xA;           Q82,154 84,118&#xA;           Q88,78 110,76 Z" fill="#fafaf7" stroke="#1a1a1a" stroke-width="1.6"></path>
+
+  
+  <path d="M76,104 Q60,124 68,142 Q90,128 96,116 Q88,106 76,104 Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"></path>
+
+  
+  <path d="M156,98 Q166,124 160,164 Q154,180 144,178 Q146,150 144,124 Q148,104 156,98 Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"></path>
+
+  
+  <ellipse cx="96" cy="80" rx="13" ry="15" fill="#fafaf7" stroke="#1a1a1a" stroke-width="2"></ellipse>
+  <ellipse cx="124" cy="80" rx="13" ry="15" fill="#fafaf7" stroke="#1a1a1a" stroke-width="2"></ellipse>
+  
+  <circle cx="103" cy="76" r="4.2" fill="#1a1a1a"></circle>
+  <circle cx="117" cy="76" r="4.2" fill="#1a1a1a"></circle>
+
+  
+  <path d="M100,98 Q110,94 120,98 Q116,108 110,110 Q104,108 100,98 Z" fill="#e94e8a" stroke="#1a1a1a" stroke-width="1.6"></path>
+  <path d="M100,98 Q110,104 120,98" stroke="#1a1a1a" stroke-width="1.4" fill="none"></path>
+</svg>

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash([ -f \"/Users/nicolaszozol/code/robusta/pyramids/packages/$pkg/$pkg.archi.md\" ])",
+      "Bash(git worktree *)",
+      "Bash(git stash *)",
+      "Bash(git add *)"
+    ]
+  }
+}
