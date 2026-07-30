@@ -6,6 +6,106 @@ This design system gives Robusta Build a distinctive, **hand-drawn sketchnote** 
 
 ---
 
+## Install
+
+This package ships as `@robusta/pyramids-design-system` in the
+`@robusta/pyramids` yarn-workspaces monorepo. To consume it from another
+workspace:
+
+```jsonc
+// apps/<your-app>/package.json
+{
+  "dependencies": {
+    "@robusta/pyramids-design-system": "1.0.0"
+  }
+}
+```
+
+Then `yarn install` from the repo root. The package is built as part of
+`yarn build:deps` (between `pyramids-themes` and `pyramids-layouts`).
+
+## Import — CSS
+
+Both stylesheets are exposed as subpath exports. Import them in this order
+once per app, typically from the root layout:
+
+```ts
+// apps/<your-app>/src/app/layout.tsx
+import '@robusta/pyramids-design-system/colors_and_type.css';
+import '@robusta/pyramids-design-system/sketch.css';
+```
+
+`colors_and_type.css` defines the CSS variables (`--paper`, `--ink`,
+`--font-sans`, `--t-h1`, …) and the `@import` for the brand fonts.
+`sketch.css` defines the hand-drawn primitives (`.sk-box`, `.sk-btn`,
+`.sk-callout`, `.sk-arrow-right`, …) and depends on those variables.
+
+## Import — assets
+
+Each asset is exposed at `assets/<filename>` as a subpath export. Next.js
+resolves the import to a hashed URL at build time.
+
+```ts
+import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+import tuxSvg   from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
+import headSvg  from '@robusta/pyramids-design-system/assets/crystal-tux-head.svg';
+
+// In a Next.js component, normalize StaticImageData → string URL:
+const wordmarkSrc =
+  typeof wordmark === 'string' ? wordmark : (wordmark as { src: string }).src;
+```
+
+Available assets:
+- `crystal-tux.svg` / `crystal-tux.png` — full-body mascot
+- `crystal-tux-head.svg` — head only, for inline annotations
+- `crystal-tux-waving.svg` — waving with "hi there!" speech bubble
+- `crystal-tux-thinking.svg` — thinking pose
+- `robusta-build-wordmark.png` — scanned napkin wordmark (1603×312)
+
+## Import — components
+
+```tsx
+import {
+  // primitives — stable, reusable
+  BrandLogo, SkButton, SkCallout, SkTag, SkInput, SkArrowRight,
+  // marketing surfaces — page-level, content-coupled today
+  Hero, SiteHeader, SiteFooter,
+  ServicesGrid, FlowDiagram, PrinciplesList, NotesPreview, CTA,
+} from '@robusta/pyramids-design-system';
+
+import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+
+export default function Page() {
+  const wordmarkSrc =
+    typeof wordmark === 'string' ? wordmark : (wordmark as { src: string }).src;
+
+  return (
+    <>
+      <SiteHeader wordmarkSrc={wordmarkSrc} />
+      <Hero />              {/* defaults match the prototype copy */}
+      <ServicesGrid />
+      <FlowDiagram />
+      <PrinciplesList />
+      <NotesPreview />
+      <CTA />
+      <SiteFooter wordmarkSrc={wordmarkSrc} />
+    </>
+  );
+}
+```
+
+All components are **server-component-safe**. None of them carry a
+`'use client'` directive. If you need to wire up form submission for the
+CTA email input or click handlers for the booking buttons, wrap the
+relevant component in a small client-side parent in your app.
+
+Each marketing component accepts its content as props with sensible
+defaults that match the original `ui_kits/marketing/*.jsx` prototype. See
+the per-component `interface FooProps` in `dist/marketing/*.d.ts` for the
+full surface, or `design-system.archi.md` for the architectural map.
+
+---
+
 ## Sources
 
 This system was built **from the brief alone** — no codebase, Figma file, or existing decks were attached. As a result, all visual assets (logo, mascot, components) are originals interpreted from the written direction. If a real codebase or Figma exists, re-attach it and we'll re-derive the system to match.

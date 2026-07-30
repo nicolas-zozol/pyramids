@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build:deps": "yarn workspace @robusta/pyramids-helpers run build && yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-links run build && yarn workspace @robusta/pyramids-ctas run build",
+    "build:deps": "yarn workspace @robusta/pyramids-helpers run build && yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-design-system run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-links run build && yarn workspace @robusta/pyramids-ctas run build",
     "build:dakar": "yarn build:deps && yarn workspace @robusta/dakar run build",
     "build:robusta": "yarn build:deps && yarn workspace @robusta/build run build",
     "build:race": "yarn build:deps && yarn workspace @robusta/race run build",
@@ -18,6 +18,7 @@
     "w:ctas": "yarn workspace @robusta/pyramids-ctas run watch",
     "w:links": "yarn workspace @robusta/pyramids-links run watch",
     "w:helpers": "yarn workspace @robusta/pyramids-helpers run watch",
+    "w:design-system": "yarn workspace @robusta/pyramids-design-system run watch",
     "w:deps": "yarn w:themes && yarn w:layouts && yarn w:ctas",
     "dev:dev": "concurrently \"yarn w:links\" \"yarn w:layouts\" \"yarn w:ctas\" \"yarn w:helpers\"  \"yarn dev:robusta\""
   },
