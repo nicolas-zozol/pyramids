@@ -1717,6 +1717,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@robusta/pyramids-routing@workspace:*, @robusta/pyramids-routing@workspace:packages/pyramids-routing":
+  version: 0.0.0-use.local
+  resolution: "@robusta/pyramids-routing@workspace:packages/pyramids-routing"
+  dependencies:
+    typescript: "npm:^5"
+    vitest: "npm:^3.0.4"
+  languageName: unknown
+  linkType: soft
+
 "@robusta/pyramids-themes@workspace:*, @robusta/pyramids-themes@workspace:packages/themes":
   version: 0.0.0-use.local
   resolution: "@robusta/pyramids-themes@workspace:packages/themes"
@@ -1761,6 +1770,7 @@ __metadata:
   resolution: "@robusta/robusta-build@workspace:apps/robusta-build"
   dependencies:
     "@robusta/pyramids-design-system": "workspace:*"
+    "@robusta/pyramids-routing": "workspace:*"
     "@tailwindcss/postcss": "npm:^4.3.3"
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
