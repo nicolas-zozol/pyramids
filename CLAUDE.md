@@ -14,19 +14,20 @@ The three workspace roots are:
 
 ## Apps
 
-- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, and where new work goes. Tailwind 4 with shadcn, its own design system, no DaisyUI. A shell for now: it renders the design system and carries no page copy. See its own README and `robusta-build.archi.md`.
+- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, and where new work goes. Tailwind 4 with shadcn, its own design system, no DaisyUI. It carries the v2 route table over a fixture corpus — 62 static pages, every one of them a placeholder. Real page copy arrives with robusta-landing-page and migrate-learn-content. See its own README and `robusta-build.archi.md`.
 - `@robusta/build` — `apps/robusta`. robusta.build version 1: blog under `/learn`, portfolio, prosemirror. Being retired — do not add to it, and do not refactor it.
 - `@robusta/dakar` — `apps/dakar`. dakar.surf, the surf guide. Uses MapLibre, has a `[locale]` segment and spot pages. Live, and out of the v2 scope.
 - intel-demo — `apps/intel-demo`. Vite front + server demo for the scribe-intel SDK. Not a workspace: it carries no `package.json`.
 
 Each Next.js app has a `src/seopyramids.config.ts` that defines `domain`, `siteName`, `defaultLocale`, `otherLocales`, blog roll size, etc. — that's the per-site source of truth.
 
-`apps/robusta` documents the v1 routing scheme (locale, `page`, `s` discriminants for ISR) in its own README. Preserve that structure when editing v1; the v2 scheme is a separate decision and does not inherit it.
+`apps/robusta` documents the v1 routing scheme (locale, `page`, `s` discriminants for ISR) in its own README. Preserve that structure when editing v1; the v2 scheme is its own — discriminants `l`, `c`, `p`, `t` under a site-named content root — and is documented in the Routing section of `apps/robusta-build/README.md`.
 
 ## Packages
 
 Packages publish their compiled output (`main: dist/index.js`, `types: dist/index.d.ts`), so **apps consume the built artefacts, not the TS sources**. Any change to a package needs a rebuild (or a watcher) before the consuming app sees it.
 
+- `pyramids-routing` — the v2 URL scheme as pure string functions: the discriminants `l`, `c`, `p`, `t`, plus `buildUrl`, `parseUrl`, `urlSet`, `validateArticles`. No dependency, no React, no Next; first in `build:deps`. Holds no site's content root.
 - `pyramids-helpers` — react/router/style/theme/time/array helpers (incl. `twCss` merge)
 - `pyramids-themes` — DaisyUI theme + colors
 - `robusta-design-system` — published as `@robusta/pyramids-design-system`: CSS tokens, brand assets, 6 sketch primitives and 8 marketing surfaces. Belongs to the robusta site alone; no other site reuses it.
@@ -57,7 +58,7 @@ yarn clean:install   # clean then reinstall
 ### Build packages (required before/during app builds)
 
 ```bash
-yarn build:deps      # builds helpers → themes → design-system → layouts → links → ctas in order
+yarn build:deps      # builds routing → helpers → themes → design-system → layouts → links → ctas in order
 yarn build:robusta-build  # build:deps then `next build` for apps/robusta-build (v2)
 yarn build:robusta   # build:deps then `next build` for apps/robusta (v1)
 yarn build:dakar     # build:deps then `next build` for apps/dakar
@@ -72,7 +73,7 @@ yarn dev:dakar       # apps/dakar with Next.js + Turbopack
 yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta
 ```
 
-When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
+When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:routing`, `w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
 
 ### Lint / format
 
@@ -86,7 +87,7 @@ Prettier config lives in `prettier.config.js` (single quotes, semi, trailing com
 
 ### Tests
 
-Vitest is set up in `apps/robusta`, `packages/scribe-intel`, `packages/helpers`, and `services/scribe-intel-collector`. No workspace declares a `test` script, so invoke vitest from the workspace itself:
+Vitest is set up in `apps/robusta`, `packages/scribe-intel`, `packages/helpers`, `packages/pyramids-routing`, and `services/scribe-intel-collector`. Only `packages/pyramids-routing` declares a `test` script (`yarn workspace @robusta/pyramids-routing run test`, 78 tests); elsewhere, invoke vitest from the workspace itself:
 
 ```bash
 yarn workspace @robusta/build exec vitest run            # apps/robusta

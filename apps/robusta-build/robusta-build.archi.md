@@ -68,14 +68,14 @@ design system CSS ───┴──────────────┴─�
                                     server components render
                                               │
                                               ▼
-                                   static generation (4 routes)
+                                   static generation (62 pages)
 ```
 
 No client boundary: no design-system component carries `'use client'`, so the whole page stays a server component and prerenders.
 
 ## Dependencies
 
-- Depends on: `@robusta/pyramids-design-system` (`workspace:*`) — the only workspace dependency. Next 15.5.3, React 19.1.1, Tailwind 4.
+- Depends on: `@robusta/pyramids-design-system` and `@robusta/pyramids-routing` (both `workspace:*`) — the two workspace dependencies. Next 15.5.3, React 19.1.1, Tailwind 4.
 - Deliberately not depended on: `pyramids-layouts`, `pyramids-links` and `pyramids-ctas`, which render DaisyUI classes and are deprecated by the shadcn decision. And `packages/scribe-intel`, because BR-PYRAMID-2 forbids the v2 base from tracking visitor intents.
 - Used by: nothing. It is a deployable site.
 

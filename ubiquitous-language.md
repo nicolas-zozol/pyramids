@@ -33,7 +33,7 @@ Article
 : A piece of written content published on a site, addressed by its slug. The v2 term. _v1_ called the same thing a post and served it under `/learn`.
 
 Category
-: The classification an article belongs to. Categories may nest (`blockchain/security`) and each category has its own page.
+: The classification an article belongs to. An article claims at most one (BR-PYRAMID-9), which is what makes a category readable in an article's address, and a category is exactly one segment: categories do not nest. Each category has its own page. _v1_ declared nested paths such as `javascript/typescript`; on v2 such a path names its leaf.
 
 Tag
 : A classification an article may carry freely, any number of them, alongside the single category it may claim (BR-PYRAMID-9). A tag is metadata: it has no page of its own today, and the URL scheme reserves an address for the tag page it must stay able to grow.
@@ -54,7 +54,7 @@ Content root
 : The single segment under which a site publishes its content section, named by the site configuration. `articles` for robusta.build; another site names its own.
 
 Discriminant
-: A segment of a URL that states what kind of page follows — the locale, the blog roll page, an article. Discriminants exist so pages can be pregenerated at build time instead of resolved at runtime.
+: A segment of a URL that states what kind of page follows. The v2 set is four — `l` for the locale, `c` for a category, `p` for a roll page, and `t`, which reserves the address of a tag page the scheme keeps possible without building it. They belong to the shared base, they are reserved words at every level of the scheme, and they exist so pages can be pregenerated at build time instead of resolved at runtime. _v1_ used the locale, `page` for the blog roll and `s` for a post.
 
 Indexable page
 : A page a site offers to search engines. A page is indexable when it is addressed by a URL of its own and carries content of its own; a page that only routes, redirects, or repeats what another page already holds is not.
