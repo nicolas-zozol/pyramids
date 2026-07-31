@@ -14,15 +14,14 @@ The three workspace roots are:
 
 ## Apps
 
-| Workspace name              | Path                  | Notes                                                                                  |
-|-----------------------------|-----------------------|----------------------------------------------------------------------------------------|
-| `@robusta/build`            | `apps/robusta`        | robusta.build — main Next.js site. Includes blog (`/learn`), portfolio, prosemirror.   |
-| `@robusta/dakar`            | `apps/dakar`          | dakar.surf — Next.js site, surf guide. Uses MapLibre. Has `[locale]` segment + spots.  |
-| (intel-demo)                | `apps/intel-demo`     | Vite-based front + server demo for the scribe-intel SDK.                               |
+- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, and where new work goes. Tailwind 4 with shadcn, its own design system, no DaisyUI. A shell for now: it renders the design system and carries no page copy. See its own README and `robusta-build.archi.md`.
+- `@robusta/build` — `apps/robusta`. robusta.build version 1: blog under `/learn`, portfolio, prosemirror. Being retired — do not add to it, and do not refactor it.
+- `@robusta/dakar` — `apps/dakar`. dakar.surf, the surf guide. Uses MapLibre, has a `[locale]` segment and spot pages. Live, and out of the v2 scope.
+- intel-demo — `apps/intel-demo`. Vite front + server demo for the scribe-intel SDK. Not a workspace: it carries no `package.json`.
 
 Each Next.js app has a `src/seopyramids.config.ts` that defines `domain`, `siteName`, `defaultLocale`, `otherLocales`, blog roll size, etc. — that's the per-site source of truth.
 
-`apps/robusta` documents its public routing scheme (locale, `page`, `p` discriminants for ISR) in its own README — preserve that route structure when editing.
+`apps/robusta` documents the v1 routing scheme (locale, `page`, `s` discriminants for ISR) in its own README. Preserve that structure when editing v1; the v2 scheme is a separate decision and does not inherit it.
 
 ## Packages
 
@@ -59,13 +58,15 @@ yarn clean:install   # clean then reinstall
 
 ```bash
 yarn build:deps      # builds helpers → themes → design-system → layouts → links → ctas in order
-yarn build:robusta   # build:deps then `next build` for apps/robusta
+yarn build:robusta-build  # build:deps then `next build` for apps/robusta-build (v2)
+yarn build:robusta   # build:deps then `next build` for apps/robusta (v1)
 yarn build:dakar     # build:deps then `next build` for apps/dakar
 ```
 
 ### Dev servers
 
 ```bash
+yarn dev:robusta-build  # apps/robusta-build with Next.js + Turbopack
 yarn dev:robusta     # apps/robusta with Next.js + Turbopack
 yarn dev:dakar       # apps/dakar with Next.js + Turbopack
 yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta
@@ -118,7 +119,13 @@ import { getOpenAiKey } from '../api/get-key.js';  // local — `.js` even thoug
 - Use Effector when a single user action would require coordinating >3 related `useState` hooks or sharing state across siblings without prop-drilling dispatch.
 - Do **not** refactor existing component code for style/lint — that explodes diff size. Only modify what's required for the task.
 
-### Styling — DaisyUI tokens, not raw colors
+### Styling
+
+Which rule applies depends on the site.
+
+`apps/robusta-build`, the v2 site, does not use DaisyUI. Its colours, type, spacing and radii come from `@robusta/pyramids-design-system` and from nowhere else — BR-PYRAMID-6 in `business-rules.md`. The site may add a name, never a value: `src/app/globals.css` aliases the names a third-party token layer expects onto design-system tokens, and every entry there is an alias. Components come from shadcn on Tailwind 4. Do not reach for `pyramids-layouts`, `pyramids-links` or `pyramids-ctas` from this site — they render DaisyUI classes and the shadcn decision deprecates them.
+
+The rest of this section governs `apps/robusta` and `apps/dakar`, which are on DaisyUI and stay there.
 
 Stick to DaisyUI semantic tokens. Avoid `bg-red-500` / `text-blue-700`-style raw Tailwind colors:
 
@@ -146,7 +153,9 @@ Tailwind config adds a `mob` breakpoint (= `max: md`, the inverse of `sm`). Pref
 
 ### Telemetry
 
-`@robusta/scribe-intel` exposes a `Telemetry` class (log/error/component) wrapping OpenTelemetry. Add `Telemetry.component(...)` at the top of pages / components / functions where logging is wanted, and use `Telemetry.log` / `Telemetry.error` consistently.
+Not on the v2 site. BR-PYRAMID-2 states that a site built on the version 2 base must not track visitor intents, so `apps/robusta-build` wires no telemetry client and depends on `@robusta/scribe-intel` nowhere. Do not add one there, whatever the section below says.
+
+On `apps/robusta` and `apps/dakar`: `@robusta/scribe-intel` exposes a `Telemetry` class (log/error/component) wrapping OpenTelemetry. Add `Telemetry.component(...)` at the top of pages / components / functions where logging is wanted, and use `Telemetry.log` / `Telemetry.error` consistently.
 
 ### Other
 

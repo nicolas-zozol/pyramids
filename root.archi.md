@@ -15,7 +15,8 @@ _None — this is the root._
 - [ctas](packages/ctas/ctas.archi.md)
 - [scribe-intel](packages/scribe-intel/scribe-intel.archi.md)
 - [design-system](packages/robusta-design-system/design-system.archi.md)
-- apps and services have no `.archi.md` yet
+- [robusta-build](apps/robusta-build/robusta-build.archi.md)
+- the other apps and the services have no `.archi.md` yet
 
 ## Overview
 
@@ -30,18 +31,22 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 │                                                                                             │
 │   apps/                          packages/                        services/                 │
 │   ┌───────────────────┐          ┌──────────────────────┐         ┌─────────────────────┐   │
-│   │ robusta   (v1)    │          │ helpers              │         │ scribe-intel-       │   │
-│   │ robusta.build     │◄─────────│ themes               │         │ collector (Express) │   │
-│   │ Next 15, RSC/ISR  │          │ layouts              │         └──────────┬──────────┘   │
-│   ├───────────────────┤          │ links                │                    │              │
-│   │ dakar     (live)  │◄─────────│ ctas                 │                    ▼              │
-│   │ dakar.surf        │          │ scribe-intel  (SDK)  │────────►┌─────────────────────┐   │
-│   │ Next 15 + MapLibre│          │                      │         │ scribe-intel-backend│   │
-│   ├───────────────────┤          ├──────────────────────┤         │ Loki · Tempo ·      │   │
-│   │ intel-demo (Vite) │◄─────────│ robusta-design-system│         │ Prometheus (docker) │   │
-│   ├───────────────────┤          │ (per-site tokens +   │         └─────────────────────┘   │
-│   │ robusta-design    │          │  primitives)         │                                   │
-│   │ (v0 prototype)    │          └──────────────────────┘                                   │
+│   │ robusta-build (v2)│          │ robusta-design-system│         │ scribe-intel-       │   │
+│   │ robusta.build     │◄─────────│ (tokens + primitives)│         │ collector (Express) │   │
+│   │ Next 15 + shadcn  │          ├──────────────────────┤         └──────────┬──────────┘   │
+│   ├───────────────────┤          │ helpers              │                    │              │
+│   │ robusta   (v1)    │          │ themes               │                    ▼              │
+│   │ (retiring)        │◄─────────│ layouts   (deprec.)  │         ┌─────────────────────┐   │
+│   │ Next 15, RSC/ISR  │          │ links     (deprec.)  │         │ scribe-intel-backend│   │
+│   ├───────────────────┤          │ ctas      (deprec.)  │         │ Loki · Tempo ·      │   │
+│   │ dakar     (live)  │◄─────────│ scribe-intel  (SDK)  │────────►│ Prometheus (docker) │   │
+│   │ dakar.surf        │          └──────────────────────┘         └─────────────────────┘   │
+│   │ Next 15 + MapLibre│                                                                     │
+│   ├───────────────────┤                                                                     │
+│   │ intel-demo (Vite) │                                                                     │
+│   ├───────────────────┤                                                                     │
+│   │ robusta-design    │                                                                     │
+│   │ (v0 prototype)    │                                                                     │
 │   └───────────────────┘                                                                     │
 │                                                                                             │
 │   packages build to dist/ ──► apps consume the built artefacts, never the TS sources        │
@@ -53,7 +58,8 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 
 ## Key Components
 
-- apps/robusta (`@robusta/build`) — robusta.build, the v1 Next.js site: blog under `/learn`, portfolio, prosemirror editor. Its README owns the current routing scheme. Declared a thrash by the epic; kept for its markdown content under `content/blog`.
+- apps/robusta-build (`@robusta/robusta-build`) — robusta.build version 2, created on 2026-07-31 as a deployable shell: it renders the design system and carries no page copy. Tailwind 4 with a token bridge, three self-hosted faces, `robots: noindex` until it has something to say. The design system is its only workspace dependency.
+- apps/robusta (`@robusta/build`) — robusta.build, the v1 Next.js site: blog under `/learn`, portfolio, prosemirror editor. Its README owns the v1 routing scheme, which the v2 site does not inherit. Declared a thrash by the epic; kept for its markdown content under `content/blog` until the migration lands.
 - apps/dakar (`@robusta/dakar`) — dakar.surf, the surf guide. Next.js with a `[locale]` segment, spots pages and MapLibre maps. Out of v2 scope but shares the same packages.
 - apps/intel-demo — Vite front + Express server demo of the scribe-intel SDK. Not deployed as a content site.
 - apps/robusta-design — v0 design prototype (prompt, uploads, HTML). Superseded by `packages/robusta-design-system`, not yet removed.
@@ -96,7 +102,7 @@ yarn build:robusta / build:dakar ──► next build
 
 Apps resolve packages through their compiled `dist/`. A package change is invisible to a running app until it is rebuilt, so `yarn dev:dev` runs the watchers alongside the dev server.
 
-The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`. Verified end to end on 2026-07-30 from a wiped tree: dakar produced 23/23 static pages on a route table identical to its baseline, robusta 42/42, and a second `yarn install` left `yarn.lock` byte-identical. `apps/robusta-build` joins the set the day `bootstrap-robusta-build` creates it.
+The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build`. Verified end to end on 2026-07-30 from a wiped tree: dakar produced 23/23 static pages on a route table identical to its baseline, robusta 42/42, and a second `yarn install` left `yarn.lock` byte-identical. `apps/robusta-build` joined it on 2026-07-31, producing 4/4 static pages.
 
 Inside the set but install-only, never built by it: `packages/scribe-intel`, `services/scribe-intel-collector`. Outside it entirely, and outside yarn's view: `apps/robusta-design`, `apps/intel-demo` and `services/scribe-intel-backend` carry no `package.json` at all, so despite the `apps/*` glob they are not workspaces — nothing installs or builds them.
 
@@ -114,7 +120,7 @@ Inside the set but install-only, never built by it: `packages/scribe-intel`, `se
 - Local TypeScript imports must end with `.js` even though the source is `.ts`/`.tsx`. Flag a non-conforming import, do not silently rewrite it.
 - `eslint.ignoreDuringBuilds: true` in both apps: a green build says nothing about lint. Run `yarn lint` explicitly.
 - The v1 article corpus is `apps/robusta/content/blog`, 11 articles — arbitrated 2026-07-29, and it is what the v1 code actually reads. The 13 articles of `apps/robusta/public/learn` are not the corpus: 8 are common to both trees, 5 exist only there and fall outside the arbitrated set. What becomes of those 5 is still open in the migrate-learn-content story.
-- The v2 restart target `apps/robusta-build` does not exist yet — the epic names it, nothing has been created.
+- `apps/robusta-build` needs `experimental.extensionAlias` in its `next.config.ts`, like `apps/dakar`. `moduleResolution: "Bundler"` makes the repository's `.js`-suffixed local imports pass `tsc`, which says nothing about webpack: without the alias the build fails at compile with `Module not found: Can't resolve '../seopyramids.config.js'`.
 - `packages/robusta-design-system` reached `dev` on 2026-07-30 through the merge `c0f98fe`, item 1 of the pyramid-v2 epic. The raw Claude Design output — CSS, assets, previews — was already there; the merge added what turns the folder into a workspace: `package.json` with its CSS and asset subpath exports, `src/`, `tsconfig.json` and its archi doc. It now builds inside `yarn build:deps`, between `pyramids-themes` and `pyramids-layouts`.
 - Two parallel colour systems coexist: `pyramids-themes` (JS tokens) and each app's `tailwind.config.ts` DaisyUI palette. Changing one does not move the other, and the design system adds a third, CSS-variable-based one.
 - DaisyUI is on its way out of the v2 site: the epic decided on 2026-07-29 that `apps/robusta-build` uses shadcn instead. Nothing has moved yet, and the reach is wide — `pyramids-layouts`, `pyramids-links` and `pyramids-ctas` all render DaisyUI classes, and the Styling section of `CLAUDE.md` still mandates DaisyUI tokens. Treat both statements as live until that is worked through.
