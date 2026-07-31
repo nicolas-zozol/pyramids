@@ -1,9 +1,9 @@
 # Story : Unblock the build chain
 
-**Dernière mise à jour :** 2026-07-29
+**Dernière mise à jour :** 2026-07-31
 **Feature :** unblock-build
 **Infix :** UNBLOCKBUILD
-**Status :** ACTIVE
+**Status :** LANDED (2026-07-31, commit d9199ad)
 
 ## Story
 
@@ -11,39 +11,68 @@ As the builder of the v2 site, I want the monorepo to build from a clean checkou
 
 ## Contexte & objectif
 
-Two failures were recorded while packaging the design system, and both are older than that work. The first makes `yarn build:deps` fail in a fresh worktree; the second makes `next build` of `apps/robusta` die during static page generation. Together they mean no site in this repo can be built end to end from a clean state, and `bootstrap-robusta-build` — the next item of the epic — would inherit both.
+Two failures recorded during the design-system work left no site in this repository buildable from a clean state: `pyramids-links` failed `tsc` in a fresh worktree, and `next build` of `apps/robusta` killed a worker during static generation. Both were declaration defects — an undeclared `next` peer, and two React copies inside one site — so no source file changed; three more undeclared imports of the same shape surfaced and were fixed the same way.
 
-Nothing blocks this story: it is the only item of the epic ready to code today. `merge-design-system` is a merge waiting on a human, and every item after it depends on the v2 site existing.
+The repository now names its own toolchain (yarn 4.17.1, Node 22, `node-modules` linker) instead of inheriting whatever the machine carries, and the green set builds end to end from a wiped tree.
 
-## The two failures
+## Livré
 
-`pyramids-links` fails `tsc` in a fresh worktree
-: the package imports `next/link` and `next/navigation` but declares `next` nowhere. It compiles on the current tree only because yarn 1 hoisted dakar's Next to the root, while `apps/robusta` keeps another version in its own `node_modules`. `pyramids-ctas` has the same undeclared import, so the failure is wider than the single package it was flagged on. Both `.archi.md` already describe `next` as a peer — only the manifests never said so.
+### Requirements
 
-`next build` of `apps/robusta` crashes a worker
-: "Next.js build worker exited with code: 1", during static page generation, on `dev` and without any design-system change. Never investigated: the cause is unknown, and so is whether a v2 site would reproduce it.
+- R-UNBLOCKBUILD-1 : A shared package declares in its own manifest every external framework its sources import.
+- R-UNBLOCKBUILD-2 : A shared package declares a framework it borrows from its host site as a peer, never as a bundled dependency, so the host's copy is the one that runs.
+- R-UNBLOCKBUILD-3 : A peer range declared by a shared package admits every version its host sites run today.
+- R-UNBLOCKBUILD-4 : Exactly one copy of React resolves inside a site's render graph.
+- R-UNBLOCKBUILD-5 : No shared package pins a release candidate as the version of a runtime dependency.
+- R-UNBLOCKBUILD-6 : The repository declares the package manager version, the node linker and the Node major it installs with; resolution does not depend on what the machine happens to carry. Realizes BR-PYRAMID-5.
+- R-UNBLOCKBUILD-7 : The set of workspaces that must build green from a clean checkout is named, and what falls outside it is named too. Realizes BR-PYRAMID-5.
+- R-UNBLOCKBUILD-8 : `apps/dakar` builds and renders unchanged: it is live and outside the v2 scope.
+- R-UNBLOCKBUILD-9 : The cause of the static-generation crash is recorded in the architecture notes in terms a reader can act on, whether or not the v1 site is repaired.
+- R-UNBLOCKBUILD-10 : Verification runs from a state the repository can produce on its own — never from an existing `node_modules`. Realizes BR-PYRAMID-5.
+- R-UNBLOCKBUILD-11 : A correction applied to the shared packages reaches all six of them, `pyramids-design-system` included.
+- R-UNBLOCKBUILD-12 : A workspace script the declared package manager cannot run is removed rather than adapted.
+- R-UNBLOCKBUILD-13 : The lockfile the repository commits is the one its declared package manager produces, and a clean install leaves it unchanged. Realizes BR-PYRAMID-5.
+- R-UNBLOCKBUILD-14 : Every workspace carrying a manifest installs under the declared toolchain, including those the green set never builds.
+- R-UNBLOCKBUILD-15 : A reference from one workspace of this monorepo to another states the workspace protocol, so no intra-monorepo edge can be answered by the registry.
 
-## Definition of done
+### Acceptance Criteria
 
-- A fresh clone or worktree installs and completes `yarn build:deps` with no manual step, and without depending on which app's Next version happened to be hoisted.
-- Every package that imports `next/*` declares that dependency itself — `pyramids-links` and `pyramids-ctas` today.
-- The static-generation crash is reproduced and its cause identified and written down, whether or not the v1 app ends up repaired.
-- Does not cover creating the v2 site, nor any change to `apps/dakar` beyond what these two failures require.
+- AC-UNBLOCKBUILD-01 : Given Arabica in a fresh worktree with its own install and no Next hoisted at the root, when she runs `yarn build:deps`, then `pyramids-links` and `pyramids-ctas` compile against their own declared `next` and every package builds (R-1, R-2).
+- AC-UNBLOCKBUILD-02 : Given Excelsa installing `apps/robusta` on Next 15.1.8 and `apps/dakar` on Next 15.5.3, when the install completes, then neither host reports an unmet peer for `next` or for `react` (R-3).
+- AC-UNBLOCKBUILD-03 : Given a host site on a Next version outside the declared peer range, when it installs, then the mismatch is reported as an unmet peer instead of surfacing at build time (R-3).
+- AC-UNBLOCKBUILD-04 : Given Arabica reading any of the six shared package manifests, when she looks at `dependencies`, then neither `react` nor `next` appears there (R-2, R-11).
+- AC-UNBLOCKBUILD-21 : Given Excelsa on a clean install, when the React copies resolved under `apps/robusta` are enumerated, then exactly one is found and none is nested under `styled-jsx` (R-4).
+- AC-UNBLOCKBUILD-22 : Given Excelsa on a clean install, when `next build` runs in `apps/robusta`, then the prerender of `/_error` and `/500` completes and the build exits 0 (R-4).
+- AC-UNBLOCKBUILD-23 : Given Excelsa on a clean install, when `next build` runs in `apps/dakar`, then it completes exactly as it does today (R-8).
+- AC-UNBLOCKBUILD-24 : Given Arabica reading the six shared packages and `apps/robusta`, when she reads every version they state for React, then all state 19.1.1 and none is a release candidate (R-5, R-11).
+- AC-UNBLOCKBUILD-41 : Given Bourbon on a machine whose ambient yarn is 4.x with Plug'n'Play defaults, when he clones and runs the repository's install, then the yarn version the repository names is the one that runs and the layout the repository names is the one produced (R-6).
+- AC-UNBLOCKBUILD-42 : Given Bourbon after a clean install, when he runs `git status`, then `yarn.lock` shows no change (R-13, BR-PYRAMID-5).
+- AC-UNBLOCKBUILD-43 : Given a machine on a Node major outside the declared range, when install runs, then it says so rather than producing a subtly different graph (R-6).
+- AC-UNBLOCKBUILD-44 : Given the declared package manager, when any script of the green set runs, then none invokes an option that package manager does not accept (R-12).
+- AC-UNBLOCKBUILD-45 : Given Excelsa on a clean checkout, when the root install runs, then every workspace carrying a manifest resolves, `scribe-intel` and `scribe-intel-collector` included, and no intra-monorepo reference is looked up in the registry (R-14, R-15). Corrected at land: the design doc also enumerates `imagine`, a workspace this story removed.
+- AC-UNBLOCKBUILD-61 : Given Excelsa on a fresh clone, when the documented verification sequence runs end to end, then every workspace of the green set builds and no manual step is needed (R-7, R-10, BR-PYRAMID-5).
+- AC-UNBLOCKBUILD-62 : Given a workspace outside the green set, when the verification runs, then it is not built, and whether it installs at all is stated in the record rather than left to be discovered (R-7).
+- AC-UNBLOCKBUILD-63 : Given a reader who meets `Next.js build worker exited with code: 1` on another app, when they read the Notes / Gotchas of `root.archi.md`, then they find the duplicate-React mechanism and learn that the message hides the prerender error that carries the real cause (R-9).
 
 ## Décisions
 
-- 2026-07-29 — This story owes the diagnosis of the `next build` crash of `apps/robusta`, and a repair only if the cause sits in the shared base; a cause belonging to v1 app code alone is recorded and left there. Pourquoi : what is asked for is a verifiable v2 site, not a healthy v1 — but a cause left unknown is a cause the v2 site can inherit.
-- 2026-07-29 — The Next version is not aligned across apps: the story declares the missing dependencies, leaves `apps/dakar` and `apps/robusta` where they are, and uses a recent version of Next ("lgtm, use recent version of next"). Pourquoi : `apps/dakar` is live and out of v2 scope, and bumping the site the epic is retiring buys nothing; the recent-version clause is the human's own addition to the proposition, and its reach is not settled here.
-- 2026-07-30 — merge-design-system lands before this story, which then sweeps all six shared packages in a single pass; if the merge has to wait, the design-system manifest is corrected on the feature branch as part of this story. Pourquoi : arbitration C3 of `pyramid-v2.bulk.md`, which overturns this story's assertion that the two can land in any order — `packages/robusta-design-system` on `feat/packagify-design-system` declares the React release candidate as both dependency and peer, so landing first would let the merge silently reintroduce the very pin this story removes, in the package the v2 site is built from.
-- 2026-07-30 — The repository migrates to yarn 4 rather than pinning yarn 1.22.22: "migrate to yarn 4 ; no fear to break ; we'll remove or delete things that are not useful if needed". Pourquoi : arbitration of Open Question 1 of `unblock-build.brainstorm.md`, against the proposition that deferred yarn 4 to its own story; what the migration breaks may be removed or deleted rather than repaired.
-- 2026-07-30 — A green build is sufficient acceptance for `apps/robusta`: any rendering difference is recorded here and left unrepaired. Pourquoi : arbitration of Open Question 2 of `unblock-build.brainstorm.md` — the epic retires the v1 site and forbids refactoring it, so verification effort there contradicts the decision of 2026-07-29; the fallback if the site visibly breaks is to force a single React through a root `resolutions` entry and leave the app on the release candidate.
+- 2026-07-29 — This story owes the diagnosis of the `next build` crash of `apps/robusta`, and a repair only if the cause sits in the shared base. Pourquoi : what is asked for is a verifiable v2 site, not a healthy v1 — but a cause left unknown is a cause the v2 site can inherit. The cause did sit in the shared base, so it was repaired.
+- 2026-07-29 — The two apps stay on their own Next, `apps/robusta` on 15.1.8 and `apps/dakar` on 15.5.3, and the declared peer range `^15.1.8` spans them. Pourquoi : `apps/dakar` is live and out of v2 scope, and bumping the site the epic is retiring buys nothing.
+- 2026-07-30 — merge-design-system lands first, so the sweep covers all six shared packages in a single pass. Pourquoi : arbitration C3 of the epic bulk — the design-system manifest declared the React release candidate, so landing this story first would have let the merge silently reintroduce the pin it removes. The merge landed as `c0f98fe`.
+- 2026-07-30 — The repository migrates to yarn 4 rather than pinning yarn 1.22.22: "migrate to yarn 4 ; no fear to break ; we'll remove or delete things that are not useful if needed". Pourquoi : arbitration of Open Question 1 of the brainstorm. What the migration broke was removed rather than repaired — the `prebuild` scripts passing `--production`, the dead `build:race`, and the `resolutions` field of `scribe-intel` that yarn 4 ignores outside the root workspace.
+- 2026-07-30 — A green build is sufficient acceptance for `apps/robusta`: any rendering difference is recorded and left unrepaired. Pourquoi : the epic retires the v1 site and forbids refactoring it. The build is green at 42/42 static pages, and nothing beyond that was verified.
+- 2026-07-31 — The v1 lockfile was migrated in place by yarn 4, not deleted and re-resolved from scratch. Pourquoi : almost every range here is a caret, so a from-scratch resolution would have moved the entire transitive tree to today's latest, `apps/dakar` included, against R-UNBLOCKBUILD-8; the dakar route table after the change is identical to the baseline taken before it. Deleting `yarn.lock` is therefore a deliberate upgrade with its own dakar verification, never a routine step.
+- 2026-07-31 — `.yarnrc.yml` is validated as it stands: `enableScripts: true` kept, `approvedGitRepositories: ["**"]` and `npmMinimalAgeGate: 0` removed. Pourquoi : yarn's first install wrote all three on its own. `sharp` (Next image optimisation), `esbuild`, `@parcel/watcher` and `protobufjs` build native binaries at install time and are unusable without scripts; the other two switch off supply-chain guards this repository needs no exemption from, having no git-protocol dependency.
+- 2026-07-31 — `@robusta/imagine` is deprecated and the workspace removed. Pourquoi : it pulled Puppeteer, whose install step downloaded a browser on every clean install — 894 MiB measured, on the build agent too — for a package the build chain never opened and nothing imported. This settles Open Question 1 of the design doc by deletion rather than by suppressing the download.
+- 2026-07-31 — `@types/react: "^18"` stays alongside React 19 in every workspace. Pourquoi : Open Question 2 of the design doc, answered by implementation — declaring `next` never surfaced the mismatch, everything still compiles, and the repository-wide sweep remains its own chore.
+- 2026-07-31 — `packages/scribe-intel` and `services/scribe-intel-collector` do not compile, and were left that way. Pourquoi : `tsc` fails on `VisitorHori` not implementing `Visitor` and on `intent.spec.ts` importing a `createIntelInstance` that no longer exists — source defects predating this work, in two workspaces the epic keeps dormant and outside the green set. Both install, which is all R-UNBLOCKBUILD-14 asks of them.
+- 2026-07-31 — `apps/robusta` type-checks its own `vite.config.ts` during `next build`, and that coupling was left in place. Pourquoi : it is what made the undeclared `vite` fatal rather than cosmetic, and excluding the file would hide the defect instead of declaring it. A tsconfig `exclude` line is available the day someone wants it.
 
 ## Documentation updates
 
-- change the Notes / Gotchas of `root.archi.md` — why: it records these two failures as latent; it must instead carry the rule that replaces the first (a package importing `next/*` declares it) and what the static-generation crash turned out to be.
-- check the Dependencies section of `packages/links/links.archi.md` and `packages/ctas/ctas.archi.md` — why: both already claim `next` as a peer, so they stay true only if that is the fix retained; anything else makes them wrong.
+Delivered in commit `14370d4`.
 
-## Dependencies
-
-- None. `merge-design-system` touches components, not the build chain, so it can land before or after.
-- Depended on by `bootstrap-robusta-build` (item 3 of the epic), which cannot be verified end to end until this lands.
+- changed the Notes / Gotchas of `root.archi.md` — the duplicate-React mechanism behind `Next.js build worker exited with code: 1`, and the second instance of the same defect class, `vite-tsconfig-paths` bound to a hoisted `vite@5`
+- changed the Dependencies and Toolchain lines of `root.archi.md` — they named yarn 1; they now carry yarn 4, `packageManager`, `engines.node`, `nodeLinker: node-modules` and the green set
+- changed the Getting started of `README.md` and the install and build command reference of `CLAUDE.md` — both described a yarn 1 repository
+- changed the Dependencies of `packages/links/links.archi.md` and `packages/ctas/ctas.archi.md` — both already claimed `next` as a peer; they now state the range and why `next` is also a devDependency
