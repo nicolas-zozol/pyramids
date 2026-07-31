@@ -11,6 +11,7 @@
     },
     "./sketch.css": "./sketch.css",
     "./colors_and_type.css": "./colors_and_type.css",
+    "./fonts.css": "./fonts.css",
     "./assets/crystal-tux.svg": "./assets/crystal-tux.svg",
     "./assets/crystal-tux.png": "./assets/crystal-tux.png",
     "./assets/crystal-tux-head.svg": "./assets/crystal-tux-head.svg",

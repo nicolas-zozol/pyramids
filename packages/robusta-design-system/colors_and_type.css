@@ -3,7 +3,19 @@
    hand-drawn sketchnote system. lowercase, ink, paper.
    ========================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap');
+/* -------- webfont delivery: not here --------
+   This stylesheet loads no font. The package owns the families and their
+   fallback order (see --font-sans / --font-script / --font-mono below); the
+   consuming site supplies the loaded face through three custom properties:
+   --font-ibm-plex-sans, --font-ibm-plex-mono, --font-caveat.
+
+   A Next.js site sets them with next/font, which self-hosts the faces and
+   issues no third-party request. A consumer with no build step opts into the
+   Google Fonts delivery by also linking
+   `@robusta/pyramids-design-system/fonts.css`.
+
+   A consumer that supplies nothing still resolves a valid family: each token
+   falls back to the face name, then to a system stack. */
 
 :root {
   /* -------- color: paper + ink -------- */
@@ -54,12 +66,12 @@
      IBM Plex Sans is the single family for body, headings, UI.
      Caveat is reserved for the logo wordmark and rare hand-drawn accents.
      IBM Plex Mono for code. */
-  --font-sans:    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans:    var(--font-ibm-plex-sans, 'IBM Plex Sans'), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: var(--font-sans);                       /* headings — same family */
   --font-hand:    var(--font-sans);                       /* legacy alias for body */
   --font-annot:   var(--font-sans);                       /* legacy alias for captions */
-  --font-script:  'Caveat', cursive;                      /* logo + rare accents only */
-  --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --font-script:  var(--font-caveat, 'Caveat'), cursive;  /* logo + rare accents only */
+  --font-mono:    var(--font-ibm-plex-mono, 'IBM Plex Mono'), ui-monospace, Menlo, monospace;
 
   /* -------- type scale --------
      standard web sizes now that we're on a readable sans. */

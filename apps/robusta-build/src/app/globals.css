@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+
+/* =========================================================
+   Token bridge — aliases only
+   =========================================================
+
+   Every name below is an alias of a design-system token, never a literal.
+   The site adds a name, never a source (BR-PYRAMID-6). The tokens themselves
+   are defined by @robusta/pyramids-design-system/colors_and_type.css, which
+   stays the single source of every colour, radius, font and spacing value the
+   site renders.
+
+   These are the names a third-party token layer expects — shadcn's
+   --background, --foreground, --primary and siblings — declared ahead of the
+   first component that needs one, so the CLI lands on a layer already pointing
+   at the design system.
+
+   Deliberately absent: --destructive and --destructive-foreground. The design
+   system ships no error colour, and inventing one here would be a literal
+   value, which BR-PYRAMID-6 forbids. The first story that needs an error
+   colour asks the design system for one rather than coining it here.
+
+   The site defines no --font-*, no --t-* and no --sp-*: those are the
+   package's. */
+
+:root {
+  --radius: var(--r-md);
+
+  --background: var(--paper);
+  --foreground: var(--ink-soft);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--paper);
+  --secondary: var(--brand-secondary);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-2);
+  --muted-foreground: var(--ink-mute);
+  --accent: var(--brand-accent);
+  --accent-foreground: var(--paper);
+  --border: var(--ink);
+  --input: var(--ink);
+  --ring: var(--brand-accent);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+}

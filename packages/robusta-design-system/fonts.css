@@ -1,0 +1,17 @@
+/* =========================================================
+   Robusta Build — opt-in webfont delivery
+   =========================================================
+
+   Loads IBM Plex Sans, IBM Plex Mono and Caveat from Google Fonts, at the
+   weights `colors_and_type.css` is designed against.
+
+   This file is for consumers with no build step — the `preview/*.html` pages
+   of this package, a static page, a CodePen. Link it BEFORE
+   `colors_and_type.css`.
+
+   A Next.js site must NOT load this file. It self-hosts the same three faces
+   with next/font and passes them in through --font-ibm-plex-sans,
+   --font-ibm-plex-mono and --font-caveat, which keeps the rendered page free
+   of any third-party request. Loading both would fetch the faces twice.  */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap');
