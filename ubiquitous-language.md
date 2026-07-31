@@ -2,7 +2,7 @@
 
 The shared vocabulary of Pyramids. Every story, design doc and business rule uses these terms and no synonyms. A term that does not appear here is either implementation detail or a term still to be agreed — propose it before using it in a rule.
 
-Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set. The same day, epicman as registrar added Canonical URL and corrected the roll-size clause of Blog roll, from Gaps 1 and 2 of `seo-url-scheme.story.md`.
+Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set. The same day, epicman as registrar added Canonical URL and corrected the roll-size clause of Blog roll, from Gaps 1 and 2 of `seo-url-scheme.story.md`, then added Published article and Translation identifier from Gap 1 of `content-source.design.md`. Published article closes a term the glossary had been using without defining, in its Related articles entry.
 
 ## Product
 
@@ -32,6 +32,9 @@ Page copy
 Article
 : A piece of written content published on a site, addressed by its slug. The v2 term. _v1_ called the same thing a post and served it under `/learn`.
 
+Published article
+: An article a site serves, which it does only when the article declares itself published (BR-PYRAMID-10); an article that does not is written and kept, and carries no page.
+
 Category
 : The classification an article belongs to. An article claims at most one (BR-PYRAMID-9), which is what makes a category readable in an article's address, and a category is exactly one segment: categories do not nest. Each category has its own page. _v1_ declared nested paths such as `javascript/typescript`; on v2 such a path names its leaf.
 
@@ -46,6 +49,9 @@ Slug
 
 Locale
 : The language a page is served in. A site has one default locale, which carries no marker in the URL, and zero or more other locales, which do.
+
+Translation identifier
+: The durable value shared by the locale versions of one article, which is what makes them linkable to each other.
 
 Content source
 : Where a site's articles come from. Today: markdown files shipped with the site. Whether the server re-reads them too often is an open point of the v2 epic.

@@ -12,6 +12,8 @@ Reconciled on 2026-07-30 by `bulkman resolve` as delegated registrar, arbitratio
 
 Recorded on 2026-07-31 by `bulkman resolve` as delegated registrar, from the arbitration of Gap 2 of `seo-url-scheme.design.md`: BR-PYRAMID-9. The four tests pass — the product owner decides how many classifications an article carries, the wording holds on glossary terms once `Tag` exists, it states an invariant rather than a sequence, and it is one rule rather than a ladder. `Tag` was added to `ubiquitous-language.md` in the same pass, together with `Content root`, `Clean checkout` and `Green set`, the last two closing the vocabulary test BR-PYRAMID-5 was still owed. 9 is the next free identifier: 4 stays retired.
 
+Recorded on 2026-07-31 by epicman as registrar, from the arbitration of Open Question 3 of `content-source.design.md`: BR-PYRAMID-10, after `Published article` entered `ubiquitous-language.md` under Gap 1 of the same document. The four tests pass — the publisher decides which articles a site serves and could decide to serve its whole corpus, the wording holds on glossary terms only, it states an invariant rather than a sequence, and it is one rule rather than a ladder. What a missing declaration costs — an article absent from the index, and its v1 addresses answering Gone — is enforcement and sequencing, deliberately left out of the rule. The glossary entry for `Published article` restates the rule in its explanatory clause and cites it rather than duplicating it silently; unlike the indexable-page rule refused on 2026-07-30, this one stays violable, since it constrains what a site serves rather than defining a property of the thing served. 10 is the next free identifier: 9 was the highest recorded and 4 stays retired.
+
 ## PYRAMID — building SEO sites on the shared base
 
 - BR-PYRAMID-1 — The URL of a page must state the kind of page it addresses, so that a site can resolve it without consulting its content source.
@@ -22,5 +24,6 @@ Recorded on 2026-07-31 by `bulkman resolve` as delegated registrar, from the arb
 - BR-PYRAMID-7 — A site must not read its content source while serving a request.
 - BR-PYRAMID-8 — A site must supply the page copy of every page it publishes; its design system must supply no page copy.
 - BR-PYRAMID-9 — An article carries at most one category and any number of tags.
+- BR-PYRAMID-10 — A site publishes an article only if that article declares itself published.
 
 BR-PYRAMID-4 is retired: see the reconciliation note above. Nothing is recorded under that identifier again.
