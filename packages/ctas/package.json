@@ -5,24 +5,30 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prebuild": "yarn install --production=false",
     "build": "tsc",
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts src/**/*.tsx",
     "watch": "tsc -p . --watch"
   },
+  "peerDependencies": {
+    "next": "^15.1.8",
+    "react": "^19.1.1"
+  },
   "dependencies": {
-    "react": "^19.0.0-rc-66855b96-20241106",
-    "@robusta/pyramids-themes": "*",
-    "@robusta/pyramids-layouts": "*",
+    "@robusta/pyramids-helpers": "workspace:*",
+    "@robusta/pyramids-layouts": "workspace:*",
+    "@robusta/pyramids-themes": "workspace:*",
     "react-icons": "^5.3.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "next": "^15.5.3",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }

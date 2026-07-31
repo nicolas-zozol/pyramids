@@ -10,25 +10,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@robusta/pyramids-ctas": "workspace:*",
+    "@robusta/pyramids-layouts": "workspace:*",
+    "@robusta/pyramids-links": "workspace:*",
     "@vis.gl/react-maplibre": "^8.0.4",
     "maplibre-gl": "^5.7.2",
+    "next": "^15.5.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "next": "^15.5.3",
-    "@robusta/pyramids-layouts": "1.0.0",
-    "@robusta/pyramids-ctas": "1.0.0",
-    "@robusta/pyramids-links": "1.0.0",
     "react-icons": "^5.3.0",
     "sass": "^1.83.4"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
     "@types/geojson": "^7946.0.16",
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "@tailwindcss/typography": "^0.5.15"
+    "typescript": "^5"
   }
 }

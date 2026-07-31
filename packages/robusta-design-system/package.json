@@ -25,22 +25,19 @@
     "README.md"
   ],
   "scripts": {
-    "prebuild": "yarn install --production=false",
     "build": "tsc",
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts src/**/*.tsx",
     "watch": "tsc -p . --watch"
   },
-  "dependencies": {
-    "react": "^19.0.0-rc-66855b96-20241106"
-  },
   "peerDependencies": {
-    "react": "^19.0.0-rc-66855b96-20241106"
+    "react": "^19.1.1"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "react": "^19.1.1",
+    "typescript": "^5"
   }
 }
