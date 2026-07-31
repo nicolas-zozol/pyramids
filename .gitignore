@@ -9,6 +9,9 @@
 !.yarn/versions
 .pnp.*
 
+# vercel CLI: `vercel link` writes project and org ids here
+.vercel
+
 # Logs
 logs
 *.log

@@ -38,9 +38,25 @@ Brand assets are resolved through the design system's exports map and hashed by 
 
 ## Commands
 
+Both are root scripts — run them from the repository root, not from here:
+
 ```bash
 yarn build:robusta-build     # build:deps, then next build
 yarn dev:robusta-build       # next dev with Turbopack
 ```
 
 This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build` must all complete from a clean checkout (BR-PYRAMID-5).
+
+## Deployment
+
+Vercel project `robusta-build-v2`, under `nicoramas-projects`, created 2026-07-31. It is its own project: robusta.build keeps answering from the v1 project until a later story decides the switch.
+
+- Root Directory: `apps/robusta-build`
+- Include source files outside the Root Directory: on. This is what makes the yarn workspaces resolve; Vercel enables it by default for projects created after 2020-08-27, so verify rather than assume.
+- Install Command: `yarn install`
+- Build Command: `cd ../.. && yarn build:robusta-build`. The `cd` is not decoration. Vercel runs the build command inside the Root Directory, and from there yarn sees only this workspace's four scripts — `build:robusta-build` lives in the root manifest and is not inherited. Plain `yarn build` would resolve, and would fail differently: the site reads the design system's `dist/`, which only `build:deps` produces.
+- Node: 22. The root `engines.node` field overrides the project setting, so that is where the real value lives.
+- `ENABLE_EXPERIMENTAL_COREPACK=1`. Without it Vercel picks its package manager from `yarn.lock` and uses its bundled yarn 1, which cannot read a yarn 4 lockfile. With it, Vercel honours `packageManager: "yarn@4.17.1"` from the root manifest.
+
+No `vercel.json` anywhere in this repository: every site is configured from the dashboard. Keep it that way or move all three at once, but do not leave one site configured in two places.
+
