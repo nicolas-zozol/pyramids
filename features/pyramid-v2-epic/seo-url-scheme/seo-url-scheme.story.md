@@ -129,12 +129,12 @@ The route table is real; almost everything it addresses is a placeholder, and a 
 - Gap 1: The `Blog roll` entry of `ubiquitous-language.md` says the roll size is "set in the site configuration", which reads as a per-site knob, where the decision of 2026-07-31 makes it a constant of 12. Glossary wording belongs to the registrar, so this story did not touch it.
 - Proposition: epicman rewords the entry to say the roll size is a constant of the base, 12 today, exposed by the site configuration rather than chosen by it.
 - Rationale: the glossary is where a term is settled, and an entry that contradicts a delivered decision will be read as the decision by the next story.
-- Resolution:
+- Resolution: recorded 2026-07-31 by epicman as registrar — the `Blog roll` entry now reads "a constant of 12 rather than a per-site setting: a site configuration exposes the value, it does not choose it". The glossary and not `business-rules.md`: the roll size is a definitional fact already carried as R-URLSCHEME-7, not an invariant the business decides.
 
 - Gap 2: `Canonical` and `canonicality` carry the whole redirect design — canonicality is the fixed point of `buildUrl` and `parseUrl` — and are load-bearing in `packages/pyramids-routing/routing.archi.md` and in the Routing section of `apps/robusta-build/README.md`, with no entry in `ubiquitous-language.md`.
 - Proposition: epicman records `Canonical URL` — the single form of a URL a site serves, the one the builder emits, every other form redirecting to it permanently — and lets `canonicality` read as its property rather than as a second term.
 - Rationale: seo-excellence computes canonical tags from this scheme and will use the word in its own sense unless the glossary fixes one; the term is also the name of the property the package's test suite asserts.
-- Resolution:
+- Resolution: recorded 2026-07-31 by epicman as registrar — `ubiquitous-language.md` gains `Canonical URL` in the proposed sense, and canonicality reads as the property of being that form rather than as a second term. A definition belongs to the glossary, never to the registry.
 
 ## Documentation updates
 

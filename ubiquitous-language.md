@@ -2,7 +2,7 @@
 
 The shared vocabulary of Pyramids. Every story, design doc and business rule uses these terms and no synonyms. A term that does not appear here is either implementation detail or a term still to be agreed — propose it before using it in a rule.
 
-Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set.
+Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set. The same day, epicman as registrar added Canonical URL and corrected the roll-size clause of Blog roll, from Gaps 1 and 2 of `seo-url-scheme.story.md`.
 
 ## Product
 
@@ -39,7 +39,7 @@ Tag
 : A classification an article may carry freely, any number of them, alongside the single category it may claim (BR-PYRAMID-9). A tag is metadata: it has no page of its own today, and the URL scheme reserves an address for the tag page it must stay able to grow.
 
 Blog roll
-: The paginated list of articles shown on a category or blog home page. Its length per page is the roll size, set in the site configuration.
+: The paginated list of articles shown on a category or blog home page. Its length per page is the roll size, a constant of 12 rather than a per-site setting: a site configuration exposes the value, it does not choose it.
 
 Slug
 : The stable, URL-safe identifier of an article or category. A slug never changes once published — changing it breaks indexed URLs.
@@ -55,6 +55,9 @@ Content root
 
 Discriminant
 : A segment of a URL that states what kind of page follows. The v2 set is four — `l` for the locale, `c` for a category, `p` for a roll page, and `t`, which reserves the address of a tag page the scheme keeps possible without building it. They belong to the shared base, they are reserved words at every level of the scheme, and they exist so pages can be pregenerated at build time instead of resolved at runtime. _v1_ used the locale, `page` for the blog roll and `s` for a post.
+
+Canonical URL
+: The single form of a URL under which a site serves a page — the form the scheme itself produces. Every other form addressing the same page, such as an explicit first roll page, a marked default locale, a trailing slash or a different letter case, redirects to it permanently. Canonicality is the property of being that form, not a second term.
 
 Indexable page
 : A page a site offers to search engines. A page is indexable when it is addressed by a URL of its own and carries content of its own; a page that only routes, redirects, or repeats what another page already holds is not.
