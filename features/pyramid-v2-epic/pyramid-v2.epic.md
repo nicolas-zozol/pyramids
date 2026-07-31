@@ -1,51 +1,109 @@
-# Pyramid v2
+# Epic : Pyramid v2
 
-Pyramid is a failed project. The ambition was to expose reusable work from packages into industrializable websites, mostly SEO websites with customized components
+**Dernière mise à jour :** 2026-07-29
+**Epic :** pyramid-v2-epic
+**Infix :** PYRAMID
 
-The v2 aims at restarting the project, leveraging AI
+## Epic
 
+As the publisher of the Robusta sites, I want the Pyramids base to turn content plus a design system into a deployable SEO site, so that the next site ships without being rewritten from scratch.
 
-Business rule: we still go with Vercel, with React server components
-Business rule: we simplify seo urls to make some easy parsing
-Business rule: The v2 starts with building only the robusta website
-Business rule: intel analytics tool is not used
+Pyramid v1 failed at exactly that: the base and the site grew into each other, and neither could be reused. Version 2 restarts the base and proves it on a single site, robusta.build, before anything else moves onto it.
 
-## Blogging
+## Contexte & architecture cible
 
-### Seo url simplification
+The shared base is a Vercel + Next.js App Router backbone with React Server Components and ISR, plus the `pyramids-*` packages (helpers, themes, layouts, links, ctas). What a site brings of its own is its content, its design system and its `seopyramids.config.ts`. Full picture in `root.archi.md`, vocabulary in `ubiquitous-language.md`.
 
-Url simplification :
-- with /blog/c/{category}/
-- when there is a locale, use /l/{locale}/
-- page must be a query param: /blog/c/{category}?page=12&size=20
-- replace 'learn' with 'articles'
+Three shifts define v2:
 
-### Content sources
+- A new site workspace, `apps/robusta-build`. `apps/robusta` is not refactored — it is a v1 that gets retired, not repaired.
+- A design system shipped as a package, one per site. `@robusta/pyramids-design-system` is robusta's; another site carries its own (BR-PYRAMID-3).
+- URLs that state what they address, so a page resolves without reading the content source (BR-PYRAMID-1): `/blog/c/{category}`, `/l/{locale}/` for non-default locales, pagination as query parameters (`?page=12&size=20`), `articles` in place of `learn`.
 
-I was using pure markdown as the source of content. I still think it's a good first source, but I wonder if the server was rebuilding from markdown too often. This must be analysed
+Content comes from the markdown articles of the v1 site, which this document and `root.archi.md` both place under `apps/robusta/public/learn` — a claim the v1 code contradicts, see Gap 1. Telemetry stays available in the base but switched off for the v2 site, and visitor intents are not tracked (BR-PYRAMID-2).
 
+SEO excellence runs across the whole epic rather than sitting in one deliverable: metadata, sitemap, structured data, internal linking — deliberately not aggressive.
 
-## Claude Design System
+## Stories de l'epic
 
-Pyramids can build multiple seo sites, reusing:
-- Vercel and RSC backbone
-- website structure patterns
-- layouts, ctas, analytics libs
+- [packagify-design-system](packagify-design-system/packagify-design-system.done.prd.md) — turn `packages/robusta-design-system` into a real workspace with typed components. Livrée, sur la branche `feat/packagify-design-system` uniquement. Legacy format: a `.done.prd.md`, no `.story.md`.
+- [unblock-build](unblock-build/unblock-build.story.md) — make the monorepo build from a clean checkout, both recorded failures lifted. En cours.
+- [bootstrap-robusta-build](bootstrap-robusta-build/bootstrap-robusta-build.story.md) — create `apps/robusta-build`, an empty but deployable shell wired to its configuration, its design system and the shared packages. En cours.
+- [seo-url-scheme](seo-url-scheme/seo-url-scheme.story.md) — the v2 route scheme, where every URL states the kind of page it addresses. En cours.
+- [content-source](content-source/content-source.story.md) — measure what v1 really costs to read its markdown, then choose the v2 content source on those numbers. En cours.
+- [robusta-landing-page](robusta-landing-page/robusta-landing-page.story.md) — the home page assembled from the design system's marketing surfaces, carrying the v1 pitch without the resume. En cours.
+- [migrate-learn-content](migrate-learn-content/migrate-learn-content.story.md) — serve the v1 articles from the v2 site under the new URLs, redirects included. En cours.
+- [seo-excellence](seo-excellence/seo-excellence.story.md) — turn the epic's SEO intent into checkable criteria: metadata, sitemap, structured data, internal linking. En cours.
 
-And on top of that, each site will have its own Design System with design tokens, given by Claude Design (https://claude.com/product/design)
-The robusta website has packages/robusta-design-system ; other web sites have others. For the moment, we build only the robusta website 
+Items 1 and 9 to 12 of À faire carry no story, by choice — see the decision of 2026-07-29 below.
 
-## Refactoring robusta website
+## Business Rules
 
-The website (apps/robusta) is a thrash, we start from scratch at apps/robusta-build
+- BR-PYRAMID-1 — The URL of a page must state the kind of page it addresses, so that a site can resolve it without consulting its content source.
+- BR-PYRAMID-2 — A site built on the version 2 base must not track visitor intents.
+- BR-PYRAMID-3 — Each site must carry its own design system, which no other site may reuse.
+- BR-PYRAMID-5 — The build chain of a site must complete from a clean checkout of the repository.
+- BR-PYRAMID-6 — A site's design tokens must come from its design system alone.
+- BR-PYRAMID-7 — A site must not read its content source while serving a request.
+- BR-PYRAMID-8 — A site must supply the page copy of every page it publishes; its design system must supply no page copy.
 
-- We will expose the content of the blog only from  apps/robusta/public/learn ; we probably DONT need images from apps/robusta/public/images.
+Synced with `business-rules.md` on 2026-07-30. BR-PYRAMID-4 is retired and never reused: the identifier carried two different meanings in two days. Two rules raised by the epic's stories are validated by the human but not recorded — "an indexable page must carry content of its own", which the registered glossary definition now restates, and "a site must keep serving an article at every address under which it has published it", still waiting on a glossary term for a published address. Both are traced in the decisions below.
 
+## Fait
 
-## Robusta landing page
+- 2026-04-29 — packagify-design-system: `packages/robusta-design-system` becomes the `@robusta/pyramids-design-system` workspace — 6 primitives, 8 marketing surfaces, CSS and assets exposed through the exports map, wired into `build:deps`. Commit `6fb8d72` on `feat/packagify-design-system`; tracking docs synced to `dev`. Detail in the PRD of the story. On `dev` the package is still the raw folder — see the first item of À faire.
+- 2026-07-29 — Project documentation base laid by `/start`: `root.archi.md`, `ubiquitous-language.md`, `business-rules.md`, `ROADMAP.md`. The epic stops carrying the architecture, the vocabulary and the priority order by itself.
 
-The robusta website must have a nice landing page using the design system, but reusing the previous content. However, we won't show the resume which is obsolete
+## À faire
 
-## SEO Excellence
+1. merge-design-system — bring `feat/packagify-design-system` onto `dev`. One commit, `6fb8d72`. Everything below that touches a component depends on it. (implemented and validated, waiting for the merge — no story, see the decision of 2026-07-29)
+2. [unblock-build](unblock-build/unblock-build.story.md) — two failures recorded during the design-system work: `pyramids-links` fails `tsc` in a fresh worktree because `next` is declared nowhere as a peer dependency, and `next build` of `apps/robusta` crashes a worker during static generation. Blocks any end-to-end verification of a v2 site. (story ACTIVE — the only item blocked by nothing)
+3. [bootstrap-robusta-build](bootstrap-robusta-build/bootstrap-robusta-build.story.md) — create `apps/robusta-build`, the v2 site: its `seopyramids.config.ts`, its wiring to the design system and to the shared packages, an empty but deployable shell. Depends on 1 and 2. (story ACTIVE)
+4. [seo-url-scheme](seo-url-scheme/seo-url-scheme.story.md) — the simplified route scheme carrying BR-PYRAMID-1: `/blog/c/{category}`, `/l/{locale}/` for non-default locales, pagination as query parameters, `articles` in place of `learn`. Depends on 3. (story ACTIVE)
+5. [content-source](content-source/content-source.story.md) — how articles reach the site, and the open point of v1: whether the server rebuilds from markdown far more often than it should. Markdown stays the first source unless the analysis says otherwise. Depends on 3. (story ACTIVE — the v1 measurement waits for nothing, the article inventory is held by Gap 1)
+6. [robusta-landing-page](robusta-landing-page/robusta-landing-page.story.md) — the landing page built from the design system, reusing the existing pitch content, without the obsolete resume. Depends on 3. (story ACTIVE)
+7. [migrate-learn-content](migrate-learn-content/migrate-learn-content.story.md) — move the articles of the v1 site onto the v2 site. Which articles exactly is Gap 1; the fate of `apps/robusta/public/images` is Open Question 3. Depends on 4 and 5. (story ACTIVE)
+8. [seo-excellence](seo-excellence/seo-excellence.story.md) — metadata, sitemap, structured data, internal linking on the v2 site. Depends on 4 and 7. (story ACTIVE)
+9. vectorize-wordmark — `robusta-build-wordmark.png` is 1603×312; a vector version scales and weighs less. (flag F2)
+10. dedupe-crystal-tux — `crystal-tux.png` and `crystal-tux.svg` are the same illustration twice; the SVG should be canonical. (flag F3)
+11. retire-robusta-design — `apps/robusta-design` is the v0 prototype, superseded by the design-system package.
+12. retire-robusta-v1 — retire `apps/robusta` once the v2 site serves the same content. Last item of the epic.
 
-Everything must go toward SEO best practice, not being too aggressive though.
+## Décisions structurantes
+
+- 2026-04-27 — The design system ships as its own workspace package, `@robusta/pyramids-design-system`, one per site instead of a shared theme. Pourquoi : a site's visual identity is its own; the shared base carries only structure — layouts, links, CTAs, helpers. Réf : BR-PYRAMID-3, PRD packagify-design-system.
+- 2026-04-27 — The package directory stays `packages/robusta-design-system/` while the package is named `@robusta/pyramids-design-system`. Pourquoi : the repo already separates directory from package name (`packages/themes` ↔ `@robusta/pyramids-themes`); aligning them is a uniform cleanup, not a feature. Réf : Q2 of `decisions-and-questions.md`.
+- 2026-04-27 — Design-system components are server-component-safe (no `'use client'`) and receive their content through props, with the prototype copy as defaults. Pourquoi : the v2 backbone is RSC and ISR, and a marketing surface has to be reusable by a site that does not share robusta's wording. Réf : Q5 to Q7.
+- 2026-04-27 — Consuming sites import the CSS and the assets through the package's `exports` map in subpaths (`/colors_and_type.css`, `/sketch.css`, `/assets/*`), with no copy step into `dist/`. Pourquoi : this is the contract every consuming site follows, and a copy step drifts from its source. Réf : Q3 and Q4.
+- 2026-04-27 — Fonts stay loaded by a Google Fonts `@import` inside `colors_and_type.css`; moving to `next/font` is left to the consuming site. Pourquoi : the CSS must stay valid for non-Next consumers, and a font swap is app-level configuration the package cannot do. Réf : Q8.
+- 2026-07-29 — The v2 site is a new workspace, `apps/robusta-build`; `apps/robusta` is not refactored and gets retired once the v2 serves the same content. Pourquoi : the v1 site and the base grew into each other, so restarting costs less than untangling.
+- 2026-07-29 — Scope: v2 covers robusta only, and no other site moves onto the v2 base until robusta ships. Pourquoi : prove the base on one site before generalizing it. Recorded here rather than in `business-rules.md`: the statement orders the work and expires the day robusta ships, so it fails the declarative test for a business rule.
+- 2026-07-29 — `business-rules.md` created under the Infix PYRAMID, with three rules and final numbering: BR-PYRAMID-1 (the URL states the kind of page), BR-PYRAMID-2 (no visitor-intent tracking on a v2 site), BR-PYRAMID-3 (one design system per site). Pourquoi : the epic's four "Business rule:" lines needed the four tests — the intent rule dropped the tool name (a mechanism, not business vocabulary), the design-system rule was collapsed to one clause, and the scope line was routed to the decision above. `ROADMAP.md` cites BR-PYRAMID-1, which did not move.
+- 2026-07-29 — This document is restructured to the epic template: the architecture moved to `root.archi.md`, the vocabulary to `ubiquitous-language.md`, the priority order to `ROADMAP.md`, the rules to `business-rules.md`. Pourquoi : the epic keeps the reasoning and the state of progress; it stops being the reference material for everything else.
+- 2026-07-29 — Items 2 to 8 of À faire become seven ACTIVE stories, each with its own Infix — UNBLOCKBUILD, BOOTSTRAP, URLSCHEME, CONTENTSOURCE, LANDING, MIGRATELEARN, SEOEXCELLENCE. Items 1 and 9 to 12 get none: merge-design-system is a git operation waiting on a human, and the four loose ends are single-edit chores where the story would cost more than the work it describes. Pourquoi : the backlog becomes seven design tracks with explicit dependencies, and only one of them — unblock-build — is blocked by nothing.
+- 2026-07-29 — The corpus the v2 site must serve is `apps/robusta/content/blog` alone, the 11 articles the v1 code actually reads; the 5 articles that exist only under `apps/robusta/public/learn` are not part of it. Pourquoi : arbitration of Gap 1 of this epic — "only content/blog" — against the proposition that took the union of the two trees. Impact : the Contexte of this document, `root.archi.md` and the 13-article figure carried by content-source, migrate-learn-content and seo-excellence all state otherwise; correcting them belongs to their owners.
+- 2026-07-29 — The canonical font stack of the robusta design system is the one `colors_and_type.css` imports — IBM Plex Sans, IBM Plex Mono, Caveat — and the README is corrected, not the CSS. Pourquoi : the CSS is what renders in `preview/*.html` today and what the ported components read through the token variables, so changing it changes a visual already validated by eye.
+- 2026-07-29 — `packages/scribe-intel` and `services/scribe-intel-collector` stay dormant and out of the v2 build chain; retirement is decided once robusta.build ships. Pourquoi : both intent clients are stubs and nothing on the v2 path depends on them (BR-PYRAMID-2), so retiring code that costs nothing to keep does not deserve a story now.
+- 2026-07-29 — Nothing under `apps/robusta/public/images` follows the articles onto the v2 site: the 32 files stay behind with the v1 site. Pourquoi : "no need to copy them in v2" — the images the articles reference sit under `public/learn/**/images` and travel with them, while `public/images` holds v1 chrome that the design system replaces.
+- 2026-07-29 — The v2 site drops DaisyUI for shadcn/ui: "Use shadCN, no more DaisyUI". Pourquoi : arbitration of Open Question 3 of bootstrap-robusta-build, against the proposition that kept the Tailwind and DaisyUI layer; no other rationale was given. Impact : this is structuring, not a shell choice — `pyramids-layouts`, `pyramids-links` and `pyramids-ctas` render DaisyUI classes, the Styling section of `CLAUDE.md` mandates DaisyUI semantic tokens for every generated component, and `apps/robusta` as well as `apps/dakar` carry DaisyUI in their `tailwind.config.ts`. The À faire item this produces, and how far the migration reaches into the shared packages, belong to epicman.
+- 2026-07-29 — Two arbitrations of seo-url-scheme diverge from the scheme this epic announces and are recorded here rather than folded into it: the content root is `articles`, not `blog` ("No, use `articles` at the root, instead of `blog`"), and pagination is to be chosen on SEO and speed grounds, with `/p/1` at a fixed size held as probably better for category pages ("do what is better for seo and speed ; for category page, having `/p/1` with fixed size is probably better"). Pourquoi : the Contexte above, item 4 of À faire and `ROADMAP.md` still read `/blog/c/{category}` and pagination as query parameters; reconciling the epic with its own story is epicman's pass, not a silent rewrite.
+- 2026-07-29 — The provisional BR-PYRAMID-4, "an indexable page must carry content of its own", is validated by the human (Open Question 2 of seo-excellence, `lgtm`) but is not recorded in `business-rules.md`: it fails the vocabulary test of the `business-rule` skill, "indexable page" being absent from `ubiquitous-language.md`, which requires a term to be proposed before it is used in a rule. Pourquoi : the three other tests pass — the publisher can decide it, it states what must hold without any process, and it is a single invariant — so the rule returns to the registrar once the term is defined, which the Documentation updates of seo-excellence already plan. The Business Rules section above still presents it as an Open Question of that story and is left to epicman.
+- 2026-07-30 — `business-rules.md` and this epic are reconciled in favour of the registrar's recorded state rather than of the two entries hand-added on 2026-07-29 at 19:16: BR-PYRAMID-2 goes back to "A site built on the version 2 base must not track visitor intents" and BR-PYRAMID-4, "We focus on SEO best practices", is removed. Pourquoi : arbitration C1 of `pyramid-v2.bulk.md` — "business-rules.md is hand-crafter and most often a priority, except if the contradiction is very new" — and this contradiction was one day old; re-run through the four tests, both hand-added entries fail, the platform sentence on vocabulary (Vercel, React Server Component and shadcn are absent from `ubiquitous-language.md`) and on the declarative test, the SEO sentence on the declarative test, stating an intention rather than an invariant. Impact : the five citations of BR-PYRAMID-2 — the Contexte above, the decision keeping `scribe-intel` dormant, and the definitions of done of bootstrap-robusta-build and seo-excellence — say again what their target says; the identifier BR-PYRAMID-4 is retired, and rules recorded today start at 5. The platform posture already lives in the shadcn decision of 2026-07-29, and the SEO intention in the Contexte above.
+- 2026-07-30 — `ubiquitous-language.md` gains "Indexable page" and "Related articles", in the wording of axis 5 of `seo-excellence.brainstorm.md`. Pourquoi : arbitration C4 of the bulk, the vocabulary gate three business-rule proposals were held on. Impact : `seo-url-scheme.brainstorm.md` proposed a different wording for "indexable page" — defined by what the site offers rather than by what the page contains, precisely so it would not presuppose the rule written on top of it — and the registered wording does presuppose it, which the next decision settles.
+- 2026-07-30 — The rule "an indexable page must carry content of its own", validated by the human on 2026-07-29 and held on the vocabulary gate, is not recorded now that the gate is lifted. Pourquoi : the registered definition of Indexable page already reads "addressed by a URL of its own and carries content of its own", so the rule restates its own term and no citation of it could ever fail; a definitional fact belongs to the glossary and never to the registry, by the jurisdiction test. It returns to the registrar the day the glossary entry is reworded — the seo-url-scheme wording would restore its content — and stays an acceptance criterion of seo-excellence until then.
+- 2026-07-30 — BR-PYRAMID-5 recorded — "The build chain of a site must complete from a clean checkout of the repository." Pourquoi : arbitration of Open Question 3 of `unblock-build.brainstorm.md`; the four tests pass, and it is what makes the pyramid's promise checkable, since a base that only builds on one machine cannot ship a second site. The neighbouring engineering constraints stay R-UNBLOCKBUILD-1, 2 and 4, having failed the jurisdiction test.
+- 2026-07-30 — BR-PYRAMID-6 recorded — "A site's design tokens must come from its design system alone." Pourquoi : arbitration of Open Question 4 of `bootstrap-robusta-build.brainstorm.md`; the four tests pass on glossary terms only, and the rule is distinct from BR-PYRAMID-3, which governs sharing between sites rather than the number of token sources inside one. Impact : `root.archi.md` records two parallel colour systems as a gotcha and shadcn adds a token layer of its own, so the aliasing direction becomes obligatory rather than a preference.
+- 2026-07-30 — BR-PYRAMID-7 recorded — "A site must not read its content source while serving a request." Pourquoi : arbitration of Open Question 1 of `content-source.brainstorm.md`; the four tests pass, and the rule is not derivable from BR-PYRAMID-1, which constrains what a URL states and carries the content source only as a purpose clause. BR-PYRAMID-1 is deliberately left untouched — rewording a recorded rule needs its own arbitration, never a registrar's initiative.
+- 2026-07-30 — `ubiquitous-language.md` gains "Page copy — the wording a visitor reads on a page, supplied by the site that publishes it", and BR-PYRAMID-8 is recorded on it: "A site must supply the page copy of every page it publishes; its design system must supply no page copy." Pourquoi : arbitration of Open Question 1 of `robusta-landing-page.brainstorm.md`, which supplies the definition together with the rule; the four tests pass once the term exists, and this is what makes a design system reusable by a site that does not share robusta's voice. The second candidate of that entry — a page offers no action the site does not fulfil — stays R-LANDING-11, being a system behaviour.
+- 2026-07-30 — The rule "A site must keep serving an article at every address under which it has published it" is validated but not recorded. Pourquoi : arbitration of Open Question 1 of `migrate-learn-content.brainstorm.md`, whose accepted proposition registers it only once `ubiquitous-language.md` defines the term for a published address; C4 defined "indexable page" and "related articles", not that term, and no arbitration supplies a definition for it — the registrar never coins a term. Three tests pass, the vocabulary test still fails, exactly as it did for the indexable-page rule.
+- 2026-07-30 — `pyramids-layouts`, `pyramids-links` and `pyramids-ctas` are deprecated and may be removed: the v2 site takes shadcn and the claude design system instead. Pourquoi : arbitration of Open Question 2 of `bootstrap-robusta-build.brainstorm.md` — "Mostly use shadcn stuff rather than pyramids-stuff. `pyramids-layouts`, `pyramids-links` and `pyramids-ctas` are basically deprecated : we can even remove them ; we prefer the claude design system". Impact : the shared base the v2 site actually reuses is the Next.js and Vercel backbone plus, later, `pyramids-helpers`; the Contexte above still presents five `pyramids-*` packages as the base, and `root.archi.md`, `CLAUDE.md` and `README.md` describe the three deprecated ones as live.
+- 2026-07-30 — A responsive pass over the design system's surfaces becomes its own story, sequenced before robusta-landing-page: "responsive is MANDATORY". Pourquoi : arbitration of Gap 1 of `robusta-landing-page.brainstorm.md` — the package carries no `@media`, no `clamp()`, no `minmax()` and no viewport unit anywhere, its layout lives in inline styles a site cannot override without `!important`, and mobile-first indexing makes it an SEO defect as much as a usability one. À faire does not yet carry the item.
+- 2026-07-30 — The same design-system story fixes the call-to-action markup: `SkButton` gains an optional `href` and renders an anchor when given one, and `FooterColumn.items` becomes label-and-href pairs. Pourquoi : arbitration of Gap 2 of `robusta-landing-page.brainstorm.md` — every call to action in the package nests an anchor inside a button, which is invalid HTML, an accessibility failure and unreliable as a followed link for a crawler, and it is the markup the landing page's only conversion path runs through. Both changes are additive and break no existing consumer.
+
+## Hors scope
+
+- Any site other than robusta — dakar included — until robusta.build ships.
+- Refactoring `apps/robusta`: the v1 site is retired, not repaired.
+- Visitor-intent analytics on the v2 site.
+- The resume pages: the landing page reuses the existing pitch content but drops the resume, which is obsolete.
+- Storybook for the design system.

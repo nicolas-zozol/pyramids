@@ -1,6 +1,6 @@
 # Architecture: ctas
 
-**Last updated:** 2026-04-27
+**Last updated:** 2026-07-30
 
 ## Parent
 
@@ -110,8 +110,8 @@ export * from './cta-link/index';  // CtaLink
 ## Dependencies
 
 - **Depends on:**
-  - `react` (19 RC)
-  - `next/link` (peer — host apps are Next.js)
+  - `react` (peer, `^19.1.1` — the host site's copy is the one that runs; never a bundled dependency)
+  - `next/link` (peer, `^15.1.8` — host apps are Next.js; the range spans `apps/robusta` on 15.1.8 and `apps/dakar` on 15.5.3. `next` is also a devDependency, `^15.5.3`, which is what this package's own `tsc` resolves that import against — it never reaches a site, which consumes `dist/`)
   - `react-icons` (`fa`, `fi` icon sets)
   - `@robusta/pyramids-themes` (DaisyUI tokens — `bg-accent`, `text-accent-content`, `btn-primary`)
   - `@robusta/pyramids-helpers` (`twCss`, `mergeCss`)

@@ -1,6 +1,6 @@
 # Architecture: links
 
-**Last updated:** 2026-04-28
+**Last updated:** 2026-07-30
 
 ## Parent
 
@@ -140,8 +140,8 @@ explicitly. The client variant relies on the App Router hook.
 ## Dependencies
 
 - **Depends on:**
-  - `react` (19 RC)
-  - `next/link` and `next/navigation` (peer — host apps are Next.js)
+  - `react` (peer, `^19.1.1` — the host site's copy is the one that runs; never a bundled dependency)
+  - `next/link` and `next/navigation` (peer, `^15.1.8` — host apps are Next.js; the range spans `apps/robusta` on 15.1.8 and `apps/dakar` on 15.5.3. `next` is also a devDependency, `^15.5.3`, which is what this package's own `tsc` resolves those imports against — it never reaches a site, which consumes `dist/`)
   - `@robusta/pyramids-helpers` (`mergeCss`, `twCss`)
   - `react-icons` (declared but unused in the current source)
 - **Used by:**

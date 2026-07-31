@@ -30,10 +30,10 @@ Packages publish their compiled output (`main: dist/index.js`, `types: dist/inde
 
 - `pyramids-helpers` — react/router/style/theme/time/array helpers (incl. `twCss` merge)
 - `pyramids-themes` — DaisyUI theme + colors
+- `robusta-design-system` — published as `@robusta/pyramids-design-system`: CSS tokens, brand assets, 6 sketch primitives and 8 marketing surfaces. Belongs to the robusta site alone; no other site reuses it.
 - `pyramids-layouts` — cards / columns / grid / spacers
 - `pyramids-links` — `client-link`, `server-link`, `standard`
 - `pyramids-ctas` — CTA buttons (`fat`, `linkedin`, `phone`, `cta-link`)
-- `imagine` — OpenAI image generation wrapper. **Never run anything in `packages/imagine/script/`** — it consumes paid AI tokens.
 - `scribe-intel` — telemetry/intent/visitor SDK (OpenTelemetry-based)
 
 ## Services
@@ -47,6 +47,8 @@ Run from the repo root unless noted.
 
 ### Install / clean
 
+Node 22 (`.nvmrc`) and yarn 4.17.1, declared by `packageManager` in the root manifest and activated by corepack — run `corepack enable` once, and never assume a globally installed yarn. `.yarnrc.yml` sets `nodeLinker: node-modules`, so the on-disk layout that `tsc`, `next build` and vitest expect is the one produced; unknown CLI options are errors under yarn 4, not warnings.
+
 ```bash
 yarn install         # install everything
 yarn clean           # rm -rf packages/*/dist and root node_modules
@@ -56,10 +58,9 @@ yarn clean:install   # clean then reinstall
 ### Build packages (required before/during app builds)
 
 ```bash
-yarn build:deps      # builds helpers → themes → layouts → links → ctas in order
+yarn build:deps      # builds helpers → themes → design-system → layouts → links → ctas in order
 yarn build:robusta   # build:deps then `next build` for apps/robusta
 yarn build:dakar     # build:deps then `next build` for apps/dakar
-yarn build:race      # build:deps then build for `@robusta/race` (workspace)
 ```
 
 ### Dev servers
@@ -70,7 +71,7 @@ yarn dev:dakar       # apps/dakar with Next.js + Turbopack
 yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta
 ```
 
-When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:helpers`, `w:themes`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
+When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
 
 ### Lint / format
 
@@ -84,11 +85,11 @@ Prettier config lives in `prettier.config.js` (single quotes, semi, trailing com
 
 ### Tests
 
-Vitest is set up in `apps/robusta`, `packages/scribe-intel`, `packages/helpers`, and `services/scribe-intel-collector`. Run from the workspace itself:
+Vitest is set up in `apps/robusta`, `packages/scribe-intel`, `packages/helpers`, and `services/scribe-intel-collector`. No workspace declares a `test` script, so invoke vitest from the workspace itself:
 
 ```bash
-yarn workspace @robusta/build test            # apps/robusta
-yarn workspace @robusta/scribe-intel test     # packages/scribe-intel
+yarn workspace @robusta/build exec vitest run            # apps/robusta
+yarn workspace @robusta/scribe-intel exec vitest run     # packages/scribe-intel
 ```
 
 There is no root-level `yarn test`.
@@ -159,3 +160,4 @@ Tailwind config adds a `mob` breakpoint (= `max: md`, the inverse of `sm`). Pref
 
 - Default branch: `main`. Active development on `dev`.
 - Commit style: prefixed `feat(scope):`, `fix(scope):`, `chore(scope):` (see recent log: `feat(design):`, `feat(home):`, `fix(spots):`).
+- NEVER COMMIT nor PUSH if I don't say it
