@@ -1,14 +1,19 @@
 import { wordmarkSrc } from './design-system/assets.js';
+import { ROLL_SIZE, urlScheme } from './routing/scheme.js';
 
 const mission = 'Building Internet the right way';
 const url = 'https://www.robusta.build';
 
+export { ROLL_SIZE };
+
 export interface BlogConfig {
+  /** The single segment under which the site publishes its content section. */
+  contentRoot: string;
   defaultLocale: string;
   otherLocales: string[];
   debugImagePath: boolean;
   mandatoryKeywords: string[];
-  rollSize: number;
+  rollSize: typeof ROLL_SIZE;
   author?: string;
   getCategories: () => Promise<string[][]>;
 }
@@ -36,14 +41,17 @@ const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
   defaultLocale: 'en',
   otherLocales: ['fr'],
   blogConfig: {
-    defaultLocale: 'en',
-    otherLocales: ['fr'],
+    // The content section's four values come from the site's scheme module, so
+    // the route table and the site configuration cannot state different ones.
+    contentRoot: urlScheme.contentRoot,
+    defaultLocale: urlScheme.defaultLocale,
+    otherLocales: [...urlScheme.otherLocales],
     debugImagePath: false,
     mandatoryKeywords: ['robusta build', 'freelance'],
-    rollSize: 12,
+    rollSize: ROLL_SIZE,
     author: 'Nicolas Zozol',
-    // Empty until content-source lands: an empty result, never a throw, and no
-    // content source read.
+    // Declared and read by nothing: the category URL set comes from the
+    // articles. Removing the field belongs to content-source.
     getCategories: async () => {
       return [];
     },

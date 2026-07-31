@@ -46,3 +46,5 @@ next-env.d.ts
 public/robots.txt
 public/sitemap.xml
 public/sitemap-0.xml
+# The routing/content modules compiled for scripts/emit-redirects.mjs
+apps/robusta-build/.routing-dist/

@@ -4,13 +4,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "yarn emit:redirects && next dev --turbopack",
+    "build": "yarn emit:redirects && next build && node scripts/check-route-table.mjs",
+    "emit:redirects": "tsc -p tsconfig.routing.json && node scripts/emit-redirects.mjs",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@robusta/pyramids-design-system": "workspace:*",
+    "@robusta/pyramids-routing": "workspace:*",
     "next": "^15.5.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"

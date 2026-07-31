@@ -1,0 +1,20 @@
+{
+  "//": "Compiles the site's routing and content modules to plain ESM so that scripts/emit-redirects.mjs can run them outside the webpack pipeline. next.config.ts is loaded by Next's own SWC require hook, which resolves import paths verbatim and therefore cannot follow this repository's `.js`-suffixed local imports — the design's stated fallback.",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "outDir": ".routing-dist",
+    "rootDir": "src",
+    "declaration": false,
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "include": [
+    "src/routing/scheme.ts",
+    "src/routing/v1-url-map.ts",
+    "src/routing/content-urls.ts",
+    "src/content"
+  ]
+}
