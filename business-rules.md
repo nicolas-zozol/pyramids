@@ -10,6 +10,8 @@ Numbering: the bootstrap draft carried four entries. Closing the gap left by the
 
 Reconciled on 2026-07-30 by `bulkman resolve` as delegated registrar, arbitration C1 of `pyramid-v2.bulk.md`. Two entries added by hand on 2026-07-29 at 19:16, outside the registrar path, were re-run through the four tests and both failed: "We embrace the constraints of Vercel, React Server Component and shadcn" fails the vocabulary test on three tool names absent from `ubiquitous-language.md` and the declarative test on its phrasing, and "We focus on SEO best practices" states an intention rather than an invariant. BR-PYRAMID-2 therefore goes back to the wording the registrar recorded on 2026-07-29 — the one five live citations point at — and BR-PYRAMID-4 is removed. The identifier 4 is retired and never reused: it was cited under two different meanings in two days, and a third would make every past citation unreadable. Rules recorded on 2026-07-30 start at 5.
 
+Recorded on 2026-07-31 by `bulkman resolve` as delegated registrar, from the arbitration of Gap 2 of `seo-url-scheme.design.md`: BR-PYRAMID-9. The four tests pass — the product owner decides how many classifications an article carries, the wording holds on glossary terms once `Tag` exists, it states an invariant rather than a sequence, and it is one rule rather than a ladder. `Tag` was added to `ubiquitous-language.md` in the same pass, together with `Content root`, `Clean checkout` and `Green set`, the last two closing the vocabulary test BR-PYRAMID-5 was still owed. 9 is the next free identifier: 4 stays retired.
+
 ## PYRAMID — building SEO sites on the shared base
 
 - BR-PYRAMID-1 — The URL of a page must state the kind of page it addresses, so that a site can resolve it without consulting its content source.
@@ -19,5 +21,6 @@ Reconciled on 2026-07-30 by `bulkman resolve` as delegated registrar, arbitratio
 - BR-PYRAMID-6 — A site's design tokens must come from its design system alone.
 - BR-PYRAMID-7 — A site must not read its content source while serving a request.
 - BR-PYRAMID-8 — A site must supply the page copy of every page it publishes; its design system must supply no page copy.
+- BR-PYRAMID-9 — An article carries at most one category and any number of tags.
 
 BR-PYRAMID-4 is retired: see the reconciliation note above. Nothing is recorded under that identifier again.

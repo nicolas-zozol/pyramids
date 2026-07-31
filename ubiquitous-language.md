@@ -2,7 +2,7 @@
 
 The shared vocabulary of Pyramids. Every story, design doc and business rule uses these terms and no synonyms. A term that does not appear here is either implementation detail or a term still to be agreed — propose it before using it in a rule.
 
-Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles.
+Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set.
 
 ## Product
 
@@ -35,6 +35,9 @@ Article
 Category
 : The classification an article belongs to. Categories may nest (`blockchain/security`) and each category has its own page.
 
+Tag
+: A classification an article may carry freely, any number of them, alongside the single category it may claim (BR-PYRAMID-9). A tag is metadata: it has no page of its own today, and the URL scheme reserves an address for the tag page it must stay able to grow.
+
 Blog roll
 : The paginated list of articles shown on a category or blog home page. Its length per page is the roll size, set in the site configuration.
 
@@ -46,6 +49,9 @@ Locale
 
 Content source
 : Where a site's articles come from. Today: markdown files shipped with the site. Whether the server re-reads them too often is an open point of the v2 epic.
+
+Content root
+: The single segment under which a site publishes its content section, named by the site configuration. `articles` for robusta.build; another site names its own.
 
 Discriminant
 : A segment of a URL that states what kind of page follows — the locale, the blog roll page, an article. Discriminants exist so pages can be pregenerated at build time instead of resolved at runtime.
@@ -63,6 +69,12 @@ Workspace
 
 Build chain
 : The ordered rebuild of the shared packages that must complete before any site builds. A site never reads a package's sources, only its build output.
+
+Clean checkout
+: A checkout carrying no installed dependency and no build output anywhere in its ancestry. A git worktree beside an installed repository is not one.
+
+Green set
+: The named collection of workspaces that must build from a clean checkout: the build chain plus every site the repository claims to ship.
 
 Watcher
 : A rebuild loop kept running during development so a package edit reaches the running site. Without it, the site keeps serving the previous build output.

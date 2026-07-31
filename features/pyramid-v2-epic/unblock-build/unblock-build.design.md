@@ -176,6 +176,11 @@ Characters: Arabica, the builder of the v2 site, working on the machine where th
 - Depends on: merge-design-system, landed on `dev` as `c0f98fe`. The sixth shared package is on `dev`, so the sweep has no branch clause.
 - Blocks: `bootstrap-robusta-build`, which cannot be verified end to end until a clean checkout builds.
 
+## Decisions
+
+- 2026-07-31 — `Clean checkout` enters `ubiquitous-language.md`: a checkout carrying no installed dependency and no build output anywhere in its ancestry; a git worktree beside an installed repository is not one. Pourquoi : lgtm on the proposition of Gap 2, applied by `bulkman resolve` as delegated registrar — BR-PYRAMID-5 is recorded on the term, and a registered rule whose central term has no definition cannot be verified the same way twice. The vocabulary test of BR-PYRAMID-5 is met from this point.
+- 2026-07-31 — `Green set` enters `ubiquitous-language.md`: the named collection of workspaces that must build from a clean checkout, being the build chain plus every site the repository claims to ship. Pourquoi : lgtm on the proposition of Gap 3, applied in the same registrar pass — without a name, "the build chain works" stays an impression; with one, R-UNBLOCKBUILD-7 states exactly what was and was not verified. Impact : this supplies the definition Gap 1 of `pyramid-v2.epic.md` asked for and left blank, so epicman can fold that entry.
+
 ## Open Questions & Gaps
 
 ### Gaps
@@ -183,16 +188,6 @@ Characters: Arabica, the builder of the v2 site, working on the machine where th
 - Gap 1: the story's Documentation updates plan covers `root.archi.md` Notes / Gotchas and the Dependencies sections of `links.archi.md` and `ctas.archi.md`, but the toolchain declaration falsifies statements in three places the plan does not name — the Dependencies section of `root.archi.md` ("Build: yarn 1 workspaces"), the Getting started section of `README.md`, and the install and build command reference of `CLAUDE.md`.
 - Proposition: storyman adds those three locations to the Documentation updates plan, each with its why, so docman corrects them in the same pass.
 - Rationale: a design doc never writes into a story, and a doc plan that misses the files contradicted by the change leaves the repository describing a package manager it no longer uses.
-- Resolution:
-
-- Gap 2: "clean checkout" is the operative term of BR-PYRAMID-5 and is absent from `ubiquitous-language.md`. The distinction is load-bearing here: a git worktree exposes the undeclared `next` and the duplicate React, but only a fresh clone exposes the toolchain defect, because only a clone starts with no installed dependency anywhere in its ancestry.
-- Proposition: epicman records the term — a clean checkout is a checkout carrying no installed dependency and no build output anywhere in its ancestry; a git worktree beside an installed repository is not one.
-- Rationale: a registered rule whose central term has no definition cannot be verified the same way twice, and this feature's whole acceptance rests on which of the two states the verification ran in.
-- Resolution:
-
-- Gap 3: "green set" is used by R-UNBLOCKBUILD-7 and by this document, and no glossary term names it. `ubiquitous-language.md` defines Build chain as the rebuild of the shared packages only, which stops short of the site builds.
-- Proposition: epicman records the term — the green set is the named collection of workspaces that must build from a clean checkout, being the build chain plus every site the repository claims to ship.
-- Rationale: without a name, "the build chain works" stays an impression; with one, the claim states exactly what was and was not verified.
 - Resolution:
 
 ### Open Questions
