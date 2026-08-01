@@ -2,7 +2,7 @@
 
 The shared vocabulary of Pyramids. Every story, design doc and business rule uses these terms and no synonyms. A term that does not appear here is either implementation detail or a term still to be agreed — propose it before using it in a rule.
 
-Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set. The same day, epicman as registrar added Canonical URL and corrected the roll-size clause of Blog roll, from Gaps 1 and 2 of `seo-url-scheme.story.md`, then added Published article and Translation identifier from Gap 1 of `content-source.design.md`. Published article closes a term the glossary had been using without defining, in its Related articles entry.
+Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set. The same day, epicman as registrar added Canonical URL and corrected the roll-size clause of Blog roll, from Gaps 1 and 2 of `seo-url-scheme.story.md`, then added Published article and Translation identifier from Gap 1 of `content-source.design.md`. Published article closes a term the glossary had been using without defining, in its Related articles entry. On 2026-08-01, epicman as registrar added Asset root, from the arbitration of Gap 2 of `migrate-learn-content.design.md`: the four tests route a definition to the glossary rather than to `business-rules.md`, and the registrar records the wording the arbitration supplied rather than coining one.
 
 ## Product
 
@@ -58,6 +58,9 @@ Content source
 
 Content root
 : The single segment under which a site publishes its content section, named by the site configuration. `articles` for robusta.build; another site names its own.
+
+Asset root
+: The URL prefix under which a site publishes the files its articles reference. It is not the content root: it carries no page, it addresses files rather than pages, and a site names its own.
 
 Discriminant
 : A segment of a URL that states what kind of page follows. The v2 set is four — `l` for the locale, `c` for a category, `p` for a roll page, and `t`, which reserves the address of a tag page the scheme keeps possible without building it. They belong to the shared base, they are reserved words at every level of the scheme, and they exist so pages can be pregenerated at build time instead of resolved at runtime. _v1_ used the locale, `page` for the blog roll and `s` for a post.

@@ -1,6 +1,6 @@
 # Story : Migrate the learn articles onto the v2 site
 
-**Dernière mise à jour :** 2026-07-29
+**Dernière mise à jour :** 2026-08-01
 **Feature :** migrate-learn-content
 **Infix :** MIGRATELEARN
 **Status :** ACTIVE
@@ -11,32 +11,44 @@ As the publisher of robusta.build, I want the articles of the v1 site served by 
 
 ## Contexte & objectif
 
-The content this story migrates lives as markdown files under `apps/robusta/content/blog`: 11 articles in two locales, spread over five categories, each carrying its title, date, category, tags and author in its frontmatter. Until the v2 site serves them, robusta.build v2 is an empty shell and the v1 site cannot be retired — the last item of the epic.
+The content this story migrates lives as markdown files under `apps/robusta/content/blog`: 11 articles in two locales, spread over six categories, each carrying its title, date, category, tags and author in its frontmatter. Its destination is `apps/robusta-build/content/articles`, the corpus root declared in `apps/robusta-build/src/content/corpus.ts`. Until the v2 site serves them, robusta.build v2 is an empty shell and the v1 site cannot be retired — the last item of the epic.
 
-The stake is indexation, not copying. v1 addresses an article as `/learn/{category}/s/{slug}`, where the slug comes from the title through a slugify implementation the code itself forbids changing. v2 changes every part of that address: `articles` in place of `learn`, `/blog/c/{category}`, `/l/{locale}/` for the non-default locale, pagination as query parameters (BR-PYRAMID-1). So every indexed URL moves, and the migration is as much a redirect exercise as a content move: a slug never changes once published (`ubiquitous-language.md`), and an indexed URL left without a redirect is a page lost from the search results.
+The stake is indexation, not copying. v1 addresses an article as `/learn/{category}/s/{slug}`, where the slug comes from the title through a slugify implementation the code itself forbids changing. v2 changes every part of that address, and seo-url-scheme fixed which: `/articles/{slug}` for an article carrying no category, `/articles/c/{category}/{slug}` for one that does, `/articles/c/{category}` for a category page, `/articles/p/{n}` and `/articles/c/{category}/p/{n}` for pagination as path segments, `/l/{locale}` as prefix for the non-default locale, and `/articles/t/{tag}` reserved but served by nothing (BR-PYRAMID-1). So every indexed URL moves, and the migration is as much a redirect exercise as a content move: a slug never changes once published (`ubiquitous-language.md`), and an indexed URL left without a redirect is a page lost from the search results.
 
-Implementation is blocked until seo-url-scheme (item 4 of the epic) fixes the destination URLs and content-source (item 5) fixes how articles reach the site; brainstorm and design can start now. The fate of `apps/robusta/public/images` is arbitrated by the epic, not here — the images the articles actually reference sit elsewhere, under `content/blog/**/images`.
+Both blockers are lifted. seo-url-scheme landed on 2026-07-31 as `acfbc0a` with the route table and the v1 mapping; content-source shipped its reader as `82c154f` — `@robusta/pyramids-content` with `readCorpus`, `readArticleBody` and `articleSlug`, wired into `apps/robusta-build/src/content/article-index.ts`. Nothing blocks implementation now.
+
+`content/articles` holds only a `.gitkeep` today, so the v2 site builds 5 static pages and its generated redirect map has degraded to 68 rows, with the category and tag rows falling back to the blog home for want of a category page to reach. Both numbers are the empty corpus talking, not breakage, and both correct themselves when the articles land.
 
 ## What travels
 
-- 11 articles across five categories: blockchain 4, javascript 4, privacy 1, theory 1, web 1. The `security` and `prompt` folders hold images but no article.
-- Two locales: `en` (default, unmarked in the URL) and `fr`, carried by a `locale` frontmatter field. Two articles exist in both languages — `yield-farming` and the Gatsby-to-NextJS migration piece — as two separate files; this tree carries no field linking the two versions.
-- Frontmatter fields to preserve: title, tags, locale, date, categoryPath, image, author.
-- Per-article images under `content/blog/**/images`, referenced by relative paths from the markdown.
+- 11 articles across six categories: blockchain 4, javascript 3, typescript 1, privacy 1, theory 1, web 1. The `security` and `prompt` folders hold images but no article.
+- Two locales: `en` (default, unmarked in the URL) and `fr`. Two articles exist in both languages — `yield-farming` and the Gatsby-to-NextJS migration piece — as two separate files.
+- Travels unchanged: `title`, `date`, `tags`, `image`, `author`, `featured`, and `published: true`, which all 11 files carry since 2026-08-01 on the publisher's instruction. That flagging supersedes the temporarily-unpublished state of the 2026-07-31 arbitration and discharges the sequencing obligation content-source's design placed on `retire-robusta-v1`; this story adds nothing on that front.
+- Converted: v1's `categoryPath` becomes the v2 schema's flat `category`, one segment, so `javascript/typescript` becomes `typescript`. The frontmatter locale of the two English files declaring `fr` is corrected in the same pass.
+- Added: `translationId`, the field content-source defined to link the locale versions of one article, filled on the four files of the two translated pairs.
+- Derived, never written by hand: the slug, which is the frozen `articleSlug(title, locale)` unless a file pins `slug`; and the excerpt, which is the opening block of the body before its separator.
+- Per-article images under `content/blog/**/images`, referenced by relative paths from the markdown. They travel beside their article into `content/articles/**/images`, and a build step copies them into `public/` under the site's asset root.
+- `featured: true` is carried by eight articles, not the seven the decision of 2026-07-30 records. Counted against the corpus on 2026-08-01; the decision stands as written and only its figure was wrong.
+
+The checklist is a test, not a list: `packages/pyramids-content/src/migrated-corpus.spec.ts` reads v1's tree through the v2 schema and pins both what already holds — 11 published, 0 violations — and what this migration must fix — every article at `category === undefined` because the files still carry `categoryPath`, and a locale split of 6 English / 5 French that the two corrections turn into 8 / 3.
 
 ## Definition of done
 
-- Every v1 article is readable on the v2 site, in its locale and under its category, with title, date, author, tags and category preserved.
+- The eleven articles are present, converted and addressable: each one sits under `apps/robusta-build/content/articles`, claims a flat category, and answers at its v2 URL. They render the placeholder seo-url-scheme gave them — reading them is [article-page](../article-page/article-page.story.md), which received this story's readable-articles bullet on 2026-08-01. This story delivers the content and the addresses, not the page.
 - The v2 URL of an article carries the same slug as its v1 URL.
-- Every indexed v1 URL — article, category page, roll page — redirects permanently to its v2 counterpart; no indexed URL ends on a 404.
-- The link between the two locale versions of the same article resolves to a v2 URL.
-- Images referenced by an article are served by the v2 site; no migrated article shows a broken image.
+- Every indexed v1 URL keeps the destination the mapping gives it: permanently redirected for articles, category pages and roll pages, 410 Gone on the five raw markdown URLs and no destination at all for `/portfolio` and `/fr/portfolio`, both deliberate. No indexed URL is lost by accident.
+- `v1-url-map.generated.json` regenerates from the real index: an article row per published article, and category rows reaching their category page instead of falling back to the blog home.
+- What `migrated-corpus.spec.ts` pins holds against `apps/robusta-build/content/articles`: 11 published, 0 violations, every article claiming a flat category, and the locale split at 8 English / 3 French.
+- The link between the two locale versions of the same article resolves to a v2 URL: `translationId` pairs them in the data, and article-page renders the link.
+- Images referenced by an article are served by the v2 site; no migrated article shows a broken image. They sit beside their article under `content/articles/**/images` and a build step copies them into `public/`, per the arbitration of 2026-08-01.
+- `apps/robusta-build` gains a vitest setup, and the corpus and freeze specs live in the app rather than in `packages/pyramids-content`, per the arbitration of 2026-08-01.
+- The NotesPreview section of the landing page is built and mounted, fed by the real articles, per the decision of 2026-07-30 as arbitrated on 2026-08-01. It lands on the home page as it stands, and robusta-landing-page inherits a working section rather than a receipt to honour.
 - Does not rewrite article content: an article aged out of date is a separate editorial matter.
-- Does not cover sitemap, structured data or internal linking (seo-excellence, item 8), nor the retirement of `apps/robusta` (item 12).
+- Does not cover sitemap, structured data or internal linking (seo-excellence), nor the retirement of `apps/robusta` (retire-robusta-v1).
 
 ## Décisions
 
-- 2026-07-29 — v2 keeps tags as article metadata without a page of their own, and the indexed tag URLs (`/learn/tag/{tag}`) redirect to the blog home. Pourquoi : the corpus does not justify a second classification axis next to categories, and a redirect keeps the indexed URLs alive at the cost of one rule. Réf : Gap 1 of seo-excellence, arbitrated the same way the same day.
+- 2026-07-29 — v2 keeps tags as article metadata without a page of their own, and the indexed tag URLs (`/learn/tag/{tag}`) redirect to the blog home. Pourquoi : the corpus does not justify a second classification axis next to categories, and a redirect keeps the indexed URLs alive at the cost of one rule. Réf : Gap 1 of seo-excellence, arbitrated the same way the same day. Superseded on 2026-07-30 by seo-url-scheme, refined by it on 2026-07-31: a tag URL reaches the category page of the same name when that category has a page, and the blog home otherwise, the split being computed from the corpus by `v1UrlMap` rather than enumerated. Tags still carry no page of their own.
 - 2026-07-29 — The migration corpus is content/blog only: the 11 articles of `apps/robusta/content/blog`, as fixed by the epic. The 5 articles that exist only under `public/learn` are out of this migration — what becomes of them is a separate editorial call, not a migration question. Pourquoi : the epic fixed the corpus at content/blog, and the 13-article Proposition contradicted it; re-answered on 2026-07-29, this supersedes the earlier lgtm. Réf : Open Question 1 of this story, held back as CONFLICT on the 2026-07-29 pass.
 - 2026-07-30 — This story corrects the frontmatter locale of `yield-farming.md` and `why-migration-gatsby-next.md` while moving them: both are English pieces declaring `locale: "fr"`. Pourquoi : arbitration C6 of `pyramid-v2.bulk.md`, merging Gap 4 of `seo-url-scheme.brainstorm.md`, Open Question 4 of `content-source.brainstorm.md` and Gap 5 of `seo-excellence.brainstorm.md` — this story owns the frontmatter fields that travel, `fr` is a valid locale so no schema can catch the error, and the real split is 8 English and 3 French rather than the 6 and 5 declared.
 - 2026-07-30 — Nothing under `apps/robusta/public/images` travels to the v2 site. Pourquoi : arbitration of Gap 1 of this story, which carried no proposition of its own and was blocked on the epic; it confirms the epic's structuring decision of 2026-07-29 — the images the articles reference sit under `public/learn/**/images` and travel with them, while `public/images` holds v1 chrome the design system replaces.
@@ -44,13 +56,14 @@ Implementation is blocked until seo-url-scheme (item 4 of the epic) fixes the de
 - 2026-07-30 — `featured: true` travels unchanged on the 7 articles carrying it; the publisher re-picks the featured set when robusta-landing-page decides what a featured article is for. Pourquoi : arbitration of Open Question 2 of `migrate-learn-content.brainstorm.md` — re-picking is an editorial judgement about which articles deserve the front page, not a migration question.
 - 2026-07-30 — This story also delivers the landing page's NotesPreview section, fed by the real articles. Pourquoi : arbitration of Gap 5 of `robusta-landing-page.brainstorm.md`, folded here because it is the receiving story — robusta-landing-page defers NotesPreview to this one, and a deferral only holds if the receiver records it. The Definition of done above covers articles, URLs, redirects and images and never mentions the landing page.
 
+- 2026-08-01 — The eleven articles are copied into `apps/robusta-build/content/articles` rather than moved, and `apps/robusta/content/blog` is frozen the day the copy is taken: no article edited there afterwards, and `retire-robusta-v1` deletes it rather than merging it back. Pourquoi : arbitration of Gap 1 of this story — a move empties the tree `apps/robusta` renders, so `yarn build:robusta` stops producing 42/42 and the green set of BR-PYRAMID-5 stays red for the remaining length of the epic, which costs more than a duplicated corpus nobody is allowed to edit. The freeze is what stops the two corpora diverging.
+- 2026-08-01 — Article rendering leaves this story and becomes [article-page](../article-page/article-page.story.md), which receives the readable-articles bullet of the Definition of done. Pourquoi : arbitration of Gap 1 of `migrate-learn-content.design.md`, against its proposition that this design take the rendering at the minimum — seo-url-scheme excluded page copy, content-source excluded layout and robusta-landing-page owns the home page alone, so the gap was real; it is answered with a story of its own rather than by widening the migration. Impact : this story delivers eleven addressable articles that render a placeholder until article-page runs.
+- 2026-08-01 — Images sit beside their article under `content/articles/**/images` and a build step copies them into `public/`; the NotesPreview section is built and mounted here rather than deferred to robusta-landing-page; and `apps/robusta-build` gains a vitest setup, with the corpus and freeze specs living in the app. Pourquoi : arbitrations of Open Questions 1, 2 and 3 of `migrate-learn-content.design.md`, all three against their proposition — one tree and working editor previews are worth a copy script and a gitignored subtree, a section fed by real articles survives the page being rebuilt around it, and a base package holding tests that reach into an app is the thing to end rather than to schedule.
+
 ## Documentation updates
 
-- change the content section of `root.archi.md` — why: it points at `apps/robusta/public/learn` as the place where articles live, which stops being true once they serve from the v2 site.
-- create the article-authoring section of the `apps/robusta-build` README — why: where a new article goes, which frontmatter fields are required, where its images belong.
-- create the v1 to v2 URL mapping next to that README — why: the redirects must stay auditable until `apps/robusta` is retired (item 12).
-
-## Dependencies
-
-- Dep 1: seo-url-scheme (item 4 of the epic) — fixes the destination URLs, and therefore the redirect map. Blocks implementation, not brainstorm or design.
-- Dep 2: content-source (item 5 of the epic) — fixes how articles reach the site; the move has no target before it is settled.
+- change the content section of `root.archi.md` — why: it names `apps/robusta/content/blog` as where the articles live and keeps `apps/robusta` alive for them, which stops being true once the corpus serves from `apps/robusta-build/content/articles`; its open point about the five `public/learn` articles is settled by the decision of 2026-07-29 above.
+- create the article-authoring section of the `apps/robusta-build` README — why: where a new article goes, which frontmatter fields the v2 schema requires, where its images belong.
+- change the v1 mapping section of the `apps/robusta-build` README — why: `v1-url-map.generated.json` is generated by `v1UrlMap` and committed for review (R-URLSCHEME-14), so the map itself is delivered and nothing is owed next to it; what the section still carries is the fixture-era figure of 99 rows, which becomes the real corpus's count once the articles land.
+- change `apps/robusta-build/robusta-build.archi.md` — why: the asset root, the build step that copies images into `public/`, the mounted NotesPreview section and the middleware exclusion the one uppercase asset forces are all new facts about the site's architecture.
+- change `packages/pyramids-content/content.archi.md` — why: the asset spec and `resolveAssetUrl` are added to a package whose architecture document describes it without them.
