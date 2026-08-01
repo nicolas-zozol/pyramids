@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "yarn@4.17.1",
   "engines": {
-    "node": ">=22 <23"
+    "node": "22.x"
   },
   "scripts": {
     "build:deps": "yarn workspace @robusta/pyramids-routing run build && yarn workspace @robusta/pyramids-content run build && yarn workspace @robusta/pyramids-helpers run build && yarn workspace @robusta/pyramids-themes run build && yarn workspace @robusta/pyramids-design-system run build && yarn workspace @robusta/pyramids-layouts run build && yarn workspace @robusta/pyramids-links run build && yarn workspace @robusta/pyramids-ctas run build",
