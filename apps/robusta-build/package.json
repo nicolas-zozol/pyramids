@@ -4,11 +4,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "yarn emit:redirects && next dev --turbopack",
-    "build": "yarn emit:redirects && next build && node scripts/check-route-table.mjs",
+    "dev": "yarn emit:redirects && yarn copy:assets && next dev --turbopack",
+    "build": "yarn emit:redirects && yarn copy:assets && next build && node scripts/check-route-table.mjs",
     "emit:redirects": "tsc -p tsconfig.routing.json && node scripts/emit-redirects.mjs",
+    "copy:assets": "node scripts/copy-article-images.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@robusta/pyramids-content": "workspace:*",
@@ -24,6 +26,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.5"
   }
 }

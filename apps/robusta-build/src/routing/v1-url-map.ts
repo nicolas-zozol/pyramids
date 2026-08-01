@@ -182,30 +182,61 @@ function categoryRows(
   return rows;
 }
 
+/**
+ * An article row's source is the URL the v1 build generated, which carries no
+ * locale segment whatever the article's locale (R-MIGRATELEARN-61).
+ * `apps/robusta/src/app/learn/[...path]/page.tsx:59` emits
+ * `path: [...post.categories, 's', post.slug]` for every article, and every blog
+ * route is `force-static`, so `/learn/fr/...` 404s on the live site while
+ * `/learn/{category}/s/{slug}` is what v1 published for a French article as much
+ * as for an English one.
+ *
+ * The fixture corpus hid this: it costs nothing until an article of a
+ * non-default locale exists. With the real corpus it costs three rows, whose
+ * true addresses would otherwise fall through to the `/learn/:path*` namespace
+ * rule and answer 410 Gone — three indexed article URLs retired by accident.
+ *
+ * A non-default-locale article gets a second row at the locale-marked form,
+ * reaching the same v2 URL. That costs three rows and matches what the category
+ * class already does, AC-URLSCHEME-62 requiring `/learn/fr/javascript/page/2` to
+ * have a destination.
+ */
 function articleRows(
   scheme: UrlScheme,
   articles: readonly ArticleIndexEntry[],
 ): V1MappingRow[] {
   return articles
     .filter((article) => article.category !== undefined)
-    .map((article) => {
+    .flatMap((article) => {
       const category = article.category as string;
-      return {
-        from: v1Path(scheme, article.locale, [
-          ...v1CategoryPath(category),
-          V1_ARTICLE_DISCRIMINANT,
-          article.slug,
-        ]),
-        destination: {
-          kind: 'permanent' as const,
-          to: buildUrl(scheme, {
-            kind: 'article',
-            locale: article.locale,
-            category,
-            slug: article.slug,
-          }),
-        },
+      const tail = [
+        ...v1CategoryPath(category),
+        V1_ARTICLE_DISCRIMINANT,
+        article.slug,
+      ];
+      const destination = {
+        kind: 'permanent' as const,
+        to: buildUrl(scheme, {
+          kind: 'article',
+          locale: article.locale,
+          category,
+          slug: article.slug,
+        }),
       };
+
+      const rows: V1MappingRow[] = [
+        { from: v1Path(scheme, scheme.defaultLocale, tail), destination },
+      ];
+
+      if (article.locale !== scheme.defaultLocale) {
+        rows.push({
+          from: v1Path(scheme, article.locale, tail),
+          destination,
+          note: `the locale-marked form; v1 published this article at the unmarked one`,
+        });
+      }
+
+      return rows;
     });
 }
 

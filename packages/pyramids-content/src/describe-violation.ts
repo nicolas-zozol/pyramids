@@ -19,5 +19,7 @@ export function describeViolation(violation: CorpusViolation): string {
       return `${violation.path}: 'published' carries '${violation.value}', which is not a boolean, so the article is neither published nor knowingly unpublished`;
     case 'duplicate-translation-id':
       return `${violation.path}: the translation identifier '${violation.translationId}' is carried by another published article of locale '${violation.locale}'`;
+    case 'unresolved-asset':
+      return `${violation.path}: the image reference '${violation.reference}' resolves to no file of the corpus, so the article would show a broken image`;
   }
 }

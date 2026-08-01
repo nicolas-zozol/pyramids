@@ -1,19 +1,28 @@
 import { BrandLogo, SkCallout } from '@robusta/pyramids-design-system';
 
 import { wordmarkSrc } from '../design-system/assets.js';
+import { NotesSection } from '../landing/NotesSection.js';
 
 /**
- * Placeholder home page.
+ * Placeholder home page, carrying one real section.
  *
- * It exists to exercise the wiring end to end — the two CSS subpaths, the asset
- * subpath, a design-system component and the design tokens — and for
- * robusta-landing-page to delete. It carries no page copy: no pitch, no
- * navigation, no call to action, no article.
+ * The wiring demonstration below exists to exercise the two CSS subpaths, the
+ * asset subpath, a design-system component and the design tokens, and for
+ * robusta-landing-page to delete. `<NotesSection />` is not part of it: it is
+ * fed by the site's real articles and survives the page being rebuilt around it,
+ * which is what the arbitration of 2026-08-01 asked for (R-MIGRATELEARN-45).
+ * Deleting the placeholder means carrying one import and one element across.
+ *
+ * Mounting is English-only. `/l/fr` derives its params from `landingParams`, and
+ * `urlSet` produces no landing URL, so the French landing pregenerates nothing
+ * and there is no page to mount into; the same component takes `locale="fr"` the
+ * day robusta-landing-page gives that page copy.
  *
  * A server component: no design-system component carries `'use client'`, so the
- * page needs no client boundary and stays statically generated.
+ * page needs no client boundary and stays statically generated even though it
+ * reads the index (BR-PYRAMID-7).
  */
-export default function Home() {
+export default async function Home() {
   return (
     <main style={{ padding: 'var(--sp-8) var(--sp-6)' }}>
       {/* `BrandLogo`'s own default is a hardcoded `/_next/static/media/…` path
@@ -38,6 +47,8 @@ export default function Home() {
           <code>--font-mono</code>.
         </p>
       </SkCallout>
+
+      <NotesSection />
     </main>
   );
 }

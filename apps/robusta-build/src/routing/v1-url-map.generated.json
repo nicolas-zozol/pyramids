@@ -6,9 +6,9 @@
     "fr"
   ],
   "counts": {
-    "total": 68,
-    "permanent": 44,
-    "gone": 14,
+    "total": 82,
+    "permanent": 66,
+    "gone": 6,
     "none": 10
   },
   "rows": [
@@ -44,14 +44,14 @@
       "from": "/learn/blockchain",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/blockchain"
       }
     },
     {
       "from": "/learn/blockchain/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/blockchain"
       },
       "note": "the page number is dropped"
     },
@@ -91,14 +91,14 @@
       "from": "/learn/web",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/web"
       }
     },
     {
       "from": "/learn/web/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/web"
       },
       "note": "the page number is dropped"
     },
@@ -106,14 +106,14 @@
       "from": "/learn/javascript",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/javascript"
       }
     },
     {
       "from": "/learn/javascript/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/javascript"
       },
       "note": "the page number is dropped"
     },
@@ -121,7 +121,7 @@
       "from": "/learn/javascript/typescript",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/typescript"
       },
       "note": "flattened to its leaf 'typescript'"
     },
@@ -129,7 +129,7 @@
       "from": "/learn/javascript/typescript/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/typescript"
       },
       "note": "the page number is dropped"
     },
@@ -153,14 +153,14 @@
       "from": "/learn/fr/blockchain",
       "destination": {
         "kind": "permanent",
-        "to": "/l/fr/articles"
+        "to": "/l/fr/articles/c/blockchain"
       }
     },
     {
       "from": "/learn/fr/blockchain/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/l/fr/articles"
+        "to": "/l/fr/articles/c/blockchain"
       },
       "note": "the page number is dropped"
     },
@@ -215,14 +215,14 @@
       "from": "/learn/fr/javascript",
       "destination": {
         "kind": "permanent",
-        "to": "/l/fr/articles"
+        "to": "/l/fr/articles/c/javascript"
       }
     },
     {
       "from": "/learn/fr/javascript/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/l/fr/articles"
+        "to": "/l/fr/articles/c/javascript"
       },
       "note": "the page number is dropped"
     },
@@ -259,10 +259,111 @@
       "note": "the page number is dropped"
     },
     {
+      "from": "/learn/blockchain/s/ledger-versus-metamask",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/blockchain/ledger-versus-metamask"
+      }
+    },
+    {
+      "from": "/learn/blockchain/s/tooling-for-solidity-coders",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/blockchain/tooling-for-solidity-coders"
+      }
+    },
+    {
+      "from": "/learn/blockchain/s/provenance-des-rendements-du-yield-farming-dans-la-blockchain",
+      "destination": {
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain"
+      }
+    },
+    {
+      "from": "/learn/fr/blockchain/s/provenance-des-rendements-du-yield-farming-dans-la-blockchain",
+      "destination": {
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain"
+      },
+      "note": "the locale-marked form; v1 published this article at the unmarked one"
+    },
+    {
+      "from": "/learn/blockchain/s/the-source-of-yield-farming-profits",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/blockchain/the-source-of-yield-farming-profits"
+      }
+    },
+    {
+      "from": "/learn/javascript/s/pourquoi-jai-migre-de-gatsby-vers-nextjs",
+      "destination": {
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs"
+      }
+    },
+    {
+      "from": "/learn/fr/javascript/s/pourquoi-jai-migre-de-gatsby-vers-nextjs",
+      "destination": {
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs"
+      },
+      "note": "the locale-marked form; v1 published this article at the unmarked one"
+    },
+    {
+      "from": "/learn/javascript/s/why-i-made-the-migration-from-gatsby-toward-nextjs",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs"
+      }
+    },
+    {
+      "from": "/learn/javascript/typescript/s/completing-a-rxjs-observable-with-another",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/typescript/completing-a-rxjs-observable-with-another"
+      }
+    },
+    {
+      "from": "/learn/web/s/easy-automation-with-sonoff-and-javascript",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/web/easy-automation-with-sonoff-and-javascript"
+      }
+    },
+    {
+      "from": "/learn/theory/s/quel-langage-pour-progresser-dans-sa-carriere",
+      "destination": {
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere"
+      }
+    },
+    {
+      "from": "/learn/fr/theory/s/quel-langage-pour-progresser-dans-sa-carriere",
+      "destination": {
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere"
+      },
+      "note": "the locale-marked form; v1 published this article at the unmarked one"
+    },
+    {
+      "from": "/learn/javascript/s/applying-correctly-classname-with-styled-components",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/javascript/applying-correctly-classname-with-styled-components"
+      }
+    },
+    {
+      "from": "/learn/privacy/s/leaving-gmail",
+      "destination": {
+        "kind": "permanent",
+        "to": "/articles/c/privacy/leaving-gmail"
+      }
+    },
+    {
       "from": "/learn/tag/web",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/web"
       }
     },
     {
@@ -297,7 +398,7 @@
       "from": "/learn/tag/blockchain",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/blockchain"
       }
     },
     {
@@ -325,7 +426,7 @@
       "from": "/learn/tag/javascript",
       "destination": {
         "kind": "permanent",
-        "to": "/articles"
+        "to": "/articles/c/javascript"
       }
     },
     {
@@ -366,58 +467,58 @@
     {
       "from": "/learn/blockchain/s/ledger-versus-metamask.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'ledger-versus-metamask': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/articles/c/blockchain/ledger-versus-metamask"
+      }
     },
     {
       "from": "/learn/blockchain/s/start-coding-blockchain.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'tooling-for-solidity-coders': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/articles/c/blockchain/tooling-for-solidity-coders"
+      }
     },
     {
       "from": "/learn/blockchain/s/yield-farming-fr.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'provenance-des-rendements-du-yield-farming-dans-la-blockchain': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain"
+      }
     },
     {
       "from": "/learn/javascript/s/completes-with.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'completing-a-rxjs-observable-with-another': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/articles/c/typescript/completing-a-rxjs-observable-with-another"
+      }
     },
     {
       "from": "/learn/javascript/s/styled-components.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'applying-correctly-classname-with-styled-components': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/articles/c/javascript/applying-correctly-classname-with-styled-components"
+      }
     },
     {
       "from": "/learn/privacy/leaving-gmail.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'leaving-gmail': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/articles/c/privacy/leaving-gmail"
+      }
     },
     {
       "from": "/learn/theory/quel-second-langage.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'quel-langage-pour-progresser-dans-sa-carriere': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere"
+      }
     },
     {
       "from": "/learn/web/easy-automation-with-sonoff.md",
       "destination": {
-        "kind": "gone"
-      },
-      "note": "no article carries the slug 'easy-automation-with-sonoff-and-javascript': the content travels nowhere"
+        "kind": "permanent",
+        "to": "/articles/c/web/easy-automation-with-sonoff-and-javascript"
+      }
     },
     {
       "from": "/learn/javascript/s/completes-with-fr.md",

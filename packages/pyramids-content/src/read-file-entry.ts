@@ -1,9 +1,15 @@
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import matter from 'gray-matter';
 import { articleSlug } from './article-slug.js';
+import {
+  assetReferences,
+  corpusAssetPath,
+  isExternalReference,
+} from './asset-reference.js';
 import type {
   ArticleEntry,
+  CorpusSpec,
   CorpusViolation,
   LocaleSource,
 } from './contract.js';
@@ -24,7 +30,7 @@ export interface FileRead {
 export async function readFileEntry(
   root: string,
   path: string,
-  localeFrom: LocaleSource,
+  corpus: CorpusSpec,
 ): Promise<FileRead> {
   let parsed: matter.GrayMatterFile<string>;
   try {
@@ -42,9 +48,20 @@ export async function readFileEntry(
   const violations: CorpusViolation[] = [];
   const declared = parsed.data as Record<string, unknown>;
 
+  if (corpus.assets !== undefined) {
+    violations.push(
+      ...(await unresolvedAssets(root, path, text(declared.image), parsed.content)),
+    );
+  }
+
   const published = readPublished(declared.published, path, violations);
   const title = required(text(declared.title), 'title', path, violations);
-  const locale = required(localeOf(localeFrom, declared.locale, path), 'locale', path, violations);
+  const locale = required(
+    localeOf(corpus.localeFrom, declared.locale, path),
+    'locale',
+    path,
+    violations,
+  );
   const excerpt = required(text(parsed.excerpt), 'excerpt', path, violations);
   const date = readDate(declared.date, path, violations);
 
@@ -66,6 +83,51 @@ export async function readFileEntry(
   };
 
   return { path, published, entry, violations };
+}
+
+/**
+ * Every image reference that names no file of the corpus (R-MIGRATELEARN-23).
+ *
+ * It costs nothing here: `matter` has already read the whole file to extract the
+ * excerpt, so this is a regular expression over a string in memory and not a
+ * markdown parse — answering what articles exist still renders no body
+ * (R-CONTENTSOURCE-06). Resolution is against the corpus and never against the
+ * published tree, which is what lets it run on a clean checkout before the copy
+ * step has produced anything.
+ */
+async function unresolvedAssets(
+  root: string,
+  path: string,
+  image: string | undefined,
+  body: string,
+): Promise<CorpusViolation[]> {
+  const checked = await Promise.all(
+    assetReferences(image, body).map(async (reference) => {
+      if (isExternalReference(reference)) {
+        return undefined;
+      }
+      // The corpus answers for every relative reference, so one it cannot
+      // resolve escapes the root and names a file it does not hold.
+      const resolved = corpusAssetPath(path, reference);
+      if (resolved === undefined) {
+        return reference;
+      }
+      return (await exists(join(root, resolved))) ? undefined : reference;
+    }),
+  );
+
+  return checked
+    .filter((reference): reference is string => reference !== undefined)
+    .map((reference) => ({ code: 'unresolved-asset' as const, path, reference }));
+}
+
+async function exists(file: string): Promise<boolean> {
+  try {
+    await access(file);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**

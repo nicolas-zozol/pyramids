@@ -48,3 +48,5 @@ public/sitemap.xml
 public/sitemap-0.xml
 # The routing/content modules compiled for scripts/emit-redirects.mjs
 apps/robusta-build/.routing-dist/
+# The corpus images, mirrored under the asset root by scripts/copy-article-images.mjs
+apps/robusta-build/public/article-images/

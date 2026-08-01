@@ -1795,6 +1795,8 @@ __metadata:
     react-dom: "npm:^19.1.1"
     tailwindcss: "npm:^4.3.3"
     typescript: "npm:^5"
+    vite-tsconfig-paths: "npm:^5.1.4"
+    vitest: "npm:^3.0.5"
   languageName: unknown
   linkType: soft
 

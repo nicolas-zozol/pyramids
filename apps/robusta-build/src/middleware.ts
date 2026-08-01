@@ -14,6 +14,12 @@ import { NextResponse, type NextRequest } from 'next/server';
  * they were published — `/learn/tag/DeFi` included. `_next` is excluded too:
  * a build asset whose hashed file name carries an uppercase letter must not be
  * redirected to a path that does not exist.
+ *
+ * `article-images` is excluded for that same reason, and the rule it confirms is
+ * general: a case-normalising rule must exclude every namespace whose paths are
+ * case-significant, and a filesystem is one. The asset root republishes the
+ * corpus's own file names, `theory/images/M87.jpg` included
+ * (R-MIGRATELEARN-26).
  */
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
@@ -22,5 +28,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!learn/|learn$|_next/)(?=[^?]*[A-Z]).*)'],
+  matcher: ['/((?!learn/|learn$|_next/|article-images/)(?=[^?]*[A-Z]).*)'],
 };

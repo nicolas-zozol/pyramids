@@ -42,6 +42,14 @@ const VIOLATIONS: readonly [CorpusViolation, string][] = [
     },
     'javascript/gatsby.md',
   ],
+  [
+    {
+      code: 'unresolved-asset',
+      path: 'javascript/typescript/completes-with.md',
+      reference: './images/stop.png',
+    },
+    'javascript/typescript/completes-with.md',
+  ],
 ];
 
 describe('describeViolation', () => {
@@ -61,6 +69,16 @@ describe('describeViolation', () => {
     expect(
       describeViolation({ code: 'non-boolean-published', path: 'a.md', value: 'true' }),
     ).toContain("'true'");
+  });
+
+  it('quotes the reference an unresolved asset was authored as, not only its file', () => {
+    expect(
+      describeViolation({
+        code: 'unresolved-asset',
+        path: 'javascript/typescript/completes-with.md',
+        reference: './images/stop.png',
+      }),
+    ).toContain("'./images/stop.png'");
   });
 
   it('describes every violation the contract declares', () => {

@@ -12,6 +12,21 @@
 
 export type LocaleSource = 'frontmatter' | { pathSegment: number };
 
+/**
+ * Where a site publishes the files its articles reference. Data, like the rest
+ * of `CorpusSpec`.
+ *
+ * The asset root is a namespace of its own, outside every shape the URL scheme
+ * reserves for a page (BR-PYRAMID-1): a site that has to look at the filesystem
+ * to know whether an address is a page or a file is what that rule forbids.
+ */
+export interface AssetSpec {
+  /** Directory the copy step writes, relative to the process working directory. It owns that directory. */
+  publishDir: string;
+  /** The URL prefix that directory is published under. */
+  urlPrefix: string;
+}
+
 /** What a site declares about its own tree. Data — the base calls back into nothing. */
 export interface CorpusSpec {
   /** Directory holding the articles, relative to the process working directory. */
@@ -19,6 +34,11 @@ export interface CorpusSpec {
   localeFrom: LocaleSource;
   /** Path suffixes that are not articles — `.brief.md`, `example.md`. */
   exclude?: readonly string[];
+  /**
+   * Absent on a site that publishes no asset: the base then judges no image
+   * reference and publishes no file.
+   */
+  assets?: AssetSpec;
 }
 
 export interface ArticleEntry {
@@ -47,7 +67,8 @@ export type CorpusViolation =
   | { code: 'missing-field'; path: string; field: 'title' | 'date' | 'locale' | 'excerpt' }
   | { code: 'malformed-date'; path: string; date: string }
   | { code: 'non-boolean-published'; path: string; value: string }
-  | { code: 'duplicate-translation-id'; path: string; translationId: string; locale: string };
+  | { code: 'duplicate-translation-id'; path: string; translationId: string; locale: string }
+  | { code: 'unresolved-asset'; path: string; reference: string };
 
 export interface CorpusRead {
   /** Published, valid, newest first. */
