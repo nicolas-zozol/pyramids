@@ -11,6 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@robusta/pyramids-content": "workspace:*",
     "@robusta/pyramids-design-system": "workspace:*",
     "@robusta/pyramids-routing": "workspace:*",
     "next": "^15.5.3",

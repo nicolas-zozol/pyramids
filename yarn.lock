@@ -1619,6 +1619,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@robusta/pyramids-content@workspace:*, @robusta/pyramids-content@workspace:packages/pyramids-content":
+  version: 0.0.0-use.local
+  resolution: "@robusta/pyramids-content@workspace:packages/pyramids-content"
+  dependencies:
+    "@types/node": "npm:^20"
+    gray-matter: "npm:^4.0.3"
+    remark: "npm:^15.0.1"
+    remark-html: "npm:^16.0.1"
+    slugify: "npm:1.6.6"
+    typescript: "npm:^5"
+    vitest: "npm:^3.0.4"
+  languageName: unknown
+  linkType: soft
+
 "@robusta/pyramids-ctas@workspace:*, @robusta/pyramids-ctas@workspace:packages/ctas":
   version: 0.0.0-use.local
   resolution: "@robusta/pyramids-ctas@workspace:packages/ctas"
@@ -1769,6 +1783,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@robusta/robusta-build@workspace:apps/robusta-build"
   dependencies:
+    "@robusta/pyramids-content": "workspace:*"
     "@robusta/pyramids-design-system": "workspace:*"
     "@robusta/pyramids-routing": "workspace:*"
     "@tailwindcss/postcss": "npm:^4.3.3"

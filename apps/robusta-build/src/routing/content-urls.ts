@@ -4,7 +4,10 @@ import {
   type PageUrl,
   type SchemeViolation,
 } from '@robusta/pyramids-routing';
-import { getArticleIndex } from '../content/article-index.js';
+import {
+  getArticleIndex,
+  type ArticleIndexEntry,
+} from '../content/article-index.js';
 import { urlScheme } from './scheme.js';
 
 /**
@@ -31,7 +34,9 @@ export async function contentUrls(): Promise<PageUrl[]> {
 
   const violations = validateArticles(urlScheme, articles);
   if (violations.length > 0) {
-    const lines = violations.map((violation) => `  - ${describe(violation)}`);
+    const lines = violations.map(
+      (violation) => `  - ${describe(violation, articles)}`,
+    );
     throw new Error(`The article corpus breaks the URL scheme:\n${lines.join('\n')}`);
   }
 
@@ -122,17 +127,36 @@ function localeOf(page: PageUrl, scope: LocaleScope): RouteParams {
   return scope === 'default-locale' ? {} : { locale: page.locale };
 }
 
-function describe(violation: SchemeViolation): string {
+/**
+ * A `SchemeViolation` carries a slug, the index carries a path, and the message
+ * the publisher reads names the file to open (R-CONTENTSOURCE-09). This is the
+ * tightening AC-URLSCHEME-04 and 05 deferred to the day a real index arrives.
+ */
+function describe(
+  violation: SchemeViolation,
+  articles: readonly ArticleIndexEntry[],
+): string {
+  const named = (slug: string, locale?: string) => {
+    const paths = articles
+      .filter(
+        (article) =>
+          article.slug === slug &&
+          (locale === undefined || article.locale === locale),
+      )
+      .map((article) => article.path);
+    return paths.length === 0 ? `article '${slug}'` : paths.join(' and ');
+  };
+
   switch (violation.code) {
     case 'reserved-segment':
-      return `article '${violation.slug}': '${violation.segment}' is a discriminant of the scheme and can be neither a slug nor a category`;
+      return `${named(violation.slug)}: '${violation.segment}' is a discriminant of the scheme and can be neither a slug nor a category`;
     case 'duplicate-slug':
-      return `two articles of locale '${violation.locale}' share the slug '${violation.slug}'`;
+      return `${named(violation.slug, violation.locale)}: two articles of locale '${violation.locale}' share the slug '${violation.slug}'`;
     case 'nested-category':
-      return `article '${violation.slug}': the category '${violation.category}' nests, and a category is exactly one segment`;
+      return `${named(violation.slug)}: the category '${violation.category}' nests, and a category is exactly one segment`;
     case 'unknown-locale':
-      return `article '${violation.slug}': the locale '${violation.locale}' is not one the site configuration declares`;
+      return `${named(violation.slug)}: the locale '${violation.locale}' is not one the site configuration declares`;
     case 'non-canonical-segment':
-      return `article '${violation.slug}': the segment '${violation.segment}' is not lowercase ASCII words joined by single hyphens`;
+      return `${named(violation.slug)}: the segment '${violation.segment}' is not lowercase ASCII words joined by single hyphens`;
   }
 }

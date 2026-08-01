@@ -15,7 +15,6 @@ export interface BlogConfig {
   mandatoryKeywords: string[];
   rollSize: typeof ROLL_SIZE;
   author?: string;
-  getCategories: () => Promise<string[][]>;
 }
 
 interface SeoPyramidsConfig {
@@ -50,11 +49,6 @@ const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
     mandatoryKeywords: ['robusta build', 'freelance'],
     rollSize: ROLL_SIZE,
     author: 'Nicolas Zozol',
-    // Declared and read by nothing: the category URL set comes from the
-    // articles. Removing the field belongs to content-source.
-    getCategories: async () => {
-      return [];
-    },
   },
 };
 
