@@ -23,11 +23,11 @@ Bootstrapped on 2026-07-29 by `/start` from the epic and from the flags left by 
 
 The v2 site deploys from the Vercel project `robusta-build-v2`, created 2026-07-31 and separate from the project serving robusta.build. Its settings live in `apps/robusta-build/README.md`; the first deployment is what confirms them.
 
-`ENABLE_EXPERIMENTAL_COREPACK=1` has to be set on every Vercel project of this repository before `dev` reaches `main`. `yarn.lock` is a yarn 4 lockfile (`__metadata: version 10`) and Vercel otherwise installs with its bundled yarn 1, which cannot read it. Set on `robusta-build-v2`; still owed by the projects serving robusta.build and dakar.surf.
+No Vercel project of this repository needs an environment variable any more. `yarn.lock` is a yarn 4 lockfile and Vercel's bundled yarn 1 cannot read it, which `ENABLE_EXPERIMENTAL_COREPACK=1` used to solve; since 2026-08-01 the Yarn binary is committed at `.yarn/releases/yarn-4.17.1.cjs` with `yarnPath` naming it in `.yarnrc.yml`, and yarn 1 delegates to it. The flag is now removed from `robusta-build-v2` and must not be set on the projects serving robusta.build and dakar.surf: with `yarnPath` in place, corepack downloads its own `yarn.js` and crashes before anything reads the config.
 
-Each project's Node Version must also read 22.x, and `engines.node` does not decide it — verified on 2026-08-01 with both a range and `"22.x"`, the project setting winning each time. `robusta-build-v2` is now on 22.x.
+Each project's Node Version must read 22.x, set in the dashboard. `engines.node` does not decide it — verified on 2026-08-01 with both a range and `"22.x"`, the project setting winning each time.
 
-That was not what blocked the deployments, though. The v2 site has never deployed — six attempts, six errors — and the cause is that corepack caches yarn inside the repository, at `.vercel/cache/corepack/`, where the root manifest's `"type": "module"` reaches it and makes Node load yarn's CommonJS bundle as an ES module. It dies before installing anything. The failure is invisible locally, since corepack caches outside the repository there, which is why the green set passes while every deployment fails. Detail and the tested non-fixes in `apps/robusta-build/README.md`.
+Why the binary is in git, since 2.9 MB deserves a reason: the v2 site failed six deployments in a row and none of them reproduced locally. Corepack caches yarn inside the repository, at `.vercel/cache/corepack/`, where the root manifest's `"type": "module"` reaches it and makes Node load yarn's CommonJS bundle as an ES module, killing the install before it starts. A `.cjs` file is CommonJS whatever any manifest says. Detail and the tested non-fixes in `apps/robusta-build/README.md`.
 
 ## Loose ends
 

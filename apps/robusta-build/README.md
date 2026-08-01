@@ -127,8 +127,11 @@ Vercel project `robusta-build-v2`, under `nicoramas-projects`, created 2026-07-3
 
   It never reproduces locally, which is the whole trap: corepack caches in `~/.cache/node/corepack`, outside any package, so `yarn install` and the full green set pass on a machine while every deployment fails.
 
-  What does not fix it, each tested: raising or lowering the Node version, and `engines.node` in any form. `vercel redeploy` does not test a fix either — it replays a deployment with the environment it was created with, so an environment variable added afterwards is not picked up and the build looks unchanged.
-- `ENABLE_EXPERIMENTAL_COREPACK=1`. Without it Vercel picks its package manager from `yarn.lock` and uses its bundled yarn 1, which cannot read a yarn 4 lockfile. With it, Vercel honours `packageManager: "yarn@4.17.1"` from the root manifest.
+  What does not fix it, each tested on 2026-08-01: raising or lowering the Node version; `engines.node` in any form; and `COREPACK_HOME` as a project environment variable, which Vercel sets itself after the user's and therefore ignores. `vercel redeploy` does not test a fix either — it replays a deployment with the environment it was created with, so a variable added afterwards never reaches the build and the log looks unchanged.
+
+  What does fix it: not using corepack. `.yarn/releases/yarn-4.17.1.cjs` is committed and `.yarnrc.yml` names it in `yarnPath`, which is Yarn's own documented workflow and the mechanism that predates corepack. A `.cjs` file is CommonJS whatever any manifest says, so it loads wherever it sits, and the yarn 1 Vercel ships delegates to `yarnPath` when it finds one. The cost is a 2.9 MB binary in git.
+
+- No environment variables. `ENABLE_EXPERIMENTAL_COREPACK=1` was required while corepack resolved the package manager and is now removed: with `yarnPath` set, enabling corepack is worse than useless, since corepack downloads its own `yarn.js` and crashes before anything reads `.yarnrc.yml`.
 
 No `vercel.json` anywhere in this repository: every site is configured from the dashboard. Keep it that way or move all three at once, but do not leave one site configured in two places.
 
