@@ -110,9 +110,24 @@ Vercel project `robusta-build-v2`, under `nicoramas-projects`, created 2026-07-3
 - Build Command: `cd ../.. && yarn build:robusta-build`. The `cd` is not decoration. Vercel runs the build command inside the Root Directory, and from there yarn sees only this workspace's four scripts — `build:robusta-build` lives in the root manifest and is not inherited. Plain `yarn build` would resolve, and would fail differently: the site reads the design system's `dist/`, which only `build:deps` produces.
 - Node: 22, and the only place that decides it is the Vercel project's own Node Version setting. `engines.node` in the root manifest does not override it — tested on 2026-08-01 with both `">=22 <23"` and `"22.x"`, and the project ran Node 24.15.0 either way. The manifest still declares `"22.x"` because that is what a human reads and what other tooling honours, but it has no say in what Vercel installs with.
 
-  This is not cosmetic. yarn 4.17.1's CLI bundle does not start on Node 24 — corepack downloads it, Node loads it as an ES module and it dies on `Dynamic require of "util" is not supported` before a single dependency installs. So a project left on the Vercel default fails every deployment in about five seconds, with a stack trace that names neither Node nor the version mismatch. The first four deployments of this project failed that way.
+  Set it to 22 for the reason `.nvmrc` gives, not to fix a build: Node 24 was suspected of breaking the install and was not the cause. The same failure reproduces identically on 22.22.2.
 
   Check the setting before assuming the repository decides it: `vercel project ls` prints the Node version per project, and `vercel inspect --logs <url>` prints the one the build actually ran on.
+
+- The install failure that has blocked every deployment of this project, and its cause. Every build dies in about five seconds:
+
+  ```
+  file:///vercel/path0/.vercel/cache/corepack/home/v1/yarn/4.17.1/yarn.js:4
+  Error: Dynamic require of "util" is not supported
+      at ModuleJob.run (node:internal/modules/esm/module_job)
+  Error: Command "yarn install" exited with 1
+  ```
+
+  yarn's CLI bundle is CommonJS. Node is loading it as an ES module — the `file://` URL and the ESM loader in the stack say so — and its `require` shim throws. Node decides a `.js` file's module type from the nearest `package.json` above it, and on Vercel corepack caches yarn at `.vercel/cache/corepack/...`, which is *inside the repository*. The nearest manifest above it is the root one, which declares `"type": "module"`. So the repository's own ESM declaration reaches a file that is not ours.
+
+  It never reproduces locally, which is the whole trap: corepack caches in `~/.cache/node/corepack`, outside any package, so `yarn install` and the full green set pass on a machine while every deployment fails.
+
+  What does not fix it, each tested: raising or lowering the Node version, and `engines.node` in any form. `vercel redeploy` does not test a fix either — it replays a deployment with the environment it was created with, so an environment variable added afterwards is not picked up and the build looks unchanged.
 - `ENABLE_EXPERIMENTAL_COREPACK=1`. Without it Vercel picks its package manager from `yarn.lock` and uses its bundled yarn 1, which cannot read a yarn 4 lockfile. With it, Vercel honours `packageManager: "yarn@4.17.1"` from the root manifest.
 
 No `vercel.json` anywhere in this repository: every site is configured from the dashboard. Keep it that way or move all three at once, but do not leave one site configured in two places.
