@@ -25,6 +25,8 @@ The v2 site deploys from the Vercel project `robusta-build-v2`, created 2026-07-
 
 `ENABLE_EXPERIMENTAL_COREPACK=1` has to be set on every Vercel project of this repository before `dev` reaches `main`. `yarn.lock` is a yarn 4 lockfile (`__metadata: version 10`) and Vercel otherwise installs with its bundled yarn 1, which cannot read it. Set on `robusta-build-v2`; still owed by the projects serving robusta.build and dakar.surf.
 
+Two settings, not one: each project's Node Version must also read 22.x. `robusta-build-v2` is on 24.x, where yarn 4.17.1 cannot start at all, and `engines.node` in the manifest does not override it — verified on 2026-08-01 with both a range and `"22.x"`. That is why the v2 site has never deployed: four attempts, four errors. The setting is dashboard-side and no commit can fix it.
+
 ## Loose ends
 
 - font-stack-readme — the design system's README still claims Caveat / Kalam / Architects Daughter / JetBrains Mono while its CSS imports IBM Plex Sans / Plex Mono / Caveat. The epic settled this on 2026-07-29: the README yields, the CSS is right. Never applied.
