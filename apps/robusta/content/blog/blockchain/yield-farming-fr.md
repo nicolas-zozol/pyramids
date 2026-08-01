@@ -5,6 +5,7 @@ locale: "fr"
 date: "2021-11-30"
 image: ./images/aave-small.png
 categoryPath: blockchain
+published: true
 author: Nicolas Zozol
 featured: true
 ---

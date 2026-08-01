@@ -5,6 +5,7 @@ locale: "en"
 date: "2021-12-13"
 image: ./images/ganache-cli.png
 categoryPath: blockchain
+published: true
 author: Nicolas Zozol
 featured: true
 ---

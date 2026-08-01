@@ -5,6 +5,7 @@ locale: "fr"
 date: "2021-11-08"
 image: ./images/promo-gatsby-vs-next.png
 categoryPath: javascript
+published: true
 author: Nicolas Zozol
 featured: false
 public: ["décideurs", "codeur"]

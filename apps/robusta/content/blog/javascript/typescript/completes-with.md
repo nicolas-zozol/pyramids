@@ -5,6 +5,7 @@ locale: 'en'
 date: '2021-05-23'
 image: ./images/stop.png
 categoryPath: 'javascript/typescript'
+published: true
 author: Nicolas Zozol
 featured: true
 ---

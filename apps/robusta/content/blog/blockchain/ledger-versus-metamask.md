@@ -5,6 +5,7 @@ locale: "en"
 date: "2022-01-20"
 image: ./images/ledger-vs-metamask.png
 categoryPath: blockchain
+published: true
 author: Nicolas Zozol
 featured: true
 ---

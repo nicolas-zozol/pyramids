@@ -5,6 +5,7 @@ locale: 'en'
 date: '2021-01-04'
 image: ./images/lili-sonoff.jpg
 categoryPath: web
+published: true
 featured: true
 ---
 

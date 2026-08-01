@@ -5,6 +5,7 @@ locale: "en"
 date: "2019-05-24"
 image: ./images/gmail.png
 categoryPath: privacy
+published: true
 ---
 
 GMail was a revolution in 2004. Is Google too big now ?
