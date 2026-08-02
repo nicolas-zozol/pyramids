@@ -48,7 +48,7 @@ Run from the repo root unless noted.
 
 ### Install / clean
 
-Node 22 (`.nvmrc`) and yarn 4.17.1, declared by `packageManager` in the root manifest and activated by corepack — run `corepack enable` once, and never assume a globally installed yarn. `.yarnrc.yml` sets `nodeLinker: node-modules`, so the on-disk layout that `tsc`, `next build` and vitest expect is the one produced; unknown CLI options are errors under yarn 4, not warnings.
+Node 22 (`.nvmrc`) and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml` — the yarn on your PATH delegates to it, so `yarn install` runs the version the repository declares and nothing here assumes a globally installed yarn. Corepack is not used and not needed: it is what broke every Vercel deployment of the v2 site on 2026-08-01, by caching yarn inside the repository where the root `"type": "module"` makes Node load it as an ES module, and it must not be enabled on a build agent — the account is in `apps/robusta-build/README.md`. `packageManager: "yarn@4.17.1"` stays declared, and is what a corepack shim or an editor reads, but `yarnPath` is what decides which binary runs. `.yarnrc.yml` also sets `nodeLinker: node-modules`, so the on-disk layout that `tsc`, `next build` and vitest expect is the one produced; unknown CLI options are errors under yarn 4, not warnings.
 
 ```bash
 yarn install         # install everything

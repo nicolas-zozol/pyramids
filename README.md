@@ -24,7 +24,7 @@ The project is in a v2 restart — the robusta site is being rebuilt from scratc
 
 ## Getting started
 
-Node 22 (`.nvmrc`) and yarn 4, which corepack activates from the `packageManager` field of the root manifest — `corepack enable` once, and it no longer matters which yarn sits on your PATH.
+Node 22 (`.nvmrc`) and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml` — any yarn on your PATH delegates to it, so it no longer matters which one that is. No corepack, and none needed: it is what broke every Vercel deployment of the v2 site, by caching yarn inside the repository where the root `"type": "module"` reaches it — `apps/robusta-build/README.md` has the account.
 
 ```bash
 yarn install
@@ -32,7 +32,7 @@ yarn build:deps      # routing → content → helpers → themes → design-sys
 yarn dev:robusta     # or dev:dakar
 ```
 
-From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
+From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
 
 Editing a shared package while a site runs? Keep a watcher up (`yarn dev:dev`, or `yarn w:<package>`), otherwise the site keeps serving the previous build output.
 
