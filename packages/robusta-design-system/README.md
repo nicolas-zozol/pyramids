@@ -213,6 +213,8 @@ Hand-drawn means handwritten typography.
 
 Body type runs **larger than usual** (19px) because handwriting at small sizes is illegible. Don't push below 14px ever.
 
+Line length is a token as well: `--measure`, 68ch — the width a body of text stays readable at, and what a text-heavy page is held to. In characters and not pixels on purpose: a measure written in px stops being a measure the moment the type scale moves, and this scale is going to move.
+
 ### spacing & layout
 
 - a loose 4px-based scale (`--sp-1` through `--sp-9`) — but we **deliberately allow a few px of irregularity** between sibling elements when it sells the hand-drawn feel.

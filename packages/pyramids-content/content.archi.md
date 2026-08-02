@@ -46,7 +46,7 @@ Two properties carry the design, and both are answers to defects the v1 reader l
 │  read-article-body  copy-corpus-assets  describe-violation   resolveAssetUrl  │
 │  remark → html      corpus →            violation → a line   a reference →    │
 │  one body, on ask   publishDir          naming the file      the URL it is    │
-│                     the site owns                            served at        │
+│  images resolved    the site owns                            served at        │
 │                     that directory                                            │
 └──────────────────────────────────────────────────────────────────────────────┘
                                         │
@@ -61,8 +61,8 @@ Two properties carry the design, and both are answers to defects the v1 reader l
 - `src/read-file-entry.ts` — one file against the schema: the required fields, the excerpt, the published flag, the locale, and the image references. Validation runs on every file the corpus holds, the unpublished ones included, so a `published` flag added later cannot reveal a violation that was sitting there.
 - `src/article-slug.ts` — `articleSlug(title, locale)`, the v1 derivation kept frozen: `slugify` pinned at 1.6.6, `lower` and `strict`, the locale folded to lowercase before it reaches the charmap. Every row of the v1-to-v2 mapping was computed from what it returns, and the eleven migrated articles are addressed by it.
 - `src/read-corpus.ts` — `readCorpus`, the memoized traversal. It publishes only articles declaring `published: true`, sorts them newest first and then by path so one corpus always produces one list, freezes what it returns, and prints one line per traversal naming the counts and the files left out for want of a published flag.
-- `src/read-article-body.ts` — `readArticleBody`, the one place a body is rendered, through `remark` and `remark-html`. It takes an entry rather than a slug, so the file is resolved by the traversal that already found it and answering what articles exist never costs a render.
-- `src/asset-reference.ts` — the one resolution rule, shared by what the site publishes and what a page links to: an article-relative reference is joined onto the article's own directory inside the corpus and normalised. External, protocol-relative and site-absolute references pass through. `resolveAssetUrl` is the public form.
+- `src/read-article-body.ts` — `readArticleBody`, the one place a body is rendered, through `remark` and `remark-html`. It takes an entry rather than a slug, so the file is resolved by the traversal that already found it and answering what articles exist never costs a render. The HTML it returns is servable as is: every image reference the body carries has been through `resolveAssetUrl`, applied to the syntax tree before serialization rather than to the output string, so the one resolution rule keeps one implementation. remark-html sanitizes by default and that default is kept — raw HTML written in a body is dropped whole, a stage before the sanitizer, so an `<img>` tag reaches neither the resolver nor the page.
+- `src/asset-reference.ts` — the one resolution rule, shared by what the site publishes and what a page links to: an article-relative reference is joined onto the article's own directory inside the corpus and normalised. External, protocol-relative and site-absolute references pass through. `resolveAssetUrl` is the public form, and it has three callers: `read-file-entry.ts` validates through it, `copy-corpus-assets.ts` publishes through it, and `read-article-body.ts` links through it.
 - `src/copy-corpus-assets.ts` — `copyCorpusAssets`, which mirrors into `assets.publishDir` the files the published articles reference, at their corpus-relative paths, and returns those paths for the caller to log.
 - `src/describe-violation.ts` — one line per violation, naming the file a publisher has to open. The base never throws; the site turns these lines into its build failure.
 
@@ -98,8 +98,8 @@ import {
 │ LocaleSource = 'frontmatter' | { pathSegment: number }                       │
 │ AssetSpec   = { publishDir, urlPrefix }                                      │
 │                                                                              │
-│ ArticleEntry = { path, slug, locale, category?, title, date, tags,           │
-│                  excerpt, image?, translationId? }                           │
+│ ArticleEntry = { path, slug, locale, category?, title, date, author,         │
+│                  tags, excerpt, image?, translationId? }                     │
 │ ArticleBody  = { html }                                                      │
 │ CorpusRead   = { articles, violations, unpublished }   all frozen            │
 │                                                                              │
@@ -125,7 +125,7 @@ import {
 
 ## The schema, on a corpus of markdown files
 
-- Required, or the file is a violation naming itself: `title`, `date` as a `YYYY-MM-DD` calendar day, the locale wherever the spec says it is read from, `published: true` as a boolean, and an excerpt — the block of the body before its first `---` separator.
+- Required, or the file is a violation naming itself: `title`, `date` as a `YYYY-MM-DD` calendar day, `author`, the locale wherever the spec says it is read from, `published: true` as a boolean, and an excerpt — the block of the body before its first `---` separator.
 - Optional: `category` (one, and the URL scheme is what forbids it from nesting), `tags`, `image`, `translationId`, and `slug`, which pins the derived value.
 - Derived: the slug, from the title and the locale. A field the schema does not name is ignored and costs nothing in the file.
 - Absent and empty are the same thing: a field declared empty is a field not declared.
@@ -160,22 +160,23 @@ corpusAssetPath(article.path, reference)         │  urlPrefix + the same path
   blockchain/images/vpn.png ─────────────────────┘
         │
         ├── read-file-entry: names no file of the corpus → unresolved-asset
-        └── copyCorpusAssets: copy it into publishDir, at that same path
+        ├── copyCorpusAssets: copy it into publishDir, at that same path
+        └── readArticleBody: rewrite it on the tree, so the body links to it
 ```
 
 The URL is derived from the file's place in the corpus, never from the page's place in the URL scheme, which is what lets an article change category without moving a single image. Validation resolves against the corpus and not against the published tree, so it runs on a clean checkout before the copy step has produced anything.
 
 ## Tests
 
-85 tests in seven spec files next to the source, run with `yarn workspace @robusta/pyramids-content run test`. `test/corpus-fixture.ts` builds a corpus on disk per test, so no spec reads a real site's tree — the specs that check a site's own corpus live in that site.
+98 tests in seven spec files next to the source, run with `yarn workspace @robusta/pyramids-content run test`. `test/corpus-fixture.ts` builds a corpus on disk per test, so no spec reads a real site's tree — the specs that check a site's own corpus live in that site.
 
 - `src/read-corpus.spec.ts`, `src/corpus-traversal.spec.ts`, `src/read-article-body.spec.ts`, `src/article-slug.spec.ts`, `src/locale-from-path.spec.ts`, `src/describe-violation.spec.ts` — the reading contract, module by module.
 - `src/corpus-assets.spec.ts` — the asset half: reference extraction, resolution, the violation, and the copy step owning the directory it writes.
 
 ## Dependencies
 
-- Depends on: `gray-matter` (frontmatter and excerpt), `remark` and `remark-html` (the body), `slugify` pinned at 1.6.6 (the frozen slug). No React, no Next, no framework.
-- Used by: `apps/robusta-build` — `src/content/corpus.ts` (the site's one `CorpusSpec`), `src/content/article-index.ts` (the index and the fatal violation), and `scripts/copy-article-images.mjs` (the asset copy, run before `next build`).
+- Depends on: `gray-matter` (frontmatter and excerpt), `remark` and `remark-html` (the body), `unist-util-visit` (the image references of a body, on the tree), `slugify` pinned at 1.6.6 (the frozen slug). No React, no Next, no framework.
+- Used by: `apps/robusta-build` — `src/content/corpus.ts` (the site's one `CorpusSpec`), `src/content/article-index.ts` (the index, the body, the resolved URL and the fatal violation), and `scripts/copy-article-images.mjs` (the asset copy, run before `next build`).
 - Build: `tsc` → `dist/`. Second step of `yarn build:deps`, right after `pyramids-routing`. Watcher: `yarn w:content`.
 
 ## Notes / Gotchas
@@ -187,6 +188,7 @@ The URL is derived from the file's place in the corpus, never from the page's pl
 - Violations never throw, and `missing-corpus-root` is one of them: a root that does not exist is reported like a missing title, so a caller has one failure path instead of two.
 - `published` is exactly `true`. Absent leaves the article out silently and the read names the file; anything else is a violation, so `published: "true"` cannot unpublish an article by a typo.
 - `copyCorpusAssets` owns `assets.publishDir` and removes it before writing. Point it at a directory that holds anything else and that thing is deleted.
-- A site declaring no `assets` gets no asset behaviour at all: no reference is judged, no file is published, and `resolveAssetUrl` returns the reference untouched.
+- A site declaring no `assets` gets no asset behaviour at all: no reference is judged, no file is published, `resolveAssetUrl` returns the reference untouched, and a rendered body therefore carries the references its author wrote.
+- Raw HTML written in a body renders as its text alone, and nothing reports it. `sanitize: true` is remark-html's default and is kept, which sets `allowDangerousHtml = false`, and an `html` node then produces nothing at all — so `<b>C</b>` reaches the page as `C`, element and attributes gone together. This is a rule for whoever writes an article, and a site's README is where a publisher meets it; enabling `allowDangerousHtml` to recover a vanished tag is what the contract forbids.
 - The excerpt is content, not a field: `gray-matter` cuts the body at its first `---`. An article whose body carries no separator declares no excerpt and is a violation.
 - Local imports inside the package end in `.js`, as everywhere in this repository. Consumers import the package by name, so no extension question crosses the boundary.

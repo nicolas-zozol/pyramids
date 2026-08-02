@@ -14,7 +14,7 @@ The three workspace roots are:
 
 ## Apps
 
-- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, and where new work goes. Tailwind 4 with shadcn, its own design system, no DaisyUI. It carries the v2 route table and the eleven articles migrated from v1 — 25 static pages, under `content/articles`, with their images published under `/article-images`. Every page is still a placeholder: reading an article arrives with article-page, and the landing page with robusta-landing-page. See its own README and `robusta-build.archi.md`.
+- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, and where new work goes. Tailwind 4 with shadcn, its own design system, no DaisyUI. It carries the v2 route table and the eleven articles migrated from v1 — 25 static pages, under `content/articles`, with their images published under `/article-images`. An article page renders since article-page landed on 2026-08-02; the nine listing routes and the home page are still placeholders, the latter until robusta-landing-page. See its own README and `robusta-build.archi.md`.
 - `@robusta/build` — `apps/robusta`. robusta.build version 1: blog under `/learn`, portfolio, prosemirror. Being retired — do not add to it, and do not refactor it.
 - `@robusta/dakar` — `apps/dakar`. dakar.surf, the surf guide. Uses MapLibre, has a `[locale]` segment and spot pages. Live, and out of the v2 scope.
 - intel-demo — `apps/intel-demo`. Vite front + server demo for the scribe-intel SDK. Not a workspace: it carries no `package.json`.

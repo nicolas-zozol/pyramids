@@ -1,6 +1,6 @@
 # @robusta/robusta-build
 
-The version 2 site of robusta.build. Created by the `bootstrap-robusta-build` story of the pyramid-v2 epic as a deployable shell: it builds, it deploys, and it carries no page copy yet.
+The version 2 site of robusta.build. Created by the `bootstrap-robusta-build` story of the pyramid-v2 epic as a deployable shell, it has carried page copy since 2026-08-02: the eleven migrated articles render as article pages. Every other content route still renders a placeholder.
 
 The version 1 site lives in `apps/robusta` and is being retired. Its README documents the v1 route scheme; that scheme is not this site's. The v2 scheme is the Routing section below.
 
@@ -22,6 +22,7 @@ What the frontmatter must carry, or the build fails naming the file:
 
 - `title` — the article's title, and the source of its slug.
 - `date` — `YYYY-MM-DD`. Quote it, or YAML reads it as a timestamp; the reader accepts both and compares the calendar day.
+- `author` — the name the page shows. Required on the same footing as the title and the date since `article-page`: an article declaring none fails the build naming the file and the field, rather than publishing a page with no author.
 - `locale` — `en` or `fr`, the two the site configuration declares. `en` is the default locale and carries no marker in the URL.
 - `published: true` — the boolean, not the string. An article that does not declare itself published is not served (BR-PYRAMID-10), and the build prints the paths it left out. Anything other than a boolean is a violation rather than a silent non-publication.
 - An excerpt, which is not a field: it is the block of the body before its first `---` separator. An article without one is missing a required field.
@@ -32,9 +33,11 @@ What it may carry:
 - `tags` — a list, any number of them. Tags are metadata: `/articles/t/{tag}` is reserved and served by nothing.
 - `image` — the cover, a path relative to the article's own file.
 - `translationId` — the value the locale versions of one article share, so a page can link them. It is authored, not derived: lowercase, locale-neutral, a subject name. Two published articles of one locale may not share one.
-- `slug` — pins the slug instead of deriving it. `author`, `featured` and any other key travel in the file and cost nothing; the index reads none of them today.
+- `slug` — pins the slug instead of deriving it. `featured` and any other key the schema does not name travel in the file and cost nothing; the index reads none of them.
 
 The slug is derived and not written: `articleSlug(title, locale)`, the v1 derivation kept frozen so a migrated article keeps the address it was indexed under. A slug never changes once published — renaming an article's title after publication is therefore a redirect question, not a rename.
+
+Write the body in markdown, and only in markdown. HTML written in an article renders as its text alone, and nothing reports it: the renderer drops the tag whole, attributes included, before the sanitizer ever sees it — `<b>C</b>` reaches the page as `C`, and an `<img>` tag reaches it as nothing at all. Emphasis is `**bold**` and `_italic_`, an image is `![alt](./images/file.png)`. The two migrated articles that carry raw HTML carry three fragments between them, each inline emphasis on a word or a letter, which is why their text survived the migration and their emphasis did not.
 
 Images live beside their article, conventionally in an `images/` directory next to it, and are referenced relatively — `./images/vpn.png` from the body or the cover, `../images/shared.png` for the corpus-root folder. The reference is resolved against the article's own place in the corpus and published under the asset root: `blockchain/images/vpn.png` is served at `/article-images/blockchain/images/vpn.png`. So an article can change category without a single image moving. A reference resolving to no file of the corpus is a violation and fails the build; an absolute or external URL passes through untouched.
 
@@ -65,7 +68,9 @@ Fourteen route files under `src/app`: seven for the default locale, seven mirror
 
 That single derivation is the point. A URL it does not contain answers 404 instead of being resolved on demand, `force-static` makes `searchParams` an empty object so no content route can read one even by accident, and there is no second list to pregenerate a URL the site then refuses at request time.
 
-21 content URLs today, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles. No roll page in either locale — 8 English articles and 3 French against a roll size of 12 — so `/articles/p/{n}` is produced by nothing until the twelfth published English article arrives. `next build` reports 25 static pages and writes 23 HTML files: those 21, plus the landing page and `/_not-found`.
+What they render: the four article routes render the article, through one shared view — `src/article/ArticleView`, which reads the entry, the body, the cover and the translation, and which the four files reach with nothing but their own param shape. Nine others render `RoutePlaceholder` until the stories that own their copy arrive — the blog homes, the category pages, the roll pages and the locale landing — and `/` carries the wiring placeholder `robusta-landing-page` replaces.
+
+21 content URLs today, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles. No roll page in either locale — 8 English articles and 3 French against a roll size of 12 — so `/articles/p/{n}` is produced by nothing until the twelfth published English article arrives. `next build` reports 25 static pages and writes 23 HTML files: those 21, plus the landing page and `/_not-found`. Seven of the fourteen route files pregenerate nothing at all, `/articles/{slug}` and its locale mirror among them: every article claims a category, so no uncategorised article page exists to build.
 
 Two build-time checks keep the route folders and the configuration honest. `next.config.ts` asserts inside `redirects()` that every route folder the configured content root implies exists, so renaming the content root without renaming the folders fails the build. `scripts/check-route-table.mjs` runs after `next build` and compares the prerender manifest with the derivation — `/` and `/_not-found` excepted, both being outside the content section — and fails if they disagree.
 
