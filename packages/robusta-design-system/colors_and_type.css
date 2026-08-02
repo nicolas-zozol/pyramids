@@ -88,6 +88,12 @@
   --lh-tight:   1.15;
   --lh-body:    1.45;
 
+  /* -------- measure -------- *
+     the line length a body of text stays readable at. in characters and
+     not pixels on purpose: a measure written in px stops being a measure
+     the moment the type scale moves. */
+  --measure: 68ch;
+
   /* -------- spacing (loose, hand-measured) -------- */
   --sp-1:  4px;
   --sp-2:  8px;
