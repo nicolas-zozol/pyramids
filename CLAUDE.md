@@ -173,7 +173,12 @@ On `apps/robusta` and `apps/dakar`: `@robusta/scribe-intel` exposes a `Telemetry
 
 - MongoDB: never put methods on Mongoose models — keep them as data, use separate Domain Objects.
 - Use `nuqs` for URL search-param state.
-- Use `next/image` with WebP, explicit `sizes`, descriptive `alt`. Component-local images live next to the component; only put genuine public assets in `public/`.
+- Use `next/image` with a descriptive `alt` for every image a component of the site renders. Which image the rest of the rule governs differs:
+  - `sizes` is required when the image is `fill` or otherwise responsive: without it Next assumes `100vw` and the browser fetches a full-viewport-width file whatever the slot's real size. On an image of known dimensions it selects nothing — the generated `srcset` is a fixed 1x/2x pair — so don't add one there.
+  - An imported image (`import cover from './cover.png'`, or `await import()`) carries `width`, `height` and `blurDataURL` on the module itself: never restate them by hand. A `src` computed as a string at build time has no dimensions to read, which is the case `fill` plus `sizes` answers.
+  - WebP comes from the optimizer, whose default `formats` is `['image/webp']`, not from the source file. Sources stay PNG or JPEG; converting them ahead of time buys nothing.
+  - A body derived from markdown is outside this rule. `remark-html` sanitizes by default, so a body carries neither `next/image` nor any utility class; it reaches the DOM through `dangerouslySetInnerHTML` with a CSS Module, as Next's own `blog-starter` example does. Detail in `features/pyramid-v2-epic/article-page/article-page.design.md`.
+- Component-local images live next to the component; only put genuine public assets in `public/`.
 - Avoid `any` — use `unknown` or precise types. Prefer interfaces over `type` for object shapes.
 - TypeScript path alias resolution in tests: vitest configs use `vite-tsconfig-paths`.
 
