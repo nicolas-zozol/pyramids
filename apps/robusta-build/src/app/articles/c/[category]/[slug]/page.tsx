@@ -1,5 +1,4 @@
-import { buildUrl } from '@robusta/pyramids-routing';
-import { RoutePlaceholder } from '@/components/RoutePlaceholder.js';
+import { ArticleView } from '@/article/ArticleView.js';
 import { categorisedArticleParams } from '@/routing/content-urls.js';
 import { urlScheme } from '@/routing/scheme.js';
 
@@ -10,20 +9,17 @@ export function generateStaticParams() {
   return categorisedArticleParams('default-locale');
 }
 
+/**
+ * The category param addresses the page and identifies nothing the slug does
+ * not: `validateArticles` refuses two articles sharing a slug within a locale,
+ * so the lookup reads the locale and the slug alone.
+ */
 export default async function CategorisedArticlePage({
   params,
 }: {
   params: Promise<{ category: string; slug: string }>;
 }) {
-  const { category, slug } = await params;
-  const locale = urlScheme.defaultLocale;
-  const page = { kind: 'article', locale, category, slug } as const;
+  const { slug } = await params;
 
-  return (
-    <RoutePlaceholder
-      kind="article carrying a category"
-      url={buildUrl(urlScheme, page)}
-      facts={{ locale, category, slug }}
-    />
-  );
+  return <ArticleView locale={urlScheme.defaultLocale} slug={slug} />;
 }

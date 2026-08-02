@@ -17,6 +17,7 @@ date: '2022-01-20'
 category: blockchain
 tags: ['blockchain', 'security']
 image: ./images/ledger.png
+author: 'Nina'
 published: true
 `;
 
@@ -36,6 +37,7 @@ describe('readCorpus — the index', () => {
       category: 'blockchain',
       title: 'Ledger versus Metamask',
       date: '2022-01-20',
+      author: 'Nina',
       tags: ['blockchain', 'security'],
       excerpt: 'The opening block of the article.',
       image: './images/ledger.png',
@@ -44,22 +46,34 @@ describe('readCorpus — the index', () => {
 
   it('orders the articles newest first', async () => {
     const root = await writeCorpus({
-      'old.md': article(`title: 'Old'\nlocale: 'en'\ndate: '2019-05-24'\npublished: true`),
-      'new.md': article(`title: 'New'\nlocale: 'en'\ndate: '2022-01-20'\npublished: true`),
+      'old.md': article(
+        `title: 'Old'\nlocale: 'en'\ndate: '2019-05-24'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'new.md': article(
+        `title: 'New'\nlocale: 'en'\ndate: '2022-01-20'\nauthor: 'Nina'\npublished: true`,
+      ),
       'middle.md': article(
-        `title: 'Middle'\nlocale: 'en'\ndate: '2021-01-04'\npublished: true`,
+        `title: 'Middle'\nlocale: 'en'\ndate: '2021-01-04'\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
     const { articles } = await readCorpus(spec(root));
 
-    expect(articles.map((entry) => entry.title)).toEqual(['New', 'Middle', 'Old']);
+    expect(articles.map((entry) => entry.title)).toEqual([
+      'New',
+      'Middle',
+      'Old',
+    ]);
   });
 
   it('orders articles of one date by their path, so the index is the same list twice', async () => {
     const root = await writeCorpus({
-      'b.md': article(`title: 'B'\nlocale: 'en'\ndate: '2021-11-30'\npublished: true`),
-      'a.md': article(`title: 'A'\nlocale: 'en'\ndate: '2021-11-30'\npublished: true`),
+      'b.md': article(
+        `title: 'B'\nlocale: 'en'\ndate: '2021-11-30'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'a.md': article(
+        `title: 'A'\nlocale: 'en'\ndate: '2021-11-30'\nauthor: 'Nina'\npublished: true`,
+      ),
     });
 
     const { articles } = await readCorpus(spec(root));
@@ -79,9 +93,12 @@ describe('readCorpus — the index', () => {
 
   it('renders no article body to answer what articles exist', async () => {
     const root = await writeCorpus({
-      'a.md': article(`title: 'A'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`, {
-        body: 'A paragraph carrying the word deoxyribonucleic.',
-      }),
+      'a.md': article(
+        `title: 'A'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+        {
+          body: 'A paragraph carrying the word deoxyribonucleic.',
+        },
+      ),
     });
     const corpus = spec(root);
 
@@ -95,8 +112,12 @@ describe('readCorpus — the index', () => {
 
   it('hands out a list the caller cannot mutate', async () => {
     const root = await writeCorpus({
-      'a.md': article(`title: 'A'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`),
-      'b.md': article(`title: 'B'\nlocale: 'en'\ndate: '2021-01-02'\npublished: true`),
+      'a.md': article(
+        `title: 'A'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'b.md': article(
+        `title: 'B'\nlocale: 'en'\ndate: '2021-01-02'\nauthor: 'Nina'\npublished: true`,
+      ),
     });
 
     const { articles } = await readCorpus(spec(root));
@@ -109,11 +130,15 @@ describe('readCorpus — the index', () => {
 describe('readCorpus — what makes a file an article', () => {
   it('reads `.md` files and leaves everything else alone', async () => {
     const root = await writeCorpus({
-      'real.md': article(`title: 'Real'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`),
+      'real.md': article(
+        `title: 'Real'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+      ),
       'notes.md.bak': 'not markdown at all',
       'draft.md/inside.txt': 'a directory whose name ends in .md',
       '.DS_Store': 'macOS',
-      'example.md': article(`title: 'Example'\nlocale: 'en'\ndate: '2021-01-01'`),
+      'example.md': article(
+        `title: 'Example'\nlocale: 'en'\ndate: '2021-01-01'`,
+      ),
     });
 
     const read = await readCorpus(spec(root, { exclude: ['example.md'] }));
@@ -126,7 +151,7 @@ describe('readCorpus — what makes a file an article', () => {
   it('takes the category from the frontmatter and never from the folder', async () => {
     const root = await writeCorpus({
       'javascript/typescript/completes-with.md': article(
-        `title: 'Completing a RxJs Observable with another'\nlocale: 'en'\ndate: '2021-05-23'\ncategory: typescript\npublished: true`,
+        `title: 'Completing a RxJs Observable with another'\nlocale: 'en'\ndate: '2021-05-23'\ncategory: typescript\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
@@ -139,10 +164,10 @@ describe('readCorpus — what makes a file an article', () => {
   it('uses the slug the frontmatter pins, and derives one when it does not', async () => {
     const root = await writeCorpus({
       'pinned.md': article(
-        `title: 'A title nobody addresses'\nlocale: 'en'\ndate: '2021-01-01'\nslug: pinned-by-hand\npublished: true`,
+        `title: 'A title nobody addresses'\nlocale: 'en'\ndate: '2021-01-01'\nslug: pinned-by-hand\nauthor: 'Nina'\npublished: true`,
       ),
       'derived.md': article(
-        `title: 'A title nobody addresses either'\nlocale: 'en'\ndate: '2021-01-02'\npublished: true`,
+        `title: 'A title nobody addresses either'\nlocale: 'en'\ndate: '2021-01-02'\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
@@ -163,6 +188,7 @@ describe('readCorpus — what makes a file an article', () => {
     const { articles } = await readCorpus(spec(root));
 
     expect(Object.keys(articles[0]).sort()).toEqual([
+      'author',
       'date',
       'excerpt',
       'locale',
@@ -177,9 +203,15 @@ describe('readCorpus — what makes a file an article', () => {
 describe('readCorpus — published', () => {
   it('carries an article only when it declares itself published', async () => {
     const root = await writeCorpus({
-      'yes.md': article(`title: 'Yes'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`),
-      'silent.md': article(`title: 'Silent'\nlocale: 'en'\ndate: '2021-01-02'`),
-      'no.md': article(`title: 'No'\nlocale: 'en'\ndate: '2021-01-03'\npublished: false`),
+      'yes.md': article(
+        `title: 'Yes'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'silent.md': article(
+        `title: 'Silent'\nlocale: 'en'\ndate: '2021-01-02'\nauthor: 'Nina'`,
+      ),
+      'no.md': article(
+        `title: 'No'\nlocale: 'en'\ndate: '2021-01-03'\nauthor: 'Nina'\npublished: false`,
+      ),
     });
 
     const read = await readCorpus(spec(root));
@@ -192,7 +224,7 @@ describe('readCorpus — published', () => {
   it('refuses a `published` that is not a boolean, so no typo unpublishes an article', async () => {
     const root = await writeCorpus({
       'typo.md': article(
-        `title: 'Typo'\nlocale: 'en'\ndate: '2021-01-01'\npublished: "true"`,
+        `title: 'Typo'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: "true"`,
       ),
     });
 
@@ -208,12 +240,21 @@ describe('readCorpus — published', () => {
 describe('readCorpus — the schema', () => {
   it('names the file and the field a published article is missing', async () => {
     const root = await writeCorpus({
-      'no-title.md': article(`locale: 'en'\ndate: '2021-01-01'\npublished: true`),
-      'no-date.md': article(`title: 'No date'\nlocale: 'en'\npublished: true`),
-      'no-locale.md': article(`title: 'No locale'\ndate: '2021-01-01'\npublished: true`),
+      'no-title.md': article(
+        `locale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'no-date.md': article(
+        `title: 'No date'\nlocale: 'en'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'no-locale.md': article(
+        `title: 'No locale'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+      ),
       'no-excerpt.md': article(
-        `title: 'No excerpt'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`,
+        `title: 'No excerpt'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
         { excerpt: null },
+      ),
+      'no-author.md': article(
+        `title: 'No author'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`,
       ),
     });
 
@@ -226,13 +267,52 @@ describe('readCorpus — the schema', () => {
         { code: 'missing-field', path: 'no-date.md', field: 'date' },
         { code: 'missing-field', path: 'no-locale.md', field: 'locale' },
         { code: 'missing-field', path: 'no-excerpt.md', field: 'excerpt' },
+        { code: 'missing-field', path: 'no-author.md', field: 'author' },
       ]),
     );
   });
 
+  /**
+   * R-ARTICLEPAGE-07: the author is required on the same footing as the title,
+   * so an article declaring none indexes no entry and fails the build. An
+   * optional field would leave that article publishable, which is the case the
+   * requirement is about.
+   */
+  it('indexes no article for a file declaring no author, as for one declaring no title', async () => {
+    const root = await writeCorpus({
+      'silent-author.md': article(
+        `title: 'Whose is it'\nlocale: 'en'\ndate: '2021-01-01'\npublished: true`,
+      ),
+      'signed.md': article(
+        `title: 'Signed'\nlocale: 'en'\ndate: '2021-01-02'\nauthor: 'Nina'\npublished: true`,
+      ),
+    });
+
+    const { articles, violations } = await readCorpus(spec(root));
+
+    expect(articles.map((entry) => entry.path)).toEqual(['signed.md']);
+    expect(violations).toEqual([
+      { code: 'missing-field', path: 'silent-author.md', field: 'author' },
+    ]);
+  });
+
+  it('treats an empty author as no author at all', async () => {
+    const root = await writeCorpus({
+      'blank.md': article(
+        `title: 'Blank'\nlocale: 'en'\ndate: '2021-01-01'\nauthor: '   '\npublished: true`,
+      ),
+    });
+
+    const { violations } = await readCorpus(spec(root));
+
+    expect(violations).toEqual([
+      { code: 'missing-field', path: 'blank.md', field: 'author' },
+    ]);
+  });
+
   it('validates the unpublished files too, so a flag added later reveals nothing', async () => {
     const root = await writeCorpus({
-      'later.md': article(`locale: 'en'\ndate: '2021-01-01'`),
+      'later.md': article(`locale: 'en'\ndate: '2021-01-01'\nauthor: 'Nina'`),
     });
 
     const { violations, unpublished } = await readCorpus(spec(root));
@@ -245,9 +325,11 @@ describe('readCorpus — the schema', () => {
 
   it('refuses a date that is not a YYYY-MM-DD calendar date', async () => {
     const root = await writeCorpus({
-      'shape.md': article(`title: 'A'\nlocale: 'en'\ndate: '20/01/2022'\npublished: true`),
+      'shape.md': article(
+        `title: 'A'\nlocale: 'en'\ndate: '20/01/2022'\nauthor: 'Nina'\npublished: true`,
+      ),
       'calendar.md': article(
-        `title: 'B'\nlocale: 'en'\ndate: '2022-02-31'\npublished: true`,
+        `title: 'B'\nlocale: 'en'\ndate: '2022-02-31'\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
@@ -264,7 +346,7 @@ describe('readCorpus — the schema', () => {
   it('accepts the date YAML parses as a timestamp, which is the same YYYY-MM-DD', async () => {
     const root = await writeCorpus({
       'unquoted.md': article(
-        `title: 'A'\nlocale: 'en'\ndate: 2021-11-30\npublished: true`,
+        `title: 'A'\nlocale: 'en'\ndate: 2021-11-30\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
@@ -276,7 +358,8 @@ describe('readCorpus — the schema', () => {
 
   it('names the file whose frontmatter cannot be read', async () => {
     const root = await writeCorpus({
-      'broken.md': "---\ntitle: 'unterminated\nlocale: 'en'\n---\n\nExcerpt\n\n---\n\nBody\n",
+      'broken.md':
+        "---\ntitle: 'unterminated\nlocale: 'en'\n---\n\nExcerpt\n\n---\n\nBody\n",
     });
 
     const { violations } = await readCorpus(spec(root));
@@ -289,10 +372,10 @@ describe('readCorpus — the schema', () => {
   it('refuses two published articles of one locale sharing a translation identifier, naming both', async () => {
     const root = await writeCorpus({
       'one.md': article(
-        `title: 'One'\nlocale: 'en'\ndate: '2021-01-01'\ntranslationId: yield-farming\npublished: true`,
+        `title: 'One'\nlocale: 'en'\ndate: '2021-01-01'\ntranslationId: yield-farming\nauthor: 'Nina'\npublished: true`,
       ),
       'two.md': article(
-        `title: 'Two'\nlocale: 'en'\ndate: '2021-01-02'\ntranslationId: yield-farming\npublished: true`,
+        `title: 'Two'\nlocale: 'en'\ndate: '2021-01-02'\ntranslationId: yield-farming\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
@@ -317,10 +400,10 @@ describe('readCorpus — the schema', () => {
   it('accepts one translation identifier shared across two locales, which is its purpose', async () => {
     const root = await writeCorpus({
       'en.md': article(
-        `title: 'The source of Yield Farming profits'\nlocale: 'en'\ndate: '2021-11-30'\ntranslationId: yield-farming\npublished: true`,
+        `title: 'The source of Yield Farming profits'\nlocale: 'en'\ndate: '2021-11-30'\ntranslationId: yield-farming\nauthor: 'Nina'\npublished: true`,
       ),
       'fr.md': article(
-        `title: 'Provenance des rendements du Yield Farming'\nlocale: 'fr'\ndate: '2021-11-30'\ntranslationId: yield-farming\npublished: true`,
+        `title: 'Provenance des rendements du Yield Farming'\nlocale: 'fr'\ndate: '2021-11-30'\ntranslationId: yield-farming\nauthor: 'Nina'\npublished: true`,
       ),
     });
 
@@ -346,17 +429,24 @@ describe('readCorpus — the schema', () => {
 
   it('returns the violations of a corpus that breaks every rule, and never throws', async () => {
     const root = await writeCorpus({
-      'a.md': article(`locale: 'en'\ndate: 'yesterday'\npublished: "yes"`),
-      'b.md': article(`title: 'B'\ndate: '2021-01-01'\npublished: true`, {
-        excerpt: null,
-      }),
+      'a.md': article(
+        `locale: 'en'\ndate: 'yesterday'\nauthor: 'Nina'\npublished: "yes"`,
+      ),
+      'b.md': article(
+        `title: 'B'\ndate: '2021-01-01'\nauthor: 'Nina'\npublished: true`,
+        {
+          excerpt: null,
+        },
+      ),
     });
 
     const read = await readCorpus(spec(root));
 
     expect(read.articles).toEqual([]);
     expect(read.violations.length).toBeGreaterThan(3);
-    expect(read.violations.every((violation) => 'code' in violation)).toBe(true);
+    expect(read.violations.every((violation) => 'code' in violation)).toBe(
+      true,
+    );
   });
 
   it('accepts an empty corpus root, which is a corpus with no article', async () => {
@@ -364,7 +454,11 @@ describe('readCorpus — the schema', () => {
 
     const read = await readCorpus(spec(root));
 
-    expect(read).toMatchObject({ articles: [], violations: [], unpublished: [] });
+    expect(read).toMatchObject({
+      articles: [],
+      violations: [],
+      unpublished: [],
+    });
   });
 });
 
@@ -383,7 +477,7 @@ describe('readCorpus — a corpus longer than one roll page', () => {
         return [
           `roll/article-${rank}.md`,
           article(
-            `title: 'Article ${rank}'\nlocale: 'en'\ndate: '2026-01-${rank}'\ncategory: javascript\npublished: true`,
+            `title: 'Article ${rank}'\nlocale: 'en'\ndate: '2026-01-${rank}'\ncategory: javascript\nauthor: 'Nina'\npublished: true`,
           ),
         ];
       }),

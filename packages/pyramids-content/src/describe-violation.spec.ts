@@ -10,7 +10,10 @@ import { describeViolation } from './describe-violation.js';
  */
 const VIOLATIONS: readonly [CorpusViolation, string][] = [
   [
-    { code: 'missing-corpus-root', root: '/repo/apps/robusta-build/content/articles' },
+    {
+      code: 'missing-corpus-root',
+      root: '/repo/apps/robusta-build/content/articles',
+    },
     '/repo/apps/robusta-build/content/articles',
   ],
   [
@@ -61,13 +64,36 @@ describe('describeViolation', () => {
 
   it('says which field is missing, not only that one is', () => {
     expect(
-      describeViolation({ code: 'missing-field', path: 'a.md', field: 'excerpt' }),
+      describeViolation({
+        code: 'missing-field',
+        path: 'a.md',
+        field: 'excerpt',
+      }),
     ).toContain('excerpt');
+  });
+
+  /**
+   * R-ARTICLEPAGE-07 widens the enumerated field rather than adding a case: the
+   * `missing-field` line names `violation.field`, so the author reads like the
+   * other four with no message written for it.
+   */
+  it('names the author among the fields an article can be missing', () => {
+    expect(
+      describeViolation({
+        code: 'missing-field',
+        path: 'web/sonoff.md',
+        field: 'author',
+      }),
+    ).toBe('web/sonoff.md: the article declares no author');
   });
 
   it('quotes the value a non-boolean `published` carries', () => {
     expect(
-      describeViolation({ code: 'non-boolean-published', path: 'a.md', value: 'true' }),
+      describeViolation({
+        code: 'non-boolean-published',
+        path: 'a.md',
+        value: 'true',
+      }),
     ).toContain("'true'");
   });
 

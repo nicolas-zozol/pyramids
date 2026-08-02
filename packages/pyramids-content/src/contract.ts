@@ -50,6 +50,8 @@ export interface ArticleEntry {
   title: string;
   /** `YYYY-MM-DD`. */
   date: string;
+  /** Read from the frontmatter. Required, like the title and the date. */
+  author: string;
   tags: readonly string[];
   excerpt: string;
   /** As declared in the frontmatter, unresolved. */
@@ -64,10 +66,19 @@ export interface ArticleBody {
 export type CorpusViolation =
   | { code: 'missing-corpus-root'; root: string }
   | { code: 'unreadable-frontmatter'; path: string; detail: string }
-  | { code: 'missing-field'; path: string; field: 'title' | 'date' | 'locale' | 'excerpt' }
+  | {
+      code: 'missing-field';
+      path: string;
+      field: 'title' | 'date' | 'locale' | 'excerpt' | 'author';
+    }
   | { code: 'malformed-date'; path: string; date: string }
   | { code: 'non-boolean-published'; path: string; value: string }
-  | { code: 'duplicate-translation-id'; path: string; translationId: string; locale: string }
+  | {
+      code: 'duplicate-translation-id';
+      path: string;
+      translationId: string;
+      locale: string;
+    }
   | { code: 'unresolved-asset'; path: string; reference: string };
 
 export interface CorpusRead {

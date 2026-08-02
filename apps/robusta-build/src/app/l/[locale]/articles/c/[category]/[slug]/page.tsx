@@ -1,7 +1,5 @@
-import { buildUrl } from '@robusta/pyramids-routing';
-import { RoutePlaceholder } from '@/components/RoutePlaceholder.js';
+import { ArticleView } from '@/article/ArticleView.js';
 import { categorisedArticleParams } from '@/routing/content-urls.js';
-import { urlScheme } from '@/routing/scheme.js';
 
 export const dynamic = 'force-static';
 export const dynamicParams = false;
@@ -15,14 +13,7 @@ export default async function LocalisedCategorisedArticlePage({
 }: {
   params: Promise<{ locale: string; category: string; slug: string }>;
 }) {
-  const { locale, category, slug } = await params;
-  const page = { kind: 'article', locale, category, slug } as const;
+  const { locale, slug } = await params;
 
-  return (
-    <RoutePlaceholder
-      kind="article carrying a category"
-      url={buildUrl(urlScheme, page)}
-      facts={{ locale, category, slug }}
-    />
-  );
+  return <ArticleView locale={locale} slug={slug} />;
 }

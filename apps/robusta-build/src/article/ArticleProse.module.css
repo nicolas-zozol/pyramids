@@ -1,0 +1,111 @@
+/* =========================================================
+   The body's typography (R-ARTICLEPAGE-61)
+   =========================================================
+
+   Descendant selectors under one container class, addressing elements by name.
+   Not utility classes, and not `@tailwindcss/typography`: the rendered body
+   carries exactly one class the site did not put there — `language-*` on the
+   `code` of a fenced block — so nothing else here is addressable any other way,
+   and `prose` would ship a second type scale, which BR-PYRAMID-6 forbids.
+
+   Every value below is a custom property of @robusta/pyramids-design-system.
+   The site adds a name, never a value — the same contract globals.css states
+   for the token bridge.
+
+   What it covers is what the design system leaves unstyled. Its
+   colors_and_type.css styles h1–h4, p, code and pre at element level and is
+   unlayered, so a body's headings and paragraphs are already right; it says
+   nothing about lists, quotes, links, images, rules or tables, whose browser
+   defaults Tailwind's preflight has stripped. A CSS Module is unlayered too, so
+   these rules win over that preflight.
+
+   The `language-*` class is left in the DOM untouched. Matching it from here
+   would take `:global(…)`, a class selector in a module being hashed to a local
+   name — and syntax highlighting belongs to no story of this epic. */
+
+.prose a {
+  color: var(--brand-accent);
+  text-decoration: underline;
+  text-underline-offset: var(--sp-1);
+}
+
+.prose a:hover {
+  color: var(--brand-accent-deep);
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-5);
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin-bottom: var(--sp-2);
+}
+
+.prose li::marker {
+  color: var(--fg-3);
+}
+
+.prose blockquote {
+  margin: var(--sp-5) 0;
+  padding: var(--sp-2) var(--sp-5);
+  border-left: var(--stroke-bold) solid var(--brand-primary);
+  color: var(--fg-3);
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: var(--sp-5) 0;
+  border: var(--stroke-thin) solid var(--border-soft);
+  border-radius: var(--r-md);
+}
+
+.prose hr {
+  margin: var(--sp-7) 0;
+  border: 0;
+  border-top: var(--stroke-thin) solid var(--border-soft);
+}
+
+.prose pre {
+  margin: 0 0 var(--sp-4);
+}
+
+/* The design system draws a box around every `code`, which is right inline and
+   wrong for the whole of a fenced block: the box would sit inside the one `pre`
+   already draws. */
+.prose pre code {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.prose table {
+  width: 100%;
+  margin: var(--sp-5) 0;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: var(--sp-2) var(--sp-3);
+  border: var(--stroke-thin) solid var(--border-soft);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--bg-2);
+}

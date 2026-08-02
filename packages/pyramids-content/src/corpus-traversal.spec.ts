@@ -1,7 +1,11 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { sep } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { article, writeCorpus, writeNeighbourhood } from '../test/corpus-fixture.js';
+import {
+  article,
+  writeCorpus,
+  writeNeighbourhood,
+} from '../test/corpus-fixture.js';
 import type { CorpusSpec } from './contract.js';
 import { readCorpus } from './read-corpus.js';
 
@@ -15,10 +19,15 @@ import { readCorpus } from './read-corpus.js';
  * appear here (R-CONTENTSOURCE-03 and 04).
  */
 vi.mock('node:fs/promises', async () => {
-  const actual = await vi.importActual<typeof import('node:fs/promises')>(
-    'node:fs/promises',
-  );
-  return { ...actual, readdir: vi.fn(actual.readdir), readFile: vi.fn(actual.readFile) };
+  const actual =
+    await vi.importActual<typeof import('node:fs/promises')>(
+      'node:fs/promises',
+    );
+  return {
+    ...actual,
+    readdir: vi.fn(actual.readdir),
+    readFile: vi.fn(actual.readFile),
+  };
 });
 
 function spec(root: string): CorpusSpec {
@@ -26,7 +35,9 @@ function spec(root: string): CorpusSpec {
 }
 
 function published(title: string, date: string): string {
-  return article(`title: '${title}'\nlocale: 'en'\ndate: '${date}'\npublished: true`);
+  return article(
+    `title: '${title}'\nlocale: 'en'\ndate: '${date}'\nauthor: 'Nina'\npublished: true`,
+  );
 }
 
 const THREE_ARTICLES = {
@@ -37,9 +48,10 @@ const THREE_ARTICLES = {
 
 /** Every path the reader handed to the filesystem, in the order it did. */
 function touchedPaths(): string[] {
-  return [...vi.mocked(readdir).mock.calls, ...vi.mocked(readFile).mock.calls].map(
-    (call) => String(call[0]),
-  );
+  return [
+    ...vi.mocked(readdir).mock.calls,
+    ...vi.mocked(readFile).mock.calls,
+  ].map((call) => String(call[0]));
 }
 
 describe('the traversal', () => {
@@ -84,7 +96,10 @@ describe('the traversal', () => {
     vi.mocked(readdir).mockClear();
 
     const first = await readCorpus({ root, localeFrom: 'frontmatter' });
-    const again = await readCorpus({ root: `${root}${sep}.`, localeFrom: 'frontmatter' });
+    const again = await readCorpus({
+      root: `${root}${sep}.`,
+      localeFrom: 'frontmatter',
+    });
 
     expect(vi.mocked(readdir)).toHaveBeenCalledTimes(1);
     expect(again).toBe(first);
@@ -107,7 +122,9 @@ describe('the traversal', () => {
     const corpus = spec(
       await writeCorpus({
         ...THREE_ARTICLES,
-        'silent.md': article(`title: 'Silent'\nlocale: 'en'\ndate: '2021-01-04'`),
+        'silent.md': article(
+          `title: 'Silent'\nlocale: 'en'\ndate: '2021-01-04'\nauthor: 'Nina'`,
+        ),
       }),
     );
 
@@ -121,7 +138,10 @@ describe('the traversal', () => {
     const { root, neighbour } = await writeNeighbourhood({
       corpus: THREE_ARTICLES,
       elsewhere: Object.fromEntries(
-        Array.from({ length: 50 }, (_, i) => [`noise-${i}.md`, published(`N${i}`, '2020-01-01')]),
+        Array.from({ length: 50 }, (_, i) => [
+          `noise-${i}.md`,
+          published(`N${i}`, '2020-01-01'),
+        ]),
       ),
     });
     vi.clearAllMocks();
@@ -131,13 +151,17 @@ describe('the traversal', () => {
     expect(read.articles).toHaveLength(3);
     expect(vi.mocked(readdir)).toHaveBeenCalledTimes(1);
     expect(vi.mocked(readdir).mock.calls[0][0]).toBe(root);
-    expect(vi.mocked(readdir).mock.calls[0][1]).toMatchObject({ recursive: true });
+    expect(vi.mocked(readdir).mock.calls[0][1]).toMatchObject({
+      recursive: true,
+    });
 
     const outside = touchedPaths().filter(
       (path) => path !== root && !path.startsWith(`${root}${sep}`),
     );
     expect(outside).toEqual([]);
-    expect(touchedPaths().some((path) => path.startsWith(neighbour))).toBe(false);
+    expect(touchedPaths().some((path) => path.startsWith(neighbour))).toBe(
+      false,
+    );
   });
 
   it('keeps a failed read memoized rather than retrying it on every caller', async () => {

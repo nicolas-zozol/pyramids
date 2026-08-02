@@ -10,7 +10,9 @@ import { readCorpus } from './read-corpus.js';
  * is the `CorpusSpec` the site declares.
  */
 const guide = (title: string, date: string) =>
-  article(`title: '${title}'\ndate: '${date}'\ncategory: guide\npublished: true`);
+  article(
+    `title: '${title}'\ndate: '${date}'\ncategory: guide\nauthor: 'Nina'\npublished: true`,
+  );
 
 describe('a corpus carrying its locale in the path', () => {
   it('returns every article with the locale of its declared path segment', async () => {
@@ -45,7 +47,9 @@ describe('a corpus carrying its locale in the path', () => {
     });
 
     expect(violations).toEqual([]);
-    expect(articles.map((entry) => entry.path)).toEqual(['en/guide/hossegor.md']);
+    expect(articles.map((entry) => entry.path)).toEqual([
+      'en/guide/hossegor.md',
+    ]);
   });
 
   it('names the file whose path carries no segment where the locale was declared to be', async () => {
@@ -66,7 +70,7 @@ describe('a corpus carrying its locale in the path', () => {
   it('takes the locale from the path even when the frontmatter declares another', async () => {
     const root = await writeCorpus({
       'fr/guide/lacanau.md': article(
-        `title: 'Lacanau'\nlocale: 'en'\ndate: '2024-06-01'\npublished: true`,
+        `title: 'Lacanau'\nlocale: 'en'\ndate: '2024-06-01'\nauthor: 'Nina'\npublished: true`,
       ),
     });
 

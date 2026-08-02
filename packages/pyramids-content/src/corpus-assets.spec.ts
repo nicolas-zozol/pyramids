@@ -13,8 +13,7 @@ const ASSETS = {
   urlPrefix: '/article-images',
 };
 
-const entry = (path: string): ArticleEntry =>
-  ({ path }) as ArticleEntry;
+const entry = (path: string): ArticleEntry => ({ path }) as ArticleEntry;
 
 const corpusOf = (root: string, publishDir = ''): CorpusSpec => ({
   root,
@@ -45,7 +44,9 @@ async function filesUnder(root: string): Promise<string[]> {
 
 afterEach(async () => {
   await Promise.all(
-    publishDirs.splice(0).map((directory) => rm(directory, { recursive: true, force: true })),
+    publishDirs
+      .splice(0)
+      .map((directory) => rm(directory, { recursive: true, force: true })),
   );
 });
 
@@ -60,41 +61,71 @@ describe('resolveAssetUrl', () => {
 
   it('joins a sibling reference onto the article’s own directory', () => {
     expect(
-      resolveAssetUrl(corpus, entry('blockchain/ledger-versus-metamask.md'), './images/vpn.png'),
+      resolveAssetUrl(
+        corpus,
+        entry('blockchain/ledger-versus-metamask.md'),
+        './images/vpn.png',
+      ),
     ).toBe('/article-images/blockchain/images/vpn.png');
   });
 
   it('resolves a reference climbing to the shared folder at the corpus root', () => {
     expect(
-      resolveAssetUrl(corpus, entry('javascript/styled-components.md'), '../images/styled-logo.png'),
+      resolveAssetUrl(
+        corpus,
+        entry('javascript/styled-components.md'),
+        '../images/styled-logo.png',
+      ),
     ).toBe('/article-images/images/styled-logo.png');
   });
 
   it('resolves a reference carrying no prefix at all', () => {
-    expect(resolveAssetUrl(corpus, entry('privacy/leaving-gmail.md'), 'images/gmail.png')).toBe(
-      '/article-images/privacy/images/gmail.png',
-    );
+    expect(
+      resolveAssetUrl(
+        corpus,
+        entry('privacy/leaving-gmail.md'),
+        'images/gmail.png',
+      ),
+    ).toBe('/article-images/privacy/images/gmail.png');
   });
 
   it('keeps the case of a path a filesystem distinguishes', () => {
-    expect(resolveAssetUrl(corpus, entry('theory/quel-second-langage.md'), './images/M87.jpg')).toBe(
-      '/article-images/theory/images/M87.jpg',
-    );
+    expect(
+      resolveAssetUrl(
+        corpus,
+        entry('theory/quel-second-langage.md'),
+        './images/M87.jpg',
+      ),
+    ).toBe('/article-images/theory/images/M87.jpg');
   });
 
   it('passes an absolute reference through untouched', () => {
-    expect(resolveAssetUrl(corpus, entry('web/sonoff.md'), '/logo.png')).toBe('/logo.png');
+    expect(resolveAssetUrl(corpus, entry('web/sonoff.md'), '/logo.png')).toBe(
+      '/logo.png',
+    );
   });
 
   it('passes an external reference through untouched', () => {
     expect(
-      resolveAssetUrl(corpus, entry('web/sonoff.md'), 'https://example.test/a.png'),
+      resolveAssetUrl(
+        corpus,
+        entry('web/sonoff.md'),
+        'https://example.test/a.png',
+      ),
     ).toBe('https://example.test/a.png');
   });
 
   it('resolves against the corpus and never against the URL an article is served at', () => {
-    const inRoot = resolveAssetUrl(corpus, entry('sonoff.md'), './images/a.png');
-    const nested = resolveAssetUrl(corpus, entry('web/deep/sonoff.md'), './images/a.png');
+    const inRoot = resolveAssetUrl(
+      corpus,
+      entry('sonoff.md'),
+      './images/a.png',
+    );
+    const nested = resolveAssetUrl(
+      corpus,
+      entry('web/deep/sonoff.md'),
+      './images/a.png',
+    );
 
     expect(inRoot).toBe('/article-images/images/a.png');
     expect(nested).toBe('/article-images/web/deep/images/a.png');
@@ -113,7 +144,7 @@ describe('the unresolved-asset violation', () => {
     readCorpus(corpusOf(await writeCorpus(files)));
 
   const published = (yaml: string, body: string) =>
-    article(`${yaml}\npublished: true`, { body });
+    article(`${yaml}\nauthor: Nina\npublished: true`, { body });
 
   it('raises nothing when every reference resolves to a file the corpus holds', async () => {
     const { violations } = await withAssets({
@@ -137,7 +168,11 @@ describe('the unresolved-asset violation', () => {
     });
 
     expect(violations).toEqual([
-      { code: 'unresolved-asset', path: 'blockchain/ledger.md', reference: './images/vpn.png' },
+      {
+        code: 'unresolved-asset',
+        path: 'blockchain/ledger.md',
+        reference: './images/vpn.png',
+      },
     ]);
   });
 
@@ -168,29 +203,46 @@ describe('the unresolved-asset violation', () => {
     });
 
     expect(violations).toEqual([
-      { code: 'unresolved-asset', path: 'web/sonoff.md', reference: '../../secrets/key.png' },
+      {
+        code: 'unresolved-asset',
+        path: 'web/sonoff.md',
+        reference: '../../secrets/key.png',
+      },
     ]);
   });
 
   it('validates an unpublished file too, so a flag added later reveals nothing', async () => {
     const { violations, unpublished } = await withAssets({
-      'web/draft.md': article('title: Draft\nlocale: en\ndate: "2021-01-04"', {
-        body: '![gone](./images/gone.png)',
-      }),
+      'web/draft.md': article(
+        'title: Draft\nlocale: en\ndate: "2021-01-04"\nauthor: Nina',
+        {
+          body: '![gone](./images/gone.png)',
+        },
+      ),
     });
 
     expect(unpublished).toEqual(['web/draft.md']);
     expect(violations).toEqual([
-      { code: 'unresolved-asset', path: 'web/draft.md', reference: './images/gone.png' },
+      {
+        code: 'unresolved-asset',
+        path: 'web/draft.md',
+        reference: './images/gone.png',
+      },
     ]);
   });
 
   it('judges no reference when the corpus declares no asset root', async () => {
     const root = await writeCorpus({
-      'web/sonoff.md': published('title: Sonoff\nlocale: en\ndate: "2021-01-04"', '![a](./x.png)'),
+      'web/sonoff.md': published(
+        'title: Sonoff\nlocale: en\ndate: "2021-01-04"',
+        '![a](./x.png)',
+      ),
     });
 
-    const { violations } = await readCorpus({ root, localeFrom: 'frontmatter' });
+    const { violations } = await readCorpus({
+      root,
+      localeFrom: 'frontmatter',
+    });
 
     expect(violations).toEqual([]);
   });
@@ -217,11 +269,11 @@ describe('copyCorpusAssets', () => {
   it('publishes the referenced files at their corpus-relative paths', async () => {
     const root = await writeCorpus({
       'blockchain/ledger.md': article(
-        'title: Ledger\nlocale: en\ndate: "2022-01-20"\nimage: ./images/cover.png\npublished: true',
+        'title: Ledger\nlocale: en\ndate: "2022-01-20"\nimage: ./images/cover.png\nauthor: Nina\npublished: true',
         { body: '![vpn](./images/vpn.png)' },
       ),
       'javascript/styled.md': article(
-        'title: Styled\nlocale: en\ndate: "2020-11-05"\nimage: ../images/logo.png\npublished: true',
+        'title: Styled\nlocale: en\ndate: "2020-11-05"\nimage: ../images/logo.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
       'blockchain/images/cover.png': 'PNG',
@@ -247,12 +299,15 @@ describe('copyCorpusAssets', () => {
   it('leaves behind an image no published article references', async () => {
     const root = await writeCorpus({
       'web/sonoff.md': article(
-        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/used.png\npublished: true',
+        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/used.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
-      'web/draft.md': article('title: Draft\nlocale: en\ndate: "2021-01-05"', {
-        body: '![d](./images/drafted.png)',
-      }),
+      'web/draft.md': article(
+        'title: Draft\nlocale: en\ndate: "2021-01-05"\nauthor: Nina',
+        {
+          body: '![d](./images/drafted.png)',
+        },
+      ),
       'web/images/used.png': 'PNG',
       'web/images/drafted.png': 'PNG',
       'security/images/locker.png': 'PNG',
@@ -267,7 +322,7 @@ describe('copyCorpusAssets', () => {
   it('creates the directory it owns, on a checkout that carries none', async () => {
     const root = await writeCorpus({
       'web/sonoff.md': article(
-        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/a.png\npublished: true',
+        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/a.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
       'web/images/a.png': 'PNG',
@@ -287,7 +342,7 @@ describe('copyCorpusAssets', () => {
   it('leaves nothing behind when an image is renamed and the corpus republished', async () => {
     const root = await writeCorpus({
       'web/sonoff.md': article(
-        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/old.png\npublished: true',
+        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/old.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
       'web/images/old.png': 'PNG',
@@ -297,7 +352,7 @@ describe('copyCorpusAssets', () => {
 
     const renamed = await writeCorpus({
       'web/sonoff.md': article(
-        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/new.png\npublished: true',
+        'title: Sonoff\nlocale: en\ndate: "2021-01-04"\nimage: ./images/new.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
       'web/images/new.png': 'PNG',
@@ -310,11 +365,11 @@ describe('copyCorpusAssets', () => {
   it('publishes one file once, however many articles reference it', async () => {
     const root = await writeCorpus({
       'a.md': article(
-        'title: A\nlocale: en\ndate: "2021-01-04"\nimage: ./images/shared.png\npublished: true',
+        'title: A\nlocale: en\ndate: "2021-01-04"\nimage: ./images/shared.png\nauthor: Nina\npublished: true',
         { body: '![s](./images/shared.png)' },
       ),
       'b.md': article(
-        'title: B\nlocale: en\ndate: "2021-01-05"\nimage: ./images/shared.png\npublished: true',
+        'title: B\nlocale: en\ndate: "2021-01-05"\nimage: ./images/shared.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
       'images/shared.png': 'PNG',
@@ -329,7 +384,7 @@ describe('copyCorpusAssets', () => {
   it('publishes nothing, and no directory, when the corpus declares no asset root', async () => {
     const root = await writeCorpus({
       'a.md': article(
-        'title: A\nlocale: en\ndate: "2021-01-04"\nimage: ./images/a.png\npublished: true',
+        'title: A\nlocale: en\ndate: "2021-01-04"\nimage: ./images/a.png\nauthor: Nina\npublished: true',
         { body: 'No body image.' },
       ),
       'images/a.png': 'PNG',
@@ -343,7 +398,7 @@ describe('copyCorpusAssets', () => {
   it('publishes the file an absolute reference names nowhere, that URL being the site’s own', async () => {
     const root = await writeCorpus({
       'a.md': article(
-        'title: A\nlocale: en\ndate: "2021-01-04"\nimage: /brand/logo.png\npublished: true',
+        'title: A\nlocale: en\ndate: "2021-01-04"\nimage: /brand/logo.png\nauthor: Nina\npublished: true',
         { body: '![e](https://example.test/e.png)' },
       ),
     });

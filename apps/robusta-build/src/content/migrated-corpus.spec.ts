@@ -1,7 +1,19 @@
-import { access, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import {
+  access,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, posix, relative, resolve, sep } from 'node:path';
-import { copyCorpusAssets, readCorpus, type CorpusSpec } from '@robusta/pyramids-content';
+import {
+  copyCorpusAssets,
+  readArticleBody,
+  readCorpus,
+  type CorpusSpec,
+} from '@robusta/pyramids-content';
 import { buildUrl, urlSet } from '@robusta/pyramids-routing';
 import { afterAll, describe, expect, it } from 'vitest';
 import { urlScheme } from '../routing/scheme.js';
@@ -68,7 +80,9 @@ const temporary: string[] = [];
 
 afterAll(async () => {
   await Promise.all(
-    temporary.splice(0).map((path) => rm(path, { recursive: true, force: true })),
+    temporary
+      .splice(0)
+      .map((path) => rm(path, { recursive: true, force: true })),
   );
 });
 
@@ -79,11 +93,16 @@ async function temporaryPublishDir(): Promise<string> {
 }
 
 async function filesUnder(directory: string): Promise<string[]> {
-  const found = await readdir(directory, { recursive: true, withFileTypes: true });
+  const found = await readdir(directory, {
+    recursive: true,
+    withFileTypes: true,
+  });
   return found
     .filter((entry) => entry.isFile())
     .map((entry) =>
-      relative(directory, join(entry.parentPath, entry.name)).split(sep).join('/'),
+      relative(directory, join(entry.parentPath, entry.name))
+        .split(sep)
+        .join('/'),
     )
     .sort();
 }
@@ -100,7 +119,9 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
   it('addresses them at the slugs the v1 mapping was computed from', async () => {
     const { articles } = await read();
 
-    expect(articles.map((entry) => entry.slug).sort()).toEqual([...SLUGS].sort());
+    expect(articles.map((entry) => entry.slug).sort()).toEqual(
+      [...SLUGS].sort(),
+    );
   });
 
   it('carries an excerpt and an image for every one of them, so a blog roll costs no render', async () => {
@@ -108,6 +129,19 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
 
     expect(articles.every((entry) => entry.excerpt.length > 0)).toBe(true);
     expect(articles.every((entry) => entry.image !== undefined)).toBe(true);
+  });
+
+  /**
+   * R-ARTICLEPAGE-08. The author is required, and two of the eleven declared
+   * none until the correction of 2026-08-02 — a corpus that still carried them
+   * would index nine articles and fail the build on the other two.
+   */
+  it('names an author on every one of them, the field being required', async () => {
+    const { articles } = await read();
+
+    expect([...new Set(articles.map((entry) => entry.author))]).toEqual([
+      'Nicolas Zozol',
+    ]);
   });
 
   /**
@@ -128,13 +162,18 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
       'typescript',
       'web',
     ]);
-    expect(claimed.some((category) => (category as string).includes('/'))).toBe(false);
+    expect(claimed.some((category) => (category as string).includes('/'))).toBe(
+      false,
+    );
   });
 
   it('splits into eight English and three French articles, the two locale defects corrected', async () => {
     const { articles } = await read();
     const byLocale = articles.reduce<Record<string, number>>(
-      (count, entry) => ({ ...count, [entry.locale]: (count[entry.locale] ?? 0) + 1 }),
+      (count, entry) => ({
+        ...count,
+        [entry.locale]: (count[entry.locale] ?? 0) + 1,
+      }),
       {},
     );
 
@@ -143,7 +182,9 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
 
   it('pairs the two translated articles, each pair holding one English and one French', async () => {
     const { articles } = await read();
-    const paired = articles.filter((entry) => entry.translationId !== undefined);
+    const paired = articles.filter(
+      (entry) => entry.translationId !== undefined,
+    );
 
     const pairs = new Map<string, string[]>();
     for (const entry of paired) {
@@ -168,7 +209,9 @@ describe('the images the corpus references', () => {
   const referencesOf = async (path: string): Promise<string[]> => {
     const raw = await readFile(join(root, path), 'utf8');
     const body = raw.slice(raw.indexOf('\n---', 3));
-    const cover = raw.slice(0, raw.indexOf('\n---', 3)).match(/^image:\s*(.*)$/m);
+    const cover = raw
+      .slice(0, raw.indexOf('\n---', 3))
+      .match(/^image:\s*(.*)$/m);
 
     return [
       ...(cover === null ? [] : [cover[1].trim()]),
@@ -182,7 +225,9 @@ describe('the images the corpus references', () => {
 
     for (const entry of articles) {
       for (const reference of await referencesOf(entry.path)) {
-        paths.add(posix.normalize(posix.join(posix.dirname(entry.path), reference)));
+        paths.add(
+          posix.normalize(posix.join(posix.dirname(entry.path), reference)),
+        );
       }
     }
 
@@ -197,7 +242,9 @@ describe('the images the corpus references', () => {
   });
 
   it('keeps them beside the articles that reference them, in six directories', async () => {
-    const directories = new Set((await referenced()).map((path) => posix.dirname(path)));
+    const directories = new Set(
+      (await referenced()).map((path) => posix.dirname(path)),
+    );
 
     expect([...directories].sort()).toEqual([
       'blockchain/images',
@@ -229,7 +276,11 @@ describe('the copy step, over the site’s corpus', () => {
   it('leaves nothing a previous run wrote, the tree being produced in full', async () => {
     const publishDir = await temporaryPublishDir();
     await copyCorpusAssets(into(publishDir));
-    await writeFile(join(publishDir, 'blockchain/images/renamed-away.png'), 'PNG', 'utf8');
+    await writeFile(
+      join(publishDir, 'blockchain/images/renamed-away.png'),
+      'PNG',
+      'utf8',
+    );
 
     await copyCorpusAssets(into(publishDir));
 
@@ -264,13 +315,18 @@ describe('what the corpus lights up', () => {
    */
   it('maps a French article from the unmarked v1 path v1 actually published', async () => {
     const rows = v1UrlMap(urlScheme, await getArticleIndex());
-    const of = (from: string) => rows.find((row) => row.from === from)?.destination;
+    const of = (from: string) =>
+      rows.find((row) => row.from === from)?.destination;
 
-    expect(of('/learn/theory/s/quel-langage-pour-progresser-dans-sa-carriere')).toEqual({
+    expect(
+      of('/learn/theory/s/quel-langage-pour-progresser-dans-sa-carriere'),
+    ).toEqual({
       kind: 'permanent',
       to: '/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
     });
-    expect(of('/learn/fr/theory/s/quel-langage-pour-progresser-dans-sa-carriere')).toEqual({
+    expect(
+      of('/learn/fr/theory/s/quel-langage-pour-progresser-dans-sa-carriere'),
+    ).toEqual({
       kind: 'permanent',
       to: '/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
     });
@@ -285,8 +341,12 @@ describe('what the corpus lights up', () => {
     );
 
     expect(articleRows).toHaveLength(14);
-    expect(articleRows.filter((row) => !row.from.startsWith('/learn/fr/'))).toHaveLength(11);
-    expect(articleRows.filter((row) => row.from.startsWith('/learn/fr/'))).toHaveLength(3);
+    expect(
+      articleRows.filter((row) => !row.from.startsWith('/learn/fr/')),
+    ).toHaveLength(11);
+    expect(
+      articleRows.filter((row) => row.from.startsWith('/learn/fr/')),
+    ).toHaveLength(3);
   });
 
   it('flattens the nested v1 category of the one article that declared one', async () => {
@@ -302,6 +362,77 @@ describe('what the corpus lights up', () => {
       kind: 'permanent',
       to: '/articles/c/typescript/completing-a-rxjs-observable-with-another',
     });
+  });
+});
+
+/**
+ * R-ARTICLEPAGE-21 over the corpus the site actually serves. Nine of the eleven
+ * articles carry body images written as `./images/…`, which is where the author
+ * put the file and not where the site publishes it; before this the rendered
+ * body handed a page references that resolved to nothing.
+ */
+describe('the body a page receives', () => {
+  const prefix = corpus.assets?.urlPrefix as string;
+
+  const bodies = async (): Promise<{ path: string; html: string }[]> => {
+    const { articles } = await read();
+    return Promise.all(
+      articles.map(async (entry) => ({
+        path: entry.path,
+        html: (await readArticleBody(corpus, entry)).html,
+      })),
+    );
+  };
+
+  const sources = (html: string): string[] =>
+    [...html.matchAll(/<img[^>]*\ssrc="([^"]+)"/g)].map((match) => match[1]);
+
+  it('serves the body images of an article under the asset root, at their place in the corpus', async () => {
+    const { articles } = await read();
+    const gatsby = articles.find(
+      (entry) =>
+        entry.path === 'javascript/pourquoi-migration-gatsby-next-js.md',
+    );
+
+    const { html } = await readArticleBody(
+      corpus,
+      gatsby as (typeof articles)[number],
+    );
+
+    expect(sources(html)).toEqual([
+      `${prefix}/javascript/images/gatsby-plugin-bug.png`,
+      `${prefix}/javascript/images/graph-ql-blog.png`,
+      `${prefix}/javascript/images/structure-gatsby.png`,
+      `${prefix}/javascript/images/structure-next.png`,
+      `${prefix}/javascript/images/404.png`,
+    ]);
+  });
+
+  it('hands no article-relative reference to any page, and names a real file every time', async () => {
+    const rendered = await bodies();
+    const referenced = rendered.flatMap(({ html }) => sources(html));
+
+    expect(referenced.length).toBeGreaterThan(0);
+    expect(referenced.every((source) => source.startsWith(`${prefix}/`))).toBe(
+      true,
+    );
+    await Promise.all(
+      referenced.map((source) =>
+        access(join(root, source.slice(prefix.length + 1))),
+      ),
+    );
+  });
+
+  it('leaves the links the articles carry to other hosts as their authors wrote them', async () => {
+    const rendered = await bodies();
+    const external = rendered.flatMap(({ html }) =>
+      [...html.matchAll(/<a[^>]*\shref="(https?:[^"]+)"/g)].map(
+        (match) => match[1],
+      ),
+    );
+
+    expect(external.length).toBeGreaterThan(0);
+    expect(external.every((href) => !href.includes(prefix))).toBe(true);
   });
 });
 

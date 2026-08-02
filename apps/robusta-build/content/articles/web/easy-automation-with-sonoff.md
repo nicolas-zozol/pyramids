@@ -6,6 +6,7 @@ date: '2021-01-04'
 image: ./images/lili-sonoff.jpg
 category: web
 published: true
+author: Nicolas Zozol
 featured: true
 ---
 

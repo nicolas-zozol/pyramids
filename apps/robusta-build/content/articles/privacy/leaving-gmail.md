@@ -6,6 +6,7 @@ date: "2019-05-24"
 image: ./images/gmail.png
 category: privacy
 published: true
+author: Nicolas Zozol
 ---
 
 GMail was a revolution in 2004. Is Google too big now ?

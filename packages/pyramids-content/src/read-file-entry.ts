@@ -34,7 +34,9 @@ export async function readFileEntry(
 ): Promise<FileRead> {
   let parsed: matter.GrayMatterFile<string>;
   try {
-    parsed = matter(await readFile(join(root, path), 'utf8'), { excerpt: true });
+    parsed = matter(await readFile(join(root, path), 'utf8'), {
+      excerpt: true,
+    });
   } catch (error) {
     return {
       path,
@@ -50,7 +52,12 @@ export async function readFileEntry(
 
   if (corpus.assets !== undefined) {
     violations.push(
-      ...(await unresolvedAssets(root, path, text(declared.image), parsed.content)),
+      ...(await unresolvedAssets(
+        root,
+        path,
+        text(declared.image),
+        parsed.content,
+      )),
     );
   }
 
@@ -63,9 +70,16 @@ export async function readFileEntry(
     violations,
   );
   const excerpt = required(text(parsed.excerpt), 'excerpt', path, violations);
+  const author = required(text(declared.author), 'author', path, violations);
   const date = readDate(declared.date, path, violations);
 
-  if (title === undefined || locale === undefined || excerpt === undefined || date === undefined) {
+  if (
+    title === undefined ||
+    locale === undefined ||
+    excerpt === undefined ||
+    author === undefined ||
+    date === undefined
+  ) {
     return { path, published, violations };
   }
 
@@ -76,6 +90,7 @@ export async function readFileEntry(
     ...optional('category', declared.category),
     title,
     date,
+    author,
     tags: readTags(declared.tags),
     excerpt,
     ...optional('image', declared.image),
@@ -118,7 +133,11 @@ async function unresolvedAssets(
 
   return checked
     .filter((reference): reference is string => reference !== undefined)
-    .map((reference) => ({ code: 'unresolved-asset' as const, path, reference }));
+    .map((reference) => ({
+      code: 'unresolved-asset' as const,
+      path,
+      reference,
+    }));
 }
 
 async function exists(file: string): Promise<boolean> {
@@ -147,7 +166,11 @@ function readPublished(
   if (typeof value === 'boolean') {
     return value;
   }
-  violations.push({ code: 'non-boolean-published', path, value: String(value) });
+  violations.push({
+    code: 'non-boolean-published',
+    path,
+    value: String(value),
+  });
   return false;
 }
 
@@ -164,7 +187,9 @@ function readDate(
   // YAML reads an unquoted `2021-11-30` as a timestamp, whose UTC day is the
   // same YYYY-MM-DD the schema asks for. Anything else is compared as written.
   const written =
-    value instanceof Date ? value.toISOString().slice(0, 10) : String(value).trim();
+    value instanceof Date
+      ? value.toISOString().slice(0, 10)
+      : String(value).trim();
 
   if (!isCalendarDate(written)) {
     violations.push({ code: 'malformed-date', path, date: written });
@@ -179,7 +204,8 @@ function isCalendarDate(written: string): boolean {
   }
   const parsed = new Date(`${written}T00:00:00Z`);
   return (
-    !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === written
+    !Number.isNaN(parsed.getTime()) &&
+    parsed.toISOString().slice(0, 10) === written
   );
 }
 
@@ -206,7 +232,7 @@ function readTags(value: unknown): readonly string[] {
 
 function required<T>(
   value: T | undefined,
-  field: 'title' | 'locale' | 'excerpt',
+  field: 'title' | 'locale' | 'excerpt' | 'author',
   path: string,
   violations: CorpusViolation[],
 ): T | undefined {
@@ -230,7 +256,9 @@ function optional<K extends string>(
   value: unknown,
 ): Record<K, string> | Record<string, never> {
   const written = text(value);
-  return written === undefined ? {} : ({ [field]: written } as Record<K, string>);
+  return written === undefined
+    ? {}
+    : ({ [field]: written } as Record<K, string>);
 }
 
 function detailOf(error: unknown): string {
