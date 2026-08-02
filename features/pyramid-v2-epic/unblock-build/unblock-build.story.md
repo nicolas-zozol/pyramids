@@ -1,6 +1,6 @@
 # Story : Unblock the build chain
 
-**Dernière mise à jour :** 2026-07-31
+**Dernière mise à jour :** 2026-08-02
 **Feature :** unblock-build
 **Infix :** UNBLOCKBUILD
 **Status :** LANDED (2026-07-31, commit d9199ad)
@@ -68,6 +68,11 @@ The repository now names its own toolchain (yarn 4.17.1, Node 22, `node-modules`
 - 2026-07-31 — `packages/scribe-intel` and `services/scribe-intel-collector` do not compile, and were left that way. Pourquoi : `tsc` fails on `VisitorHori` not implementing `Visitor` and on `intent.spec.ts` importing a `createIntelInstance` that no longer exists — source defects predating this work, in two workspaces the epic keeps dormant and outside the green set. Both install, which is all R-UNBLOCKBUILD-14 asks of them.
 - 2026-07-31 — `apps/robusta` type-checks its own `vite.config.ts` during `next build`, and that coupling was left in place. Pourquoi : it is what made the undeclared `vite` fatal rather than cosmetic, and excluding the file would hide the defect instead of declaring it. A tsconfig `exclude` line is available the day someone wants it.
 
+## Fixes
+
+- 2026-08-01 — six deployments of the v2 site died in five seconds and none reproduced locally: corepack caches yarn inside the repository at `.vercel/cache/corepack/`, where the root manifest's `"type": "module"` reaches it and makes Node load yarn's CommonJS bundle as an ES module, killing the install before a single dependency resolves. Locally corepack caches in `~/.cache/node/corepack`, outside any package, which is why the whole green set passes on a machine. The yarn binary is now committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml`, so yarn 1 delegates to it and corepack is abandoned; `ENABLE_EXPERIMENTAL_COREPACK` and `COREPACK_HOME` are removed from the Vercel project. Ruled out first, in both directions: the Node version, and `engines.node` in every form. Commits `a4b0923`, `2281b5f`, `8f1ecde`.
+- 2026-08-01 — the delivered contracts are unchanged by that fix: corepack was a mechanism, never a requirement. R-UNBLOCKBUILD-6 asks that the repository declare its toolchain rather than inherit the machine's, and `yarnPath` declares it more strictly than `packageManager` did; AC-UNBLOCKBUILD-41 still holds, the yarn the repository names being the one that runs. What the fix leaves behind is documentation, planned below and due to docman.
+
 ## Documentation updates
 
 Delivered in commit `14370d4`.
@@ -76,3 +81,10 @@ Delivered in commit `14370d4`.
 - changed the Dependencies and Toolchain lines of `root.archi.md` — they named yarn 1; they now carry yarn 4, `packageManager`, `engines.node`, `nodeLinker: node-modules` and the green set
 - changed the Getting started of `README.md` and the install and build command reference of `CLAUDE.md` — both described a yarn 1 repository
 - changed the Dependencies of `packages/links/links.archi.md` and `packages/ctas/ctas.archi.md` — both already claimed `next` as a peer; they now state the range and why `next` is also a devDependency
+
+Due since the corepack fix of 2026-08-01 and not delivered. The three first entries do not merely read stale: they instruct the reader to run the command that breaks the deployments. `apps/robusta-build/README.md` already carries the true account and is the reference.
+
+- change the Install / clean paragraph of `CLAUDE.md` — it declares yarn 4.17.1 "activated by corepack" and tells the reader to run `corepack enable` once; the install now goes through the committed binary that `yarnPath` names, and enabling corepack is what kills a Vercel build
+- change the Toolchain line of the Dependencies section of `root.archi.md` — it ends on "Install is `yarn install`, with corepack honouring `packageManager`", and the same line still states `engines.node: ">=22 <23"` where the root manifest reads `"22.x"`
+- change the Getting started of `README.md` — same corepack instruction, sitting in the first commands a newcomer runs
+- change the green-set sequence of `README.md` — it names `yarn install`, `yarn build:deps`, `yarn build:dakar` and `yarn build:robusta`, and omits `yarn build:robusta-build`, in the green set since 2026-07-31
