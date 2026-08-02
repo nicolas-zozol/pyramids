@@ -8,9 +8,39 @@ The version 1 site lives in `apps/robusta` and is being retired. Its README docu
 
 `src/seopyramids.config.ts` — domain, site name and title, mission, logo, default and other locales, and the blog configuration (roll size, mandatory keywords, author, category resolver). Everything a per-site value should be read from there rather than hardcoded in a component.
 
-`blogConfig.getCategories` returns an empty array today and never throws. It stays that way until `content-source` decides how articles reach the site; per BR-PYRAMID-7 a site does not read its content source while serving a request.
+`blogConfig` no longer carries a category resolver: `content-source` removed it when the site gained a real index. What articles exist is answered by `src/content/article-index.ts`, at build time and at no other, per BR-PYRAMID-7.
 
 The site is `robots: { index: false, follow: false }` at the root layout, so nothing is indexed while it holds no copy. Removing that directive is an acceptance criterion of `robusta-landing-page`, not a detail to drop in passing.
+
+## Articles
+
+The site's articles are the eleven pieces migrated from v1 on 2026-08-01, and a new one is a markdown file added the same way.
+
+Where the file goes: anywhere under `content/articles`, at any depth. The tree mirrors v1's folders so a converted file stays findable next to its source, but a folder carries no meaning on v2 — the category is a frontmatter field, and a file at the root of the corpus is as valid as one three directories down. Only `*.md` files are read.
+
+What the frontmatter must carry, or the build fails naming the file:
+
+- `title` — the article's title, and the source of its slug.
+- `date` — `YYYY-MM-DD`. Quote it, or YAML reads it as a timestamp; the reader accepts both and compares the calendar day.
+- `locale` — `en` or `fr`, the two the site configuration declares. `en` is the default locale and carries no marker in the URL.
+- `published: true` — the boolean, not the string. An article that does not declare itself published is not served (BR-PYRAMID-10), and the build prints the paths it left out. Anything other than a boolean is a violation rather than a silent non-publication.
+- An excerpt, which is not a field: it is the block of the body before its first `---` separator. An article without one is missing a required field.
+
+What it may carry:
+
+- `category` — exactly one segment, and categories do not nest (BR-PYRAMID-9). A v1 `categoryPath` of `javascript/typescript` becomes `typescript`. An article claiming none is addressed at `/articles/{slug}`; one claiming a category gets `/articles/c/{category}/{slug}` and a category page.
+- `tags` — a list, any number of them. Tags are metadata: `/articles/t/{tag}` is reserved and served by nothing.
+- `image` — the cover, a path relative to the article's own file.
+- `translationId` — the value the locale versions of one article share, so a page can link them. It is authored, not derived: lowercase, locale-neutral, a subject name. Two published articles of one locale may not share one.
+- `slug` — pins the slug instead of deriving it. `author`, `featured` and any other key travel in the file and cost nothing; the index reads none of them today.
+
+The slug is derived and not written: `articleSlug(title, locale)`, the v1 derivation kept frozen so a migrated article keeps the address it was indexed under. A slug never changes once published — renaming an article's title after publication is therefore a redirect question, not a rename.
+
+Images live beside their article, conventionally in an `images/` directory next to it, and are referenced relatively — `./images/vpn.png` from the body or the cover, `../images/shared.png` for the corpus-root folder. The reference is resolved against the article's own place in the corpus and published under the asset root: `blockchain/images/vpn.png` is served at `/article-images/blockchain/images/vpn.png`. So an article can change category without a single image moving. A reference resolving to no file of the corpus is a violation and fails the build; an absolute or external URL passes through untouched.
+
+`public/article-images/` is generated, git-ignored and owned by `yarn copy:assets`, which removes it and rewrites it in full before every build and at the start of `yarn dev:robusta-build`. It publishes only what the published articles reference — 44 files today. It is not a watcher: an image added mid-session reaches the site on the next run.
+
+Where a mistake surfaces: `yarn emit:redirects`, the first step of both `build` and `dev`, reads the corpus and fails on the first violation with the file named. `yarn workspace @robusta/robusta-build run test` checks the corpus as it stands — what is published, the locale split, the categories, and the byte-for-byte freeze against the v1 tree.
 
 ## Routing
 
@@ -33,7 +63,9 @@ Who owns what: the discriminants `l`, `c`, `p` and `t` and the shapes built from
 
 Fourteen route files under `src/app`: seven for the default locale, seven mirroring them under `l/[locale]`. Every one declares `dynamic = 'force-static'` and `dynamicParams = false`, and takes its params from `src/routing/content-urls.ts`, which is `urlSet(urlScheme, await getArticleIndex())` filtered by page kind and by locale scope.
 
-That single derivation is the point. A URL it does not contain answers 404 instead of being resolved on demand, `force-static` makes `searchParams` an empty object so no content route can read one even by accident, and there is no second list to pregenerate a URL the site then refuses at request time. 62 static pages today, on the fixture corpus that stands in until `content-source` lands.
+That single derivation is the point. A URL it does not contain answers 404 instead of being resolved on demand, `force-static` makes `searchParams` an empty object so no content route can read one even by accident, and there is no second list to pregenerate a URL the site then refuses at request time.
+
+21 content URLs today, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles. No roll page in either locale — 8 English articles and 3 French against a roll size of 12 — so `/articles/p/{n}` is produced by nothing until the twelfth published English article arrives. `next build` reports 25 static pages and writes 23 HTML files: those 21, plus the landing page and `/_not-found`.
 
 Two build-time checks keep the route folders and the configuration honest. `next.config.ts` asserts inside `redirects()` that every route folder the configured content root implies exists, so renaming the content root without renaming the folders fails the build. `scripts/check-route-table.mjs` runs after `next build` and compares the prerender manifest with the derivation — `/` and `/_not-found` excepted, both being outside the content section — and fails if they disagree.
 
@@ -51,9 +83,9 @@ Four families of non-canonical address redirect permanently to the canonical one
 
 ### The v1 mapping
 
-`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, rather than as a hand-kept table: the day an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed — 99 rows, 83 permanent, 6 gone, 10 none — because the mapping is meant to be reviewable, and a diff is exactly that.
+`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, rather than as a hand-kept table: the day an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed — 82 rows, 66 permanent, 6 gone, 10 none, over the real corpus — because the mapping is meant to be reviewable, and a diff is exactly that. The rows moved with the corpus and not by hand: the fixture corpus's 31 article rows became the 14 the real one produces — the eleven articles, plus the locale-marked form of the three French ones — and every other class kept its count.
 
-- Permanent rows become `redirects()` entries in `next.config.ts`.
+- Permanent rows become `redirects()` entries in `next.config.ts`. An article of a non-default locale contributes two: v1 emits its path with no locale segment, which is what search engines hold, and the locale-marked form is mapped too, defensively.
 - Gone rows are answered by `src/app/learn/[...path]/route.ts`, which returns 410 for the retired `/learn` namespace and lets any path carrying an `images` segment fall through to 404.
 - None rows emit nothing and exist to be read: `/portfolio` and `/fr/portfolio` are visibly let go rather than silently forgotten.
 

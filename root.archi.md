@@ -1,6 +1,6 @@
 # Architecture: root (@robusta/pyramids)
 
-**Last updated:** 2026-07-31
+**Last updated:** 2026-08-02
 
 ## Parent
 
@@ -9,6 +9,7 @@ _None — this is the root._
 ## Children
 
 - [routing](packages/pyramids-routing/routing.archi.md)
+- [content](packages/pyramids-content/content.archi.md)
 - [helpers](packages/helpers/helpers.archi.md)
 - [themes](packages/themes/themes.archi.md)
 - [layouts](packages/layouts/layouts.archi.md)
@@ -59,8 +60,8 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 
 ## Key Components
 
-- apps/robusta-build (`@robusta/robusta-build`) — robusta.build version 2, created on 2026-07-31 as a deployable shell: it renders the design system and carries no page copy. Tailwind 4 with a token bridge, three self-hosted faces, `robots: noindex` until it has something to say. It carries the v2 URL scheme since 2026-07-31 — 62 static pages, fourteen route files, its own README holding the reference — and its workspace dependencies are two: the design system and `pyramids-routing`.
-- apps/robusta (`@robusta/build`) — robusta.build, the v1 Next.js site: blog under `/learn`, portfolio, prosemirror editor. Its README owns the v1 routing scheme, which the v2 site does not inherit. Declared a thrash by the epic; kept for its markdown content under `content/blog` until the migration lands.
+- apps/robusta-build (`@robusta/robusta-build`) — robusta.build version 2, created on 2026-07-31 as a deployable shell: it renders the design system and carries no page copy. Tailwind 4 with a token bridge, three self-hosted faces, `robots: noindex` until it has something to say. It carries the v2 URL scheme since 2026-07-31 — fourteen route files, a case-normalising middleware, its own README holding the reference — and serves the eleven migrated articles since 2026-08-01, at 25 static pages. Its workspace dependencies are three: the design system, `pyramids-routing` and `pyramids-content`.
+- apps/robusta (`@robusta/build`) — robusta.build, the v1 Next.js site: blog under `/learn`, portfolio, prosemirror editor. Its README owns the v1 routing scheme, which the v2 site does not inherit. Declared a thrash by the epic. Its markdown content under `content/blog` was copied onto the v2 site on 2026-08-01 and the tree is frozen since; `retire-robusta-v1` deletes it rather than merging it back.
 - apps/dakar (`@robusta/dakar`) — dakar.surf, the surf guide. Next.js with a `[locale]` segment, spots pages and MapLibre maps. Out of v2 scope but shares the same packages.
 - apps/intel-demo — Vite front + Express server demo of the scribe-intel SDK. Not deployed as a content site.
 - apps/robusta-design — v0 design prototype (prompt, uploads, HTML). Superseded by `packages/robusta-design-system`, not yet removed.
@@ -75,8 +76,13 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 ## Data Flow — a content site
 
 ```
-content markdown (apps/robusta/content/blog for v1 — see the gotchas)
-        │
+content markdown ── v1  apps/robusta/content/blog        (frozen, copied from)
+        │           v2  apps/robusta-build/content/articles
+        │                     │
+        │                     └── read by @robusta/pyramids-content:
+        │                         one traversal per corpus root per process,
+        │                         and the images the articles reference
+        │                         mirrored into public/ before the build
         ▼
   build-time parsing ── categories, slugs, blog roll
         │
@@ -107,7 +113,7 @@ yarn build:robusta / build:dakar ──► next build
 
 Apps resolve packages through their compiled `dist/`. A package change is invisible to a running app until it is rebuilt, so `yarn dev:dev` runs the watchers alongside the dev server.
 
-The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build`. Verified end to end on 2026-07-30 from a wiped tree: dakar produced 23/23 static pages on a route table identical to its baseline, robusta 42/42, and a second `yarn install` left `yarn.lock` byte-identical. `apps/robusta-build` joined it on 2026-07-31, producing 4/4 static pages; it produces 62/62 since the v2 URL scheme landed later the same day, dakar and robusta unchanged at 23/23 and 42/42.
+The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build`. Verified end to end on 2026-07-30 from a wiped tree: dakar produced 23/23 static pages on a route table identical to its baseline, robusta 42/42, and a second `yarn install` left `yarn.lock` byte-identical. `apps/robusta-build` joined it on 2026-07-31, producing 4/4 static pages; it produced 62/62 on the fixture corpus the v2 URL scheme shipped with, and produces 25/25 since the eleven articles landed on 2026-08-01 — 23 HTML pages, being the 21 content URLs the corpus derives plus the landing page and `/_not-found`. dakar and robusta are unchanged at 23/23 and 42/42, which is what copying the corpus rather than moving it protects.
 
 Inside the set but install-only, never built by it: `packages/scribe-intel`, `services/scribe-intel-collector`. Outside it entirely, and outside yarn's view: `apps/robusta-design`, `apps/intel-demo` and `services/scribe-intel-backend` carry no `package.json` at all, so despite the `apps/*` glob they are not workspaces — nothing installs or builds them.
 
@@ -124,10 +130,11 @@ Inside the set but install-only, never built by it: `packages/scribe-intel`, `se
 - Apps consume built artefacts, not sources. Any package edit needs a rebuild or a running watcher.
 - Local TypeScript imports must end with `.js` even though the source is `.ts`/`.tsx`. Flag a non-conforming import, do not silently rewrite it.
 - `eslint.ignoreDuringBuilds: true` in both apps: a green build says nothing about lint. Run `yarn lint` explicitly.
-- The v1 article corpus is `apps/robusta/content/blog`, 11 articles — arbitrated 2026-07-29, and it is what the v1 code actually reads. The 13 articles of `apps/robusta/public/learn` are not the corpus: 8 are common to both trees, 5 exist only there and fall outside the arbitrated set. What becomes of those 5 is still open in the migrate-learn-content story.
+- The v1 article corpus is `apps/robusta/content/blog`, 11 articles — arbitrated 2026-07-29, and it is what the v1 code actually reads. The 13 articles of `apps/robusta/public/learn` are not the corpus: 8 are common to both trees, 5 exist only there and fall outside the arbitrated set. Those 5 did not travel and what becomes of them is an editorial call, not a migration question — decided 2026-07-29 by the migrate-learn-content story.
+- The two corpora are a copy, and the copy is frozen. The eleven articles were copied into `apps/robusta-build/content/articles` on 2026-08-01 rather than moved, so `apps/robusta` keeps rendering the tree it reads; no article is edited under `content/blog` afterwards. `apps/robusta-build/src/content/corpus-freeze.spec.ts` holds the eleven markdown bodies byte for byte between the two trees and is the only thing enforcing it — it says nothing about frontmatter, which the conversion deliberately diverged. It dies with the tree, in `retire-robusta-v1`.
 - `apps/robusta-build` needs `experimental.extensionAlias` in its `next.config.ts`, like `apps/dakar`. `moduleResolution: "Bundler"` makes the repository's `.js`-suffixed local imports pass `tsc`, which says nothing about webpack: without the alias the build fails at compile with `Module not found: Can't resolve '../seopyramids.config.js'`.
 - `next.config.ts` cannot import application code, in this repository more firmly than in most. Next loads it outside webpack and resolves its imports before the `require.extensions['.ts']` hook it registers, so the repository's `.js`-suffixed local imports resolve to files that do not exist — and independently, any chain reaching a bundler-only asset such as the design system's PNG wordmark dies there too. What the config needs from the application is emitted by a build script and read as data: `apps/robusta-build` compiles its routing modules with `tsconfig.routing.json` and reads the JSON `scripts/emit-redirects.mjs` writes.
-- A case-normalising middleware must exclude every namespace whose paths are case-significant. `apps/robusta-build` excludes `/learn`, so the v1 mapping keeps matching addresses as they were published, and `/_next`, without which every hashed asset under `/_next/static/{buildId}/` — a build ID carries uppercase letters — would be 308'd to a path that does not exist.
+- A case-normalising middleware must exclude every namespace whose paths are case-significant. `apps/robusta-build` excludes `/learn`, so the v1 mapping keeps matching addresses as they were published; `/_next`, without which every hashed asset under `/_next/static/{buildId}/` — a build ID carries uppercase letters — would be 308'd to a path that does not exist; and `/article-images`, the asset root, which republishes the corpus's own file names and holds `theory/images/M87.jpg`.
 - `packages/robusta-design-system` reached `dev` on 2026-07-30 through the merge `c0f98fe`, item 1 of the pyramid-v2 epic. The raw Claude Design output — CSS, assets, previews — was already there; the merge added what turns the folder into a workspace: `package.json` with its CSS and asset subpath exports, `src/`, `tsconfig.json` and its archi doc. It now builds inside `yarn build:deps`, between `pyramids-themes` and `pyramids-layouts`.
 - Two parallel colour systems coexist: `pyramids-themes` (JS tokens) and each app's `tailwind.config.ts` DaisyUI palette. Changing one does not move the other, and the design system adds a third, CSS-variable-based one.
 - DaisyUI is on its way out of the v2 site: the epic decided on 2026-07-29 that `apps/robusta-build` uses shadcn instead. Nothing has moved yet, and the reach is wide — `pyramids-layouts`, `pyramids-links` and `pyramids-ctas` all render DaisyUI classes, and the Styling section of `CLAUDE.md` still mandates DaisyUI tokens. Treat both statements as live until that is worked through.
