@@ -43,8 +43,8 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 │   ├───────────────────┤          │ ctas      (deprec.)  │         │ Loki · Tempo ·      │   │
 │   │ dakar     (live)  │◄─────────│ scribe-intel  (SDK)  │────────►│ Prometheus (docker) │   │
 │   │ dakar.surf        │          │ routing   (v2 URLs)  │         └─────────────────────┘   │
-│   │ Next 15 + MapLibre│          └──────────────────────┘                                   │
-│   ├───────────────────┤                                                                     │
+│   │ Next 15 + MapLibre│          │ content   (v2 corpus)│                                   │
+│   ├───────────────────┤          └──────────────────────┘                                   │
 │   │ intel-demo (Vite) │                                                                     │
 │   ├───────────────────┤                                                                     │
 │   │ robusta-design    │                                                                     │
@@ -66,7 +66,8 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 - apps/intel-demo — Vite front + Express server demo of the scribe-intel SDK. Not deployed as a content site.
 - apps/robusta-design — v0 design prototype (prompt, uploads, HTML). Superseded by `packages/robusta-design-system`, not yet removed.
 - packages/pyramids-routing — the v2 URL scheme as pure string functions: the discriminants `l`, `c`, `p` and `t`, plus `buildUrl`, `parseUrl`, `urlSet` and `validateArticles`. It depends on nothing and holds no site's content root, so a second site can adopt the scheme without inheriting anything else.
-- packages/helpers — cross-cutting utilities (style/`twCss`, router, theme, react, time, arrays, debug). Every other package depends on it, `pyramids-routing` excepted.
+- packages/pyramids-content — the reading contract of the v2 base, added 2026-08-01: a tree of markdown files becomes an article index (`readCorpus`, `readArticleBody`, `articleSlug`, `describeViolation`) and the images those articles reference become published assets (`copyCorpusAssets`, `resolveAssetUrl`). It owns the article schema and the seven violation codes, and owns no site's tree — the corpus root, the locale source, the exclusions and the asset directory are fields of the `CorpusSpec` the site declares. It depends on `gray-matter`, `remark` and `slugify`, on no React and no Next and on no other package here, and builds second in `build:deps`, right behind `pyramids-routing`.
+- packages/helpers — cross-cutting utilities (style/`twCss`, router, theme, react, time, arrays, debug). Every other package depends on it, `pyramids-routing` and `pyramids-content` excepted.
 - packages/themes — JS-side design tokens (`pyramidsColors`, `PyramidsTheme`, per-site overrides). Separate from each app's DaisyUI/Tailwind palette.
 - packages/layouts, packages/links, packages/ctas — the shared presentational libraries: structural primitives, `next/link` wrappers with server/client navigators, call-to-action widgets.
 - packages/robusta-design-system — the robusta site's own design system: CSS tokens (`colors_and_type.css`, `sketch.css`), brand assets, HTML previews, 6 React primitives and 8 marketing surfaces.
@@ -104,8 +105,8 @@ Each site holds its per-site truth in `src/seopyramids.config.ts`: domain, site 
 
 ```
 yarn build:deps
-   routing ──► helpers ──► themes ──► design-system ──► layouts ──► links ──► ctas
-                                                          (tsc, each to dist/)
+   routing ──► content ──► helpers ──► themes ──► design-system ──► layouts ──► links ──► ctas
+                                                                      (tsc, each to dist/)
         │
         ▼
 yarn build:robusta / build:dakar ──► next build

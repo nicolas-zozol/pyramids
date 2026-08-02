@@ -1,6 +1,6 @@
 # Architecture: routing
 
-**Last updated:** 2026-07-31
+**Last updated:** 2026-08-02
 
 ## Parent
 
@@ -167,7 +167,7 @@ validateArticles ──► violations ──► the caller fails the build
 
 - Depends on: nothing at runtime. No dependency, no peer dependency, no React, no Next; `typescript` and `vitest` in `devDependencies` and nothing else. It introduces no second copy of anything.
 - Used by: `apps/robusta-build` — `src/routing/scheme.ts` (the site's one `UrlScheme`), `src/routing/content-urls.ts` (the derivation every route pregenerates from), `src/routing/v1-url-map.ts` (redirect targets) and `scripts/check-route-table.mjs`.
-- Build: `tsc` → `dist/`. First step of `yarn build:deps`, before `pyramids-helpers`, because it depends on nothing and the site needs its `dist/` before `next build`. Watcher: `yarn w:routing`.
+- Build: `tsc` → `dist/`. First step of `yarn build:deps`, before `pyramids-content`, because it depends on nothing and the site needs its `dist/` before `next build`. Watcher: `yarn w:routing`.
 
 ## Notes / Gotchas
 

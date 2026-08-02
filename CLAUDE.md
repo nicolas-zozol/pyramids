@@ -28,6 +28,7 @@ Each Next.js app has a `src/seopyramids.config.ts` that defines `domain`, `siteN
 Packages publish their compiled output (`main: dist/index.js`, `types: dist/index.d.ts`), so **apps consume the built artefacts, not the TS sources**. Any change to a package needs a rebuild (or a watcher) before the consuming app sees it.
 
 - `pyramids-routing` — the v2 URL scheme as pure string functions: the discriminants `l`, `c`, `p`, `t`, plus `buildUrl`, `parseUrl`, `urlSet`, `validateArticles`. No dependency, no React, no Next; first in `build:deps`. Holds no site's content root.
+- `pyramids-content` — the v2 reading contract: `readCorpus`, `readArticleBody`, `articleSlug`, `copyCorpusAssets`, `resolveAssetUrl`, `describeViolation`, plus the article schema and its violation codes. No React, no Next, no other package of this repository; second in `build:deps`. Holds no site's corpus root — a site declares a `CorpusSpec` and reads results. See `packages/pyramids-content/content.archi.md`.
 - `pyramids-helpers` — react/router/style/theme/time/array helpers (incl. `twCss` merge)
 - `pyramids-themes` — DaisyUI theme + colors
 - `robusta-design-system` — published as `@robusta/pyramids-design-system`: CSS tokens, brand assets, 6 sketch primitives and 8 marketing surfaces. Belongs to the robusta site alone; no other site reuses it.
@@ -58,7 +59,7 @@ yarn clean:install   # clean then reinstall
 ### Build packages (required before/during app builds)
 
 ```bash
-yarn build:deps      # builds routing → helpers → themes → design-system → layouts → links → ctas in order
+yarn build:deps      # builds routing → content → helpers → themes → design-system → layouts → links → ctas in order
 yarn build:robusta-build  # build:deps then `next build` for apps/robusta-build (v2)
 yarn build:robusta   # build:deps then `next build` for apps/robusta (v1)
 yarn build:dakar     # build:deps then `next build` for apps/dakar
@@ -73,7 +74,7 @@ yarn dev:dakar       # apps/dakar with Next.js + Turbopack
 yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta
 ```
 
-When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:routing`, `w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
+When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:routing`, `w:content`, `w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
 
 ### Lint / format
 
@@ -87,12 +88,22 @@ Prettier config lives in `prettier.config.js` (single quotes, semi, trailing com
 
 ### Tests
 
-Vitest is set up in `apps/robusta`, `packages/scribe-intel`, `packages/helpers`, `packages/pyramids-routing`, and `services/scribe-intel-collector`. Only `packages/pyramids-routing` declares a `test` script (`yarn workspace @robusta/pyramids-routing run test`, 78 tests); elsewhere, invoke vitest from the workspace itself:
+Three workspaces declare a `test` script, and that script is the whole command:
+
+```bash
+yarn workspace @robusta/pyramids-routing run test   # 78 tests — the URL scheme
+yarn workspace @robusta/pyramids-content run test   # 85 tests — the reading contract, on fixture corpora
+yarn workspace @robusta/robusta-build run test      # 28 tests — the v2 site's own corpus
+```
+
+Vitest is also installed in `apps/robusta`, `packages/scribe-intel` and `packages/helpers`, which declare no script; invoke it from the workspace itself:
 
 ```bash
 yarn workspace @robusta/build exec vitest run            # apps/robusta
 yarn workspace @robusta/scribe-intel exec vitest run     # packages/scribe-intel
 ```
+
+A spec that reads a real site's corpus lives in that site, not in `pyramids-content`: the package's own specs build a corpus on disk per test.
 
 There is no root-level `yarn test`.
 

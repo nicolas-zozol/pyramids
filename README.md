@@ -28,7 +28,7 @@ Node 22 (`.nvmrc`) and yarn 4, which corepack activates from the `packageManager
 
 ```bash
 yarn install
-yarn build:deps      # helpers → themes → layouts → links → ctas
+yarn build:deps      # routing → content → helpers → themes → design-system → layouts → links → ctas
 yarn dev:robusta     # or dev:dakar
 ```
 
