@@ -27,15 +27,11 @@ const DEFAULT_LINKS: NavLink[] = [
   { label: 'about', href: '#about' },
 ];
 
-const navLinkStyle: CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: 18,
-  color: 'var(--ink)',
-  textDecoration: 'none',
-};
-
 /**
- * Top nav: logo on the left, link list + primary CTA on the right.
+ * Top nav: logo on the left, link list + primary CTA on the right. Below
+ * `md` the three parts stack and centre; the layout lives in `.sk-site-header`
+ * and its parts in `sketch.css`.
+ *
  * Server-component-safe; if you want client-side click handling, wrap
  * the CTA in a client component on the consumer side.
  */
@@ -47,35 +43,22 @@ export function SiteHeader({
   className,
   style,
 }: SiteHeaderProps) {
+  const merged = ['sk-site-header', className].filter(Boolean).join(' ');
+
   return (
-    <header
-      className={className}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '20px 48px',
-        borderBottom: '1.5px dashed var(--ink-faint)',
-        ...style,
-      }}
-    >
-      <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
+    <header className={merged} style={style}>
+      <a href="/" className="sk-site-header__brand">
         <BrandLogo size="compact" wordmarkSrc={wordmarkSrc} />
       </a>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+      <nav className="sk-site-header__nav">
         {links.map((l) => (
-          <a key={l.href} href={l.href} style={navLinkStyle}>
+          <a key={l.href} href={l.href} className="sk-site-header__link">
             {l.label}
           </a>
         ))}
         {ctaLabel ? (
-          <SkButton variant="primary" style={{ marginLeft: 8 }}>
-            <a
-              href={ctaHref}
-              style={{ color: 'inherit', textDecoration: 'none' }}
-            >
-              {ctaLabel}
-            </a>
+          <SkButton variant="primary" href={ctaHref}>
+            {ctaLabel}
           </SkButton>
         ) : null}
       </nav>

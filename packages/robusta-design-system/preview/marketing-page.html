@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>robusta build — the eight marketing surfaces, composed</title>
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../sketch.css">
+<!--
+  A full page, not a specimen card. This sheet deliberately does not link
+  `_card.css`: that file pins the body to 700px with `overflow: hidden`, which
+  is a frame for one component and hides exactly the horizontal overflow this
+  sheet exists to show.
+
+  Open it and drag the window from 320px to 1600px. Every layout below comes
+  from `sketch.css` under the class names the components render — the markup
+  here restates the TSX rather than importing it, so it can drift; what it
+  cannot drift from is the stylesheet, which is the real one.
+
+  The frame below is the sheet's own and carries no design-system value.
+-->
+<style>
+  /* Both consuming sites run Tailwind's preflight, which sets border-box and
+     drops the default body margin. The package assumes that and ships no
+     reset of its own, so the sheet supplies what a site would. */
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; }
+
+  /* the emoji marks and the wordmark are sized inline by BrandLogo, from the
+     wordmark's 1603×312 ratio — restated here so the lockup is the real one */
+  .demo-emoji {
+    line-height: 1;
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  }
+  .demo-brand-root { display: inline-flex; flex-direction: column; align-items: flex-start; }
+  .demo-lockup { display: inline-flex; align-items: center; gap: 10px; }
+  .demo-emoji--compact { font-size: 36px; }
+  .demo-wordmark { display: block; margin-top: -3px; margin-left: 2px; }
+</style>
+</head>
+<body class="paper">
+
+<!-- ============ SiteHeader ============ -->
+<header class="sk-site-header">
+  <a href="/" class="sk-site-header__brand">
+    <span class="sk-brand-logo demo-brand-root">
+      <span class="sk-brand-logo__lockup demo-lockup">
+        <span class="demo-emoji demo-emoji--compact">💪</span>
+        <span class="demo-emoji demo-emoji--compact">🏗</span>
+        <img class="sk-brand-logo__wordmark demo-wordmark"
+             src="../assets/robusta-build-wordmark.png"
+             alt="Robusta Build" width="257" height="50">
+      </span>
+    </span>
+  </a>
+  <nav class="sk-site-header__nav">
+    <a href="#work" class="sk-site-header__link">work</a>
+    <a href="#approach" class="sk-site-header__link">approach</a>
+    <a href="#notes" class="sk-site-header__link">notes</a>
+    <a href="#about" class="sk-site-header__link">about</a>
+    <a href="#book" class="sk-btn sk-btn--primary">book a call</a>
+  </nav>
+</header>
+
+<!-- ============ Hero ============ -->
+<section class="sk-hero">
+  <div class="sk-hero__grid">
+    <div class="sk-hero__copy">
+      <div class="sk-hero__eyebrow">
+        <span class="sk-arrow-right sk-hero__eyebrow-arrow"
+              style="display:inline-block;width:38px;vertical-align:middle" aria-hidden="true"></span>
+        independent senior engineering
+      </div>
+      <h1 class="sk-hero__title">
+        we build software<br>
+        you can still <span class="sk-scribble sk-hero__title-scribble">maintain</span> in<br>
+        <span class="highlight-yellow">five years.</span>
+      </h1>
+      <p class="sk-hero__subtitle">
+        small team. long memory. for high-stakes systems where<span class="highlight-blue">
+        architecture, reliability, and the next engineer</span> all matter.
+      </p>
+      <div class="sk-hero__actions">
+        <a href="#book" class="sk-btn sk-btn--primary">book a call →</a>
+        <a href="#audit" class="sk-btn">read a sample audit</a>
+      </div>
+      <div class="sk-hero__footnote">
+        <span class="sk-check"></span>
+        currently booking q3 · 2 slots left this quarter
+      </div>
+    </div>
+
+    <div class="sk-hero__figure">
+      <img class="sk-hero__mascot" src="../assets/crystal-tux.svg" alt="crystal tux">
+      <div class="sk-hero__annotation">
+        this is crystal tux.<br>
+        she lives here.
+      </div>
+      <svg class="sk-hero__doodle" viewBox="0 0 80 60" aria-hidden="true">
+        <path d="M70,10 Q40,20 20,40" stroke="var(--ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M22,32 L18,42 L28,42" stroke="var(--ink)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ServicesGrid ============ -->
+<section id="work" class="sk-services-grid">
+  <div class="sk-services-grid__head">
+    <div class="sk-services-grid__eyebrow">// what we do</div>
+    <h2 class="sk-services-grid__title">three ways we work.</h2>
+  </div>
+  <div class="sk-services-grid__list">
+
+    <div class="sk-services-grid__card sk-services-grid__card--tilt-left">
+      <div class="sk-services-grid__stamp"></div>
+      <div class="sk-services-grid__face">
+        <div class="sk-services-grid__frame"></div>
+        <div class="sk-services-grid__card-body">
+          <div class="sk-services-grid__tag-row"><span class="sk-tag sk-tag--pink">most popular</span></div>
+          <div class="sk-services-grid__card-title">the audit</div>
+          <div class="sk-services-grid__time">2–3 weeks · written report</div>
+          <p class="sk-services-grid__body">we read your code, your incidents, and your last 6 months of prs. you get a 30-page memo with a ranked list of risks and a plan.</p>
+          <div class="sk-services-grid__more">
+            see how it works
+            <span class="sk-arrow-right" style="display:inline-block;width:40px" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sk-services-grid__card sk-services-grid__card--tilt-right">
+      <div class="sk-services-grid__stamp"></div>
+      <div class="sk-services-grid__face">
+        <div class="sk-services-grid__frame"></div>
+        <div class="sk-services-grid__card-body">
+          <div class="sk-services-grid__tag-row"><span class="sk-tag sk-tag--blue">high stakes</span></div>
+          <div class="sk-services-grid__card-title">embedded eng</div>
+          <div class="sk-services-grid__time">1–2 quarters · on the team</div>
+          <p class="sk-services-grid__body">we sit inside your team — pull rotation, code review, design docs, on-call. we leave you with a smaller backlog and an upgraded bench.</p>
+          <div class="sk-services-grid__more">
+            see how it works
+            <span class="sk-arrow-right" style="display:inline-block;width:40px" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sk-services-grid__card sk-services-grid__card--tilt-left">
+      <div class="sk-services-grid__stamp"></div>
+      <div class="sk-services-grid__face">
+        <div class="sk-services-grid__frame"></div>
+        <div class="sk-services-grid__card-body">
+          <div class="sk-services-grid__tag-row"><span class="sk-tag sk-tag--green">scoped</span></div>
+          <div class="sk-services-grid__card-title">rebuild surgery</div>
+          <div class="sk-services-grid__time">3–6 months · scoped</div>
+          <p class="sk-services-grid__body">you have one piece that's holding the rest hostage. we replace it without rewriting the world. yes, postgres still works.</p>
+          <div class="sk-services-grid__more">
+            see how it works
+            <span class="sk-arrow-right" style="display:inline-block;width:40px" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FlowDiagram ============ -->
+<section id="approach" class="sk-flow-diagram">
+  <div class="sk-flow-diagram__head">
+    <div class="sk-flow-diagram__eyebrow">// how an engagement runs</div>
+    <h2 class="sk-flow-diagram__title">no surprises. just <span class="highlight-pink">five steps.</span></h2>
+  </div>
+  <div class="sk-flow-diagram__steps">
+    <div class="sk-flow-diagram__step">
+      <span class="sk-circle sk-flow-diagram__badge">1</span>
+      <div class="sk-flow-diagram__label">hello</div>
+      <div class="sk-flow-diagram__sub">30 min, free</div>
+    </div>
+    <span class="sk-flow-diagram__arrow"><span class="sk-arrow-right" style="display:inline-block;width:64px" aria-hidden="true"></span></span>
+    <div class="sk-flow-diagram__step">
+      <span class="sk-circle sk-flow-diagram__badge">2</span>
+      <div class="sk-flow-diagram__label">scope</div>
+      <div class="sk-flow-diagram__sub">1 page, written</div>
+    </div>
+    <span class="sk-flow-diagram__arrow"><span class="sk-arrow-right" style="display:inline-block;width:64px" aria-hidden="true"></span></span>
+    <div class="sk-flow-diagram__step">
+      <span class="sk-circle sk-flow-diagram__badge">3</span>
+      <div class="sk-flow-diagram__label">audit</div>
+      <div class="sk-flow-diagram__sub">2–3 weeks</div>
+    </div>
+    <span class="sk-flow-diagram__arrow"><span class="sk-arrow-right" style="display:inline-block;width:64px" aria-hidden="true"></span></span>
+    <div class="sk-flow-diagram__step">
+      <span class="sk-circle sk-flow-diagram__badge">4</span>
+      <div class="sk-flow-diagram__label">work</div>
+      <div class="sk-flow-diagram__sub">embedded or scoped</div>
+    </div>
+    <span class="sk-flow-diagram__arrow"><span class="sk-arrow-right" style="display:inline-block;width:64px" aria-hidden="true"></span></span>
+    <div class="sk-flow-diagram__step">
+      <span class="sk-circle sk-flow-diagram__badge">5</span>
+      <div class="sk-flow-diagram__label">handoff</div>
+      <div class="sk-flow-diagram__sub">docs + a memo</div>
+    </div>
+  </div>
+  <div class="sk-flow-diagram__caveat">
+    <img class="sk-flow-diagram__mascot" src="../assets/crystal-tux-thinking.svg" alt="">
+    <div class="sk-callout sk-flow-diagram__bubble">
+      <div class="sk-flow-diagram__caveat-text">we'll say no if your problem isn't a fit. honestly, that happens about 1 in 3 calls.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PrinciplesList ============ -->
+<section class="sk-principles-list">
+  <div class="sk-principles-list__head">
+    <div class="sk-principles-list__eyebrow">// what we believe</div>
+    <h2 class="sk-principles-list__title">principles, written down.</h2>
+  </div>
+  <ul class="sk-principles-list__items">
+    <li class="sk-principles-list__item">
+      <span class="sk-check sk-principles-list__check"></span>
+      <div>
+        <div class="sk-principles-list__key">we read before we write.</div>
+        <div class="sk-principles-list__value">no commits in the first week. promise.</div>
+      </div>
+    </li>
+    <li class="sk-principles-list__item">
+      <span class="sk-check sk-principles-list__check"></span>
+      <div>
+        <div class="sk-principles-list__key">boring tech, on purpose.</div>
+        <div class="sk-principles-list__value">postgres, sql, http. fewer moving parts is the feature.</div>
+      </div>
+    </li>
+    <li class="sk-principles-list__item">
+      <span class="sk-check sk-principles-list__check"></span>
+      <div>
+        <div class="sk-principles-list__key">the next engineer matters most.</div>
+        <div class="sk-principles-list__value">every choice is a memo to whoever inherits it.</div>
+      </div>
+    </li>
+    <li class="sk-principles-list__item">
+      <span class="sk-check sk-principles-list__check"></span>
+      <div>
+        <div class="sk-principles-list__key">we don't take work we can't finish.</div>
+        <div class="sk-principles-list__value">small slate. long horizons. quarter-shaped projects.</div>
+      </div>
+    </li>
+    <li class="sk-principles-list__item">
+      <span class="sk-check sk-principles-list__check"></span>
+      <div>
+        <div class="sk-principles-list__key">tests are documentation.</div>
+        <div class="sk-principles-list__value">if it isn't covered, we don't know how it should behave.</div>
+      </div>
+    </li>
+    <li class="sk-principles-list__item">
+      <span class="sk-check sk-principles-list__check"></span>
+      <div>
+        <div class="sk-principles-list__key">incidents are not surprises.</div>
+        <div class="sk-principles-list__value">they are the signal that an invariant was wrong.</div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- ============ NotesPreview ============ -->
+<section id="notes" class="sk-notes-preview">
+  <div class="sk-notes-preview__head">
+    <div>
+      <div class="sk-notes-preview__eyebrow">// notes from the desk</div>
+      <h2 class="sk-notes-preview__title">things we wrote down.</h2>
+    </div>
+    <a href="#notes" class="sk-notes-preview__all">
+      all notes
+      <span class="sk-arrow-right" style="display:inline-block;width:50px;vertical-align:middle" aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="sk-notes-preview__list">
+    <a href="#" class="sk-notes-preview__post">
+      <div class="sk-notes-preview__date">apr 12</div>
+      <div class="sk-notes-preview__post-body">
+        <div class="sk-notes-preview__post-title">idempotency keys: a love letter</div>
+        <div class="sk-notes-preview__tag-row"><span class="sk-tag sk-tag--blue">distributed systems</span></div>
+      </div>
+    </a>
+    <a href="#" class="sk-notes-preview__post">
+      <div class="sk-notes-preview__date">mar 28</div>
+      <div class="sk-notes-preview__post-body">
+        <div class="sk-notes-preview__post-title">the audit memo we send every client</div>
+        <div class="sk-notes-preview__tag-row"><span class="sk-tag">process</span></div>
+      </div>
+    </a>
+    <a href="#" class="sk-notes-preview__post">
+      <div class="sk-notes-preview__date">mar 04</div>
+      <div class="sk-notes-preview__post-body">
+        <div class="sk-notes-preview__post-title">why we still pick postgres</div>
+        <div class="sk-notes-preview__tag-row"><span class="sk-tag sk-tag--pink">opinions</span></div>
+      </div>
+    </a>
+    <a href="#" class="sk-notes-preview__post">
+      <div class="sk-notes-preview__date">feb 19</div>
+      <div class="sk-notes-preview__post-body">
+        <div class="sk-notes-preview__post-title">reading code is harder than writing it</div>
+        <div class="sk-notes-preview__tag-row"><span class="sk-tag sk-tag--green">craft</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="sk-cta">
+  <img class="sk-cta__mascot" src="../assets/crystal-tux-waving.svg" alt="">
+  <h2 class="sk-cta__title">ok, ready when you are.</h2>
+  <p class="sk-cta__subtitle">first call is 30 minutes, no slides. tell us what hurts. we'll tell you whether we're the right people to help.</p>
+  <div class="sk-cta__form">
+    <div class="sk-input-wrap sk-cta__email">
+      <input class="sk-input sk-cta__email-field" type="email" placeholder="your email">
+    </div>
+    <a href="#book" class="sk-btn sk-btn--primary">book a call →</a>
+  </div>
+  <div class="sk-cta__footnote">no newsletter funnel. one human reads it. promise.</div>
+</section>
+
+<!-- ============ SiteFooter ============
+     The first column shows what a site supplies: items carrying a
+     destination, rendered as anchors. The other two show the package's own
+     defaults: a label and no destination, so no anchor at all — never an
+     `<a>` without href, never `href="#"`.
+     ======================================================================= -->
+<footer class="sk-site-footer">
+  <div class="sk-site-footer__brand">
+    <span class="sk-brand-logo demo-brand-root">
+      <span class="sk-brand-logo__lockup demo-lockup">
+        <span class="demo-emoji demo-emoji--compact">💪</span>
+        <span class="demo-emoji demo-emoji--compact">🏗</span>
+        <img class="sk-brand-logo__wordmark demo-wordmark"
+             src="../assets/robusta-build-wordmark.png"
+             alt="Robusta Build" width="257" height="50">
+      </span>
+    </span>
+    <p class="sk-site-footer__tagline">a small senior engineering practice.
+remote, distributed across europe + na.</p>
+  </div>
+
+  <div class="sk-site-footer__col">
+    <div class="sk-site-footer__col-title">work</div>
+    <ul class="sk-site-footer__items">
+      <li><a href="#work" class="sk-site-footer__link">the audit</a></li>
+      <li><a href="#work" class="sk-site-footer__link">embedded eng</a></li>
+      <li><a href="#work" class="sk-site-footer__link">rebuild surgery</a></li>
+      <li><a href="#work" class="sk-site-footer__link">past projects</a></li>
+    </ul>
+  </div>
+
+  <div class="sk-site-footer__col">
+    <div class="sk-site-footer__col-title">notes</div>
+    <ul class="sk-site-footer__items">
+      <li><span class="sk-site-footer__text">all posts</span></li>
+      <li><span class="sk-site-footer__text">rss</span></li>
+      <li><span class="sk-site-footer__text">on github</span></li>
+      <li><span class="sk-site-footer__text">on bsky</span></li>
+    </ul>
+  </div>
+
+  <div class="sk-site-footer__col">
+    <div class="sk-site-footer__col-title">company</div>
+    <ul class="sk-site-footer__items">
+      <li><span class="sk-site-footer__text">about</span></li>
+      <li><span class="sk-site-footer__text">engagement notes</span></li>
+      <li><span class="sk-site-footer__text">contact</span></li>
+      <li><span class="sk-site-footer__text">privacy</span></li>
+    </ul>
+  </div>
+
+  <div class="sk-site-footer__bottom">
+    <div>© robusta build · made by hand, with care.</div>
+    <div>// v1.0 · the system you're reading is itself.</div>
+  </div>
+</footer>
+
+</body>
+</html>

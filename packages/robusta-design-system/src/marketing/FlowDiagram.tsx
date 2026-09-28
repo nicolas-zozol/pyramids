@@ -45,11 +45,13 @@ const DEFAULT_CAVEAT = (
   <>we'll say no if your problem isn't a fit. honestly, that happens about 1 in 3 calls.</>
 );
 
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
-
 /**
- * "How an engagement runs" left-to-right flow diagram on dotted-grid paper.
- * Each step is a numbered circle + label + sub. Arrows separate them.
+ * "How an engagement runs" flow diagram on dotted-grid paper. Each step is a
+ * numbered circle + label + sub.
+ *
+ * The connecting arrows read left-to-right, which is only true once the steps
+ * fit on one row: below `lg` they wrap and `sketch.css` hides the arrows, an
+ * arrow at the end of a wrapped line pointing at nothing.
  */
 export function FlowDiagram({
   eyebrow = '// how an engagement runs',
@@ -60,74 +62,37 @@ export function FlowDiagram({
   className,
   style,
 }: FlowDiagramProps) {
+  const merged = ['sk-flow-diagram', className].filter(Boolean).join(' ');
+
   return (
-    <section
-      id="approach"
-      className={className}
-      style={{
-        padding: '64px 48px',
-        background: 'var(--paper)',
-        backgroundImage:
-          'radial-gradient(var(--ink-faint) 1px, transparent 1px)',
-        backgroundSize: '22px 22px',
-        backgroundPosition: '11px 11px',
-        borderTop: '1.5px dashed var(--ink-faint)',
-        borderBottom: '1.5px dashed var(--ink-faint)',
-        ...style,
-      }}
-    >
-      <div style={{ marginBottom: 40 }}>
-        <div style={{ ...sansBlock, fontSize: 15, color: 'var(--ink-mute)', marginBottom: 6 }}>
-          {eyebrow}
-        </div>
-        <h2 style={{ ...sansBlock, fontSize: 56, margin: 0, lineHeight: 1, color: 'var(--ink)' }}>
-          {title}
-        </h2>
+    <section id="approach" className={merged} style={style}>
+      <div className="sk-flow-diagram__head">
+        <div className="sk-flow-diagram__eyebrow">{eyebrow}</div>
+        <h2 className="sk-flow-diagram__title">{title}</h2>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 8,
-          flexWrap: 'wrap',
-        }}
-      >
+      <div className="sk-flow-diagram__steps">
         {steps.map((s, i) => (
           <Fragment key={s.n}>
-            <div style={{ textAlign: 'center', minWidth: 110 }}>
-              <span
-                className="sk-circle"
-                style={{ width: 72, height: 72, fontSize: 32, ...sansBlock }}
-              >
-                {s.n}
-              </span>
-              <div style={{ ...sansBlock, fontSize: 28, marginTop: 8, lineHeight: 1, color: 'var(--ink)' }}>
-                {s.label}
-              </div>
-              <div style={{ ...sansBlock, fontSize: 13, color: 'var(--ink-mute)', marginTop: 4 }}>
-                {s.sub}
-              </div>
+            <div className="sk-flow-diagram__step">
+              <span className="sk-circle sk-flow-diagram__badge">{s.n}</span>
+              <div className="sk-flow-diagram__label">{s.label}</div>
+              <div className="sk-flow-diagram__sub">{s.sub}</div>
             </div>
-            {i < steps.length - 1 && <SkArrowRight width={64} />}
+            {i < steps.length - 1 && (
+              <span className="sk-flow-diagram__arrow">
+                <SkArrowRight width={64} />
+              </span>
+            )}
           </Fragment>
         ))}
       </div>
       {caveat ? (
-        <div
-          style={{
-            marginTop: 36,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            gap: 16,
-          }}
-        >
+        <div className="sk-flow-diagram__caveat">
           {mascotSrc ? (
-            <img src={mascotSrc} alt="" style={{ height: 110 }} />
+            <img className="sk-flow-diagram__mascot" src={mascotSrc} alt="" />
           ) : null}
-          <SkCallout style={{ maxWidth: 320 }}>
-            <div style={{ ...sansBlock, fontSize: 15 }}>{caveat}</div>
+          <SkCallout className="sk-flow-diagram__bubble">
+            <div className="sk-flow-diagram__caveat-text">{caveat}</div>
           </SkCallout>
         </div>
       ) : null}

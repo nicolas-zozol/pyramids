@@ -49,10 +49,12 @@ export function BrandLogo({
   style,
   className,
 }: BrandLogoProps) {
+  const rootClass = ['sk-brand-logo', className].filter(Boolean).join(' ');
+
   if (size === 'mark') {
     return (
       <span
-        className={className}
+        className={rootClass}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -75,7 +77,7 @@ export function BrandLogo({
 
   return (
     <span
-      className={className}
+      className={rootClass}
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
@@ -83,10 +85,14 @@ export function BrandLogo({
         ...style,
       }}
     >
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap }}>
+      <span
+        className="sk-brand-logo__lockup"
+        style={{ display: 'inline-flex', alignItems: 'center', gap }}
+      >
         <span style={emojiStyle(emojiH)}>💪</span>
         <span style={emojiStyle(emojiH)}>🏗</span>
         <img
+          className="sk-brand-logo__wordmark"
           src={wordmarkSrc}
           alt="Robusta Build"
           width={wordmarkW}
@@ -104,7 +110,7 @@ export function BrandLogo({
         <span
           style={{
             fontFamily: 'var(--font-sans)',
-            fontSize: 14,
+            fontSize: 'var(--t-small)',
             color: 'var(--ink-mute)',
             marginTop: 10,
             marginLeft: emojiH * 2 + gap * 2,

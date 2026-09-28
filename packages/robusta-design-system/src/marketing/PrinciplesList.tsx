@@ -39,11 +39,9 @@ const DEFAULT_PRINCIPLES: Principle[] = [
   },
 ];
 
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
-
 /**
- * Two-column list of values, sketchnote bullet style. Each row is a
- * checkmark + bold key line + sub caption.
+ * List of values, sketchnote bullet style. Each row is a checkmark + bold
+ * key line + sub caption. One column below `sm`, two above.
  */
 export function PrinciplesList({
   eyebrow = '// what we believe',
@@ -52,51 +50,21 @@ export function PrinciplesList({
   className,
   style,
 }: PrinciplesListProps) {
+  const merged = ['sk-principles-list', className].filter(Boolean).join(' ');
+
   return (
-    <section className={className} style={{ padding: '72px 48px', ...style }}>
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ ...sansBlock, fontSize: 15, color: 'var(--ink-mute)', marginBottom: 6 }}>
-          {eyebrow}
-        </div>
-        <h2 style={{ ...sansBlock, fontSize: 56, margin: 0, lineHeight: 1, color: 'var(--ink)' }}>
-          {title}
-        </h2>
+    <section className={merged} style={style}>
+      <div className="sk-principles-list__head">
+        <div className="sk-principles-list__eyebrow">{eyebrow}</div>
+        <h2 className="sk-principles-list__title">{title}</h2>
       </div>
-      <ul
-        style={{
-          listStyle: 'none',
-          padding: 0,
-          margin: 0,
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '22px 56px',
-        }}
-      >
+      <ul className="sk-principles-list__items">
         {principles.map((it, i) => (
-          <li key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            <span className="sk-check" style={{ flexShrink: 0, marginTop: 4 }} />
+          <li key={i} className="sk-principles-list__item">
+            <span className="sk-check sk-principles-list__check" />
             <div>
-              <div
-                style={{
-                  ...sansBlock,
-                  fontWeight: 700,
-                  fontSize: 19,
-                  color: 'var(--ink)',
-                  lineHeight: 1.3,
-                }}
-              >
-                {it.k}
-              </div>
-              <div
-                style={{
-                  ...sansBlock,
-                  fontSize: 15,
-                  color: 'var(--ink-mute)',
-                  marginTop: 2,
-                }}
-              >
-                {it.v}
-              </div>
+              <div className="sk-principles-list__key">{it.k}</div>
+              <div className="sk-principles-list__value">{it.v}</div>
             </div>
           </li>
         ))}

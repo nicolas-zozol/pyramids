@@ -50,10 +50,9 @@ const DEFAULT_POSTS: NotePost[] = [
   },
 ];
 
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
-
 /**
- * Engineering-blog preview grid. Two columns of date + title + tag rows.
+ * Engineering-blog preview grid: date + title + tag rows, one column below
+ * `sm` and two above.
  */
 export function NotesPreview({
   eyebrow = '// notes from the desk',
@@ -64,67 +63,29 @@ export function NotesPreview({
   className,
   style,
 }: NotesPreviewProps) {
+  const merged = ['sk-notes-preview', className].filter(Boolean).join(' ');
+
   return (
-    <section
-      id="notes"
-      className={className}
-      style={{ padding: '64px 48px', background: 'var(--paper-2)', ...style }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          marginBottom: 36,
-        }}
-      >
+    <section id="notes" className={merged} style={style}>
+      <div className="sk-notes-preview__head">
         <div>
-          <div style={{ ...sansBlock, fontSize: 15, color: 'var(--ink-mute)', marginBottom: 6 }}>
-            {eyebrow}
-          </div>
-          <h2 style={{ ...sansBlock, fontSize: 56, margin: 0, lineHeight: 1, color: 'var(--ink)' }}>
-            {title}
-          </h2>
+          <div className="sk-notes-preview__eyebrow">{eyebrow}</div>
+          <h2 className="sk-notes-preview__title">{title}</h2>
         </div>
         {allLinkLabel ? (
-          <a href={allLinkHref} style={{ ...sansBlock, fontSize: 17, color: 'var(--ink)', textDecoration: 'none' }}>
-            {allLinkLabel}{' '}
-            <SkArrowRight width={50} verticalAlign="middle" />
+          <a href={allLinkHref} className="sk-notes-preview__all">
+            {allLinkLabel} <SkArrowRight width={50} verticalAlign="middle" />
           </a>
         ) : null}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '22px 32px' }}>
+      <div className="sk-notes-preview__list">
         {posts.map((p, i) => (
-          <a
-            key={i}
-            href={p.href ?? '#'}
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              display: 'flex',
-              gap: 18,
-              alignItems: 'flex-start',
-              padding: '14px 0',
-              borderBottom: '1.5px dashed var(--ink-faint)',
-            }}
-          >
-            <div
-              style={{
-                ...sansBlock,
-                fontSize: 14,
-                color: 'var(--ink-mute)',
-                minWidth: 56,
-                paddingTop: 4,
-              }}
-            >
-              {p.date}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ ...sansBlock, fontSize: 21, color: 'var(--ink)', lineHeight: 1.25 }}>
-                {p.title}
-              </div>
+          <a key={i} href={p.href ?? '#'} className="sk-notes-preview__post">
+            <div className="sk-notes-preview__date">{p.date}</div>
+            <div className="sk-notes-preview__post-body">
+              <div className="sk-notes-preview__post-title">{p.title}</div>
               {p.tag ? (
-                <div style={{ marginTop: 8 }}>
+                <div className="sk-notes-preview__tag-row">
                   <SkTag tone={p.tagTone}>{p.tag}</SkTag>
                 </div>
               ) : null}

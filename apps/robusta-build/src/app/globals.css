@@ -15,11 +15,6 @@
    first component that needs one, so the CLI lands on a layer already pointing
    at the design system.
 
-   Deliberately absent: --destructive and --destructive-foreground. The design
-   system ships no error colour, and inventing one here would be a literal
-   value, which BR-PYRAMID-6 forbids. The first story that needs an error
-   colour asks the design system for one rather than coining it here.
-
    The site defines no --font-*, no --t-* and no --sp-*: those are the
    package's. */
 
@@ -34,6 +29,8 @@
   --popover-foreground: var(--ink);
   --primary: var(--brand-primary);
   --primary-foreground: var(--paper);
+  --destructive: var(--brand-error);
+  --destructive-foreground: var(--paper);
   --secondary: var(--brand-secondary);
   --secondary-foreground: var(--ink);
   --muted: var(--paper-2);
@@ -54,6 +51,8 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);

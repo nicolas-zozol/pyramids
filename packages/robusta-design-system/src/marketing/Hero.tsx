@@ -34,7 +34,8 @@ const DEFAULT_TITLE = (
   <>
     we build software
     <br />
-    you can still <span className="sk-scribble" style={{ marginRight: 14 }}>maintain</span> in
+    you can still{' '}
+    <span className="sk-scribble sk-hero__title-scribble">maintain</span> in
     <br />
     <span className="highlight-yellow">five years.</span>
   </>
@@ -52,17 +53,19 @@ const DEFAULT_SUBTITLE = (
 
 const DEFAULT_FOOTNOTE = (
   <>
-    <span className="sk-check" style={{ display: 'inline-block', marginRight: 10 }} />
+    <span className="sk-check" />
     currently booking q3 · 2 slots left this quarter
   </>
 );
-
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
 
 /**
  * Marketing hero — headline + subtitle + dual CTA + mascot illustration.
  * All textual content is prop-driven with the original prototype copy as
  * the default (so consumers see the same surface out of the box).
+ *
+ * One column below `lg`, where the mascot sits under the copy and the
+ * annotation with it; the two-column split and the pointing squiggle are
+ * `.sk-hero`'s business in `sketch.css`.
  */
 export function Hero({
   eyebrow = 'independent senior engineering',
@@ -77,119 +80,47 @@ export function Hero({
   className,
   style,
 }: HeroProps) {
+  const merged = ['sk-hero', className].filter(Boolean).join(' ');
+
   return (
-    <section
-      className={className}
-      style={{ padding: '64px 48px 32px', position: 'relative', ...style }}
-    >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1.3fr 1fr',
-          gap: 48,
-          alignItems: 'center',
-        }}
-      >
-        <div>
-          <div
-            style={{
-              ...sansBlock,
-              fontSize: 17,
-              color: 'var(--ink-mute)',
-              marginBottom: 18,
-            }}
-          >
-            <SkArrowRight width={38} verticalAlign="middle" style={{ marginRight: 8 }} />
+    <section className={merged} style={style}>
+      <div className="sk-hero__grid">
+        <div className="sk-hero__copy">
+          <div className="sk-hero__eyebrow">
+            <SkArrowRight
+              width={38}
+              verticalAlign="middle"
+              className="sk-hero__eyebrow-arrow"
+            />
             {eyebrow}
           </div>
-          <h1
-            style={{
-              ...sansBlock,
-              fontWeight: 600,
-              fontSize: 88,
-              lineHeight: 1.05,
-              margin: 0,
-              letterSpacing: '-1px',
-              color: 'var(--ink)',
-            }}
-          >
-            {title}
-          </h1>
-          <p
-            style={{
-              ...sansBlock,
-              fontSize: 21,
-              lineHeight: 1.45,
-              color: 'var(--ink-soft)',
-              marginTop: 28,
-              maxWidth: 520,
-            }}
-          >
-            {subtitle}
-          </p>
-          <div style={{ display: 'flex', gap: 16, marginTop: 36 }}>
+          <h1 className="sk-hero__title">{title}</h1>
+          <p className="sk-hero__subtitle">{subtitle}</p>
+          <div className="sk-hero__actions">
             {primaryCtaLabel ? (
-              <SkButton variant="primary">
-                <a
-                  href={primaryCtaHref}
-                  style={{ color: 'inherit', textDecoration: 'none' }}
-                >
-                  {primaryCtaLabel}
-                </a>
+              <SkButton variant="primary" href={primaryCtaHref}>
+                {primaryCtaLabel}
               </SkButton>
             ) : null}
             {secondaryCtaLabel ? (
-              <SkButton>
-                <a
-                  href={secondaryCtaHref}
-                  style={{ color: 'inherit', textDecoration: 'none' }}
-                >
-                  {secondaryCtaLabel}
-                </a>
-              </SkButton>
+              <SkButton href={secondaryCtaHref}>{secondaryCtaLabel}</SkButton>
             ) : null}
           </div>
           {footnote ? (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                marginTop: 28,
-                ...sansBlock,
-                fontSize: 15,
-                color: 'var(--ink-mute)',
-              }}
-            >
-              {footnote}
-            </div>
+            <div className="sk-hero__footnote">{footnote}</div>
           ) : null}
         </div>
 
-        <div style={{ position: 'relative', textAlign: 'center' }}>
+        <div className="sk-hero__figure">
           {mascotSrc ? (
-            <img src={mascotSrc} alt="crystal tux" style={{ height: 360 }} />
+            <img className="sk-hero__mascot" src={mascotSrc} alt="crystal tux" />
           ) : null}
-          <div
-            style={{
-              position: 'absolute',
-              top: 30,
-              right: 0,
-              ...sansBlock,
-              fontSize: 14,
-              color: 'var(--ink-mute)',
-              transform: 'rotate(4deg)',
-            }}
-          >
+          <div className="sk-hero__annotation">
             this is crystal tux.
             <br />
             she lives here.
           </div>
-          <svg
-            style={{ position: 'absolute', top: 60, right: 50, width: 80, height: 60 }}
-            viewBox="0 0 80 60"
-            aria-hidden="true"
-          >
+          <svg className="sk-hero__doodle" viewBox="0 0 80 60" aria-hidden="true">
             <path
               d="M70,10 Q40,20 20,40"
               stroke="var(--ink)"

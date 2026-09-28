@@ -41,6 +41,19 @@
   --brand-accent-soft:    #cfe2f5;
   --brand-accent-deep:    #074a8f;
 
+  /* -------- error --------
+     One ramp, shaped like the three above, so a consumer can alias a
+     semantic name onto it (--destructive, --error, whatever its token layer
+     calls it) instead of coining a colour of its own.
+
+     The value is constrained by contrast rather than by taste: the base
+     reads 6.25:1 against --paper, which holds it as body text and holds
+     --paper as text on top of it. No component of this package consumes
+     the ramp — it exists so that the naming is the consumer's. */
+  --brand-error:          #b3261e;
+  --brand-error-soft:     #f7d9d6;
+  --brand-error-deep:     #7d1a15;
+
   /* -------- legacy accent aliases (kept for compatibility) --------
      Old code still references --accent-blue/green/pink/yellow.
      We point them at the new brand tokens so existing components shift palette. */
@@ -73,16 +86,29 @@
   --font-script:  var(--font-caveat, 'Caveat'), cursive;  /* logo + rare accents only */
   --font-mono:    var(--font-ibm-plex-mono, 'IBM Plex Mono'), ui-monospace, Menlo, monospace;
 
-  /* -------- type scale --------
-     standard web sizes now that we're on a readable sans. */
-  --t-h1:   56px;
-  --t-h2:   40px;
-  --t-h3:   28px;
-  --t-h4:   20px;
-  --t-body: 16px;   /* readable floor */
-  --t-small:14px;
-  --t-tiny: 12px;
-  --t-code: 14px;
+  /* -------- type scale — ten steps, every one fluid --------
+     Each step is clamp(floor, viewport-relative, ceiling). The ceiling is
+     what the role renders at on a wide viewport, the floor what it renders
+     at 320px, and the middle term interpolates linearly between the two
+     across 320px → 1536px. No step is a fixed length, so a headline shrinks
+     continuously as the viewport narrows rather than in steps.
+
+     px and not rem: `html` below takes its font-size from --t-body, so a
+     rem-based step would be relative to a length this very block defines.
+
+     No component of this package declares a font size. Every size it
+     renders reads one of these ten names, which is what makes the scale
+     worth having — a scale nothing consumes changes nothing. */
+  --t-display: clamp(34px, 21.9px + 3.78vw, 80px);  /* the largest text of a surface */
+  --t-h1:      clamp(28px, 20.63px + 2.3vw, 56px);  /* a section headline */
+  --t-h2:      clamp(24px, 19.79px + 1.32vw, 40px);
+  --t-h3:      clamp(20px, 17.89px + 0.66vw, 28px);
+  --t-h4:      clamp(18px, 17.47px + 0.16vw, 20px);
+  --t-lead:    clamp(17px, 16.47px + 0.16vw, 19px); /* one step above running text */
+  --t-body:    clamp(16px, 15.74px + 0.08vw, 17px); /* readable floor */
+  --t-small:   clamp(14px, 13.74px + 0.08vw, 15px);
+  --t-tiny:    clamp(12px, 11.74px + 0.08vw, 13px);
+  --t-code:    clamp(13px, 12.74px + 0.08vw, 14px);
 
   --lh-display: 1.0;
   --lh-tight:   1.15;

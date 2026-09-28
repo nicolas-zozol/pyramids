@@ -100,7 +100,7 @@
   align-items: center;
   gap: 8px;
   font-family: var(--font-annot);
-  font-size: 18px;
+  font-size: var(--t-lead);
   text-transform: lowercase;
   background: var(--paper);
   color: var(--ink);
@@ -150,7 +150,7 @@
 /* ---------- input ---------- */
 .sk-input {
   font-family: var(--font-hand);
-  font-size: 18px;
+  font-size: var(--t-lead);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -177,7 +177,7 @@
 .sk-tag {
   display: inline-block;
   font-family: var(--font-annot);
-  font-size: 14px;
+  font-size: var(--t-small);
   padding: 3px 10px;
   background: var(--paper);
   color: var(--ink);
@@ -237,4 +237,572 @@
   background: rgba(255, 240, 130, 0.55);
   border-left: 1px dashed rgba(0,0,0,0.15);
   border-right: 1px dashed rgba(0,0,0,0.15);
+}
+
+/* =========================================================
+   marketing surfaces — layout
+   =========================================================
+
+   One block per surface, named after the component in kebab-case:
+   `.sk-<surface>` for the root, `.sk-<surface>__<part>` for a part,
+   `--<modifier>` for a variant — the rule `.sk-btn--primary` already
+   follows, extended with a part separator.
+
+   These class names are the override surface. Every rule below is written
+   at single-class specificity and carries no `!important`, so a consuming
+   site overrides one with a selector carrying one class more and wins
+   whatever the load order — which matters, since a site's own stylesheet
+   may well load before this file.
+
+   Mobile-first: what follows is the narrow layout, and the responsive
+   section at the end of this file widens it. No surface declares a font
+   size; every size reads a --t-* step of colors_and_type.css.
+   ========================================================= */
+
+/* ---------- brand logo ----------
+   Not a surface — a primitive the header and the footer both embed. It
+   carries two rules and no more: the lockup has to be able to shrink, or
+   the wordmark alone is wider than a 320px viewport. The emoji glyph sizes
+   stay inline: they are dimensions of the mark, tuned against the
+   wordmark's 1603×312 ratio, and not type. */
+.sk-brand-logo        { max-width: 100%; }
+.sk-brand-logo__lockup   { min-width: 0; max-width: 100%; }
+.sk-brand-logo__wordmark { min-width: 0; max-width: 100%; height: auto; }
+
+/* ---------- site header ---------- */
+.sk-site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4);
+  border-bottom: 1.5px dashed var(--ink-faint);
+}
+.sk-site-header__brand { display: flex; align-items: center; min-width: 0; }
+.sk-site-header__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3) var(--sp-4);
+}
+.sk-site-header__link {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ---------- hero ---------- */
+.sk-hero {
+  position: relative;
+  padding: var(--sp-6) var(--sp-4) var(--sp-5);
+}
+.sk-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: center;
+}
+.sk-hero__copy { min-width: 0; }
+.sk-hero__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-4);
+}
+.sk-hero__eyebrow-arrow { margin-right: var(--sp-2); }
+.sk-hero__title-scribble { margin-right: var(--sp-3); }
+.sk-hero__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-display);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-hero__subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  margin: var(--sp-5) 0 0;
+  max-width: 520px;
+}
+.sk-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}
+.sk-hero__footnote {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+}
+.sk-hero__figure { position: relative; text-align: center; min-width: 0; }
+.sk-hero__mascot { height: 240px; max-width: 100%; object-fit: contain; }
+.sk-hero__annotation {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  transform: rotate(4deg);
+  margin-top: var(--sp-4);
+}
+/* the little pointing squiggle: it aims at the mascot from a fixed offset,
+   which only means anything once the figure sits in its own column. */
+.sk-hero__doodle { display: none; }
+
+/* ---------- services grid ---------- */
+.sk-services-grid { padding: var(--sp-6) var(--sp-4); }
+.sk-services-grid__head { margin-bottom: var(--sp-6); }
+.sk-services-grid__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-services-grid__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-services-grid__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+.sk-services-grid__card { position: relative; min-width: 0; }
+.sk-services-grid__card--tilt-left  { transform: rotate(-0.4deg); }
+.sk-services-grid__card--tilt-right { transform: rotate(0.4deg); }
+.sk-services-grid__stamp {
+  position: absolute;
+  inset: 6px -6px -6px 6px;
+  background: var(--ink);
+  z-index: 0;
+}
+.sk-services-grid__face {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  padding: var(--sp-5);
+  min-height: 200px;
+}
+.sk-services-grid__frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'><path d='M3,4 Q40,2 100,3 T197,5 Q198,60 197,120 Q198,170 196,196 Q140,198 100,196 T6,196 Q3,140 4,80 T3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='0.7'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-services-grid__card-body { position: relative; z-index: 2; }
+.sk-services-grid__tag-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--sp-1);
+}
+.sk-services-grid__card-title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h2);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: var(--sp-1);
+  overflow-wrap: break-word;
+}
+.sk-services-grid__time {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-3);
+}
+.sk-services-grid__body {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  margin: 0;
+}
+.sk-services-grid__more {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink);
+}
+
+/* ---------- flow diagram ---------- */
+.sk-flow-diagram {
+  padding: var(--sp-6) var(--sp-4);
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--ink-faint) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  border-top: 1.5px dashed var(--ink-faint);
+  border-bottom: 1.5px dashed var(--ink-faint);
+}
+.sk-flow-diagram__head { margin-bottom: var(--sp-6); }
+.sk-flow-diagram__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-flow-diagram__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-flow-diagram__steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--sp-5) var(--sp-4);
+}
+.sk-flow-diagram__step { text-align: center; min-width: 96px; }
+.sk-flow-diagram__badge {
+  width: 64px;
+  height: 64px;
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
+}
+.sk-flow-diagram__label {
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
+  line-height: 1;
+  color: var(--ink);
+  margin-top: var(--sp-2);
+}
+.sk-flow-diagram__sub {
+  font-family: var(--font-sans);
+  font-size: var(--t-tiny);
+  color: var(--ink-mute);
+  margin-top: var(--sp-1);
+}
+/* the arrows read left-to-right, which is only true once the steps sit on
+   one row. Wrapped, an arrow at the end of a line points at nothing. */
+.sk-flow-diagram__arrow { display: none; }
+.sk-flow-diagram__caveat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}
+.sk-flow-diagram__mascot { height: 96px; max-width: 100%; object-fit: contain; }
+.sk-flow-diagram__bubble { max-width: 320px; }
+.sk-flow-diagram__caveat-text {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+}
+
+/* ---------- principles list ---------- */
+.sk-principles-list { padding: var(--sp-7) var(--sp-4); }
+.sk-principles-list__head { margin-bottom: var(--sp-6); }
+.sk-principles-list__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-principles-list__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-principles-list__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+.sk-principles-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+.sk-principles-list__check { flex-shrink: 0; margin-top: 4px; }
+.sk-principles-list__key {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--t-lead);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.sk-principles-list__value {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-top: 2px;
+}
+
+/* ---------- notes preview ---------- */
+.sk-notes-preview {
+  padding: var(--sp-6) var(--sp-4);
+  background: var(--paper-2);
+}
+.sk-notes-preview__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+.sk-notes-preview__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-notes-preview__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-notes-preview__all {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sk-notes-preview__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-4) var(--sp-6);
+}
+.sk-notes-preview__post {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-bottom: 1.5px dashed var(--ink-faint);
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
+.sk-notes-preview__date {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  min-width: 52px;
+  padding-top: 4px;
+}
+.sk-notes-preview__post-body { flex: 1; min-width: 0; }
+.sk-notes-preview__post-title {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  line-height: 1.25;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+.sk-notes-preview__tag-row { margin-top: var(--sp-2); }
+
+/* ---------- closing cta ---------- */
+.sk-cta {
+  position: relative;
+  padding: var(--sp-7) var(--sp-4);
+  text-align: center;
+}
+.sk-cta__mascot {
+  height: 110px;
+  max-width: 100%;
+  object-fit: contain;
+  margin-bottom: var(--sp-2);
+}
+.sk-cta__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  line-height: 1;
+  color: var(--ink);
+  margin: var(--sp-3) 0 var(--sp-2);
+  overflow-wrap: break-word;
+}
+.sk-cta__subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink-soft);
+  max-width: 540px;
+  margin: 0 auto var(--sp-6);
+}
+.sk-cta__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+}
+.sk-cta__email { width: min(320px, 100%); height: 52px; }
+.sk-cta__email-field { height: 52px; }
+.sk-cta__footnote {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-top: var(--sp-4);
+}
+
+/* ---------- site footer ---------- */
+.sk-site-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+  padding: var(--sp-6) var(--sp-4) var(--sp-7);
+  border-top: 1.5px solid var(--ink);
+}
+.sk-site-footer__brand { min-width: 0; }
+.sk-site-footer__tagline {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  line-height: 1.4;
+  color: var(--ink-mute);
+  white-space: pre-line;
+  max-width: 280px;
+  margin: var(--sp-3) 0 0;
+}
+.sk-site-footer__col { min-width: 0; }
+.sk-site-footer__col-title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
+  color: var(--ink);
+}
+.sk-site-footer__items {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-2) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.sk-site-footer__link {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink);
+  text-decoration: none;
+}
+/* an item with no destination — a label, and no anchor around it */
+.sk-site-footer__text {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+}
+.sk-site-footer__bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-family: var(--font-sans);
+  font-size: var(--t-tiny);
+  color: var(--ink-mute);
+  border-top: 1.5px dashed var(--ink-faint);
+  padding-top: var(--sp-4);
+  margin-top: var(--sp-3);
+}
+
+/* =========================================================
+   responsive — the five widths, each written once
+   =========================================================
+
+   Five widths — sm, md, lg, xl, 2xl at 640, 768, 1024, 1280 and 1536px, the
+   Tailwind default set shadcn sits on. This package imports no Tailwind theme
+   and inherits nothing: it restates the five values, so a site writing `md:`
+   and a surface's own query switch at the same width. Each appears in exactly
+   one `@media` prelude below and nowhere else in this file.
+
+   No --bp-* custom property ships. A media query cannot read one, so a token
+   named for a breakpoint would fail where its name promises.
+
+   320px is a floor and not a breakpoint: no rule keys on it, and the base
+   rule set above must already hold there.
+   ========================================================= */
+
+/* -------- sm — two columns appear -------- */
+@media (min-width: 40rem) {
+  .sk-site-header    { padding: var(--sp-4) var(--sp-5); }
+  .sk-hero           { padding: var(--sp-7) var(--sp-5) var(--sp-5); }
+  .sk-services-grid  { padding: var(--sp-6) var(--sp-5); }
+  .sk-flow-diagram   { padding: var(--sp-6) var(--sp-5); }
+  .sk-principles-list{ padding: var(--sp-7) var(--sp-5); }
+  .sk-notes-preview  { padding: var(--sp-6) var(--sp-5); }
+  .sk-cta            { padding: var(--sp-7) var(--sp-5); }
+  .sk-site-footer    { padding: var(--sp-6) var(--sp-5) var(--sp-7); }
+
+  .sk-principles-list__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-notes-preview__list    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-site-footer            { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* -------- md — the horizontal padding reaches its full width and the
+   header becomes one row -------- */
+@media (min-width: 48rem) {
+  .sk-site-header    { padding: var(--sp-5) var(--sp-7); justify-content: space-between; }
+  .sk-hero           { padding: var(--sp-8) var(--sp-7) var(--sp-6); }
+  .sk-services-grid  { padding: var(--sp-8) var(--sp-7); }
+  .sk-flow-diagram   { padding: var(--sp-8) var(--sp-7); }
+  .sk-principles-list{ padding: var(--sp-9) var(--sp-7); }
+  .sk-notes-preview  { padding: var(--sp-8) var(--sp-7); }
+  .sk-cta            { padding: var(--sp-9) var(--sp-7); }
+  .sk-site-footer    { padding: var(--sp-6) var(--sp-7) var(--sp-8); }
+
+  .sk-site-header__nav       { gap: var(--sp-5); }
+  .sk-services-grid__list    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-flow-diagram__caveat   { justify-content: flex-end; }
+  .sk-notes-preview__head    { flex-wrap: nowrap; }
+}
+
+/* -------- lg — the hero splits, the grids reach their full count, and the
+   five steps fit on one row, which is what makes the arrows mean something:
+   below this the row wants 800px against less paper than that, so it wraps
+   and the arrows stay hidden -------- */
+@media (min-width: 64rem) {
+  .sk-flow-diagram__steps    { flex-wrap: nowrap; justify-content: space-between; gap: var(--sp-2); }
+  .sk-flow-diagram__arrow    { display: inline-block; }
+  .sk-hero__grid             { grid-template-columns: 1.3fr minmax(0, 1fr); gap: var(--sp-6); }
+  .sk-hero__mascot           { height: 300px; }
+  .sk-services-grid__list    { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
+  .sk-principles-list__items { gap: var(--sp-5) var(--sp-7); }
+  .sk-site-footer            { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--sp-6); }
+  .sk-site-header__nav       { gap: var(--sp-6); }
+}
+
+/* -------- xl — the hero annotation returns to the margin it points from -------- */
+@media (min-width: 80rem) {
+  .sk-hero__grid       { gap: var(--sp-7); }
+  .sk-hero__annotation { position: absolute; top: 30px; right: 0; margin-top: 0; }
+  .sk-hero__doodle     { display: block; position: absolute; top: 60px; right: 50px; width: 80px; height: 60px; }
+}
+
+/* -------- 2xl — the surfaces reach the proportions they render at their
+   widest, which is where the type scale tops out as well -------- */
+@media (min-width: 96rem) {
+  .sk-hero__mascot         { height: 360px; }
+  .sk-flow-diagram__mascot { height: 110px; }
+  .sk-cta__mascot          { height: 140px; }
 }

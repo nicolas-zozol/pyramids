@@ -1,11 +1,17 @@
 import type { CSSProperties } from 'react';
 import { BrandLogo } from '../primitives/BrandLogo.js';
 
+export interface FooterLink {
+  /** The text of the item. */
+  label: string;
+  /** Absent when no destination is known: renders as text, never as an anchor. */
+  href?: string;
+}
+
 export interface FooterColumn {
   /** Column heading. */
   h: string;
-  /** Plain-string item labels — internally rendered as `<a href="#">`. */
-  items: string[];
+  items: FooterLink[];
 }
 
 export interface SiteFooterProps {
@@ -22,16 +28,45 @@ export interface SiteFooterProps {
   style?: CSSProperties;
 }
 
+/**
+ * The package knows no site's URL, so its own defaults declare no
+ * destination and render as text. A site supplying `columns` supplies real
+ * links — which is the only honest way for a design system to ship default
+ * copy it cannot resolve.
+ */
 const DEFAULT_COLUMNS: FooterColumn[] = [
-  { h: 'work', items: ['the audit', 'embedded eng', 'rebuild surgery', 'past projects'] },
-  { h: 'notes', items: ['all posts', 'rss', 'on github', 'on bsky'] },
-  { h: 'company', items: ['about', 'engagement notes', 'contact', 'privacy'] },
+  {
+    h: 'work',
+    items: [
+      { label: 'the audit' },
+      { label: 'embedded eng' },
+      { label: 'rebuild surgery' },
+      { label: 'past projects' },
+    ],
+  },
+  {
+    h: 'notes',
+    items: [
+      { label: 'all posts' },
+      { label: 'rss' },
+      { label: 'on github' },
+      { label: 'on bsky' },
+    ],
+  },
+  {
+    h: 'company',
+    items: [
+      { label: 'about' },
+      { label: 'engagement notes' },
+      { label: 'contact' },
+      { label: 'privacy' },
+    ],
+  },
 ];
 
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
-
 /**
- * Four-column site footer — brand block + three link columns + bottom line.
+ * Site footer — brand block + three link columns + bottom line. One column
+ * below `sm`, two up to `lg`, and the 1.4fr/1fr/1fr/1fr row above.
  */
 export function SiteFooter({
   wordmarkSrc,
@@ -42,78 +77,33 @@ export function SiteFooter({
   className,
   style,
 }: SiteFooterProps) {
+  const merged = ['sk-site-footer', className].filter(Boolean).join(' ');
+
   return (
-    <footer
-      className={className}
-      style={{
-        padding: '36px 48px 56px',
-        borderTop: '1.5px solid var(--ink)',
-        display: 'grid',
-        gridTemplateColumns: '1.4fr 1fr 1fr 1fr',
-        gap: 36,
-        ...style,
-      }}
-    >
-      <div>
+    <footer className={merged} style={style}>
+      <div className="sk-site-footer__brand">
         <BrandLogo size="compact" wordmarkSrc={wordmarkSrc} />
-        <p
-          style={{
-            ...sansBlock,
-            fontSize: 15,
-            color: 'var(--ink-mute)',
-            marginTop: 14,
-            maxWidth: 280,
-            lineHeight: 1.4,
-            whiteSpace: 'pre-line',
-          }}
-        >
-          {tagline}
-        </p>
+        <p className="sk-site-footer__tagline">{tagline}</p>
       </div>
       {columns.map((col) => (
-        <div key={col.h}>
-          <div style={{ ...sansBlock, fontSize: 26, color: 'var(--ink)' }}>{col.h}</div>
-          <ul
-            style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: '8px 0 0',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 6,
-            }}
-          >
+        <div key={col.h} className="sk-site-footer__col">
+          <div className="sk-site-footer__col-title">{col.h}</div>
+          <ul className="sk-site-footer__items">
             {col.items.map((it) => (
-              <li key={it}>
-                <a
-                  href="#"
-                  style={{
-                    ...sansBlock,
-                    fontSize: 15,
-                    color: 'var(--ink)',
-                    textDecoration: 'none',
-                  }}
-                >
-                  {it}
-                </a>
+              <li key={it.label}>
+                {it.href ? (
+                  <a href={it.href} className="sk-site-footer__link">
+                    {it.label}
+                  </a>
+                ) : (
+                  <span className="sk-site-footer__text">{it.label}</span>
+                )}
               </li>
             ))}
           </ul>
         </div>
       ))}
-      <div
-        style={{
-          gridColumn: '1 / -1',
-          display: 'flex',
-          justifyContent: 'space-between',
-          ...sansBlock,
-          fontSize: 13,
-          color: 'var(--ink-mute)',
-          borderTop: '1.5px dashed var(--ink-faint)',
-          paddingTop: 20,
-          marginTop: 12,
-        }}
-      >
+      <div className="sk-site-footer__bottom">
         <div>{copyright}</div>
         <div>{versionLine}</div>
       </div>

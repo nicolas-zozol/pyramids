@@ -49,72 +49,30 @@ const DEFAULT_SERVICES: ServiceItem[] = [
   },
 ];
 
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
-
-const WOBBLY_BORDER_SVG =
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'><path d='M3,4 Q40,2 100,3 T197,5 Q198,60 197,120 Q198,170 196,196 Q140,198 100,196 T6,196 Q3,140 4,80 T3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='0.7'/></svg>\")";
-
 interface ServiceCardProps extends ServiceItem {
-  rotate: string;
+  /** Alternating ±0.4° tilt, so the row of cards does not read as a grid. */
+  tilt: 'left' | 'right';
 }
 
-function ServiceCard({ title, time, body, tag, tagTone, rotate }: ServiceCardProps) {
+function ServiceCard({ title, time, body, tag, tagTone, tilt }: ServiceCardProps) {
+  const cardClass = `sk-services-grid__card sk-services-grid__card--tilt-${tilt}`;
   return (
-    <div style={{ position: 'relative', transform: `rotate(${rotate})` }}>
+    <div className={cardClass}>
       {/* offset stamp behind */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: '6px -6px -6px 6px',
-          background: 'var(--ink)',
-          zIndex: 0,
-        }}
-      />
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          background: 'var(--paper)',
-          padding: '24px 26px 28px',
-          minHeight: 220,
-        }}
-      >
+      <div className="sk-services-grid__stamp" />
+      <div className="sk-services-grid__face">
         {/* wobbly border */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            pointerEvents: 'none',
-            backgroundImage: WOBBLY_BORDER_SVG,
-            backgroundSize: '100% 100%',
-          }}
-        />
-        <div style={{ position: 'relative', zIndex: 2 }}>
+        <div className="sk-services-grid__frame" />
+        <div className="sk-services-grid__card-body">
           {tag ? (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 6 }}>
+            <div className="sk-services-grid__tag-row">
               <SkTag tone={tagTone}>{tag}</SkTag>
             </div>
           ) : null}
-          <div style={{ ...sansBlock, fontSize: 38, lineHeight: 1.1, marginBottom: 4, color: 'var(--ink)' }}>
-            {title}
-          </div>
-          <div style={{ ...sansBlock, fontSize: 14, color: 'var(--ink-mute)', marginBottom: 14 }}>
-            {time}
-          </div>
-          <p style={{ ...sansBlock, fontSize: 17, lineHeight: 1.45, color: 'var(--ink-soft)', margin: 0 }}>
-            {body}
-          </p>
-          <div
-            style={{
-              marginTop: 20,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              ...sansBlock,
-              fontSize: 15,
-              color: 'var(--ink)',
-            }}
-          >
+          <div className="sk-services-grid__card-title">{title}</div>
+          <div className="sk-services-grid__time">{time}</div>
+          <p className="sk-services-grid__body">{body}</p>
+          <div className="sk-services-grid__more">
             see how it works <SkArrowRight width={40} />
           </div>
         </div>
@@ -124,9 +82,11 @@ function ServiceCard({ title, time, body, tag, tagTone, rotate }: ServiceCardPro
 }
 
 /**
- * Three-column "what we do" service grid. Cards have a sticker-offset stamp
- * + wobbly inline-SVG border. Per-card rotation alternates ±0.4° to fight
- * the perfect grid feel.
+ * "What we do" service grid. Cards have a sticker-offset stamp + wobbly
+ * SVG border, both declared in `sketch.css`.
+ *
+ * One column below `md`, two up to `lg`, three above — a card holding a
+ * paragraph is unreadable at a third of a phone's width.
  */
 export function ServicesGrid({
   eyebrow = '// what we do',
@@ -135,26 +95,20 @@ export function ServicesGrid({
   className,
   style,
 }: ServicesGridProps) {
+  const merged = ['sk-services-grid', className].filter(Boolean).join(' ');
+
   return (
-    <section
-      id="work"
-      className={className}
-      style={{ padding: '64px 48px', ...style }}
-    >
-      <div style={{ marginBottom: 36 }}>
-        <div style={{ ...sansBlock, fontSize: 15, color: 'var(--ink-mute)', marginBottom: 6 }}>
-          {eyebrow}
-        </div>
-        <h2 style={{ ...sansBlock, fontSize: 56, margin: 0, lineHeight: 1, color: 'var(--ink)' }}>
-          {title}
-        </h2>
+    <section id="work" className={merged} style={style}>
+      <div className="sk-services-grid__head">
+        <div className="sk-services-grid__eyebrow">{eyebrow}</div>
+        <h2 className="sk-services-grid__title">{title}</h2>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28 }}>
+      <div className="sk-services-grid__list">
         {services.map((s, i) => (
           <ServiceCard
             key={s.title}
             {...s}
-            rotate={i % 2 === 0 ? '-0.4deg' : '0.4deg'}
+            tilt={i % 2 === 0 ? 'left' : 'right'}
           />
         ))}
       </div>

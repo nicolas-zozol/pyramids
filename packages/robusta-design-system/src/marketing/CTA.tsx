@@ -19,10 +19,11 @@ export interface CTAProps {
   style?: CSSProperties;
 }
 
-const sansBlock: CSSProperties = { fontFamily: 'var(--font-sans)' };
-
 /**
  * Closing call-to-action: waving-tux mascot + headline + email + button.
+ * The headline shares `--t-display` with the hero's — one surface, one
+ * largest text.
+ *
  * Server-component-safe; consumer should wrap the email field in a client
  * form when wiring submit behavior.
  */
@@ -37,52 +38,31 @@ export function CTA({
   className,
   style,
 }: CTAProps) {
+  const merged = ['sk-cta', className].filter(Boolean).join(' ');
+
   return (
-    <section
-      className={className}
-      style={{ padding: '80px 48px', textAlign: 'center', position: 'relative', ...style }}
-    >
+    <section className={merged} style={style}>
       {mascotSrc ? (
-        <img src={mascotSrc} alt="" style={{ height: 140, marginBottom: 8 }} />
+        <img className="sk-cta__mascot" src={mascotSrc} alt="" />
       ) : null}
-      <h2 style={{ ...sansBlock, fontSize: 76, margin: '12px 0 8px', lineHeight: 1, color: 'var(--ink)' }}>
-        {title}
-      </h2>
-      {subtitle ? (
-        <p style={{ ...sansBlock, fontSize: 19, color: 'var(--ink-soft)', maxWidth: 540, margin: '0 auto 32px' }}>
-          {subtitle}
-        </p>
-      ) : null}
-      <div
-        style={{
-          display: 'flex',
-          gap: 16,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
+      <h2 className="sk-cta__title">{title}</h2>
+      {subtitle ? <p className="sk-cta__subtitle">{subtitle}</p> : null}
+      <div className="sk-cta__form">
         {emailPlaceholder ? (
           <SkInput
             type="email"
             placeholder={emailPlaceholder}
-            wrapperStyle={{ width: 320, height: 52 }}
-            style={{ height: 52 }}
+            wrapperClassName="sk-cta__email"
+            className="sk-cta__email-field"
           />
         ) : null}
         {ctaLabel ? (
-          <SkButton variant="primary">
-            <a href={ctaHref} style={{ color: 'inherit', textDecoration: 'none' }}>
-              {ctaLabel}
-            </a>
+          <SkButton variant="primary" href={ctaHref}>
+            {ctaLabel}
           </SkButton>
         ) : null}
       </div>
-      {footnote ? (
-        <div style={{ ...sansBlock, fontSize: 14, color: 'var(--ink-mute)', marginTop: 18 }}>
-          {footnote}
-        </div>
-      ) : null}
+      {footnote ? <div className="sk-cta__footnote">{footnote}</div> : null}
     </section>
   );
 }
