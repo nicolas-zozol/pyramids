@@ -14,6 +14,8 @@ Recorded on 2026-07-31 by `bulkman resolve` as delegated registrar, from the arb
 
 Recorded on 2026-07-31 by epicman as registrar, from the arbitration of Open Question 3 of `content-source.design.md`: BR-PYRAMID-10, after `Published article` entered `ubiquitous-language.md` under Gap 1 of the same document. The four tests pass — the publisher decides which articles a site serves and could decide to serve its whole corpus, the wording holds on glossary terms only, it states an invariant rather than a sequence, and it is one rule rather than a ladder. What a missing declaration costs — an article absent from the index, and its v1 addresses answering Gone — is enforcement and sequencing, deliberately left out of the rule. The glossary entry for `Published article` restates the rule in its explanatory clause and cites it rather than duplicating it silently; unlike the indexable-page rule refused on 2026-07-30, this one stays violable, since it constrains what a site serves rather than defining a property of the thing served. 10 is the next free identifier: 9 was the highest recorded and 4 stays retired.
 
+Recorded on 2026-10-06 by epicman as registrar, from the arbitration of OQ-PYRAMID-2 of `features/pyramid-v2-epic/pyramid-v2.epic.md`, which has the English articles translated rather than kept: BR-PYRAMID-11. The four tests pass — the publisher decides the languages a site speaks and can reverse it, the wording holds on the glossary terms Site and Locale, it states what holds rather than a sequence, and it is one rule rather than a ladder. How the site gets there — the default locale switched to French, the English articles translated — is work, not rule. 12 is the next free identifier: 4 stays retired.
+
 ## PYRAMID — building SEO sites on the shared base
 
 - BR-PYRAMID-1 — The URL of a page must state the kind of page it addresses, so that a site can resolve it without consulting its content source.
@@ -25,5 +27,6 @@ Recorded on 2026-07-31 by epicman as registrar, from the arbitration of Open Que
 - BR-PYRAMID-8 — A site must supply the page copy of every page it publishes; its design system must supply no page copy.
 - BR-PYRAMID-9 — An article carries at most one category and any number of tags.
 - BR-PYRAMID-10 — A site publishes an article only if that article declares itself published.
+- BR-PYRAMID-11 — robusta.build must have no locale other than French.
 
 BR-PYRAMID-4 is retired: see the reconciliation note above. Nothing is recorded under that identifier again.
