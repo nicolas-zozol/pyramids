@@ -180,24 +180,6 @@ Characters: Arabica, the builder of the v2 site, working on the machine where th
 
 - 2026-07-31 — `Clean checkout` enters `ubiquitous-language.md`: a checkout carrying no installed dependency and no build output anywhere in its ancestry; a git worktree beside an installed repository is not one. Pourquoi : lgtm on the proposition of Gap 2, applied by `bulkman resolve` as delegated registrar — BR-PYRAMID-5 is recorded on the term, and a registered rule whose central term has no definition cannot be verified the same way twice. The vocabulary test of BR-PYRAMID-5 is met from this point.
 - 2026-07-31 — `Green set` enters `ubiquitous-language.md`: the named collection of workspaces that must build from a clean checkout, being the build chain plus every site the repository claims to ship. Pourquoi : lgtm on the proposition of Gap 3, applied in the same registrar pass — without a name, "the build chain works" stays an impression; with one, R-UNBLOCKBUILD-7 states exactly what was and was not verified. Impact : this supplies the definition Gap 1 of `pyramid-v2.epic.md` asked for and left blank, so epicman can fold that entry.
-
-## Open Questions & Gaps
-
-### Gaps
-
-- Gap 1: the story's Documentation updates plan covers `root.archi.md` Notes / Gotchas and the Dependencies sections of `links.archi.md` and `ctas.archi.md`, but the toolchain declaration falsifies statements in three places the plan does not name — the Dependencies section of `root.archi.md` ("Build: yarn 1 workspaces"), the Getting started section of `README.md`, and the install and build command reference of `CLAUDE.md`.
-- Proposition: storyman adds those three locations to the Documentation updates plan, each with its why, so docman corrects them in the same pass.
-- Rationale: a design doc never writes into a story, and a doc plan that misses the files contradicted by the change leaves the repository describing a package manager it no longer uses.
-- Resolution:
-
-### Open Questions
-
-- Open Question 1: `packages/imagine` depends on Puppeteer 21, whose install step downloads a browser on every clean install — including on the build agent, which is precisely the consumer BR-PYRAMID-5 protects.
-- Proposition: keep the workspace and suppress the download at install time through the environment variable Puppeteer reads, leaving the scripts runnable for whoever explicitly wants the browser.
-- Rationale: the download costs minutes and hundreds of megabytes on a build that never uses it, and removing the workspace outright — which the migration's "delete what is not useful" clause would permit — loses a working image-generation tool to save a configuration line.
-- Resolution:
-
-- Open Question 2: `@types/react: "^18"` sits next to React 19 in every workspace. The brainstorm scoped the mismatch out as a separate sweep, and declaring `next` pulls Next's own React types into the resolution, which may make it fail here.
-- Proposition: bump the types to `^19` only in the workspaces whose type-check actually fails, and leave the repository-wide sweep to its own chore.
-- Rationale: the story's diff is meant to be declarations, and a type bump in a workspace that already compiles buys nothing while widening what has to be re-verified.
-- Resolution:
+- 2026-10-06 — Gap 1 is closed as stale: the three locations it named were corrected by install-doc-corepack on 2026-08-02 (`e4deb9a`) — the Getting started of `README.md`, the install and build reference of `CLAUDE.md`, and `root.archi.md`, whose Dependencies section reads yarn 4 workspaces.
+- 2026-10-06 — Open Question 1 is closed as stale: `@robusta/imagine` and its Puppeteer download were removed in this story's own pass (`d9199ad`).
+- 2026-10-06 — Open Question 2 is closed as stale: no `@types/react` bump was made. `^18` still sits beside React 19 in nine workspaces and the green set builds; the repository-wide sweep stays a chore of its own, on no roadmap.

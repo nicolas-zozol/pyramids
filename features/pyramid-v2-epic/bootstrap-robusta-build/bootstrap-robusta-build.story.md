@@ -185,33 +185,14 @@ AC-BOOTSTRAP-81 and AC-BOOTSTRAP-82, both verifying the deployment, are not deli
 - 2026-07-31 — The story lands on its machine-verifiable half: R-BOOTSTRAP-1 to 18 implemented and verified locally,
   R-BOOTSTRAP-19 left to the account owner. Pourquoi : arbitration of Gap 1 of the design doc — no agent holds Vercel
   credentials, and the wiring this story exists to prove sits entirely in the local half. What remains is one project
-  creation and two page loads, carried by Gap 1 below.
+  creation and two page loads, answered by the decision of 2026-10-06 below.
 - 2026-07-31 — The placeholder `src/app/page.tsx` and the root `robots: { index: false, follow: false }` are debts
   carried to robusta-landing-page, which deletes the first and lifts the second as acceptance criteria of its own.
   Pourquoi : the shell must not be indexed while it carries no page copy, and the directive sits at the root so it
   covers every page the site adds rather than the home page alone — lifting it is a named criterion downstream, not a
   chore anyone may do silently.
-
-## Open Questions & Gaps
-
-- Gap 1: The Vercel project for `apps/robusta-build` does not exist, and only the account owner can create it.
-  R-BOOTSTRAP-19, AC-BOOTSTRAP-81 and AC-BOOTSTRAP-82 are therefore unverified.
-- Proposition: create the project with root directory `apps/robusta-build`, install command `yarn install` at the
-  repository root, build command `yarn build:robusta-build`, Node 22 to match `engines`; then check once that the
-  preview URL renders as it does locally and that robusta.build still answers from the v1 project.
-- Rationale: everything else this story exists to prove is machine-verified locally; what is left is one project
-  creation and two page loads.
-- Resolution: j'ai un projet vercel pour https://vercel.com/nicoramas-projects/pyramids-robusta ; comment le consigner ?
-
-- Gap 2: The design system ships no error colour — `colors_and_type.css` has paper, ink, three brand ramps and their
-  soft/deep variants, and nothing semantic for danger. The site's token bridge therefore omits `--destructive` and
-  `--destructive-foreground`, so a shadcn component using `bg-destructive` will render an unresolved variable.
-- Proposition: the design system decides an error colour before the first story that adds a component needing one; the
-  site aliases it then, and coins nothing itself.
-- Rationale: aliasing destructive onto a brand token would coin a semantic the design system never decided, and it would
-  be silent — a wrong red nobody notices until a delete button ships. An unresolved variable is loud, which is why the
-  omission is deliberate.
-- Resolution: lgtm
+- 2026-07-31 — The design system decides an error colour before the first story that adds a component needing one; the site aliases it then and coins nothing. Pourquoi : `lgtm` on Gap 2 of this story — aliasing destructive onto a brand token would coin a semantic the design system never decided, where an unresolved variable is loud. design-system-responsive carries it: R-RESPONSIVE-61 to 64 ship the error ramp and the `--destructive` alias.
+- 2026-10-06 — The v2 site's Vercel project is `robusta-build-v2`, under `nicoramas-projects`, created 2026-07-31. Its settings are recorded in the Deployment section of `apps/robusta-build/README.md`, and its Node version was checked on 2026-08-02 (`b6337ff`). Pourquoi : answer to Gap 1 of this story, whose Resolution asked how to record the project and named `pyramids-robusta` — the v1 project serving robusta.build, not this one. No document records the preview deployment rendering, so AC-BOOTSTRAP-81 has no recorded verification.
 
 ## Documentation updates
 
