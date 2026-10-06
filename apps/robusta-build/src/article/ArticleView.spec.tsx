@@ -80,6 +80,17 @@ describe('ArticleView', () => {
     expect(html).toMatch(/<a [^>]*hreflang="en"/i);
   });
 
+  it('writes the category line as today’s markup, at the article’s own address', async () => {
+    const html = await renderInRouter(
+      <ArticleView page={covered} />,
+      '/l/fr/articles/c/web/a-fixture',
+    );
+
+    expect(html).toContain(
+      '<p>Filed in <a href="/l/fr/articles/c/web">web</a></p>',
+    );
+  });
+
   it('renders no other-locale link when the payload carries no translation', async () => {
     const html = await renderInRouter(<ArticleView page={coverless} />);
 

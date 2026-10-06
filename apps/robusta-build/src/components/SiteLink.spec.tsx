@@ -23,4 +23,14 @@ describe('SiteLink', () => {
     expect(html).toMatch(/<a [^>]*hreflang="en"/i);
     expect(html).toMatch(/<a [^>]*lang="en"[^>]*>English<\/a>/);
   });
+
+  it('does not mark a link to an ancestor of the current page as the current page', async () => {
+    const html = await renderInRouter(
+      <SiteLink href="/articles/c/blockchain">blockchain</SiteLink>,
+      '/articles/c/blockchain/ledger-versus-metamask',
+    );
+
+    expect(html).toMatch(/<a href="\/articles\/c\/blockchain">blockchain<\/a>/);
+    expect(html).not.toMatch(/aria-current|data-status|class="active"/);
+  });
 });

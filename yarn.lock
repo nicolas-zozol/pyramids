@@ -695,10 +695,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/caveat@npm:^5.3.0":
+"@fontsource-variable/caveat@npm:^5.3.0":
   version: 5.3.0
-  resolution: "@fontsource/caveat@npm:5.3.0"
-  checksum: 10c0/90b25e1c23783f8a2e11b245518447aaf6704ac7f26b0ae6f288bd8fb647509da64e5fe50d97ec9b5c56fcd5f16eebb4979c9b57cb3a677cf8733e708a4e5a80
+  resolution: "@fontsource-variable/caveat@npm:5.3.0"
+  checksum: 10c0/f62ac6dfa4276f06e67c31eeaadd5d97cf488557c0fecbc3065a368cf717604850dca5e530ac0c6095325cad18a9aeb05c7321201e7b10f1cf3143fb524d96f4
+  languageName: node
+  linkType: hard
+
+"@fontsource-variable/ibm-plex-sans@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/ibm-plex-sans@npm:5.3.0"
+  checksum: 10c0/3fe44e92a441c956654d08be2fc1310f5527e241961f1386f4dcbe1ecfee4d3a387e1ca8b108afa48184647f3aa9db0d6547c2dd63a0442c2d369401c9a2e306
   languageName: node
   linkType: hard
 
@@ -706,13 +713,6 @@ __metadata:
   version: 5.3.0
   resolution: "@fontsource/ibm-plex-mono@npm:5.3.0"
   checksum: 10c0/4aaf5a3c9efc7c32de4fa46ff3187ac63720904beab825f331ac01800038899761da23270f09d3fb5cff22f7cdc366904834854e2107229ad60833bba71c223d
-  languageName: node
-  linkType: hard
-
-"@fontsource/ibm-plex-sans@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "@fontsource/ibm-plex-sans@npm:5.3.0"
-  checksum: 10c0/8e4c7a849e8167c8de1905282a62ff312a4266e364e3c436fa6d89d650bbb30b3386157ae31af3783e00f85fa64fd7e26bee7ca232db7d22fdc082f6b531edb5
   languageName: node
   linkType: hard
 
@@ -2042,9 +2042,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@robusta/robusta-build@workspace:apps/robusta-build"
   dependencies:
-    "@fontsource/caveat": "npm:^5.3.0"
+    "@fontsource-variable/caveat": "npm:^5.3.0"
+    "@fontsource-variable/ibm-plex-sans": "npm:^5.3.0"
     "@fontsource/ibm-plex-mono": "npm:^5.3.0"
-    "@fontsource/ibm-plex-sans": "npm:^5.3.0"
     "@robusta/pyramids-content": "workspace:*"
     "@robusta/pyramids-design-system": "workspace:*"
     "@robusta/pyramids-routing": "workspace:*"

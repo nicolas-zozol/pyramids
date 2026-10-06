@@ -79,7 +79,7 @@ export function ArticleView({ page }: ArticleViewProps) {
         >
           {categoryUrl !== undefined && (
             <p>
-              Filed in{' '}
+              {'Filed in '}
               <SiteLink href={categoryUrl}>{article.category}</SiteLink>
             </p>
           )}

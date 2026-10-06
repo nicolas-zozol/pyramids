@@ -6,7 +6,7 @@
 **Status:** APPROVED (2026-10-06)
 **Sources:** [story](tanstack-start-migration.story.md), [brainstorm](tanstack-start-migration.brainstorm.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md)
 
-## Progress — APPROVED 79%
+## Progress — APPROVED 81%
 
 ```
       Toolchain              ████████████████████  11/11  ✅
@@ -15,7 +15,7 @@
  WIP  Page data              ████████████████░░░░  5/6
       Not-found and failure  ████████████████████  4/4    ✅
  WIP  Netlify deployment     ████░░░░░░░░░░░░░░░░  1/5
- WIP  Acceptance Criteria    █████░░░░░░░░░░░░░░░  2/7
+ WIP  Acceptance Criteria    ████████░░░░░░░░░░░░  3/7
 ```
 
 ## Goal
@@ -274,7 +274,7 @@ Toolchain.
 - Vite resolves a `.js` import from a TypeScript file to its `.ts` or `.tsx` source, so `extensionAlias` has no successor. `resolve.tsconfigPaths` is built into Vite 8.
 - `next.config.ts` read the v1 map as JSON because Next's config loader could not follow the `.js`-suffixed imports. That reason dies with it; `.routing-dist` stays because the plain-Node scripts and `prerender-pages.mjs` need the seams compiled.
 - `public/article-images` is filled by `copy:assets` before `vite build`, which copies `public/` into `dist/client`. The prerender runs in the build process with the app directory as working directory, which is what `corpus.root` resolves against.
-- Fonts: Fontsource's `latin-<weight>.css` declare `'IBM Plex Sans'`, `'IBM Plex Mono'` and `'Caveat'` with `font-display: swap`, and Vite bundles the woff2 files into `dist/client/assets`. `colors_and_type.css` falls back to exactly those names when `--font-ibm-plex-sans`, `--font-ibm-plex-mono` and `--font-caveat` are unset, the case its header documents. `next/font`'s size-adjusted fallback face is lost, so the text shifts once while the faces load; AC-TANSTACK-3 compares after they have.
+- Fonts: IBM Plex Sans and Caveat come from the variable files of `@fontsource-variable/*`, the files Google served `next/font`, the static cuts of `@fontsource/*` drawing weight 600 differently; the site's `src/styles/fonts.css` declares one `@font-face` per weight over each variable file, as `next/font` did. IBM Plex Mono keeps `@fontsource/ibm-plex-mono`'s `latin-<weight>.css`. All three are declared as `'IBM Plex Sans'`, `'IBM Plex Mono'` and `'Caveat'` with `font-display: swap`, and Vite bundles the woff2 files into `dist/client/assets`. `colors_and_type.css` falls back to exactly those names when `--font-ibm-plex-sans`, `--font-ibm-plex-mono` and `--font-caveat` are unset, the case its header documents. `next/font`'s size-adjusted fallback face is lost, so the text shifts once while the faces load; AC-TANSTACK-3 compares after they have.
 - The cover loses WebP, as the decision of 2026-10-06 accepts. The `<img>` keeps its box's ratio, so the page does not shift when the cover arrives.
 
 Netlify, verified on 2026-10-06 against [manage dependencies](https://docs.netlify.com/build/configure-builds/manage-dependencies.md), [monorepos](https://docs.netlify.com/build/configure-builds/monorepos.md), [ignore builds](https://docs.netlify.com/build/configure-builds/ignore-builds.md), [redirect options](https://docs.netlify.com/manage/routing/redirects/redirect-options.md), the [yarn berry install command](https://github.com/yarnpkg/berry/blob/master/packages/plugin-essentials/sources/commands/install.ts), and requests to [trailing-slash-guide-pretty-url-enabled.netlify.app](https://trailing-slash-guide-pretty-url-enabled.netlify.app).
@@ -290,7 +290,7 @@ Netlify, verified on 2026-10-06 against [manage dependencies](https://docs.netli
 
 ### Toolchain
 
-- R-TANSTACK-01: The site builds with Vite 8 and TanStack Start, and its own manifest declares `vite`, `@vitejs/plugin-react`, `@tanstack/react-start`, `@tanstack/start-static-server-functions`, `@tailwindcss/vite`, `vitest`, `@fontsource/ibm-plex-sans`, `@fontsource/ibm-plex-mono` and `@fontsource/caveat`.
+- R-TANSTACK-01: The site builds with Vite 8 and TanStack Start, and its own manifest declares `vite`, `@vitejs/plugin-react`, `@tanstack/react-start`, `@tanstack/start-static-server-functions`, `@tailwindcss/vite`, `vitest`, `@fontsource-variable/ibm-plex-sans`, `@fontsource/ibm-plex-mono` and `@fontsource-variable/caveat`.
 - R-TANSTACK-02: `next`, `@tailwindcss/postcss` and `vite-tsconfig-paths` leave the site's manifest; `next.config.ts`, `postcss.config.mjs`, `next-env.d.ts`, and the `next` plugin and `.next/types` entries of `tsconfig.json` leave the site.
 - R-TANSTACK-03: The TanStack packages are declared at exact versions and are upgraded together.
 - R-TANSTACK-04: After a clean install, every resolution of `vite` from the site's build and test graph lands on the site's 8.x copy, while `apps/robusta` and the packages keep the hoisted 6.4.3; a package importing `vite` without declaring it gets the peer through `packageExtensions`, never through a root `resolutions` (BR-PYRAMID-5).

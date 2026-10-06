@@ -2,21 +2,81 @@
    The three brand faces, self-hosted from Fontsource
    =========================================================
 
-   Latin subset, `font-display: swap`, the weights the site renders. Each file
-   declares the family name `colors_and_type.css` falls back to when its
+   Latin subset, `font-display: swap`, the weights the site renders. Each face
+   carries the family name `colors_and_type.css` falls back to when its
    `--font-*` slot is unset, and the site sets no slot: no font value is coined
    here (BR-PYRAMID-6). Vite bundles the woff2 files into the deploy, so a page
-   issues no request to a font CDN. */
+   issues no request to a font CDN.
 
-@import '@fontsource/ibm-plex-sans/latin-300.css';
-@import '@fontsource/ibm-plex-sans/latin-400.css';
-@import '@fontsource/ibm-plex-sans/latin-500.css';
-@import '@fontsource/ibm-plex-sans/latin-600.css';
-@import '@fontsource/ibm-plex-sans/latin-700.css';
+   IBM Plex Sans and Caveat are the variable fonts Google Fonts serves, declared
+   once per weight over the same file, the way the v1 build received them. A
+   static 600 cut draws its outlines differently from the variable font at 600,
+   and one face per weight keeps a run at an undeclared weight on the nearest
+   declared one. IBM Plex Mono is served static by both. */
 
 @import '@fontsource/ibm-plex-mono/latin-400.css';
 @import '@fontsource/ibm-plex-mono/latin-500.css';
 @import '@fontsource/ibm-plex-mono/latin-600.css';
 
-@import '@fontsource/caveat/latin-600.css';
-@import '@fontsource/caveat/latin-700.css';
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url('@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
