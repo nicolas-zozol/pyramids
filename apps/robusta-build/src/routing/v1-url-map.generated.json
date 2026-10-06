@@ -1,5 +1,5 @@
 {
-  "generatedBy": "scripts/emit-redirects.mjs — do not edit by hand",
+  "generatedBy": "scripts/emit-v1-map.mjs — do not edit by hand",
   "contentRoot": "articles",
   "defaultLocale": "en",
   "otherLocales": [

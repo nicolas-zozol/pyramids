@@ -17,16 +17,16 @@ import { corpus } from './corpus.js';
  * listing can show without opening a body — a title, a date, an excerpt, an
  * image, the categories and tags related articles are chosen on.
  *
- * Called from `generateStaticParams`, from page bodies at build time and from
- * `scripts/emit-redirects.mjs`, and from nothing else (BR-PYRAMID-7).
+ * Called at build time only — from the page-data handlers, the prerender page
+ * list and the build scripts — and from nothing else (BR-PYRAMID-7).
  */
 export type ArticleIndexEntry = ArticleEntry;
 
 /**
  * The single place a corpus violation becomes fatal (R-CONTENTSOURCE-47).
  * `readCorpus` returns violations and never throws; every consumer passes
- * through here, `emit-redirects.mjs` included, so a corpus that breaks the
- * schema fails `yarn emit:redirects` before `next build` starts — the earliest
+ * through here, `emit-v1-map.mjs` included, so a corpus that breaks the
+ * schema fails `yarn emit:v1-map` before `vite build` starts — the earliest
  * possible failure, with the file named.
  */
 export async function getArticleIndex(): Promise<readonly ArticleIndexEntry[]> {

@@ -10,8 +10,8 @@ import type { ArticleIndexEntry } from '../content/article-index.js';
  * v1 inventory no article index can produce — the raw markdown URLs, the tag
  * URLs, the declared category paths — read once from the v1 code and frozen.
  *
- * This module imports nothing from Next and nothing from React on purpose: it
- * is executed by `scripts/emit-redirects.mjs` outside the webpack pipeline.
+ * This module imports nothing from React on purpose: it is executed by
+ * `scripts/emit-v1-map.mjs` in plain Node.
  */
 
 export type V1Destination =

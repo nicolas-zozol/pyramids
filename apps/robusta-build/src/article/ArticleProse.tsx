@@ -6,9 +6,8 @@ interface ArticleProseProps {
 
 /**
  * The one boundary where a body reaches the DOM, and the site's only
- * `dangerouslySetInnerHTML` (R-ARTICLEPAGE-04). It is what Next.js documents for
- * a markdown body — a server component with a CSS Module for the typography —
- * rather than what is left when nothing better can be done.
+ * `dangerouslySetInnerHTML` (R-ARTICLEPAGE-04), with a CSS Module for the
+ * typography.
  *
  * The string is safe by construction on three counts: it is produced at build
  * time from a corpus committed to this repository, remark-html 16 by default

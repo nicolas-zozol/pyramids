@@ -1,0 +1,22 @@
+/* =========================================================
+   The three brand faces, self-hosted from Fontsource
+   =========================================================
+
+   Latin subset, `font-display: swap`, the weights the site renders. Each file
+   declares the family name `colors_and_type.css` falls back to when its
+   `--font-*` slot is unset, and the site sets no slot: no font value is coined
+   here (BR-PYRAMID-6). Vite bundles the woff2 files into the deploy, so a page
+   issues no request to a font CDN. */
+
+@import '@fontsource/ibm-plex-sans/latin-300.css';
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-sans/latin-700.css';
+
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+@import '@fontsource/ibm-plex-mono/latin-600.css';
+
+@import '@fontsource/caveat/latin-600.css';
+@import '@fontsource/caveat/latin-700.css';

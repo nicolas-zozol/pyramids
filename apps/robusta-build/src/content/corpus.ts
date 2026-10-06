@@ -4,9 +4,9 @@ import type { CorpusSpec } from '@robusta/pyramids-content';
  * Where this site's articles live, declared as data (R-CONTENTSOURCE-22).
  *
  * A leaf module, for the same reason `src/routing/scheme.ts` is one:
- * `scripts/emit-redirects.mjs` reaches the article index outside the webpack
- * pipeline, and anything reachable from `seopyramids.config.ts` is out of its
- * reach because the site configuration resolves a bundler-only PNG. So the
+ * the plain-Node build scripts reach the article index through `.routing-dist`,
+ * and anything reachable from `seopyramids.config.ts` is out of their reach
+ * because the site configuration resolves a bundler-only PNG. So the
  * corpus is declared here and `seopyramids.config.ts` reads it, never the other
  * way round.
  *
@@ -21,8 +21,8 @@ import type { CorpusSpec } from '@robusta/pyramids-content';
  * (BR-PYRAMID-1): an image under `/articles/c/{category}/` would sit inside a
  * shape the URL scheme reserves for pages, and a site that has to look at the
  * filesystem to tell a page from a file is what that rule forbids. `publishDir`
- * is generated rather than committed, and the site's middleware excludes
- * `urlPrefix` because a filesystem is case-significant.
+ * is generated rather than committed, and its paths are case-significant
+ * because a filesystem is.
  */
 export const corpus: CorpusSpec = {
   root: 'content/articles',

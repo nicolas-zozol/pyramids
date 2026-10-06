@@ -1,0 +1,17 @@
+# The v2 site on Netlify, read from the package directory apps/robusta-build.
+# The base directory is unset, so install and build run at the repository root:
+# every path below is relative to it, and the root .nvmrc picks Node 22.
+#
+# Netlify publishes the prerendered client output and nothing else: no function,
+# no redirect rule, no header rule, no plugin.
+
+[build]
+  command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta-build"
+  publish = "apps/robusta-build/dist/client"
+  # Exit 0 skips the build. A change under these paths exits 1, an unknown
+  # cached ref exits 128, and both build.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/robusta-build packages/pyramids-routing packages/pyramids-content packages/robusta-design-system package.json yarn.lock .yarnrc.yml .nvmrc"
+
+[build.environment]
+  # Netlify's default, --ignore-optional, is an unknown option to yarn 4.
+  YARN_FLAGS = "--immutable"

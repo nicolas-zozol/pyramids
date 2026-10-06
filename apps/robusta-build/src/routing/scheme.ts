@@ -13,8 +13,8 @@ export const ROLL_SIZE = 12;
  * It is a leaf module on purpose. `seopyramids.config.ts` reads these four
  * values into `blogConfig` rather than the other way round, because the site
  * configuration resolves the design system's wordmark through a bundler-only
- * PNG import, and `next.config.ts` — which is loaded outside the webpack
- * pipeline — has to reach the scheme without it. `articles` is still written
+ * PNG import, and the plain-Node build scripts have to reach the scheme
+ * without it. `articles` is still written
  * once, in site-owned code, and the shared base never holds it.
  */
 export const urlScheme: UrlScheme = {

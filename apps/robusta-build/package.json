@@ -4,30 +4,41 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "yarn emit:redirects && yarn copy:assets && next dev --turbopack",
-    "build": "yarn emit:redirects && yarn copy:assets && next build && node scripts/check-route-table.mjs",
-    "emit:redirects": "tsc -p tsconfig.routing.json && node scripts/emit-redirects.mjs",
+    "dev": "yarn compile:seams && yarn emit:v1-map && yarn copy:assets && vite dev",
+    "build": "yarn check:source && yarn compile:seams && yarn emit:v1-map && yarn copy:assets && vite build && node scripts/check-route-table.mjs",
+    "check:source": "node scripts/check-source.mjs",
+    "compile:seams": "tsc -p tsconfig.routing.json",
+    "emit:v1-map": "node scripts/emit-v1-map.mjs",
     "copy:assets": "node scripts/copy-article-images.mjs",
-    "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource/caveat": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "@robusta/pyramids-content": "workspace:*",
     "@robusta/pyramids-design-system": "workspace:*",
     "@robusta/pyramids-routing": "workspace:*",
-    "next": "^15.5.3",
+    "@tanstack/react-router": "1.170.41",
+    "@tanstack/react-start": "1.168.60",
+    "@tanstack/start-static-server-functions": "1.167.39",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^20",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^22.12.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "8.57.0",
+    "eslint-plugin-react": "^7.35.2",
     "tailwindcss": "^4.3.3",
     "typescript": "^5",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.5"
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
   }
 }
