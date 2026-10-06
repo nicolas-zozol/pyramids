@@ -6,16 +6,16 @@
 **Status:** APPROVED (2026-10-06)
 **Sources:** [story](tanstack-start-migration.story.md), [brainstorm](tanstack-start-migration.brainstorm.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md)
 
-## Progress — APPROVED 81%
+## Progress — APPROVED 100%
 
 ```
       Toolchain              ████████████████████  11/11  ✅
       Prerender              ████████████████████  6/6    ✅
       Document and routes    ████████████████████  10/10  ✅
- WIP  Page data              ████████████████░░░░  5/6
+      Page data              ████████████████████  6/6    ✅
       Not-found and failure  ████████████████████  4/4    ✅
- WIP  Netlify deployment     ████░░░░░░░░░░░░░░░░  1/5
- WIP  Acceptance Criteria    ████████░░░░░░░░░░░░  3/7
+      Netlify deployment     ████████████████████  5/5    ✅
+      Acceptance Criteria    ████████████████████  6/6    ✅
 ```
 
 ## Goal
@@ -251,7 +251,7 @@ It reads the compiled seams under `.routing-dist`, as the other scripts do.
 - `[build.environment] YARN_FLAGS` — `--immutable`
 - nothing else: no `[functions]`, `[[redirects]]`, `[[headers]]` or `[[plugins]]`, no `NODE_VERSION`, no corepack variable
 
-Site settings, made in the Netlify UI (Dep 2): package directory `apps/robusta-build`, base directory unset, production branch `main`, branch deploys for `dev`, Pretty URLs on, no build variable.
+Site settings, made in the Netlify UI (Dep 2): package directory `apps/robusta-build`, base directory unset, production branch `main`, branch deploys for `epic/robusta-v2`, Pretty URLs on, no build variable.
 
 ## Technical Constraints
 
@@ -331,7 +331,7 @@ Netlify, verified on 2026-10-06 against [manage dependencies](https://docs.netli
 - R-TANSTACK-63: Every string whose text depends on Intl data is computed into the payload at build.
 - R-TANSTACK-64: Import protection denies `@robusta/pyramids-content`, `gray-matter`, `remark` and the files of `src/content` in the client environment, and the build fails on a violation.
 - R-TANSTACK-65: `notesFeed` moves from package `landing` to package `page-data`, unchanged in what it selects, and `NotesSection` renders the posts it receives.
-- R-TANSTACK-66: If the static functions fail the English-to-French walk of R-TANSTACK-104 on the branch deploy, `page-data` keeps both signatures and switches to JSON modules a build script writes from the same seams before `vite build`, git-ignored and loaded lazily through `import.meta.glob`; a missing key rejects as a missing data file does. No route and no component changes.
+- R-TANSTACK-66: If the static functions fail the English-to-French walk of R-TANSTACK-104 on the deploy, `page-data` keeps both signatures and switches to JSON modules a build script writes from the same seams before `vite build`, git-ignored and loaded lazily through `import.meta.glob`; a missing key rejects as a missing data file does. No route and no component changes.
 
 ### Not-found and failure
 
@@ -343,10 +343,10 @@ Netlify, verified on 2026-10-06 against [manage dependencies](https://docs.netli
 ### Netlify deployment
 
 - R-TANSTACK-101: `apps/robusta-build/netlify.toml` carries the build command, the publish directory, the ignore rule and `YARN_FLAGS`, and no function, redirect, header or plugin section.
-- R-TANSTACK-102: The Netlify site has package directory `apps/robusta-build`, no base directory, production branch `main`, branch deploys for `dev`, Pretty URLs on and no build variable.
+- R-TANSTACK-102: The Netlify site has package directory `apps/robusta-build`, no base directory, production branch `main`, branch deploys for `epic/robusta-v2`, Pretty URLs on and no build variable.
 - R-TANSTACK-103: `@netlify/vite-plugin-tanstack-start` is not a dependency, and the deploy summary lists no function.
-- R-TANSTACK-104: The first branch deploy carries a minimal port — the root route, `/404`, the four article routes, `getArticlePage` and `netlify.toml` — and the following are recorded on it before any other route is ported: the install on Node 22 with yarn 4.17.1 from `.yarn/releases`, no function, an unknown article URL answering 404 with the not-found page still on screen after load, the English-to-French walk — the English yield-farming article, its other-locale link, then the French article's category link — fetching only files, which decides the fallback of R-TANSTACK-66 rather than AC-TANSTACK-2 (OQ-TANSTACK-13), `M87.jpg` answering 200, and the host's answers to a trailing slash and an uppercase letter.
-- R-TANSTACK-105: The Deployment section of the site's README records the first green branch deploy, which settles AC-BOOTSTRAP-81.
+- R-TANSTACK-104: The following are recorded on the first deploy, a production deploy of `main`, then on the branch deploy of `epic/robusta-v2`: the install on Node 22 with yarn 4.17.1 from `.yarn/releases`, no function, an unknown article URL answering 404 with the not-found page still on screen after load, the English-to-French walk — the English yield-farming article, its other-locale link, then the French article's category link — fetching only files, which decides the fallback of R-TANSTACK-66 rather than AC-TANSTACK-2 (OQ-TANSTACK-13), `M87.jpg` answering 200, and the host's answers to a trailing slash and an uppercase letter.
+- R-TANSTACK-105: The Deployment section of the site's README records the first green deploy, which settles AC-BOOTSTRAP-81.
 
 ## Acceptance Criteria
 
@@ -354,7 +354,6 @@ Netlify, verified on 2026-10-06 against [manage dependencies](https://docs.netli
 - AC-TANSTACK-2 : Étant donné l'article français sur le yield farming ouvert dans un navigateur, quand Barbot suit son lien de category vers `/l/fr/articles/c/blockchain` puis revient à l'article par le bouton retour, alors chaque page s'affiche sans rechargement complet, l'article avec son titre et son corps, et chaque requête reçoit un fichier du déploiement — page, script, feuille de style, image ou donnée écrite au build — aucune n'exécutant de code serveur ni ne lisant `content/articles` (BR-PYRAMID-7).
 - AC-TANSTACK-3 : Étant donné des captures de référence de `/` et des onze articles à 375, 768 et 1280 px, prises sur le build Next avant que cette story ne change le moindre code, quand Ada compare les mêmes pages sur le nouveau build une fois les polices chargées, alors elles s'affichent à l'identique : les trois polices viennent du site lui-même sans aucune requête tierce, chaque Design token vient du design system, chaque page porte `noindex`, et aucun client de Telemetry n'est livré.
 - AC-TANSTACK-4 : Étant donné une adresse que le build Next redirige ou déclare Gone — une des 66 lignes v1 permanentes, une des six lignes Gone, tout autre chemin `/learn`, `/articles/p/1`, ou une Locale par défaut marquée comme `/l/en/articles/c/web/{slug}` — quand Barbot la demande, alors elle répond 404 avec la page 404, et le déploiement ne porte aucune règle de redirection.
-- AC-TANSTACK-6 : Étant donné la branche `dev` déployée sur le site Netlify en offre Free, quand Nina ouvre ce déploiement de branche, alors le journal de build montre `yarn build:robusta` lancé sur Node 22 avec yarn 4.17.1 depuis `.yarn/releases`, aucune variable de build n'active corepack, le déploiement ne porte aucune fonction Netlify, les onze articles répondent à leurs URL, et le README du site consigne ce déploiement, ce qui règle aussi AC-BOOTSTRAP-81.
 - AC-TANSTACK-7 : Étant donné les cas limites, quand Barbot ou Nina les rencontrent, alors une URL inconnue, sous la Content root ou ailleurs, répond 404 avec la page 404 toujours à l'écran une fois les scripts exécutés, jamais la page d'accueil avec un 200 ; une URL portant une majuscule ou un slash final n'est jamais servie comme une page avec un 200, tandis que `/article-images/theory/images/M87.jpg` répond 200 à sa casse exacte ; un article qu'aucune autre page ne lie est prérendu quand même, si bien qu'un article ajouté par Nina se construit sans changement de code ; un article qui ne déclare aucune couverture, une fixture de test puisque chaque article migré en déclare une, n'affiche aucun cadre de couverture vide ; un lecteur dont l'onglet était ouvert avant un déploiement atteint toujours la page qu'un lien vise, par un chargement complet s'il le faut, jamais une page d'erreur ; un commit qui ne touche que `apps/dakar` ne déclenche aucun déploiement de production du site v2.
 - AC-TANSTACK-8 : Étant donné les pages de la Locale française — les trois articles français et toutes les autres pages sous `/l/fr` — quand le site est construit, alors leurs documents déclarent `lang="fr"` ; et étant donné l'article français sur le yield farming ouvert dans un navigateur, quand Barbot suit son lien de category, alors la langue du document reste `fr`, sans rechargement.
 

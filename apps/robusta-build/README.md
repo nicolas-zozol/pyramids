@@ -139,36 +139,40 @@ This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn bui
 
 ## Deployment
 
-Vercel project `robusta-build-v2`, under `nicoramas-projects`, created 2026-07-31. It is its own project: robusta.build keeps answering from the v1 project until a later story decides the switch.
+Netlify project `robusta-build`, in a team on the Free plan, linked to the repository `nicolas-zozol/pyramids`. It serves robusta.build from the production branch `main`, `www.robusta.build` as primary domain and the apex answering 301 to it. The first deploy of this site is `6ac53fd1`, on 2026-10-06: commit `04e70d6`, 23 pages and 41 assets, no function.
 
-- Root Directory: `apps/robusta-build`
-- Include source files outside the Root Directory: on. This is what makes the yarn workspaces resolve; Vercel enables it by default for projects created after 2020-08-27, so verify rather than assume.
-- Install Command: `yarn install`
-- Build Command: `cd ../.. && yarn build:robusta`. The `cd` is not decoration. Vercel runs the build command inside the Root Directory, and from there yarn sees only this workspace's four scripts — `build:robusta` lives in the root manifest and is not inherited. Plain `yarn build` would resolve, and would fail differently: the site reads the design system's `dist/`, which only `build:deps` produces.
-- Node: 22, and the only place that decides it is the Vercel project's own Node Version setting. `engines.node` in the root manifest does not override it — tested on 2026-08-01 with both `">=22 <23"` and `"22.x"`, and the project ran Node 24.15.0 either way. The manifest still declares `"22.x"` because that is what a human reads and what other tooling honours, but it has no say in what Vercel installs with.
+`netlify.toml`, beside this README, holds what the repository can say:
 
-  Set it to 22 for the reason `.nvmrc` gives, not to fix a build: Node 24 was suspected of breaking the install and was not the cause. The same failure reproduces identically on 22.22.2.
+- the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
+- the publish directory, `apps/robusta-build/dist/client`: the prerendered output and nothing else. No function, no redirect rule, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
+- the ignore rule: `git diff --quiet` between the cached and the current commit over the site, its three workspace dependencies and the root build files. Exit 0 skips the build.
+- `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 
-  Check the setting before assuming the repository decides it: `vercel project ls` prints the Node version per project, and `vercel inspect --logs <url>` prints the one the build actually ran on.
+The dashboard holds the rest:
 
-- The install failure that has blocked every deployment of this project, and its cause. Every build dies in about five seconds:
+- package directory `apps/robusta-build`, base directory empty. Netlify installs and builds at the repository root, reads `.nvmrc` there, and finds `netlify.toml` in the package directory.
+- build command and publish directory empty: `netlify.toml` carries both
+- production branch `main`, branch deploys for `epic/robusta-v2`, the epic's working branch
+- Pretty URLs on. A page answers at its canonical path and at that path plus `.html`; a trailing slash or an uppercase letter answers 301 to the canonical form; an unmatched path gets `404.html` with status 404.
+- no environment variable, in particular no `NODE_VERSION`, no `COREPACK_*` and no `YARN_VERSION`
 
-  ```
-  file:///vercel/path0/.vercel/cache/corepack/home/v1/yarn/4.17.1/yarn.js:4
-  Error: Dynamic require of "util" is not supported
-      at ModuleJob.run (node:internal/modules/esm/module_job)
-  Error: Command "yarn install" exited with 1
-  ```
+A production deploy costs 15 of the team's 300 monthly credits, a branch deploy none, and a spent balance pauses every site of the team: work goes to the epic branch, and `main` receives merges.
 
-  yarn's CLI bundle is CommonJS. Node is loading it as an ES module — the `file://` URL and the ESM loader in the stack say so — and its `require` shim throws. Node decides a `.js` file's module type from the nearest `package.json` above it, and on Vercel corepack caches yarn at `.vercel/cache/corepack/...`, which is *inside the repository*. The nearest manifest above it is the root one, which declares `"type": "module"`. So the repository's own ESM declaration reaches a file that is not ours.
+DNS stays at Hover, which is the domain's name server: `@` A `75.2.60.5`, Netlify's load balancer, and `www` CNAME `robusta-build.netlify.app`. Every other record of the zone belongs to another service — mail, `race`, `code`. Netlify holds no DNS zone for the domain, and must not: with one, it renews a wildcard certificate it can only validate through its own name servers, and renewal fails. Without one, its Let's Encrypt certificate covers `robusta.build` and `www.robusta.build`.
 
-  It never reproduces locally, which is the whole trap: corepack caches in `~/.cache/node/corepack`, outside any package, so `yarn install` and the full green set pass on a machine while every deployment fails.
+### No corepack on a build agent
 
-  What does not fix it, each tested on 2026-08-01: raising or lowering the Node version; `engines.node` in any form; and `COREPACK_HOME` as a project environment variable, which Vercel sets itself after the user's and therefore ignores. `vercel redeploy` does not test a fix either — it replays a deployment with the environment it was created with, so a variable added afterwards never reaches the build and the log looks unchanged.
+Corepack broke every deployment of this site on Vercel, on 2026-08-01. Each build died in about five seconds:
 
-  What does fix it: not using corepack. `.yarn/releases/yarn-4.17.1.cjs` is committed and `.yarnrc.yml` names it in `yarnPath`, which is Yarn's own documented workflow and the mechanism that predates corepack. A `.cjs` file is CommonJS whatever any manifest says, so it loads wherever it sits, and the yarn 1 Vercel ships delegates to `yarnPath` when it finds one. The cost is a 2.9 MB binary in git.
+```
+file:///vercel/path0/.vercel/cache/corepack/home/v1/yarn/4.17.1/yarn.js:4
+Error: Dynamic require of "util" is not supported
+    at ModuleJob.run (node:internal/modules/esm/module_job)
+Error: Command "yarn install" exited with 1
+```
 
-- No environment variables. `ENABLE_EXPERIMENTAL_COREPACK=1` was required while corepack resolved the package manager and is now removed: with `yarnPath` set, enabling corepack is worse than useless, since corepack downloads its own `yarn.js` and crashes before anything reads `.yarnrc.yml`.
+yarn's CLI bundle is CommonJS. Node loaded it as an ES module — the `file://` URL and the ESM loader in the stack say so — and its `require` shim threw. Node decides a `.js` file's module type from the nearest `package.json` above it, and Vercel's corepack caches yarn at `.vercel/cache/corepack/...`, inside the repository. The nearest manifest above it is the root one, which declares `"type": "module"`, so the repository's own ESM declaration reaches a file that is not ours.
 
-No `vercel.json` anywhere in this repository: every site is configured from the dashboard. Keep it that way or move all three at once, but do not leave one site configured in two places.
+It never reproduces locally: corepack caches in `~/.cache/node/corepack`, outside any package, so `yarn install` and the full green set pass on a machine while every deployment fails. Raising or lowering the Node version, `engines.node` in any form and `COREPACK_HOME` as a project variable do not fix it.
 
+`.yarn/releases/yarn-4.17.1.cjs` is committed and `.yarnrc.yml` names it in `yarnPath`, Yarn's own documented workflow. A `.cjs` file is CommonJS whatever any manifest says, so it loads wherever it sits, and any yarn on the PATH delegates to it. The cost is a 2.9 MB binary in git. Netlify's build image enables corepack itself, but caches yarn outside the repository, where the root manifest does not reach, and yarn then hands over to `yarnPath`.
