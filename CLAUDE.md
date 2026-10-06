@@ -182,6 +182,12 @@ On `apps/robusta` and `apps/dakar`: `@robusta/scribe-intel` exposes a `Telemetry
 - Avoid `any` — use `unknown` or precise types. Prefer interfaces over `type` for object shapes.
 - TypeScript path alias resolution in tests: vitest configs use `vite-tsconfig-paths`.
 
+## Compound documents
+
+Every Compound file of this repository is written in French: stories, brainstorms, design docs, epics, bulks, fix documents, `decisions-and-questions.md`, `ROADMAP.md`, `business-rules.md`, the definitions of `ubiquitous-language.md` and every `*.archi.md`. Decided on 2026-10-06.
+
+What stays in English: code and code comments, identifiers, file paths, requirement and AC keys, the terms of `ubiquitous-language.md` themselves, and quotes kept as spoken. A Compound file written in English before that date is translated when an agent rewrites it, not in a sweep.
+
 ## Git
 
 - Default branch: `main`. Active development on `dev`.
