@@ -1,10 +1,10 @@
 # Design: Responsive pass over the robusta design system
 
-**Last update:** 2026-08-07
+**Last update:** 2026-10-06
 **Feature:** design-system-responsive
 **Infix:** RESPONSIVE
-**Status:** APPROVED (2026-08-07)
-**Sources:** [story](design-system-responsive.story.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../packages/robusta-design-system/design-system.archi.md)
+**Status:** DRAFT
+**Sources:** [story](design-system-responsive.story.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../packages/robusta-design-system/design-system.archi.md), [robusta-landing-page story](../robusta-landing-page/robusta-landing-page.story.md)
 
 ## Goal
 
@@ -12,10 +12,13 @@
 
 No component and no surface is added. Everything below is a token, a class or a prop.
 
+Amendement du 2026-10-06 : `Hero`, `ServicesGrid` et `BrandLogo` cessent de rendre un texte qu'aucune prop n'atteint — la légende et le texte alternatif de la mascotte du `Hero`, la ligne « see how it works » des cartes, la tagline de la variante `full` du logo. C'est la décision du 2026-10-06 de la [story](design-system-responsive.story.md), qui accepte Gap-LANDING-10 de robusta-landing-page.
+
 ## Decisions
 
 - 2026-08-07 — The scale wins over the rendering it replaces: fourteen font-size literals collapse onto the ten steps below, the closing-CTA headline joins the hero headline at `--t-display`, and the 17/18/19/21 band collapses onto `--t-lead`, so a few surfaces render a couple of pixels away from today's at the widest viewport. Pourquoi : keeping every literal takes fourteen steps, which is not a scale, and would contradict the definition of done asking that no surface declare a size of its own; the clause of the story on the widest viewport speaks of composition, and composition does not move. Arbitration of Open Question 1, accepted as proposed.
 - 2026-08-07 — The eight surface class blocks and the naming rule are documented in the Component vocabulary section of `packages/robusta-design-system/README.md`, where the `.sk-*` classes are already listed. Pourquoi : the class names are a public override surface, and a consumer that cannot read them can override nothing, while the list that already answers the same question for the primitives makes the addition one bullet rather than a new section. Arbitration of Gap 1, accepted as proposed. The bullet belongs to the Documentation updates of the story, which storyman is writing in parallel — this design names the location and writes nothing there.
+- 2026-10-06 — `storyman refine design-system-responsive` crée la section, y reprend AC-RESPONSIVE-01 à 12 verbatim et ajoute un AC pour le texte de page — par exemple : étant donné `Hero`, `ServicesGrid` et `BrandLogo` rendus avec toutes leurs props de texte, quand Barbot lit la page, textes alternatifs compris, aucun mot du prototype ne lui parvient, et une annotation vide ne laisse ni légende ni flèche. Ce design cite ensuite la section. Why: un AC naît dans la story et le design le cite ; sans lui, R-RESPONSIVE-101 à 107 n'ont aucun critère d'acceptation validé par l'éditeur. Réf : Gap-RESPONSIVE-3.
 
 ## Ubiquitous Language
 
@@ -33,7 +36,7 @@ Two terms are named here and not coined here.
 - BR-PYRAMID-6 — A site's design tokens must come from its design system alone.
 - BR-PYRAMID-8 — A site must supply the page copy of every page it publishes; its design system must supply no page copy.
 
-## Interfaces
+## Boundaries
 
 ### `SkButton` — an optional destination
 
@@ -83,6 +86,73 @@ An item carrying an `href` renders an anchor. An item carrying none renders its 
 The optional destination is what makes the package's own defaults honest. `DEFAULT_COLUMNS` declares twelve labels and the package knows none of the site's URLs (BR-PYRAMID-8), so the defaults declare no destination and render as text; a site supplying `columns` supplies real links.
 
 The additive constraint costs nothing here, verified rather than assumed: `SiteFooter` has no call site in the repository. The only consumers of the package are `apps/robusta-build`, which imports `NotesPreview`, `BrandLogo`, `SkCallout` and `SkTag`, and `apps/robusta`, whose `_design-test` page imports `BrandLogo`, `SkButton` and `SkTag`. `apps/dakar` imports the package nowhere. So the widening of `items` breaks no compiling call site, and `SkButton`'s union keeps the three `_design-test` calls valid as written.
+
+### `Hero`, `ServicesGrid`, `BrandLogo` — le texte de page passe par des props
+
+API library du module `@robusta/pyramids-design-system`, modifiée par l'amendement du 2026-10-06. Client code : package `landing` de l'app `@robusta/robusta-build` (robusta-landing-page).
+
+Le code de `4963dc0` n'a aucune des cinq entrées ci-dessous : `Hero` écrit sa légende et `alt="crystal tux"` en dur, la carte de `ServicesGrid` écrit « see how it works » dans un `div`, `BrandLogo` écrit « senior engineering, hand-built. » sous sa variante `full`.
+
+Types :
+
+```ts
+interface HeroProps {
+  /** Caption beside the mascot. Empty ('' or null): no caption, no doodle arrow. */
+  annotation?: ReactNode;
+  /** Alt text of the mascot. Empty: the mascot is decorative, alt="". */
+  mascotAlt?: string;
+  mascotSrc?: string;
+  // … eyebrow, title, subtitle, CTA labels and hrefs, footnote: unchanged
+}
+
+interface ServiceItem {
+  title: string;
+  /** Label of the card's link line. Absent or empty: no line. */
+  moreLabel?: string;
+  /** Absent: the label renders as text, never as an anchor. */
+  moreHref?: string;
+  // … time, body, tag, tagTone: unchanged
+}
+
+interface BrandLogoProps {
+  size?: 'compact' | 'full' | 'mark';
+  /** Rendered by the `full` variant alone. Empty: no tagline line. */
+  tagline?: string;
+  // … wordmarkSrc, style, className: unchanged
+}
+```
+
+Rendu :
+
+- `annotation` vide : ni `sk-hero__annotation` ni `sk-hero__doodle` dans le DOM — retirés, pas masqués en CSS. La légende ne dépend pas de `mascotSrc`, comme aujourd'hui.
+- `mascotAlt` : l'`<img>` de la mascotte porte toujours un attribut `alt` ; vide, il vaut `alt=""` et la mascotte est décorative, comme celles de `FlowDiagram` et de `CTA`.
+- `moreLabel` et `moreHref` : avec les deux, la ligne est une ancre `sk-services-grid__more` ; avec le libellé seul, le même élément non interactif qu'aujourd'hui, sans ancre ni `#` ; sans libellé, pas de ligne. La carte n'est pas interactive, l'ancre n'est donc imbriquée dans rien (R-RESPONSIVE-42). Le couple `*Label` / `*Href` est la convention du package (`primaryCtaLabel` / `primaryCtaHref`, `allLinkLabel` / `allLinkHref`) ; il est porté par la carte parce que chaque service mène à sa propre page.
+- `tagline` : les variantes `compact` et `mark` ne la rendent pas, même passée.
+
+Défauts — le texte du prototype, comme pour toutes les props de texte des surfaces (`design-system.archi.md`, « Defaults preserve the prototype copy ») :
+
+- `annotation` — « this is crystal tux. » et « she lives here. », sur deux lignes ;
+- `mascotAlt` — « crystal tux » ;
+- `tagline` — « senior engineering, hand-built. » ;
+- `moreLabel` — pas de défaut de prop : les trois cartes de `DEFAULT_SERVICES` portent « see how it works » et aucun `moreHref`, le package ne connaissant l'URL d'aucun site, comme pour `DEFAULT_COLUMNS`.
+
+Un site qui ne passe rien obtient le rendu d'aujourd'hui ; un site qui passe tout ne reçoit plus un mot du prototype. C'est ce second cas que BR-PYRAMID-8 exige et qu'AC-LANDING-2 de robusta-landing-page vérifie sur `/`.
+
+Le texte alternatif « Robusta Build » du wordmark reste fixe : c'est l'équivalent textuel de l'actif de marque que le package fournit (BR-PYRAMID-3), pas un texte de page.
+
+Client code, dans le package `landing` :
+
+```tsx
+import { Hero } from '@robusta/pyramids-design-system';
+import tux from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
+
+<Hero
+  eyebrow="Sites web rapides et applications sur mesure"
+  mascotSrc={tux}
+  mascotAlt="Crystal Tux, la mascotte de Robusta Build"
+  annotation=""
+/>;
+```
 
 ### The type scale — ten steps, all fluid
 
@@ -167,6 +237,7 @@ It restates the surfaces' markup in plain HTML and can drift from the TSX. It is
 - A media query cannot read a CSS custom property, and the package ships plain CSS through no PostCSS step, so `@custom-media` is unavailable too. The five widths are literals in five `@media` preludes and nowhere else.
 - BR-PYRAMID-6 — a site's design tokens come from its design system alone. The consuming site aliases a name onto a token and coins no value, which is why `--destructive` has to exist here before the bridge can name it, and why the fluid scale is written in `colors_and_type.css` and in no site's file. BR-PYRAMID-3 keeps the package robusta's alone; BR-PYRAMID-8 keeps the package's default copy out of what a site publishes, and is why a default footer item declares no destination.
 - BR-PYRAMID-5 — the green set stays green from a clean checkout: dakar 23/23, robusta 42/42, robusta-build 25/25 static pages. The v1 `_design-test` page and the v2 article page are the two rendered proofs; the article page reads `--t-*` through the element rules of `colors_and_type.css` and through `ArticleProse.module.css`, so a scale change reaches it without it changing.
+- React n'émet pas un attribut qui vaut `undefined`, et émet `alt=""` pour une chaîne vide. `mascotAlt` a donc une chaîne pour défaut et n'atteint jamais l'`<img>` en `undefined` : c'est ce qui tient l'attribut `alt` de R-RESPONSIVE-103.
 - Node 22, yarn 4.17.1, React 19.1.1 stable everywhere, TypeScript 5. `next.config.ts` sets `eslint.ignoreDuringBuilds: true` in both Next apps, so `yarn lint` is run explicitly and is not gated by a build.
 
 ## Requirements
@@ -217,6 +288,16 @@ Scope:
 - R-RESPONSIVE-84: The green set builds from a clean checkout — dakar 23/23, robusta 42/42, robusta-build 25/25 — with the v2 article page and the v1 `_design-test` page still rendering. Realizes BR-PYRAMID-5.
 - R-RESPONSIVE-85: The only site file this story touches is the v2 token bridge, and it touches it with aliases alone. Realizes BR-PYRAMID-3 and BR-PYRAMID-6.
 
+Texte de page :
+
+- R-RESPONSIVE-101 : Tout texte que rend une surface ou `BrandLogo`, texte alternatif compris, passe par une prop qu'un site peut remplacer, hors le texte alternatif du wordmark. Réalise BR-PYRAMID-8.
+- R-RESPONSIVE-102 : `Hero` lit sa légende dans `annotation` ; une `annotation` vide retire du DOM la légende et sa flèche.
+- R-RESPONSIVE-103 : L'image de la mascotte du `Hero` porte toujours un attribut `alt`, lu dans `mascotAlt` ; un `mascotAlt` vide rend la mascotte décorative.
+- R-RESPONSIVE-104 : Une carte de `ServicesGrid` lit sa ligne de lien dans `moreLabel` et `moreHref` : une ancre avec les deux, du texte sans ancre ni `#` avec le libellé seul, rien sans libellé.
+- R-RESPONSIVE-105 : La variante `full` de `BrandLogo` lit sa tagline dans `tagline`, aucune autre variante ne la rend, et une `tagline` vide retire la ligne.
+- R-RESPONSIVE-106 : Une prop de texte absente prend pour défaut le texte du prototype qu'elle remplace : un composant rendu sans elle rend le texte d'aujourd'hui, au même endroit.
+- R-RESPONSIVE-107 : Les cartes par défaut de `ServicesGrid` portent le libellé du prototype et aucune destination, le package ne connaissant l'URL d'aucun site. Réalise BR-PYRAMID-8.
+
 ## Acceptance Criteria
 
 Ada develops the site, Barbot visits, Tux builds from a clean checkout.
@@ -233,8 +314,19 @@ Ada develops the site, Barbot visits, Tux builds from a clean checkout.
 - AC-RESPONSIVE-10: Given a clean checkout, when Tux runs the green set, then dakar builds 23/23, robusta 42/42 and robusta-build 25/25, and the article page renders as it did. Realizes BR-PYRAMID-5 and R-RESPONSIVE-84.
 - AC-RESPONSIVE-11: Given the package's CSS, when Ada searches it for a breakpoint width, then each of the five appears once and no sixth width appears anywhere. Realizes R-RESPONSIVE-21.
 - AC-RESPONSIVE-12: Given a surface rendered from a server component of the v2 site, when Tux builds, then no surface carries `'use client'` and the site gains no client bundle from the design system. Realizes R-RESPONSIVE-82.
+- AC-RESPONSIVE-13 : Étant donné `Hero`, `ServicesGrid` et la variante `full` de `BrandLogo` rendus avec toutes leurs props de texte (`annotation`, `mascotAlt`, `moreLabel` et `moreHref` de chaque carte, `tagline`), quand Barbot lit la page, textes alternatifs compris, alors aucun mot du prototype ne lui parvient, et une annotation vide ne laisse ni légende ni flèche ; rendus sans aucune de ces props, ils gardent le rendu d'aujourd'hui, même texte au même endroit. Réalise BR-PYRAMID-8 et R-RESPONSIVE-101 à 107.
+
+Cas limites à tester :
+
+- `Hero` avec `annotation=""`, puis avec `annotation={null}` : ni légende ni flèche dans le HTML rendu.
+- `Hero` avec `mascotSrc` et sans `mascotAlt` : `alt="crystal tux"` ; avec `mascotAlt=""` : l'attribut `alt=""` est présent — jamais une `<img>` sans `alt`.
+- `Hero`, `ServicesGrid` et `BrandLogo size="full"` rendus sans aucune prop de texte : le même texte au même endroit qu'avant l'amendement ; la page `_design-test` de v1 garde la tagline de son `BrandLogo`.
+- Les trois rendus avec toutes leurs props de texte, `annotation` vide et des `services` sans `moreLabel` : ni « this is crystal tux. », ni « she lives here. », ni `alt="crystal tux"`, ni « see how it works », ni « senior engineering, hand-built. » dans le HTML. AC-LANDING-2 de robusta-landing-page repose sur ce cas.
+- Trois cartes, la première avec `moreLabel` et `moreHref`, la deuxième avec `moreLabel` seul, la troisième sans : une ancre, du texte sans ancre ni `#`, aucune ligne.
+- `BrandLogo` en variante `compact` ou `mark` avec une `tagline` passée : pas de tagline rendue.
 
 ## Dependencies
 
 - Depends on: nothing blocking. The package has been on `dev` and inside `build:deps` since 2026-07-30.
 - Blocks: robusta-landing-page, item 2 of the epic's À faire.
+

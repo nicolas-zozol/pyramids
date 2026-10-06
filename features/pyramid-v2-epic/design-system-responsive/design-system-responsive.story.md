@@ -22,6 +22,24 @@ This is item 1 of the epic's À faire and item 1 of the ROADMAP's Next because i
 - Calls to action. Every one nests an `<a>` inside a `<button>` — four of them, in `Hero`, `CTA` and `SiteHeader` — which is invalid HTML, a WCAG 4.1.2 failure and unreliable as a followed link for a crawler. The footer's three link columns render `href="#"`, `FooterColumn.items` being plain strings with nowhere to carry a destination.
 - Error colour. The design system ships none, which is why the v2 site's token bridge carries no `--destructive` and says so in three places. Decision of 2026-07-31: the design system decides the value, the site aliases it and coins nothing.
 
+## Acceptance Criteria
+
+Ada développe le site, Barbot le visite, Tux le construit depuis un Clean checkout.
+
+- AC-RESPONSIVE-01: Given the eight surfaces composed as a full page, when Barbot loads it at 320, 640, 768 and 1280 px, then nothing scrolls sideways at any width and no text is clipped. Realizes R-RESPONSIVE-26, 27 and 28.
+- AC-RESPONSIVE-02: Given that page at 1280 px and above, when Ada compares it with what the package renders today, then each surface keeps its composition, the sizes the collapse onto the scale moved being the only difference she finds. Realizes R-RESPONSIVE-07 and 29.
+- AC-RESPONSIVE-03: Given the hero headline, when Barbot narrows the viewport from 1280 to 320 px, then its size shrinks continuously rather than in steps. Realizes R-RESPONSIVE-01.
+- AC-RESPONSIVE-04: Given any text a surface renders, when Ada inspects its computed size, then it traces to a `--t-*` step and to no literal declared by a component or by `sketch.css`. Realizes R-RESPONSIVE-03.
+- AC-RESPONSIVE-05: Given the hero, the closing CTA and the header, when a crawler reads the page, then each call to action is one anchor carrying its destination, and no anchor sits inside a button. Realizes R-RESPONSIVE-41 and 42.
+- AC-RESPONSIVE-06: Given the three `SkButton` calls of the v1 `_design-test` page, none of which passes an `href`, when Tux builds, then each renders a button, the page compiles unchanged and the build stays green. Realizes R-RESPONSIVE-41, 45 and 84.
+- AC-RESPONSIVE-07: Given a footer column carrying one item with a destination and one without, when Barbot reads the footer, then the first is a followable anchor and the second is text carrying no anchor and no `#`. Realizes R-RESPONSIVE-43.
+- AC-RESPONSIVE-08: Given Ada overriding a surface's layout from the site's own stylesheet with a selector carrying one class more than the package's, when the page renders, then her rule wins and she writes no `!important`. Realizes R-RESPONSIVE-22, 23 and 24.
+- AC-RESPONSIVE-09: Given a shadcn component rendering `bg-destructive`, when Barbot loads the page, then the colour resolves, and the site's stylesheet declares no colour literal. Realizes BR-PYRAMID-6 and R-RESPONSIVE-61 and 64.
+- AC-RESPONSIVE-10: Given a clean checkout, when Tux runs the green set, then dakar builds 23/23, robusta 42/42 and robusta-build 25/25, and the article page renders as it did. Realizes BR-PYRAMID-5 and R-RESPONSIVE-84.
+- AC-RESPONSIVE-11: Given the package's CSS, when Ada searches it for a breakpoint width, then each of the five appears once and no sixth width appears anywhere. Realizes R-RESPONSIVE-21.
+- AC-RESPONSIVE-12: Given a surface rendered from a server component of the v2 site, when Tux builds, then no surface carries `'use client'` and the site gains no client bundle from the design system. Realizes R-RESPONSIVE-82.
+- AC-RESPONSIVE-13 : Étant donné `Hero`, `ServicesGrid` et la variante `full` de `BrandLogo` rendus avec toutes leurs props de texte (`annotation`, `mascotAlt`, `moreLabel` et `moreHref` de chaque carte, `tagline`), quand Barbot lit la page, textes alternatifs compris, alors aucun mot du prototype ne lui parvient, et une annotation vide ne laisse ni légende ni flèche ; rendus sans aucune de ces props, ils gardent le rendu d'aujourd'hui, même texte au même endroit. Réalise BR-PYRAMID-8 et R-RESPONSIVE-101 à 107.
+
 ## Definition of done
 
 - The eight marketing surfaces hold at `sm` (640 px), `md` (768 px) and `xl` (1280 px) with no text clipped and nothing scrolling sideways, and keep their present composition at the widest. 320 px is a floor and not a breakpoint: nothing scrolls sideways there either.
@@ -30,12 +48,24 @@ This is item 1 of the epic's À faire and item 1 of the ROADMAP's Next because i
 - The layout of a surface no longer lives in inline styles: a consuming site can override it from a stylesheet without `!important`.
 - The type scale is fluid, written once in `colors_and_type.css`, and the surfaces render their type through it — no surface declares a font size of its own.
 - `SkButton` takes an optional `href` and renders an anchor when given one, `FooterColumn.items` carry a label and a destination, and every call to action of the package renders one interactive element with none nested inside it. Both changes are additive and no existing consumer breaks (decision of 2026-07-30).
-- No surface renders page copy the consumer did not pass (BR-PYRAMID-8): `Hero` takes an `annotation` and a `mascotAlt`, an empty annotation hiding the caption and its arrow, and the « see how it works » link of `ServicesGrid` and the tagline of `BrandLogo`'s full variant stop being fixed text. Additive, like the changes above (decision of 2026-10-06).
 - The design system ships an error ramp of three — a base, its wash and its pressed tone — and the v2 site's token bridge aliases `--destructive` onto the base instead of recording its absence.
 - The package gains tokens, classes and props; it gains no new component and no new surface (decision of 2026-08-02).
 - The surfaces stay server-component-safe: no `'use client'`, and no viewport read in JavaScript.
 - The green set stays green from a clean checkout (BR-PYRAMID-5): dakar 23/23, robusta 42/42, robusta-build 25/25, with the article page and the `_design-test` smoke page of v1 still rendering.
 - Does not cover the landing page itself, its copy or its composition (robusta-landing-page); the README's stale font-stack claim (font-stack-readme, item 5); the weight of the wordmark (vectorize-wordmark).
+
+## Boundaries
+
+Le contrat de référence est la section Boundaries de [`design-system-responsive.design.md`](design-system-responsive.design.md) : types, rendu, défauts et client code y sont, la story ne les recopie pas.
+
+### API library du module `@robusta/pyramids-design-system` — modifiée
+
+Client code : app `@robusta/robusta-build` (package `landing` et pont de tokens), app `@robusta/build` (page `_design-test`).
+
+- `SkButtonProps` — un `href` optionnel : une ancre avec, un bouton sans.
+- `FooterColumn.items` — des `FooterLink`, un libellé et une destination optionnelle.
+- `HeroProps`, `ServiceItem`, `BrandLogoProps` — le texte de page passe par `annotation`, `mascotAlt`, `moreLabel` / `moreHref` et `tagline`.
+- CSS — l'échelle `--t-*` devient fluide et gagne `--t-display` et `--t-lead`, la rampe `--brand-error` apparaît, et les classes `sk-<surface>__<part>` deviennent la surface de surcharge de la mise en page.
 
 ## Décisions
 
@@ -44,13 +74,7 @@ This is item 1 of the epic's À faire and item 1 of the ROADMAP's Next because i
 - 2026-08-07 — The design system ships one error ramp of the shape its brand ramps already have: a red that sits with the ink and the paper, its wash and its pressed tone, with the v2 bridge aliasing `--destructive` onto the base. Pourquoi : the decision of 2026-07-31 asked the design system to settle the value before a component needs one, and matching the existing ramps costs nothing today and saves a second pass. Arbitration of Open Question 1, accepted as proposed.
 - 2026-08-07 — The `.sk-*` primitive classes and the eight surface blocks are documented together in the README's Component vocabulary section, naming rule included. Pourquoi : Gap 1 of `design-system-responsive.design.md` made the surface class names a public override surface, which is how a site overrides a layout from a stylesheet without `!important`, and none of the five locations of the plan below documented them — a consumer who cannot read the names overrides nothing. Arbitration of that gap, accepted as proposed; the design doc stays the reference for the mechanism.
 - 2026-10-06 — The design system stops rendering page copy of its own: `HeroProps` gains `annotation` and `mascotAlt`, an empty annotation hiding the caption and its arrow, and the same defect is fixed in `ServicesGrid` (« see how it works ») and in the full variant of `BrandLogo`. Pourquoi : BR-PYRAMID-8 forbids a design system any page copy, yet `Hero` renders « this is crystal tux. she lives here. » and the alt text « crystal tux » whatever props it receives, so AC-LANDING-2 cannot hold, and the fix costs least while this story still has `Hero.tsx` open. Arbitration of Gap-LANDING-10 in `robusta-landing-page.story.md`, accepted as proposed (`lgtm`).
-
-## Open Questions & Gaps
-
-- Gap-RESPONSIVE-1: `design-system-responsive.design.md` is APPROVED and does not cover the scope added on 2026-10-06 (the `annotation` and `mascotAlt` props of `Hero`, the copy of `ServicesGrid` and of `BrandLogo`'s full variant), while most of this story's code already sits in the WIP commit `4963dc0`.
-- Proposition: designman amends the design doc for this scope, the `HeroProps` boundary and the requirement behind the new Definition of done line, before the code covers it; the WIP of `4963dc0` is then checked against the amended design.
-- Rationale: implementation starts from an approved design, and the WIP predates the decision, so without the amendment the fixed copy ships unchanged.
-- Resolution:
+- 2026-10-06 — Le design est amendé pour le texte de page (R-RESPONSIVE-101 à 107 : `annotation` et `mascotAlt` de `Hero`, `moreLabel` et `moreHref` des cartes de `ServicesGrid`, `tagline` de la variante `full` de `BrandLogo`) et repasse en DRAFT pour la réapprobation de l'éditeur. Pourquoi : l'implémentation part d'un design approuvé, et le WIP de `4963dc0`, antérieur à l'amendement, ne porte aucune de ces props ; il sera confronté au design une fois réapprouvé. Constat des sources, qui clôt Gap-RESPONSIVE-1.
 
 ## Documentation updates
 
