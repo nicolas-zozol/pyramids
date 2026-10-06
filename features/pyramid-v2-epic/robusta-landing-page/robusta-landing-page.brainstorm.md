@@ -1,19 +1,59 @@
 # Brainstorm : Landing page of robusta.build
 
-**Date :** 2026-07-29
+**Date :** 2026-10-06 — reworked in place, first version 2026-07-29 (in git)
 **Feature :** robusta-landing-page
 **Infix :** LANDING
 **Participants :** bsman (autonomous)
 
 > **Note:** All axes completed autonomously by bsman. Decisions are flagged with **Décision (autonome):** for review.
 
-Sources read: the story, `pyramid-v2.epic.md` (Décisions structurantes of 2026-07-29), `root.archi.md`, `ubiquitous-language.md`, `business-rules.md`, `ROADMAP.md`, `CLAUDE.md`, the `packagify-design-system` PRD, the eight marketing surfaces and six primitives as they exist on `feat/packagify-design-system` (commit `6fb8d72`), the design system's CSS and brand-voice sheet, and the v1 home page under `apps/robusta/src/components/freelance/`.
+Sources read: the story (last touched 2026-07-29), `pyramid-v2.epic.md` up to its decisions of 2026-08-02, `ROADMAP.md`, `business-rules.md`, `ubiquitous-language.md`, `root.archi.md`, the story and approved design of design-system-responsive, the stories of seo-excellence, migrate-learn-content, article-page and bootstrap-robusta-build, `apps/robusta-build` as it stands (README, archi, layout, home page, `src/landing`, site configuration, v1 map), the eight surfaces and `SkButton` as committed in `4963dc0` ("wip rebuild"), and the v1 pitch in `apps/robusta/src/components/freelance/FreelanceAd.tsx`.
 
-Two things found in the package source drive most of what follows: the surfaces carry no responsive rule of any kind, and every call-to-action in them renders an anchor nested inside a button. Both are described in the Gaps.
+## What changed since the version of 2026-07-29
+
+- Five stories landed between 2026-07-31 and 2026-08-02. `apps/robusta-build` exists, builds 25 static pages, reads eleven real articles, renders them as articles, and mounts the notes section on `/`, fed by the four newest English articles. The home page around it is still the shell's wiring demonstration.
+- The two package defects that drove the first version are being fixed by design-system-responsive (design APPROVED 2026-08-07, code largely in `4963dc0`, story ACTIVE): fluid type scale, layout moved from inline styles to `sk-<surface>__<part>` classes in `sketch.css`, `SkButton` rendering an anchor when given an `href`, footer items carrying an optional destination, an error ramp.
+- BR-PYRAMID-8 is recorded: the site supplies all page copy, the design system none. BR-PYRAMID-2 reads again "A site built on the version 2 base must not track visitor intents".
+- The fonts are self-hosted by the site through `next/font`; the page makes no third-party request.
+- New findings: `Hero` renders a caption no prop can replace; nine listing routes (ten built pages) are placeholders and no roadmap item renders them; the v2 site answers on its own Vercel project, not on robusta.build; the story says nothing about the site-wide `noindex` that ROADMAP and the epic assign to it.
+
+Settled, and built on rather than reopened:
+
+- The story's decisions: first person singular (2026-07-29); the v1 social proof as text in Hero and PrinciplesList, no logo wall, skills grid or portfolio (2026-07-29); NotesPreview delivered by migrate-learn-content (2026-07-29, executed); ServicesGrid and FlowDiagram out of the first release (2026-07-30); fragments carrying design-system class names and bare `id` wrappers only, no class, colour, font or spacing of the site's own (2026-07-30); the hero headline drafted from R-LANDING-6 (2026-07-30).
+- The epic's decisions on the first version's entries: Open Question 1 gave `Page copy` and BR-PYRAMID-8; Gap 1 gave design-system-responsive; Gap 2 gave `SkButton.href` and footer items with a destination; Gap 4 closed with the reconciliation of BR-PYRAMID-2 (arbitration C1). Open Question 2, on the Google Fonts `@import`, was overtaken by bootstrap-robusta-build's self-hosted faces.
+- The keys of the Open Questions & Gaps below start at 9: Open Questions 1 to 4 and Gaps 1 to 4 of the first version are cited by number in the story and the epic, and their numbers are not reused.
 
 ---
 
-## Requirements
+## Acceptance Criteria challenge
+
+The story carries no AC: it still has a legacy Definition of done, so there is no `AC-LANDING-n` to cite (Gap-LANDING-9). The verdicts below are on its seven bullets, numbered in order as DoD 1 to DoD 7.
+
+- DoD 1 — "`/` renders a complete landing page composed only of design-system surfaces; the site adds no marketing markup of its own". Testable once "complete" becomes the list of surfaces in their order. Insufficient: the composition grew to six surfaces when the notes section was mounted, against the five the decision of 2026-07-30 names, and the bare `id` wrapper allowed by the decision of 2026-07-30 needs stating, or a strict reading fails it.
+- DoD 2 — "every surface shows robusta's copy, passed through props — none of the prototype defaults reaches a visitor". Testable by a string guard. Not satisfiable today: `Hero` renders "this is crystal tux. she lives here." and the alt text "crystal tux" whatever props it receives (Gap-LANDING-10). "Passed through props" is implementation; the business statement is "every word a visitor reads is robusta's".
+- DoD 3 — the v1 pitch carried over. Testable by presence. Insufficient: "the startups" should name Nauto, Diool and Swaap Finance, and the claims that are not references — twenty years and more, fullstack, EVM and Solidity, scientific background, Toulouse and remote — have no criterion at all, though R-LANDING-6 lists them.
+- DoD 4 — "no resume anywhere on the v2 site: no page, no link, no PDF". Testable and in business language. Misses the one resume v1 linked from the pitch itself: the Toptal screening pointed at `toptal.com/resume/nicolas-zozol`.
+- DoD 5 — "renders as a server component and survives the site's build". Testable, technical. The business criterion behind it is "the full pitch and the contact route read without JavaScript".
+- DoD 6 — scope: "does not cover the article list (migrate-learn-content) …". Stale: the article list is on the page, inherited, and the story carries it across (R-MIGRATELEARN-45).
+- DoD 7 — "does not touch `apps/robusta`". Sound.
+
+Missing criteria, beyond the edge cases below: the deletion of the shell's wiring demonstration, which the epic assigns to this story; the first person singular of the decision of 2026-07-29, which no bullet checks; and the site-wide `robots: noindex`, which ROADMAP item 2 and epic item 2 assign to this story and the story never mentions — its shape depends on OQ-LANDING-12.
+
+Business edge cases the story misses, proposed to storyman:
+
+- Given a design-system surface renders a sentence the site cannot replace, When the landing page is built, Then that sentence does not reach the visitor.
+- Given the notes section inherited from migrate-learn-content speaks as "we" ("what we publish."), When the landing page renders, Then its headings speak in the first person singular like the rest of the page.
+- Given no English article declares itself published, When the site is built, Then the landing page carries no notes section, rather than an empty one or the design system's sample posts.
+- Given the blog home still renders a placeholder, When the landing page is offered to search engines, Then no control on it leads to a page carrying no content of its own.
+- Given the Toptal screening is cited, When a visitor reads it, Then it is plain text and leads to no Toptal resume page.
+- Given a reader arrives on an article from a search engine, When they want to know who wrote it and how to reach him, Then the page offers a route to the landing page and to the contact route (OQ-LANDING-13).
+- Given the longest strings the site supplies — the email address, the hero headline, `docker-compose` — When the page is read at 320 px, Then nothing scrolls sideways and nothing is clipped.
+
+---
+
+## Requirements of the first version
+
+Written by bsman on 2026-07-29, before bsman stopped writing requirements. They stay here verbatim because the story cites R-LANDING-4 and R-LANDING-6 and the epic cites R-LANDING-11; designman restates them in the design doc under the same numbers. This version adds none.
 
 Composition — BR-PYRAMID-3 : "Each site must carry its own design system, which no other site may reuse."
 
@@ -21,7 +61,7 @@ Composition — BR-PYRAMID-3 : "Each site must carry its own design system, whic
 - R-LANDING-2 — The site may pass a surface's content as a fragment carrying design-system class names, and nothing else. It defines no class, no colour, no font and no spacing of its own.
 - R-LANDING-3 — The order in which the surfaces are composed is written down, because the next site starts by copying this page.
 
-Editorial
+Editorial — BR-PYRAMID-8 : "A site must supply the page copy of every page it publishes; its design system must supply no page copy."
 
 - R-LANDING-4 — No wording shipped as a default by the design system reaches a visitor. Every string a visitor reads is passed in by the site.
 - R-LANDING-5 — The page speaks in the first person singular of one named engineer.
@@ -35,7 +75,7 @@ Contact
 - R-LANDING-10 — The contact route is direct — an email address and a LinkedIn profile — reachable without submitting anything.
 - R-LANDING-11 — The page offers no action the site does not fulfil. Every control leads to a destination that exists.
 
-Technical — BR-PYRAMID-2 as recorded : "We embrace the constraints of Vercel, React Server Component and shadcn." It warrants R-LANDING-12 and nothing beyond it. R-LANDING-13 rests instead on the epic's decision of 2026-07-29 that the v2 base does not track visitor intents — a prohibition the registry no longer states under any number, which is Gap 4.
+Technical — BR-PYRAMID-2 : "A site built on the version 2 base must not track visitor intents."
 
 - R-LANDING-12 — The page renders entirely as a server component and stays readable with JavaScript disabled.
 - R-LANDING-13 — The page loads no analytics client, no intent client and no telemetry.
@@ -43,46 +83,56 @@ Technical — BR-PYRAMID-2 as recorded : "We embrace the constraints of Vercel, 
 - R-LANDING-15 — Stylesheets and brand assets reach the page through the package's exports subpaths, with no copy into the site's public directory.
 - R-LANDING-16 — The page is readable on a phone: nothing scrolls horizontally, no text is clipped by a fixed-width grid.
 
+What moved under them since:
+
+- R-LANDING-4 cannot hold while `Hero` hardcodes its caption (Gap-LANDING-10).
+- R-LANDING-11: a placeholder page exists and answers 200, so the requirement as written is met by a link to the blog home. The edge case above states what it was meant to say.
+- R-LANDING-13 realizes BR-PYRAMID-2 again, the registry stating it since 2026-07-30.
+- R-LANDING-14 is already true of the layout since bootstrap-robusta-build; what remains is the page declaring its own pair (axis 8).
+- R-LANDING-15 extends to the two mascots, which the first version never imported.
+- R-LANDING-16 is design-system-responsive's guarantee for the surfaces with their own copy; the site's longer strings are what this story still has to check.
+
 ---
 
 ## 1. Product Role
 
-The landing page is the one page of robusta.build that sells rather than informs. `ubiquitous-language.md` already fixes the term: a landing page is "the home page of a site, built from the site's design system … a marketing surface, distinct from any content page."
+The landing page is the one page of robusta.build that sells rather than informs. `ubiquitous-language.md` fixes the term: the home page of a site, built from the site's design system, a marketing surface distinct from any content page.
 
-Inside the epic it plays a second role that outweighs the first: it is the proof that a site can be dressed entirely by its own design system, and the template the next site is copied from. That is why the story forbids the site any markup of its own — a page that quietly patches the design system proves nothing.
+Inside the epic it is also the proof that a site is dressed entirely by its own design system, and the template the next site is copied from. That is why the site may add no presentation of its own: a page that quietly patches its design system proves nothing.
 
-What it is not: a portfolio, a resume, an article, or a lead-capture funnel. The v1 home page tried to be all of those at once — pitch, logo wall, skills grid, portfolio preview, an embedded CV in an iframe, and a recent-articles roll, in one scroll.
+Since 2026-08-02 it has a third role. The eleven articles render and are where search traffic will land; the landing page is where a reader of those articles goes to find out who wrote them and how to hire him. The articles bring the reader, the landing page converts him.
 
-**Décision (autonome):** The landing page is a pitch page with one destination — the contact route — and it carries no portfolio, no skills taxonomy, no resume and, in this story, no article list.
+What it is not: a portfolio, a resume, an article, or a lead-capture funnel.
 
-**Rationale:** A page with one job can be judged; the v1 page had six and none of them was measurable.
+**Décision (autonome):** The landing page is a pitch page with one destination, the contact route, plus the four newest articles it inherits from migrate-learn-content. No portfolio, no skills taxonomy, no resume.
+
+**Rationale:** A page with one job can be judged; the notes section stays because it was built for this page and shows the record is alive.
 
 ---
 
 ## 2. Target Audience
 
-Two readers, and they are not the same person.
+- The buyer: a CTO, a founder or an engineering manager with a system that is hurting. Arrives from LinkedIn, a referral, a search, or now an article. Technical enough to detect padding.
+- The crawler: indexes mobile-first and reads the server-rendered HTML, which the RSC rendering guarantees.
+- The article reader: arrives on one of the eleven articles from a search engine, and is a buyer only if something on the article page leads him to the pitch. Today nothing does: an article page carries no header, no footer and no link to `/` (OQ-LANDING-13).
 
-- The buyer: a CTO, a founder or an engineering manager with a system that is hurting, arriving from a LinkedIn profile, a referral, or a search. They read the first screen and decide whether this is a serious engineer. They are technical enough to detect padding.
-- The crawler: Googlebot, which indexes mobile-first and reads the server-rendered HTML. Everything the page wants to be found for has to be in that HTML, which the RSC decision already guarantees.
+The recruiter, audience of the v1 embedded CV, stays dropped: the epic puts the resume out of scope.
 
-A third reader existed in v1 and is deliberately dropped: the recruiter, who was the audience of the embedded CV and its two PDF downloads. The epic puts the resume out of scope, and that removes the audience conflict — a page addressing both a buyer and a recruiter tells neither of them a clear story.
+**Décision (autonome):** The page is written for the buyer and rendered for the crawler; the article reader is treated as a buyer one click away.
 
-**Décision (autonome):** The page is written for the buyer and rendered for the crawler; the recruiter is no longer an audience of robusta.build.
-
-**Rationale:** Removing the resume removes the reason the v1 page had to hedge between selling an engagement and selling a candidate.
+**Rationale:** Eleven article pages against one landing page means most first visits will not start on `/`.
 
 ---
 
 ## 3. Core Problem
 
-The v1 home page states the offer as a list of nouns. Its pitch is one `<h2>` reading "Experienced Fullstack freelance", four bullets of technologies, a paragraph of client names, and a LinkedIn button carrying a phone icon. There is no `<h1>`, no headline, no statement of what a buyer would actually be buying. The `<title>` served is a string hardcoded in the root layout that does not match the `siteTitle` in `seopyramids.config.ts` — and `siteTitle`, `mission`, `logo` and `domain` in that file are declared but read by nothing.
+The v1 home page states the offer as a list of nouns: one `<h2>` reading "Experienced Fullstack freelance", four bullets of technologies, a paragraph of client names, and a LinkedIn button carrying a phone icon. No `<h1>`, no headline, no statement of what a buyer would be buying.
 
-So there are two problems stacked. The visible one: the page lists what Nicolas knows rather than what he does for you. The structural one: the site's own configuration is decorative, so the page identity lives in whatever string someone last edited in a layout file.
+The structural half of the problem found in the first version — a site configuration nothing read — is half fixed: the v2 layout reads `siteTitle` and `mission` from `seopyramids.config.ts`. But it uses the motto "Building Internet the right way" as the description of every page, the home page included, and the shell's wiring demonstration ("placeholder", a font specimen) is what `/` serves.
 
-**Décision (autonome):** The page solves both — it leads with a headline stating the offer, and it reads its title, description and brand values from `seopyramids.config.ts`, making that file load-bearing for the first time.
+**Décision (autonome):** The page leads with a headline stating the offer, and declares its own title and a description written from the pitch, both held by the site configuration.
 
-**Rationale:** bootstrap-robusta-build declares the site configuration to be the per-site source of truth; a source of truth nothing reads is a comment.
+**Rationale:** A motto is not a description, and a home page that inherits the layout default shares it with every placeholder.
 
 ---
 
@@ -90,42 +140,62 @@ So there are two problems stacked. The visible one: the page lists what Nicolas 
 
 Against the alternatives a buyer holds in the same hand:
 
-- Against an agency: one named engineer with a traceable record, not an account manager and an unnamed team. This is exactly why the story's decision of 2026-07-29 rewrites the surfaces' "we" into the first person singular.
-- Against a marketplace profile (Toptal, Malt): the screening is cited as evidence, but the engagement is direct — no intermediary, no platform margin.
+- Against an agency: one named engineer with a traceable record. This is why the decision of 2026-07-29 rewrites the surfaces' "we" into the first person singular.
+- Against a marketplace profile (Toptal, Malt): the screening is cited as evidence, the engagement is direct.
 - Against the v1 page: the same claims, ordered so that a reader gets the offer before the technology list.
 
-The evidence that carries the proposition is already written and verifiable: Renault, Boston Consulting Group, Nauto, Diool, Swaap Finance, the Toptal screening, the Oracle Certified Java Master certification. The v1 page had it too, and buried it in a paragraph below a logo wall.
+The evidence is already written and checkable: Renault, Boston Consulting Group, Nauto, Diool, Swaap Finance, the Toptal screening, the Oracle Certified Java Master certification. One loss is accepted knowingly: the v1 portrait lives under `apps/robusta/public/images`, which stays behind by the epic's decision of 2026-07-29, so the named engineer has no face on v2 and the mascot takes the visual slot.
 
-**Décision (autonome):** The proposition is "one senior engineer you can name, with a record you can check", and the named references are promoted from a buried paragraph into the surfaces a reader meets first.
+**Décision (autonome):** The proposition is "one senior engineer you can name, with a record you can check", and the references move from a buried paragraph into the hero and the principles.
 
-**Rationale:** The references are the only unfalsifiable thing on the page, and every competing option is anonymous by construction.
+**Rationale:** The references are the only thing on the page a competitor cannot claim, and every competing option is anonymous by construction.
 
 ---
 
 ## 5. Functional Scope
 
-The design system ships eight marketing surfaces. Five of them have copy that the v1 record actually supports; two of them describe a service business that robusta has never described anywhere in writing; one is deferred by the story.
-
 In scope — the composition, in order:
 
-1. SiteHeader — wordmark, a short nav, the contact CTA
-2. Hero — the pitch: the name, the experience claim, the specialism, the location, the contact CTAs
+1. SiteHeader — the wordmark linking home, the contact call to action
+2. Hero — the headline, the experience claim, the specialism, Toulouse and remote, the two contact calls to action
 3. PrinciplesList — how the work is done, and the named references as text
-4. CTA — the closing contact block
-5. SiteFooter — brand block, tagline, copyright
+4. NotesPreview — inherited as `NotesSection`, the four newest English articles
+5. CTA — the closing contact block
+6. SiteFooter — brand block, tagline, copyright
 
-Held out of the first release:
+Also in scope: deleting the shell's wiring demonstration from `src/app/page.tsx`, and carrying `NotesSection` across with its headings rewritten.
 
-- ServicesGrid and FlowDiagram — their prototype copy ("the audit", "embedded eng", "rebuild surgery", a five-step engagement with a 2–3 week audit) is invented. There is no v1 source for it, and R-LANDING-4 forbids shipping the defaults. See Gap 3.
-- NotesPreview — the story already defers it to migrate-learn-content.
+Held out: ServicesGrid and FlowDiagram (decision of 2026-07-30). Out: the logo wall, the skills grid, the portfolio preview, the GitHub calendar, the resume in every form, a French landing page. `/l/fr` keeps building nothing: v1's home page was English-only, so no indexed page is lost.
 
-Explicitly out: the logo wall, the skills grid, the portfolio preview, the GitHub contribution calendar, the resume in all its forms, and any French version of the page.
+The site-wide `noindex` is the open scope question. ROADMAP and the epic say this story lifts it; the story is silent. Three paths:
 
-Two scope calls worth stating plainly. The footer's `FooterColumn.items` is typed `string[]` and every item renders as `<a href="#">` — the package gives no way to attach a real destination. Passing `columns={[]}` yields a brand-and-copyright footer with no dead link, which satisfies R-LANDING-11. And the v1 home page is English-only — no `fr` route, no dictionary, `lang="en"` hardcoded — so an English-only v2 landing page loses no indexed page, whatever `otherLocales: ['fr']` says for the blog.
+```
+  Where the site-wide noindex lifts. Arrow = ships before.
 
-**Décision (autonome):** Five surfaces ship, the footer ships with no link columns, and the page ships in English only.
+  (a) in this story
+      responsive ──→ landing page + lift
+                     → 10 placeholder pages and a second host indexed
 
-**Rationale:** Shipping only the surfaces whose copy is backed by the v1 record keeps R-LANDING-4 true without inventing commercial claims, and a footer of `#` links would break R-LANDING-11 on the first surface a crawler reads.
+  (b) a go-live step of its own
+      responsive ──→ landing page ──→ seo-excellence ──→ listing pages ──┐
+                                                                         │
+      go-live: domain switch + lift + v1 redirects on  ←─────────────────┘
+
+  (c) page by page, in this story
+      responsive ──→ landing page: `/` and 11 articles indexable,
+                     the 10 placeholder pages keep noindex
+                     → the second host is still indexed
+```
+
+The second host is the Vercel project `robusta-build-v2`: robusta.build keeps answering from v1 until the domain switch, and v1 serves the same eleven articles under `/learn`. Not decided here: OQ-LANDING-12.
+
+Whether SiteHeader and SiteFooter wrap `/` only or every page is the other open scope question: OQ-LANDING-13.
+
+The footer: `FooterLink.href` now makes a real footer link possible, so the first version's reason for an empty footer is gone. What remains to link is the contact route, already in the header, the hero and the closing CTA, and the article list, whose blog home is a placeholder.
+
+**Décision (autonome):** Six surfaces ship in English, the wiring demonstration is deleted, the footer ships with no link column until the listing pages render, and the `noindex` directive is left as it stands pending OQ-LANDING-12.
+
+**Rationale:** Every surface shipped has copy the v1 record supports, and every link shipped leads to a page with something on it.
 
 ---
 
@@ -133,132 +203,141 @@ Two scope calls worth stating plainly. The footer's `FooterColumn.items` is type
 
 ### Feature: The composed landing route
 
-**Capability:** `/` of `apps/robusta-build` returns a server-rendered page assembled from five design-system surfaces, in a fixed and documented order, with the two stylesheets imported once from the root layout and the wordmark and mascot resolved through the package's `assets/*` subpath.
+**Capability:** `/` of `apps/robusta-build` serves a statically generated page assembled from six design-system surfaces in a fixed, documented order, with the wordmark and two mascots resolved through the package's `assets/*` subpath and no client bundle of the site's own. The wiring demonstration is gone.
 
-The page module is a pure function: every surface is server-safe, none is async, none reads a request. That makes the whole page testable by rendering it to a string, which the test approach leans on throughout.
+`NotesSection` is an async server component, so the page is no longer a synchronous function: it renders only where the article index can be read, at build time (BR-PYRAMID-7).
 
-**Acceptance Criteria:**
-- Given the site is built, When `/` is requested, Then the response HTML contains the header, hero, principles, CTA and footer sections, and the site's own module tree declares no styled element of its own.
-- Given JavaScript is disabled, When `/` is loaded, Then the full pitch, the references and the contact route are readable.
-- Given the design system package is absent from `dev`, When the site is built, Then the build fails loudly rather than rendering a page with unstyled fallbacks.
-- Given the wordmark is imported through the exports subpath, When the page is built, Then no brand asset has been copied into the site's `public/` directory.
+**Acceptance Criteria:** DoD 1 and DoD 5 of the story — testable, DoD 1 to be rewritten as the ordered list of surfaces.
+- Proposed to storyman: Given the site is built, When `/` is requested, Then it carries header, hero, principles, notes, closing call to action and footer in that order, and nothing of the shell's demonstration.
+- Proposed to storyman: Given JavaScript is disabled, When `/` is read, Then the full pitch, the references and the contact route are readable.
 
-**Test Approach:** A vitest unit test rendering the page function with `renderToStaticMarkup` and asserting the section sequence; a build-output assertion that `public/` contains no file from the package.
+**Test Approach:** Vitest assertions over the prerendered HTML of `/` emitted by `next build`, in the site's existing vitest setup: the sequence of surface classes (`sk-site-header`, `sk-hero`, …), the absence of the demonstration, and no file of the package under `public/`.
 
 ---
 
-### Feature: Robusta's copy in place of the prototype defaults
+### Feature: Robusta's copy in place of the defaults
 
-**Capability:** Every string a visitor reads is passed in by the site, in the first person singular, carrying the v1 claims and the named references.
+**Capability:** Every string a visitor reads is supplied by the site, in the first person singular, carrying the v1 claims and the named references. `NotesSection`'s three headings are rewritten in the same voice ("what we publish." is plural).
 
-**Acceptance Criteria:**
-- Given the page is rendered, When its HTML is searched for the prototype defaults ("small team. long memory.", "we build software", "principles, written down.", "made by hand, with care.", "we read before we write."), Then none is found.
-- Given the page is rendered, Then it contains Renault, Boston Consulting Group, Nauto, Diool, Swaap Finance, Toptal and the Oracle certification.
-- Given the page is rendered, Then it contains no first-person-plural pronoun in the marketing copy.
-- Given a surface is given no prop for a slot the page does not use, When the page renders, Then that slot is absent rather than falling back to the prototype's wording.
+**Acceptance Criteria:** DoD 2 and DoD 3 — DoD 2 blocked by Gap-LANDING-10, DoD 3 to be completed with the claims of R-LANDING-6 and the three startups by name.
+- Proposed to storyman: Given a design-system surface renders a sentence the site cannot replace, When the landing page is built, Then that sentence does not reach the visitor.
+- Proposed to storyman: Given the notes section inherited from migrate-learn-content speaks as "we", When the landing page renders, Then its headings speak in the first person singular.
 
-**Test Approach:** A single guard test holding the list of forbidden default strings and the list of required claims, run against the rendered markup. It is cheap, it is exact, and it is the only thing standing between a package upgrade and prototype copy silently reappearing in production.
+**Test Approach:** One guard test holding two lists, run against the prerendered HTML: the prototype defaults that must not appear ("small team. long memory.", "we build software", "principles, written down.", "this is crystal tux.", "made by hand, with care.", "what we publish.", …) and the claims that must ("Renault", "Boston Consulting Group", "Nauto", "Diool", "Swaap Finance", "Toptal", "Oracle", "Toulouse"). It is what stands between a package upgrade and prototype copy reappearing in production.
 
 ---
 
 ### Feature: The contact route
 
-**Capability:** A visitor reaches Nicolas in one click, by email or LinkedIn, from the header, the hero and the closing CTA — with no form, no field and no capture.
+**Capability:** A visitor reaches Nicolas in one click, by email or LinkedIn, from the header, the hero and the closing CTA. Every call to action is now one anchor (`SkButton` with an `href`). No form, no field: `CTA` receives an empty `emailPlaceholder`, which hides its input. The email address and the LinkedIn URL are held once, in the site configuration.
 
-The v1 email `nicolas@robusta.build` was rendered behind `TimeDiffered`, a client component that delays the mailto to frustrate scrapers. That mechanism cannot survive R-LANDING-12, and it is not worth reintroducing: the same address already sits in cleartext in the published resume HTML and both PDFs, so the obfuscation protects nothing while costing the page its no-JavaScript readability.
+The v1 `TimeDiffered` obfuscation of the address does not come back: it needs JavaScript (R-LANDING-12), and the address already sits in cleartext in every v1 resume file.
 
-The CTA surface offers an `SkInput` email field with no submit path — a server component cannot handle one. Hiding it with `emailPlaceholder=""` removes a control that would do nothing, and removes the funnel the brand voice sheet explicitly rejects.
+**Acceptance Criteria:** DoD 3 (its "contact route" clause) — testable.
+- Proposed to storyman: Given the page is rendered, When its calls to action are followed, Then each leads to `mailto:nicolas@robusta.build` or to the LinkedIn profile, and the page carries no form and no field.
 
-**Acceptance Criteria:**
-- Given the page is rendered, When the contact controls are inspected, Then each resolves to `mailto:nicolas@robusta.build` or to the LinkedIn profile, and both appear in the static HTML.
-- Given the page is rendered, Then it contains no `<input>`, no `<form>` and no element whose destination is `#`.
-- Given a visitor uses a keyboard only, When they tab through the page, Then every contact control is reachable and announces itself as a link.
-
-**Test Approach:** Assertions over the rendered markup for the two destinations and for the absence of inputs, forms and `href="#"`; one accessibility pass with axe on the built page for the nested-interactive check of Gap 2.
+**Test Approach:** Assertions over the prerendered HTML: the two destinations, no `<input>`, no `<form>`, no `href="#"`, no anchor inside a `<button>`. One axe pass on the built page for link names and nesting.
 
 ---
 
 ### Feature: No resume, and no way back to one
 
-**Capability:** The v2 site carries nothing from the v1 resume apparatus: no `WebResume` component, no `public/nicolas/` tree, no iframe, no PDF, no link.
+**Capability:** The v2 site carries nothing of the v1 resume apparatus: no iframe, no PDF, no `nicolas/` tree, no link to a resume — the Toptal profile included, which v1 linked from the pitch.
 
-The v1 apparatus is larger than the story implies: an iframe over `public/nicolas/resume-web-crypto.html`, two linked PDFs, plus four orphan HTML resumes and six unlinked PDFs including a French CV, none of which anything on the site points at.
+**Acceptance Criteria:** DoD 4 — testable, in business language, missing the Toptal case.
+- Proposed to storyman: Given the Toptal screening is cited, When a visitor reads it, Then it is plain text and leads to no Toptal resume page.
 
-**Acceptance Criteria:**
-- Given the v2 site is built, When its output is searched, Then it contains no file under a `nicolas/` path, no `.pdf`, and no `<iframe>`.
-- Given the page is rendered, When its links are collected, Then none targets a resume, a CV or a downloadable document.
-
-**Test Approach:** A build-output check over the site's static assets, plus the link-collection assertion in the render test.
+**Test Approach:** A build-output check — no `.pdf`, no `<iframe>`, no path under `nicolas/` — plus a link-collection assertion on `/` refusing any `toptal.com/resume` target.
 
 ---
 
-### Feature: Page identity and its measurement
+### Feature: Page identity, and no measurement on the page
 
-**Capability:** The page's title and description are read from `seopyramids.config.ts`, and the page carries no measurement code at all — what the page achieves is measured off the page.
+**Capability:** `/` declares its own title and description, read from the site configuration, instead of inheriting the layout default every placeholder shares. The page carries no measurement code and makes no third-party request — the three faces are self-hosted since bootstrap-robusta-build.
 
-**Acceptance Criteria:**
-- Given `siteTitle` is changed in the site configuration, When the site is rebuilt, Then the `<title>` of `/` changes with it.
-- Given the page is rendered, Then it contains no third-party script tag and no request to an analytics endpoint.
-- Given the page is loaded, Then the only external network request it makes is the one the design system's font `@import` produces — see Open Question 2.
+**Acceptance Criteria:** DoD 6 grants this story the page's own title and description; no criterion checks them.
+- Proposed to storyman: Given the site configuration's title changes, When the site is rebuilt, Then the title of `/` changes with it, and no other page carries the same description.
 
-**Test Approach:** A render assertion tying the metadata to the configuration; a network-request assertion in the accessibility/E2E pass; Lighthouse run against the built page for the performance and SEO scores rather than any runtime instrument.
+**Test Approach:** A metadata assertion on the prerendered `<head>`; a network check in the axe pass confirming no request leaves the site's own origin.
+
+---
+
+### Feature: The inherited notes section
+
+**Capability:** `NotesSection` stays as migrate-learn-content built it: the four newest published articles of the locale, newest first, each linking to its article page, and an "all articles" link to the blog home.
+
+migrate-learn-content left one choice to this story: what a `featured` article is for. Eight articles carry `featured: true`, the index does not read the field, and `ArticleEntry` does not carry it.
+
+**Décision (autonome):** `featured` gets no role on the landing page; the section stays newest-first and the publisher has nothing to re-pick.
+
+**Rationale:** A curated set needs an editorial rule nobody has written and a wider reading contract in `@robusta/pyramids-content`; newest-first needs neither and is what a preview of notes means.
+
+**Acceptance Criteria:** R-MIGRATELEARN-44 and 45, AC-MIGRATELEARN-43, already met by migrate-learn-content; nothing in the story.
+- Proposed to storyman: Given no English article declares itself published, When the site is built, Then the landing page carries no notes section, rather than an empty one or the design system's sample posts.
+- Proposed to storyman: Given the blog home still renders a placeholder, When the landing page is offered to search engines, Then no control on it leads to a page carrying no content of its own.
+
+**Test Approach:** The existing AC-MIGRATELEARN-43 spec, extended with the rewritten headings; a unit test of the section on an empty feed.
 
 ---
 
 ## 7. Critical Edge Cases
 
-Product and usage:
+Product:
 
-- A phone visitor. The surfaces have no `@media`, no `clamp()`, no `minmax()` and no viewport unit anywhere — the hero is a fixed `1.3fr 1fr` grid with an 88 px headline and 48 px side padding, the footer a fixed four-column grid. On a 390 px screen the page will scroll sideways and clip. Gap 1.
-- A visitor who clicks the contact button. Every CTA renders `<button class="sk-btn"><a href="…">…</a></button>`. Gap 2.
-- A visitor who reads the availability line. The prototype footnote says "currently booking q3 · 2 slots left this quarter" — fabricated scarcity, of the exact kind the brand-voice sheet lists under "don't", and a claim that rots on a statically generated page. It is replaced by a line that does not expire.
-- A visitor who finds the page through a French search. The page is English-only, matching v1. Nothing is lost, but nothing is gained either.
+- A visitor following "all articles" lands on a placeholder: the blog home renders `RoutePlaceholder`, as do the eight category pages. Nothing in ROADMAP renders them (Gap-LANDING-11).
+- A visitor reading the hero meets "this is crystal tux. she lives here.", written into `Hero` and rendered whether or not a mascot is passed, with its doodle arrow (Gap-LANDING-10).
+- A visitor reading the notes section meets "what we publish." on a page that speaks as "I".
+- A reader on an article page has no way to the pitch: no header, no footer, no link to `/` (OQ-LANDING-13).
+- A visitor checking the Toptal claim: v1 linked it to a Toptal resume page, which R-LANDING-9 forbids.
+- A visitor reading the availability line: the prototype's "2 slots left this quarter" is replaced by Toulouse and remote (decision of 2026-07-30).
+- A French visitor: the page is English-only, as v1's was.
 
 Technical:
 
-- The wordmark is a 1603×312 PNG rendered by `BrandLogo` as a plain `<img>`. The component does not accept `next/image`, so the site cannot optimise it. It carries explicit dimensions, so there is no layout shift, but it is a heavy above-the-fold image on the LCP path. The epic already holds `vectorize-wordmark` as item 9, which would resolve most of the weight without a component change.
-- The mascot props default to `''`, which hides the illustration silently. A consumer that forgets the import gets a page that renders fine and is simply missing its brand character — a failure with no error. The render test asserting the asset is present is what catches it.
-- The surfaces hardcode `id="approach"` (FlowDiagram) and `id="notes"` (NotesPreview) and nothing else. Neither ships in this release, so no in-page anchor target exists at all.
-- Inline styles cannot be overridden by a stylesheet without `!important`. Any correction the site might attempt from the outside is therefore not just forbidden by R-LANDING-2 — it does not work.
+- The wordmark is a 1603×312 PNG rendered by `BrandLogo` as a plain `<img>` with explicit dimensions: no layout shift, but a heavy image on the LCP path. vectorize-wordmark (epic item 7) is the fix, without a component change.
+- Mascot props default to `''`, which hides the illustration silently. The site imports the SVGs (`crystal-tux.svg` for the hero, `crystal-tux-waving.svg` for the CTA), which dedupe-crystal-tux already names canonical, and the render test asserts both are present.
+- The surfaces hardcode three ids: `work` (ServicesGrid), `approach` (FlowDiagram), `notes` (NotesPreview). Only `#notes` exists on this page.
+- design-system-responsive makes every surface's layout overridable by a selector one class stronger. The decision of 2026-07-30 keeps this site from using that surface: a correction this page needs goes into the package.
 
-**Décision (autonome):** The header nav carries no in-page anchors in this release; it carries the wordmark and the contact CTA only, and grows real destinations when migrate-learn-content ships `/articles`.
+**Décision (autonome):** The header carries the wordmark (linking `/`) and the contact call to action and no nav link; the "all articles" link of the notes section stays, pointing at the blog home.
 
-**Rationale:** A nav of four anchors pointing at sections that do not exist is the v1 header's `FakeLink` mistake repeated, and R-LANDING-11 exists to prevent exactly that.
+**Rationale:** A nav would point at placeholders or at one in-page anchor; the "all articles" link is a canonical URL of the scheme, and if OQ-LANDING-12 is accepted nothing is offered to a search engine before the blog home renders — if it is rejected, the link is hidden until then.
 
 ---
 
 ## 8. Non-Functional Constraints
 
-Rendering and platform, per BR-PYRAMID-2 as recorded — "We embrace the constraints of Vercel, React Server Component and shadcn": the page is a server component, statically generated, and carries no client bundle of its own. Worth noting for the design step: the shadcn decision does not reach this page. The surfaces render inline styles plus CSS custom properties and use no utility class at all — not one Tailwind class, not one DaisyUI token. The landing page therefore imports zero shadcn components and does not wait on the DaisyUI-to-shadcn migration of `pyramids-layouts`, `pyramids-links` and `pyramids-ctas`.
+Rendering: the page is a server component, statically generated, with no client bundle of its own (R-LANDING-12). The surfaces now carry class names styled in `sketch.css` and read the fluid `--t-*` scale; they still use no Tailwind utility and no shadcn component, so the page does not wait on anything shadcn.
 
-Performance: the LCP element is the hero headline or the wordmark. Two costs are structural — the 1603×312 PNG through a plain `<img>`, and the fonts loaded by an `@import` nested inside `colors_and_type.css`, which serialises the download (site CSS → font CSS → font files) and blocks the first paint at the worst possible point.
+Responsive: design-system-responsive guarantees no sideways scroll from 320 px for the surfaces with their own copy (AC-RESPONSIVE-01). The site's copy is longer in places — an email address inside a button, a headline carrying `docker-compose` — and that check is this story's.
 
-Privacy, and the measurement question the constraint forces. The epic puts visitor-intent analytics out of scope and forbids tracking visitor intents; `ubiquitous-language.md` defines an intent as "a named, hierarchical, lifecycle-tracked visitor action". That rules out the usual instrumentation of a landing page — conversion events, funnels, scroll depth, session recording, A/B assignment. It also rules out Vercel Web Analytics and Speed Insights, which are cheap and tempting and both inject a client script that identifies a visit.
+Performance: the LCP element is the hero headline or the wordmark. The font chain of the first version (site CSS, then font CSS, then font files) is gone: `next/font` self-hosts the faces at build time. The wordmark PNG is the one structural cost left.
 
-What is left is not nothing, and it is arguably better suited to a page that expects tens of visitors a day rather than thousands:
+Privacy and measurement: BR-PYRAMID-2 rules out conversion events, funnels, scroll depth, session recording, A/B assignment, and Vercel Web Analytics or Speed Insights, which inject a client script identifying a visit. What is left fits a page expecting tens of visits a day:
 
-- Acquisition: Google Search Console — queries, impressions, clicks and position for `/`. Google's own aggregate, no code on the page, no visitor identified.
-- Conversion: the inbox and the LinkedIn message list. For a freelance landing page the real metric is qualified inbound per month, and it is countable where it lands. One question in the first reply — "how did you find me?" — recovers more attribution than a funnel would, from the only person who actually knows.
-- Quality: Lighthouse in CI and the Core Web Vitals report in Search Console, which comes from Chrome's own field data rather than from anything the site collects.
+- Acquisition: a search engine's webmaster console, which seo-excellence's arbitration of 2026-07-30 keeps as its one measurement. It reports nothing while the site is `noindex` and not on its domain.
+- Conversion: the inbox and the LinkedIn message list. One question in the first reply — "how did you find me?" — recovers more attribution than a funnel would.
+- Quality: Lighthouse on the built page.
 
-An alternative was considered and rejected: giving each surface's contact link a distinct `mailto:` subject, so the inbox attributes the click without any tracking at all. It works, it breaks no rule, and it puts a machine-readable tag in a subject line the sender sees and did not choose. Not worth it.
+Page identity: seo-excellence requires every page to carry its own title and description. This story owns the pair for `/` (DoD 6); the layout default and every other page are seo-excellence's.
 
-**Décision (autonome):** The landing page ships zero client-side measurement of any kind. Acquisition is read in Search Console, conversion is counted in the inbox, quality is measured in CI.
+**Décision (autonome):** The landing page ships zero client-side measurement, and declares its own title and description from the site configuration.
 
-**Rationale:** The rule forbids tracking visitor intents, and the honest reading is that a page which cannot instrument its visitors should measure its outcome instead of its traffic — which for a page with one destination is both cheaper and more truthful.
+**Rationale:** A page that may not instrument its visitors measures its outcome instead, and a home page that owns its metadata is unaffected when seo-excellence changes the layout default.
 
 ---
 
 ## 9. External Dependencies
 
-- `@robusta/pyramids-design-system` at commit `6fb8d72` — the hard one. Everything this page renders comes from it, and it is on `feat/packagify-design-system`, not on `dev`.
-- `apps/robusta-build` — created by bootstrap-robusta-build, which also owns the root layout where the stylesheets are imported and the font decision of Open Question 2 lands.
-- unblock-build — until `pyramids-links` compiles in a fresh worktree, the build chain the site sits on does not go green, so nothing here is verifiable end to end.
-- Google Fonts CDN — IBM Plex Sans, IBM Plex Mono and Caveat, fetched at render time by the `@import` in `colors_and_type.css`. The only third party the page touches, and the subject of Open Question 2.
-- LinkedIn — `https://www.linkedin.com/in/robustacode/`, currently hardcoded in `packages/ctas`, which this page does not use. The v2 site holds it in its own configuration.
-- Vercel — the preview project bootstrap-robusta-build sets up; the robusta.build domain does not move until retire-robusta-v1.
+- design-system-responsive — the blocking one. Design APPROVED 2026-08-07, code largely in `4963dc0` on `dev`, story ACTIVE, not landed. Every surface this page renders, `SkButton.href` and `FooterLink.href` come from it, and Gap-LANDING-10 proposes one more prop there.
+- `@robusta/pyramids-design-system` — on `dev` and in `build:deps` since 2026-07-30. The first version's dependency on `feat/packagify-design-system` is closed.
+- `apps/robusta-build` — landed; the root layout, the site configuration, `src/landing` and the vitest setup this story extends.
+- `@robusta/pyramids-routing` and `@robusta/pyramids-content` — reached through `NotesSection` and the site's index seam, unchanged.
+- seo-excellence — running in parallel, and both stories touch `src/app/layout.tsx` metadata. No dependency in either direction for implementation; the `noindex` question (OQ-LANDING-12) is where the two meet.
+- LinkedIn — `https://www.linkedin.com/in/robustacode/`, hardcoded in `packages/ctas` today, which the v2 site does not import; the site configuration holds it.
+- Vercel — project `robusta-build-v2`, separate from the project serving robusta.build, which keeps answering from v1 until the domain switch.
 
-The font stack itself is settled and not reopened here: the epic decided on 2026-07-29 that `colors_and_type.css` is canonical — IBM Plex Sans, IBM Plex Mono, Caveat — and that the README's Caveat / Kalam / Architects Daughter / JetBrains Mono claim is the error to correct. The correction is owed by the design system package, not by this story, and `ROADMAP.md` still lists it as an open loose end.
+The stories the current story's Dependencies section names — bootstrap-robusta-build, merge-design-system, unblock-build, migrate-learn-content — have all landed.
 
 ---
 
@@ -266,28 +345,89 @@ The font stack itself is settled and not reopened here: the epic decided on 2026
 
 Product:
 
-- The offer is still unwritten. The page can carry who Nicolas is and who he has worked for, because v1 wrote that down. It cannot say what an engagement costs, how long it runs, or what a buyer receives, because nothing in the repo has ever said so. A pitch page that never names its offer converts on reputation alone. Gap 3.
-- The page is the template for every later site, so its shortcuts propagate. A footer with no links and a nav with no destinations are defensible for a one-page site and become wrong the moment the second site copies them.
+- The offer is still unwritten. The page says who Nicolas is and who he has worked for; it cannot say what an engagement costs, how long it runs or what a buyer receives, which is why ServicesGrid and FlowDiagram are held out. A pitch page that never names its offer converts on reputation alone.
+- The page is the template for every later site, so its shortcuts propagate: a footer with no columns and a header with no nav are right for a one-page site and wrong the day the listing pages exist.
+- Publishing before the listing pages render: two thirds of the v1 redirects target them — of 66 permanent rows, 29 land on a blog home and 15 on a category page, all placeholders today (Gap-LANDING-11, OQ-LANDING-12).
 
 Technical:
 
-- The design system was validated by eye, on desktop, in per-component preview sheets — there is no full-page preview in `preview/`, so this composition has never been seen assembled at any width. The first honest look at the page is also its first integration test.
-- Both blocking defects are in the package, and the package is one unmerged commit that has already been declared delivered. Fixing them reopens work everyone considers finished.
-- `sketch.css` and `colors_and_type.css` are global and unscoped. They will also apply to the article pages migrate-learn-content brings in, which nobody has looked at.
+- This story builds on code that is committed as "wip rebuild" and not landed. If design-system-responsive changes a prop or a class name before it lands, this page follows.
+- `Hero` still carries copy no prop reaches, in a package declared to supply none (BR-PYRAMID-8). The same class of defect sits in ServicesGrid ("see how it works") and in `BrandLogo`'s full variant ("senior engineering, hand-built."), outside this page.
+- Three stories run in parallel — design-system-responsive in `Hero.tsx`, seo-excellence in the layout metadata, this one in both. Collisions are textual, not conceptual, but they are likely.
 
 Adoption:
 
-- The measurement decision means that if the page underperforms, there will be no on-page evidence of why. That is the accepted price of the rule, and it should be a conscious one rather than a discovery in six months.
+- With no on-page measurement, an underperforming page leaves no evidence of why — the accepted price of BR-PYRAMID-2. Under OQ-LANDING-12's proposition, the console reports nothing before go-live either.
 
-**Décision (autonome):** The risk register is carried into the design doc as-is; none of these justifies weakening R-LANDING-2 or adding site-level markup.
+**Décision (autonome):** The risk register goes into the design doc as-is; none of these justifies site-level markup or a style override.
 
-**Rationale:** Every one of them is either a package fix, a content decision or an accepted cost — none is solved by letting the site patch its own design system, which would forfeit the only thing this story proves.
+**Rationale:** Each is a package fix, a sequencing call or an accepted cost; letting the site patch its design system would forfeit the only thing this story proves.
+
+---
+
+## 11. Boundaries
+
+```
+  Arrow = depends on, from client code to the API it uses.
+  Nothing points into an app, no loop.
+
+  app `robusta-build` [modified]
+      │
+      ├── library ──→ module `@robusta/pyramids-design-system`
+      │               [modified, if Gap-LANDING-10 lands as proposed]
+      ├── library ──→ module `@robusta/pyramids-routing`
+      └── library ──→ module `@robusta/pyramids-content`
+```
+
+Inside `apps/robusta-build` the dependencies run one way: the `/` route uses `landing`, the layout uses `chrome` if OQ-LANDING-13 is accepted; both use the site configuration and the asset seam; the asset seam uses the design-system module. The site configuration already imports the asset seam for its `logo`.
+
+### library API of module `@robusta/pyramids-design-system` — modified
+
+Client code: package `landing` in app `robusta-build`. Modified by design-system-responsive if Gap-LANDING-10 is accepted as proposed, by this story otherwise. `SkButton.href` and `FooterLink` are design-system-responsive's own blocks and are consumed here unchanged.
+
+- type `HeroProps` · modified
+  - `annotation` — new; the caption beside the mascot, empty hides it with its doodle
+  - `mascotAlt` — new; the mascot's accessible name
+
+### library API of package `landing` in app `robusta-build` — modified
+
+Client code: the `/` route, `src/app/page.tsx`.
+
+- component `LandingPage` · new — the six surfaces in their written order, every string supplied by the site
+- component `NotesSection` · modified — headings in the first person singular; selection and feed unchanged
+
+### library API of package `chrome` in app `robusta-build` — new
+
+Client code: `src/app/layout.tsx` if OQ-LANDING-13 is accepted, package `landing` otherwise.
+
+- component `Header` — `SiteHeader` fed by the site: wordmark linking `/`, the contact call to action, no nav link
+- component `Footer` — `SiteFooter` fed by the site: brand block, tagline, copyright, no link column
+
+### library API of the site configuration `seopyramids.config` in app `robusta-build` — modified
+
+Client code: packages `landing` and `chrome`, and `src/app/layout.tsx`.
+
+- type `SeoPyramidsConfig` · modified
+  - `contact` — new; the email address and the LinkedIn profile, the single source of the contact route
+  - `description` — new; the home page's description, written from the pitch, beside the `mission` motto
+
+### library API of package `design-system` in app `robusta-build` — modified
+
+The asset URL seam. Client code: packages `landing` and `chrome`, the site configuration.
+
+- `heroMascotSrc` — new; the hero's mascot, `crystal-tux.svg`
+- `ctaMascotSrc` — new; the closing CTA's mascot, `crystal-tux-waving.svg`
+
+### HTTP API of app `robusta-build` — modified
+
+- `GET /` — 200, the landing page, statically generated; its robots directive is the site-wide one until OQ-LANDING-12 is arbitrated
 
 ---
 
 ## Next Steps
 
-1. Arbitrate this section. Gaps 1 and 2 are the ones that matter: they are package defects, they block a page that can be shipped to a public URL, and they are likely to become a design-system story sequenced ahead of this one.
-2. Run bulkman on the epic so these entries reach `pyramid-v2.bulk.md` alongside the other stories' open points.
-3. Once Gaps 1 to 3 are settled, run designman for `robusta-landing-page.design.md`: the surface-by-surface prop mapping, the composition module, the metadata wiring to `seopyramids.config.ts`, and the R-/AC- derived from the requirements above.
-4. Implementation stays blocked on merge-design-system, unblock-build and bootstrap-robusta-build, in that order.
+1. Arbitrate the entries above. Gap-LANDING-10 blocks DoD 2 and is cheapest while design-system-responsive is still open; OQ-LANDING-12 changes ROADMAP and the epic, not only this story.
+2. `storyman refine robusta-landing-page`: the AC of Gap-LANDING-9; the six-surface composition; the deletion of the wiring demonstration; the `noindex` criterion in the shape OQ-LANDING-12 settles; and, if kept, the autonomous decisions worth a dated line — `featured` given no role, the contact route held in the site configuration, `NotesSection`'s headings rewritten in the first person singular, a footer without link columns until the listing pages render.
+3. Run bulkman on the epic if these entries should reach `pyramid-v2.bulk.md` with seo-excellence's.
+4. designman once the story carries AC and design-system-responsive's props are final: the surface-by-surface prop mapping, the composition module, the metadata, R-LANDING-1 to 16 under their numbers, the boundaries of axis 11 at full zoom.
+5. Implementation after design-system-responsive lands.

@@ -12,7 +12,7 @@ Positionnement du 2026-10-06 : Robusta Build est une entreprise locale qui aide 
 - Catégories secondaires : celles que Google propose en tapant « logiciel » (développeur ou société de logiciels) et « informatique » (consultant en informatique)
 - Type : entreprise de services de proximité, adresse masquée — les clients sont rencontrés chez eux ou sur rendez-vous, sans local ouvert au public
 - Zone desservie : Toulouse, Haute-Garonne
-- Site web : https://robusta.build
+- Site web : https://www.robusta.build, l'hôte de toutes les URL canoniques du site ; les données structurées de `/` déclarent le même nom, la même zone et le même contact que cette fiche
 - Téléphone et horaires : à compléter
 
 ## Description

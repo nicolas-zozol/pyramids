@@ -1,6 +1,6 @@
 # Story : Responsive pass over the robusta design system
 
-**Dernière mise à jour :** 2026-08-07
+**Dernière mise à jour :** 2026-10-06
 **Feature :** design-system-responsive
 **Infix :** RESPONSIVE
 **Status :** ACTIVE
@@ -30,6 +30,7 @@ This is item 1 of the epic's À faire and item 1 of the ROADMAP's Next because i
 - The layout of a surface no longer lives in inline styles: a consuming site can override it from a stylesheet without `!important`.
 - The type scale is fluid, written once in `colors_and_type.css`, and the surfaces render their type through it — no surface declares a font size of its own.
 - `SkButton` takes an optional `href` and renders an anchor when given one, `FooterColumn.items` carry a label and a destination, and every call to action of the package renders one interactive element with none nested inside it. Both changes are additive and no existing consumer breaks (decision of 2026-07-30).
+- No surface renders page copy the consumer did not pass (BR-PYRAMID-8): `Hero` takes an `annotation` and a `mascotAlt`, an empty annotation hiding the caption and its arrow, and the « see how it works » link of `ServicesGrid` and the tagline of `BrandLogo`'s full variant stop being fixed text. Additive, like the changes above (decision of 2026-10-06).
 - The design system ships an error ramp of three — a base, its wash and its pressed tone — and the v2 site's token bridge aliases `--destructive` onto the base instead of recording its absence.
 - The package gains tokens, classes and props; it gains no new component and no new surface (decision of 2026-08-02).
 - The surfaces stay server-component-safe: no `'use client'`, and no viewport read in JavaScript.
@@ -42,6 +43,14 @@ This is item 1 of the epic's À faire and item 1 of the ROADMAP's Next because i
 - 2026-08-07 — The breakpoints are fixed in one place in the package's CSS and named by its README, and `ubiquitous-language.md` gains `Breakpoint` on the values above. Pourquoi : BR-PYRAMID-6 forbids a site inventing one, so every later story cites these widths, and unnamed they get quoted as bare numbers and drift. The glossary entry is epicman's to record as registrar, never this story's to write. Arbitration of Gap 2, accepted as proposed.
 - 2026-08-07 — The design system ships one error ramp of the shape its brand ramps already have: a red that sits with the ink and the paper, its wash and its pressed tone, with the v2 bridge aliasing `--destructive` onto the base. Pourquoi : the decision of 2026-07-31 asked the design system to settle the value before a component needs one, and matching the existing ramps costs nothing today and saves a second pass. Arbitration of Open Question 1, accepted as proposed.
 - 2026-08-07 — The `.sk-*` primitive classes and the eight surface blocks are documented together in the README's Component vocabulary section, naming rule included. Pourquoi : Gap 1 of `design-system-responsive.design.md` made the surface class names a public override surface, which is how a site overrides a layout from a stylesheet without `!important`, and none of the five locations of the plan below documented them — a consumer who cannot read the names overrides nothing. Arbitration of that gap, accepted as proposed; the design doc stays the reference for the mechanism.
+- 2026-10-06 — The design system stops rendering page copy of its own: `HeroProps` gains `annotation` and `mascotAlt`, an empty annotation hiding the caption and its arrow, and the same defect is fixed in `ServicesGrid` (« see how it works ») and in the full variant of `BrandLogo`. Pourquoi : BR-PYRAMID-8 forbids a design system any page copy, yet `Hero` renders « this is crystal tux. she lives here. » and the alt text « crystal tux » whatever props it receives, so AC-LANDING-2 cannot hold, and the fix costs least while this story still has `Hero.tsx` open. Arbitration of Gap-LANDING-10 in `robusta-landing-page.story.md`, accepted as proposed (`lgtm`).
+
+## Open Questions & Gaps
+
+- Gap-RESPONSIVE-1: `design-system-responsive.design.md` is APPROVED and does not cover the scope added on 2026-10-06 (the `annotation` and `mascotAlt` props of `Hero`, the copy of `ServicesGrid` and of `BrandLogo`'s full variant), while most of this story's code already sits in the WIP commit `4963dc0`.
+- Proposition: designman amends the design doc for this scope, the `HeroProps` boundary and the requirement behind the new Definition of done line, before the code covers it; the WIP of `4963dc0` is then checked against the amended design.
+- Rationale: implementation starts from an approved design, and the WIP predates the decision, so without the amendment the fixed copy ships unchanged.
+- Resolution:
 
 ## Documentation updates
 

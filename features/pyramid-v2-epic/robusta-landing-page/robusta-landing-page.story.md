@@ -1,4 +1,4 @@
-# Story : Landing page of robusta.build
+# Story : La landing page de robusta.build
 
 **Dernière mise à jour :** 2026-10-06
 **Feature :** robusta-landing-page
@@ -7,56 +7,114 @@
 
 ## Story
 
-As the publisher of robusta.build, I want the home page of the v2 site assembled from the robusta design system and carrying the pitch already written for v1, so that the site states the offer without the obsolete resume and without marketing markup of its own.
+En tant qu'éditeur de robusta.build, je veux une page d'accueil v2 composée des surfaces du design system robusta et portant le pitch de Robusta Build, afin que le site présente l'offre aux PME de la région, sans le CV obsolète et sans balisage marketing propre au site.
 
 ## Contexte & objectif
 
-The v1 home page hand-writes everything inside the site: pitch, client logos, skills grid, portfolio preview, web resume, featured posts (`apps/robusta/src/app/page.tsx` → `src/components/freelance/`). The v2 landing page takes the opposite bet — a composition of the marketing surfaces of `@robusta/pyramids-design-system`, each fed by props. It is the first real proof that a site is dressed by its own design system (BR-PYRAMID-3), and the page every later site will be copied from.
+La page d'accueil v1 écrit tout à la main dans le site : pitch, logos clients, grille de compétences, aperçu du portfolio, CV en ligne, articles mis en avant (`apps/robusta/src/app/page.tsx` → `src/components/freelance/`). La v2 fait le pari inverse : une composition des surfaces marketing de `@robusta/pyramids-design-system`, alimentées par props. C'est la première preuve qu'un site est habillé par son propre design system (BR-PYRAMID-3), et la page que les sites suivants copieront.
 
-The copy is an editorial reprise, not a rewrite: the claims of the v1 pitch move over, the resume does not (Hors scope of the epic). The surfaces ship with the prototype's copy as defaults; this story is what replaces those defaults with robusta's own words.
+Le texte reprend une partie triée du pitch v1, réécrite en français pour un dirigeant de PME (décisions du 2026-10-06). Le CV ne passe pas, il est hors périmètre de l'epic. Les surfaces livrent le texte du prototype par défaut ; cette story le remplace par celui de Robusta Build (BR-PYRAMID-8).
 
-Nothing is implementable before `apps/robusta-build` exists (item 3 of the epic) and before the design-system package reaches `dev` — the packagified workspace lives only on `feat/packagify-design-system`, and `packages/robusta-design-system/` on `dev` is still a bare folder of CSS and assets. The canonical font stack stays open at epic level (Open Question 1 of `pyramid-v2.epic.md`); it is not re-opened here, and whatever the epic settles arrives through the package's CSS.
+Aujourd'hui `/` sert encore la démonstration de câblage du shell, autour de la section de notes que migrate-learn-content y a montée. Cette story livre `/` sous `robots: noindex`, comme le reste du site : la levée revient à go-live, après seo-excellence et blog-rolls (décision du 2026-10-06). Hors périmètre : les pages de listing (blog-rolls), le schéma d'URL, le SEO au-delà du titre et de la description de `/` (seo-excellence), et `apps/robusta`, qui sert jusqu'à son retrait.
 
-## Surfaces and the copy they carry
+## Composition
 
-- Hero — the pitch headline: who Nicolas is, the experience claim, the availability line
-- ServicesGrid, FlowDiagram, PrinciplesList — what is on offer, and how an engagement runs
-- CTA — the contact route (email, LinkedIn), in place of the contact bits scattered across v1
-- SiteHeader, SiteFooter — navigation and footer of the v2 site
-- NotesPreview — left out of this story, see Open Question 3
+Dans l'ordre :
 
-## Definition of done
+- SiteHeader : le wordmark, qui mène à `/`, et l'appel au contact ; aucun lien de navigation
+- Hero : la tagline « Sites web rapides et applications sur mesure » en eyebrow, le titre qui porte les vingt ans d'expérience, les deux appels au contact (e-mail, LinkedIn), et en note Toulouse, la zone desservie et les rendez-vous sur place ; la légende et le texte alternatif de la mascotte passent par `annotation` et `mascotAlt`
+- PrinciplesList : la façon de travailler, et les références en texte : Renault, le BCG, les startups
+- NotesPreview : la section de notes héritée de migrate-learn-content, les quatre articles publiés les plus récents, titres réécrits à la première personne
+- CTA : le bloc de contact final, sans formulaire
+- SiteFooter : marque, tagline, copyright ; aucune colonne de liens avant blog-rolls
 
-- `/` of `apps/robusta-build` renders a complete landing page composed only of design-system surfaces; the site adds no marketing markup of its own
-- every surface shows robusta's copy, passed through props — none of the prototype defaults reaches a visitor
-- the pitch is carried over in French and in the first person, naming Nicolas: the twenty years of experience in a headline about the client's business, the named references (Renault, BCG, the startups), Toulouse with the area served and meetings on site, the contact route; the EVM specialism, the Toptal screening, the Oracle certification, "remote" and the revenue threshold appear nowhere on the page
-- no resume anywhere on the v2 site: no page, no link, no PDF
-- the page renders as a server component and survives the site's build
-- does not cover the article list (migrate-learn-content), the URL scheme (seo-url-scheme), nor SEO work beyond the page's own title and description (seo-excellence)
-- does not touch `apps/robusta`, which keeps serving until it is retired
+SiteHeader et SiteFooter viennent de la route racine et habillent toutes les pages du site ; `/` n'apporte que les quatre surfaces du milieu. ServicesGrid et FlowDiagram restent hors de la première version (décision du 2026-07-30).
+
+## Acceptance Criteria
+
+- AC-LANDING-1 : Given le site construit, When un visiteur ouvre `/`, Then il lit dans cet ordre l'en-tête, le hero, les principes, les notes, le bloc de contact et le pied de page, tous rendus par le design system, et plus rien de la démonstration du shell.
+- AC-LANDING-2 : Given la page `/`, When un visiteur la lit, textes alternatifs compris, Then chaque mot est celui de Robusta Build, en français, à la première personne et au nom de Nicolas ; aucun texte du prototype (« we build software », « small team. long memory. », « this is crystal tux. », « what we publish. »…) ne lui parvient.
+- AC-LANDING-3 : Given le hero et les principes, When un dirigeant de PME les lit, Then il y trouve la tagline en eyebrow, les vingt ans d'expérience dans un titre qui parle de son entreprise, Renault, le BCG et les startups, Toulouse avec la zone desservie et les rendez-vous sur place ; il n'y trouve ni la spécialité EVM, ni Toptal, ni Oracle, ni « remote », ni seuil de chiffre d'affaires, ni disponibilité datée.
+- AC-LANDING-4 : Given n'importe quelle page du site, article compris, When le visiteur suit le wordmark ou l'appel au contact de l'en-tête, ou sur `/` un appel au contact du hero ou du bloc final, Then le wordmark le ramène à `/`, et chaque appel au contact l'amène sur un e-mail à Nicolas ou sur son profil LinkedIn, sans formulaire ni champ à remplir.
+- AC-LANDING-5 : Given le site v2, When on le parcourt en entier, Then aucun CV n'est joignable : ni page, ni PDF, ni document intégré, ni lien vers un profil CV externe, Toptal compris.
+- AC-LANDING-6 : Given JavaScript désactivé, When `/` est lu, Then le pitch, les références et le contact sont lisibles, et la page porte un titre et une description qu'aucune autre page ne partage.
+- AC-LANDING-7 : Given les cas limites métier, When on les rejoue, Then sans article publié la page n'a pas de section de notes, plutôt qu'une section vide ou les articles d'exemple du design system ; livrée avant go-live, la page reste fermée aux moteurs de recherche comme le reste du site, son lien « tous les articles » pouvant encore mener à une page de listing sans contenu propre ; à 320 px, l'adresse e-mail et le titre le plus long ne débordent pas et ne sont pas coupés.
+
+## Boundaries
+
+```
+  Flèche = dépend de, du code client vers l'API utilisée.
+
+  app `@robusta/robusta-build` [modified]
+      │
+      └── library ──→ module `@robusta/pyramids-design-system`
+                      [modified, par design-system-responsive]
+```
+
+### library API of module `@robusta/pyramids-design-system` — modified
+
+Client code : package `landing` de l'app. Les deux props ci-dessous, `SkButton.href` et `FooterLink` viennent de design-system-responsive et sont consommés tels quels.
+
+- type `HeroProps` · modified
+  - `annotation` — new ; la légende près de la mascotte, vide elle disparaît avec sa flèche
+  - `mascotAlt` — new ; le nom accessible de la mascotte
+
+### library API of package `landing` in app `@robusta/robusta-build` — modified
+
+Client code : la route `/`.
+
+- `LandingPage` · new — Hero, PrinciplesList, NotesPreview et CTA dans l'ordre de la Composition, tout le texte fourni par le site
+- `NotesSection` · modified — titres à la première personne ; sélection et flux inchangés
+
+### library API of package `chrome` in app `@robusta/robusta-build` — new
+
+Client code : la route racine, qui en habille toutes les pages du site.
+
+- `Header` — SiteHeader alimenté par le site : wordmark vers `/`, appel au contact
+- `Footer` — SiteFooter alimenté par le site : marque, tagline, copyright
+
+### library API of the site configuration `seopyramids.config` in app `@robusta/robusta-build` — modified
+
+- type `SeoPyramidsConfig` · modified
+  - `contact` — new ; l'e-mail et le profil LinkedIn, source unique de la route de contact
+  - `description` — new ; la description de `/`, écrite depuis le pitch
+
+### library API of package `design-system` in app `@robusta/robusta-build` — modified
+
+- `heroMascotSrc`, `ctaMascotSrc` — new ; `crystal-tux.svg` et `crystal-tux-waving.svg`, résolus par les exports du package
+
+### HTTP API of app `@robusta/robusta-build` — modified
+
+- `GET /` — 200, la landing page, prérendue au build, sous `robots: noindex` comme tout le site jusqu'à go-live
+- toute autre page — statut et contenu inchangés, désormais entre l'en-tête et le pied de page du site
 
 ## Décisions
 
-- 2026-07-29 — The landing page speaks in the first person singular of a named freelance, and the surfaces' default "we" copy is rewritten accordingly. Pourquoi : robusta.build sells one named engineer and the pitch's credibility rests on his own record; a visitor who reads "small team" and then meets one person has been mis-sold. Confirmed on 2026-10-06 for the French page of a local business, see below.
-- 2026-07-29 — The v1 social proof survives as text inside Hero and PrinciplesList; logo wall, skills grid and portfolio grid are out of this story. Pourquoi : a new surface means changing the design-system package, which is its own story; the references survive as words, only the images are lost. Narrowed on 2026-10-06: the Toptal screening and the Oracle certification leave the page, and only Renault, BCG and the startups survive as named references, see below.
-- 2026-07-29 — NotesPreview is left out of this story and added by migrate-learn-content, once real articles exist. Pourquoi : a landing page advertising notes that 404 costs more than a landing page with no notes section.
-- 2026-07-30 — ServicesGrid and FlowDiagram stay out of the first release and the page ships with five surfaces; they are added once three services and an engagement sequence are written down. Pourquoi : arbitration of Gap 3 of `robusta-landing-page.brainstorm.md` — the two surfaces describe a productised offer (a paid audit, an embedded engagement, a scoped rebuild, a five-step intake) that nothing in the record has ever described, and shipping it would break R-LANDING-4 and put pricing and duration claims in front of buyers nobody has agreed to honour.
-- 2026-07-30 — The site may pass fragments that use design-system class names only, and may wrap a surface in a bare element to carry an `id`; it may not define a class, a colour, a font or a spacing value. Pourquoi : arbitration of Open Question 3 of `robusta-landing-page.brainstorm.md` — the class vocabulary belongs to the design system, so the site chooses which emphasis applies rather than inventing an appearance, and an anchor target is navigation plumbing rather than marketing markup.
-- 2026-07-30 — The hero headline is drafted from the claims R-LANDING-6 fixes, in the brand voice — lowercase, plain, no superlative — along the lines of "twenty years of shipping software that outlives the project that paid for it", with the subtitle carrying the fullstack and EVM specialism and the footnote carrying Toulouse and remote in place of the prototype's slot-scarcity line. Pourquoi : arbitration of Open Question 4 of `robusta-landing-page.brainstorm.md` — the v1 pitch is one heading of nouns with no headline, and this is the only claim in R-LANDING-6 that cannot be lifted verbatim from v1. Superseded on 2026-10-06 except for the brand voice: the tagline takes the eyebrow, the headline is French and speaks of the client's business, EVM leaves the subtitle and the area served replaces remote in the footnote, see below.
-- 2026-10-06 — The positioning of Robusta Build is the tagline « Sites web rapides et applications sur mesure », verbatim in French, used on its Google Business Profile and in the presentation of the v2 site; it sits in the Hero eyebrow of `/`, see below. Pourquoi : one line names both offers, websites and custom software for businesses; "progiciel" was judged dated and replaced by "applications sur mesure", and the publisher kept "applications" knowingly, after being told a lay reader may hear "mobile app".
-- 2026-10-06 — robusta.build, the v2 site, goes entirely French, and Robusta Build becomes a local business that helps local businesses grow: its target clients are SMEs (PME) with at least €500,000 of annual revenue, which software fitted to their business takes past €1M. Pourquoi : decision of the publisher, recorded at epic level by epicman in parallel. Impact : `/` is in French, tagline included; the claims chosen on 2026-07-29 and 2026-07-30 for an English page selling a freelance's record are sorted again by the last entry below.
-- 2026-10-06 — The tagline « Sites web rapides et applications sur mesure » goes verbatim in the Hero eyebrow, and the headline stays a line of its own carrying the experience claim. Pourquoi : the eyebrow names what the page sells and the headline says why to trust the person selling it; made the headline, the tagline would leave the record no line in the hero, and the record is the one claim a competitor cannot copy.
-- 2026-10-06 — The French page keeps the first person and names Nicolas. The twenty years survive, in a French headline about the client's business rather than about the projects that paid for the software; Renault, BCG and the startups survive as named references; the EVM specialism, the Toptal screening and the Oracle certification leave the page; Toulouse stays in the footnote and "remote" gives way to the area served and meetings on site; the revenue threshold is not shown. Pourquoi : an SME owner looking for someone local checks that the person is real, nearby and has delivered for serious companies; EVM, Toptal and Oracle speak to a technical recruiter, and "remote" contradicts the local promise. The Google Business Profile drafted the same day (`documentation/google-business-profile.md`) makes the same cuts and keeps the threshold for prospecting only, so the page and the profile tell the same story. Impact : supersedes the hero of 2026-07-30, narrows the social proof of 2026-07-29, and rewrites item 3 of the Definition of done.
+- 2026-07-29 — La page parle à la première personne du singulier, au nom d'un ingénieur nommé ; le « we » par défaut des surfaces est réécrit. Pourquoi : Robusta Build vend une personne nommée, et sa crédibilité tient à son parcours ; un visiteur qui lit « petite équipe » puis rencontre une seule personne a été trompé. Confirmé le 2026-10-06 pour la page française.
+- 2026-07-29 — La preuve sociale v1 survit en texte dans Hero et PrinciplesList ; mur de logos, grille de compétences et portfolio sortent de la story. Pourquoi : une nouvelle surface change le package du design system, ce qui est une autre story ; les références survivent en mots. Restreinte le 2026-10-06 à Renault, au BCG et aux startups.
+- 2026-07-29 — NotesPreview arrive avec migrate-learn-content, une fois de vrais articles en place. Pourquoi : une section qui annonce des notes en 404 coûte plus qu'une page sans notes. Exécutée : la section est montée sur `/`, cette story la reprend.
+- 2026-07-30 — ServicesGrid et FlowDiagram restent hors de la première version, jusqu'à ce que trois services et un déroulé d'engagement soient écrits. Pourquoi : Gap 3 du brainstorm ; ces surfaces décrivent une offre packagée (audit payant, engagement intégré, refonte cadrée, prise en charge en cinq étapes) que rien n'a jamais décrite, avec des prix et des durées que personne ne s'est engagé à tenir.
+- 2026-07-30 — Le site peut passer des fragments qui n'utilisent que des noms de classe du design system, et envelopper une surface dans un élément nu pour porter un `id` ; il ne définit ni classe, ni couleur, ni police, ni espacement. Pourquoi : Open Question 3 du brainstorm ; le vocabulaire de classes appartient au design system, et une ancre relève de la navigation.
+- 2026-07-30 — Le titre du hero suit la voix de la marque : minuscules, simple, sans superlatif. Pourquoi : Open Question 4 du brainstorm. Le reste de cette décision (titre anglais, EVM en sous-titre, « remote » en note) est remplacé le 2026-10-06.
+- 2026-10-06 — Robusta Build se présente avec la tagline « Sites web rapides et applications sur mesure », telle quelle, sur sa fiche Google Business Profile et sur le site v2. Pourquoi : une ligne nomme les deux offres ; « progiciel », jugé daté, a cédé la place à « applications sur mesure », gardé en sachant qu'un profane peut entendre « application mobile ».
+- 2026-10-06 — robusta.build passe entièrement en français, et Robusta Build devient une entreprise locale qui aide les entreprises de sa région à grandir : des PME d'au moins 500 000 € de chiffre d'affaires, que des logiciels adaptés à leur activité font passer le million. Pourquoi : décision de l'éditeur, consignée aussi dans l'epic. Impact : `/` est en français, et les arguments choisis en juillet pour une page anglaise sont retriés plus bas.
+- 2026-10-06 — La tagline va telle quelle dans l'eyebrow du Hero, et le titre reste une ligne à part qui porte l'expérience. Pourquoi : l'eyebrow dit ce que la page vend, le titre dit pourquoi faire confiance à celui qui le vend, et le parcours est le seul argument qu'un concurrent ne peut pas copier.
+- 2026-10-06 — La page garde la première personne et nomme Nicolas. Restent : les vingt ans, dans un titre qui parle de l'entreprise du client ; Renault, le BCG et les startups ; Toulouse en note, avec la zone desservie et les rendez-vous sur place à la place de « remote ». Sortent : la spécialité EVM, la sélection Toptal, la certification Oracle et le seuil de chiffre d'affaires. Pourquoi : un dirigeant de PME vérifie que la personne est réelle, proche, et a livré pour des entreprises sérieuses ; EVM, Toptal et Oracle parlent à un recruteur technique, et « remote » contredit la promesse locale. La fiche Google Business Profile (`documentation/google-business-profile.md`) fait les mêmes coupes et garde le seuil pour la prospection.
+- 2026-10-06 — La légende du `Hero` et le nom accessible de sa mascotte passent par deux props que design-system-responsive ajoute à `HeroProps`, `annotation` et `mascotAlt` ; une annotation vide masque la légende et sa flèche. Le même item corrige le texte figé de `ServicesGrid` (« see how it works ») et de la variante complète de `BrandLogo`. Pourquoi : Gap-LANDING-10, `lgtm` — le `Hero` affichait « this is crystal tux. she lives here. » quelles que soient ses props, BR-PYRAMID-8 interdit au design system tout texte de page, le site n'a aucun contournement, et la correction coûte le moins tant que design-system-responsive n'a pas atterri.
+- 2026-10-06 — Les pages de listing (accueils de blog, pages de catégorie et leurs suites) reviennent à un item de l'epic, `blog-rolls`, placé avant go-live : c'est le même item que seo-excellence demande (Gap-SEOEXCELLENCE-17). Sa première question : quelle surface affiche une liste, le design system n'ayant que NotesPreview. Pourquoi : Gap-LANDING-11, `lgtm` — sans lui, la moitié des pages du site seraient vides le jour où il s'ouvre aux moteurs de recherche. Impact : cette story livre le lien « tous les articles » de la section de notes vers une page de listing encore placeholder, et un pied de page sans colonne de liens.
+- 2026-10-06 — Le `robots: noindex` ne se lève pas dans cette story : un item à part, `go-live`, placé après seo-excellence et blog-rolls, bascule robusta.build sur le déploiement Netlify et ouvre les pages aux moteurs de recherche d'un même mouvement ; c'est l'item qu'OQ-SEOEXCELLENCE-19 propose aussi. Cette story livre `/` sous `noindex`. Pourquoi : OQ-LANDING-12, `lgtm` — lever plus tôt ferait indexer des pages vides, et le déploiement Netlify servirait sous une seconde adresse les articles que robusta.build sert encore en v1. Impact : l'item 5 de l'epic et le ROADMAP, qui confient la levée à cette story, sont à corriger par epicman.
+- 2026-10-06 — SiteHeader et SiteFooter habillent toutes les pages du site depuis la route racine que tanstack-start-migration réécrit, et pas `/` seule. Pourquoi : OQ-LANDING-13, `lgtm` — la plupart des visiteurs arriveront sur un article depuis un moteur de recherche, et un article n'offre aujourd'hui aucun chemin vers le pitch ni vers le contact.
 
 ## Documentation updates
 
-- change the README of `apps/robusta-build` — why: the landing page is the reference example of a site consuming its own design system, and the next site starts by copying it
-- change the "Install / Import" section of `packages/robusta-design-system/README.md` — why: it describes the consumer setup in the abstract and can now point at a real consumer
-- change the robusta.build entry of `root.archi.md` — why: the v2 site stops being an empty shell and gets its first public page
+- change the README of `apps/robusta-build` — why: la landing page devient l'exemple de référence d'un site qui consomme son propre design system, le site suivant commence par la copier, et l'en-tête et le pied de page habillent désormais toutes les pages depuis la route racine
+- change the `noindex` sentence of the « The v1 mapping » section of `apps/robusta-build/README.md` and of `apps/robusta-build/robusta-build.archi.md` — why: les deux confient la levée du `noindex` à cette story, qui revient à go-live
+- change the « Install / Import » section of `packages/robusta-design-system/README.md` — why: elle décrit le consommateur dans l'abstrait et peut désormais pointer un vrai
+- change the robusta.build entry of `root.archi.md` and the `@robusta/robusta-build` entry of `CLAUDE.md` — why: les deux décrivent encore la page d'accueil comme un placeholder en attente de cette story
 
 ## Dependencies
 
-- Dep 1: item 3 bootstrap-robusta-build — the `apps/robusta-build` workspace, its config and its wiring to the packages. Blocks implementation only; brainstorm and design can proceed.
-- Dep 2: item 1 merge-design-system — `@robusta/pyramids-design-system` must be on `dev`, where the directory has today neither `package.json` nor `src/`.
-- Dep 3: item 2 unblock-build, inherited through item 3 — without it the site does not build end to end, so nothing can be accepted in a browser.
-- Dep 4: item 7 migrate-learn-content — for the notes section alone, which Open Question 3 proposes to postpone to that story.
+- Dep 1 : item 1 design-system-responsive — toutes les surfaces de la page en viennent, avec `SkButton.href`, `FooterLink` et les props `annotation` et `mascotAlt` du `Hero` (décision du 2026-10-06). Sa story et son design, APPROVED le 2026-08-07, ne portent pas encore ces deux props. Bloque l'implémentation.
+- Dep 2 : item 2 tanstack-start-migration — la route racine, qui portera l'en-tête et le pied de page de toutes les pages, la route `/` et les métadonnées changent de framework ; le design de cette story s'écrit après elle.
+- Dep 3 : items 3 default-locale-fr et 4 translate-english-articles — la section de notes n'affiche des articles français qu'après eux (BR-PYRAMID-11).
+- Levées : bootstrap-robusta-build, merge-design-system, unblock-build et migrate-learn-content, livrées.

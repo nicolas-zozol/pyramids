@@ -1,72 +1,101 @@
 # Story : SEO excellence on the v2 site
 
-**Dernière mise à jour :** 2026-08-01
+**Dernière mise à jour :** 2026-10-06
 **Feature :** seo-excellence
 **Infix :** SEOEXCELLENCE
 **Status :** ACTIVE
 
 ## Story
 
-As the publisher of robusta.build, I want every page of the v2 site to state to a search engine exactly what it is — and nothing more than it is — so that the content is found on its own merit and the site never reads as manufactured for robots.
+As the publisher of robusta.build, I want every page of the v2 site to state to a search engine exactly what it is, and nothing more, so that the content is found on its own merit and the site never reads as manufactured for robots.
 
 ## Contexte & objectif
 
-The epic carries one SEO intent: everything goes toward best practice, without being aggressive. epicman ran it through the four tests and kept it out of `business-rules.md` — no verifiable declarative statement comes out of that sentence. This story is where it becomes checkable criteria, and that translation is the actual work here.
+The epic carries one SEO intent: best practice, never aggressive. No business rule comes out of that sentence, so this story is where it becomes checkable criteria.
 
-The v1 site shows the starting point: no sitemap, no `robots.txt`, no structured data, a canonical URL left as a `TODO` in `apps/robusta/src/app/learn/page.tsx`, and a root layout whose title and description are the same on every page. At the other end, `mandatoryKeywords: ['robusta build', 'freelance']` is appended to the keyword list of every article — two commercial terms pushed onto content that has nothing to do with them. That is the aggressive end of the range, and bootstrap-robusta-build carried the field into `apps/robusta-build/src/seopyramids.config.ts` with the rest of the shell, so this story removes it rather than declining to port it.
+Read in the code on 2026-10-06, the v2 site declares the same thing on every page: the root layout's title `Robusta Build: Freelance ethers.js, solidity, web, blockchain`, its description `Building Internet the right way`, and `robots: noindex`. There is no canonical URL, no sitemap, no `robots.txt` and no structured data. The articles render as articles since article-page; the blog home and the category pages still show a placeholder, until blog-rolls renders them. Five article bodies declare a second `h1`, and `mandatoryKeywords: ['robusta build', 'freelance']` still sits in the site configuration. article-page left two subjects to this story on purpose: the related-articles block at the end of an article, and those five headings.
 
-Scale decides what is honest here: 11 articles over six categories — blockchain 4, javascript 3, typescript 1, privacy 1, theory 1, web 1 — four of which hold exactly one article, and a locale split of 8 English and 3 French once migrate-learn-content corrects the two English files declaring `fr`. The `security` and `prompt` folders of the v1 tree hold images and no article, and no category page exists for them: R-URLSCHEME-6 derives the category URLs from what the articles claim, so an empty category cannot be offered to the index in the first place.
+The site this story ships on is the one the epic decided on 2026-10-06: TanStack Start on Netlify, entirely French with `fr` as the unmarked default locale and nine French articles (BR-PYRAMID-11), no redirect at all, the v1 addresses answering 404 until restore-v1-urls, and a local business speaking to SMEs. A canonical URL is the form `@robusta/pyramids-routing` builds on `https://www.robusta.build` (BR-PYRAMID-1). The site stays closed to indexing until go-live switches robusta.build to it.
 
-What this story computes from is delivered. seo-url-scheme landed on 2026-07-31 as `acfbc0a`: the content root is `articles`, an article sits at `/articles/{slug}` or `/articles/c/{category}/{slug}`, a roll at `/articles/p/{n}` or `/articles/c/{category}/p/{n}`, `/l/{locale}` prefixes a non-default locale, and `/articles/t/{tag}` is reserved and served by nothing. A canonical URL is the form that scheme's builder emits, so canonicals and sitemap entries derive from the route rather than from the content source (BR-PYRAMID-1). What is missing is what those URLs address, which the Dependencies below name.
-
-Nothing on the site is indexable yet: `apps/robusta-build/src/app/layout.tsx` declares `robots: { index: false, follow: false }` site-wide until robusta-landing-page lifts it, and the v1 redirect map ships dormant until retire-robusta-v1 turns it on. Every criterion below is checked against the built output, and none of this story's work can be verified against a live index before that flag is lifted.
+Out of scope: off-site SEO, Core Web Vitals, any analytics (BR-PYRAMID-2), `<html lang>` (tanstack-start-migration), the landing page's own wording, title and description included (robusta-landing-page), the rendering of the rolls (blog-rolls), the opening of the site to indexing (go-live), and the v1 addresses (restore-v1-urls).
 
 ## What "not aggressive" means here
 
 - No term is added to a page because the site wants to rank on it. What the page says is what the page declares.
-- A page that would carry nothing of its own is not generated, not linked and not listed — it never becomes an indexable page.
+- A page that carries nothing of its own is not indexable, not listed in the sitemap, and not offered as a related article.
 - Internal links exist for a reader who would follow them; a link block is left out rather than padded.
 - Structured data describes what the page displays, never more.
 
-## Definition of done
+## Acceptance Criteria
 
-- Every indexable page declares a self-referencing canonical URL, which is the form the scheme's builder emits; a roll page beyond the first is canonical to itself and never to the roll's own address.
-- Every page carries a title and a description of its own; no page falls back to the root layout defaults. An article's description is its `excerpt`, which the v2 schema already requires of every article.
-- Article pages expose structured data for the article — headline, publication date, author, language, image — plus a breadcrumb, and declare nothing that the page does not show. The image is an absolute URL under the site's asset root.
-- `sitemap.xml` is generated from the same derivation as the routes and lists exactly the indexable pages, with a last-modification date each. It lists published articles only — BR-PYRAMID-10, "A site publishes an article only if that article declares itself published" — so an article that stops declaring itself published leaves the sitemap along with the index.
-- The optional `updated` frontmatter field that the sitemap date rests on is added to `ArticleEntry` in `@robusta/pyramids-content`, which shipped on 2026-07-31 without it.
-- `robots.txt` exists, points at the sitemap, and blocks nothing the sitemap lists.
-- Each article page links to its category page and offers related articles as the glossary defines them; the block disappears when the set is empty.
-- `mandatoryKeywords` leaves `apps/robusta-build/src/seopyramids.config.ts` and its `BlogConfig` type: keywords come from the article or not at all.
-- A non-default-locale page declares its own language, and an alternate is declared between two articles only where a `translationId` pairs them.
-- Verified on the production build, in the vitest setup migrate-learn-content adds to `apps/robusta-build`: no page with a missing or duplicated title or description, no indexable page absent from the sitemap, no broken internal link.
-- Does not cover off-site SEO, Core Web Vitals tuning, and any form of analytics — a v2 site tracks no visitor intent (BR-PYRAMID-2).
-- Does not cover turning the v1 redirects on, which belongs to retire-robusta-v1.
+- AC-SEOEXCELLENCE-1 : Given any indexable page, When a search engine or a social platform reads it, Then it finds a title and a description of its own (an article's description is its excerpt, whole, as plain text), a canonical URL pointing at the page itself, the language `fr` and a sharing preview built from those same values; it finds no keyword the site configuration adds and no alternate-language version.
+- AC-SEOEXCELLENCE-2 : Given a page with no content of its own (a listing page still showing a placeholder, the not-found page) or a page that declares nothing about its indexing, When the site is built, Then that page declares itself not indexable and the sitemap leaves it out; once a listing page renders its roll, it is indexable like any other page. Until go-live, no page is open to indexing, whatever it carries.
+- AC-SEOEXCELLENCE-3 : Given the built site, When a crawler fetches `/sitemap.xml` and `/robots.txt`, Then the sitemap lists exactly the indexable pages, published articles only (BR-PYRAMID-10), each with a date: an article's date of last update when it declares one, its publication date otherwise, and for a page listing articles the most recent date among them; `robots.txt` names the sitemap and blocks nothing it lists, nor the asset root that serves the covers.
+- AC-SEOEXCELLENCE-4 : Given an article page or `/`, When a reader or a crawler reads it, Then an article page shows a breadcrumb (blog home, category, article) labelled in French and the date of last update when the article declares one, and declares as structured data the article (headline, publication date, date of last update, author, language, cover as an absolute URL under the asset root) and that breadcrumb; `/` declares Robusta Build as a local business with the name, service area and contact it shows, the same as its Google Business Profile, and no other page declares the business; no structured data carries a field its page does not show.
+- AC-SEOEXCELLENCE-5 : Given an article, When its page is built, Then it links to its category page and ends on its related articles, three at most, or on no block at all when it has none.
+- AC-SEOEXCELLENCE-6 : Given the production build, When it is checked, Then no page lacks or shares a title or a description, every indexable page is in the sitemap and every sitemap entry is a built page, no internal link is broken, and every page carries exactly one first-level heading; a failure names the page. The outcome is read in a search engine's webmaster console, where robusta.build is a verified property and nothing ships to the visitor.
+- AC-SEOEXCELLENCE-7 : Given the business edge cases, When the site is rebuilt, Then an article that stops declaring itself published leaves the sitemap, and no related block or breadcrumb of another page points at it; an article declaring no date of last update declares no modification date anywhere; an article whose body repeats its title as a heading shows that title once, and a body using the first level for its sections keeps them one level down; a category page holding a single article stays indexable; a page with no image of its own shares a preview with no image rather than a default one; the second page of a roll is canonical to itself, never to the first.
+
+## Boundaries
+
+```
+  Apps and modules. Arrow = depends on, from client code to the API.
+  Nothing points into an app, no loop.
+
+  app `robusta-build` [modified]
+      │                            │
+      │ library                    │ library
+      ↓                            ↓
+  module `pyramids-routing`    module `pyramids-content` [modified]
+```
+
+Where the declarations live inside the site, or in a base package, is the design's to draw, against TanStack Start.
+
+### HTTP API of app `robusta-build` — modified
+
+Client code: crawlers and social platforms.
+
+- `GET /sitemap.xml` · new — 200, the indexable pages with a date each, generated at build
+- `GET /robots.txt` · new — 200, names the sitemap, disallows nothing
+- `GET` on any page · modified — its head declares a title, a description, a canonical URL, its indexability and the sharing preview; an article page adds its structured data, and shows a breadcrumb and its related articles; `/` adds the local business
+
+### library API of module `@robusta/pyramids-content` — modified
+
+Client code: app `robusta-build`.
+
+- `ArticleEntry` · modified — gains an optional date of last update, read from an `updated` frontmatter field
+- `readCorpus(corpus)` · modified — refuses a malformed update date as it refuses a malformed `date`
+
+### library API of package `seopyramids.config` in app `robusta-build` — modified
+
+- `BlogConfig` · modified — loses `mandatoryKeywords`
 
 ## Décisions
 
-- 2026-07-29 — No tag routes on the v2 site: tags stay metadata used to pick related articles, and browsing runs through categories. Pourquoi : the corpus split across tags produces pages with one or two entries, which is exactly the thin page this story refuses. Réf : Gap 2 of migrate-learn-content, arbitrated the same way the same day. Refined on 2026-07-31 by seo-url-scheme: the scheme reserves the tag address rather than ignoring it — the builder and the parser know the shape of `/articles/t/{tag}`, no such URL is produced and no route serves one (R-URLSCHEME-31) — and a v1 tag address reaches the category page of the same name when that category has one, the blog home otherwise. Tags still carry no page, so nothing this story computes changes.
-- 2026-07-29 — `mandatoryKeywords` is dropped from the v2 `seopyramids.config.ts` rather than ported. Pourquoi : it appends the same two commercial terms to every article regardless of subject, which is exactly the aggressive pattern the epic rules out. Overtaken on 2026-07-31 by the shell: bootstrap-robusta-build ported the field in commit `84c3587`, so the decision is executed by removing it from the v2 configuration rather than by never adding it.
-- 2026-07-29 — "An indexable page must carry content of its own" is validated by the human but is not recorded as BR-PYRAMID-4: it fails the vocabulary test of the `business-rule` skill, "indexable page" being absent from `ubiquitous-language.md`, which requires a term to be proposed before it is used in a rule. Pourquoi : the three other tests pass — the publisher can decide it, it states what must hold without any process, and it is a single invariant — so the rule goes back to the registrar once the term is defined, which the Documentation updates below already plan. Until then the statement stays an acceptance criterion of this story. Superseded on 2026-07-30: `Indexable page` entered `ubiquitous-language.md` by arbitration C4 of `pyramid-v2.bulk.md`, and the rule was then deliberately left unrecorded — the registered definition already reads "addressed by a URL of its own and carries content of its own", so the rule restates its own term, and a definitional fact belongs to the glossary rather than to the registry. The identifier BR-PYRAMID-4 is retired and never reused; the statement stays an acceptance criterion here, and the glossary entry this decision planned is delivered.
-- 2026-07-30 — A category page holding a single article is indexable and stays. Pourquoi : arbitration of Open Question 1 of `seo-excellence.brainstorm.md` — four of the six category pages hold exactly one article today, refusing them would leave three articles reachable only from the blog home, and the page shows something real rather than being created to fill a tree.
-- 2026-07-30 — The site declares a minimal social-sharing metadata set — title, description, image, canonical URL, language — derived from values the page already computes, with nothing authored separately. Pourquoi : arbitration of Open Question 2 of `seo-excellence.brainstorm.md` — it adds no authoring and no maintenance since it reuses the page's own declaration, and a shared link that renders nothing is a loss the story never chose.
-- 2026-07-30 — The sitemap's last-modification date comes from an optional `updated` frontmatter field, falling back to the publication date; a category or roll page takes the most recent date among the articles it lists. Pourquoi : arbitration of Open Question 3 of `seo-excellence.brainstorm.md` — it is the only date the content itself owns, it stays correct without upkeep, and a file timestamp is meaningless after a CI checkout.
-- 2026-07-30 — Registering the site with a search engine's webmaster console is compatible with the no-tracking rule and is the one measurement kept, verified through a DNS record or a static file. Pourquoi : arbitration of Open Question 4 of `seo-excellence.brainstorm.md` — the console reports on crawling and on results the engine already holds, ships no code to the visitor and identifies nobody (BR-PYRAMID-2), whereas refusing it leaves this story with no outcome signal at all.
-
-## Open Questions & Gaps
-
-- Gap 1: an image inside a rendered article body reaches the page as a plain `<img>` through `dangerouslySetInnerHTML`, with no `sizes`, no WebP and no lazy loading. `migrate-learn-content.design.md` hands the question to article-page and to this story without answering it, and neither has taken it.
-- Proposition: this story takes the cover image only — the one the page renders itself and structured data declares — and leaves body images as the markdown pipeline emits them, recording the limit rather than hiding it.
-- Rationale: answering it for body images means either rewriting eleven article bodies or replacing remark's HTML with a component pipeline, which is a content-pipeline decision and not a metadata one; image loading also sits in the Core Web Vitals tuning this story excludes.
-- Resolution:
+- 2026-07-29 — No tag routes: tags stay metadata that picks related articles, and browsing runs through categories. Pourquoi : split across tags, the corpus yields pages of one or two entries, the thin page this story refuses. seo-url-scheme reserves `/articles/t/{tag}` and serves nothing there (R-URLSCHEME-31).
+- 2026-07-29 — `mandatoryKeywords` leaves the v2 configuration. Pourquoi : it appends the same two commercial terms to every article whatever its subject, the aggressive pattern the epic rules out. bootstrap-robusta-build had ported it in `84c3587`, so the decision is carried out by removing it.
+- 2026-07-30 — "An indexable page must carry content of its own" stays a criterion of this story, not a business rule. Pourquoi : `Indexable page` entered `ubiquitous-language.md` with that very definition, so the rule would restate its own term. BR-PYRAMID-4 is retired and never reused.
+- 2026-07-30 — A category page holding a single article is indexable. Pourquoi : Open Question 1 of the brainstorm; refusing it leaves articles reachable from the blog home alone, and the page shows something real.
+- 2026-07-30 — The site declares a minimal sharing set (title, description, image, canonical URL, language) derived from values the page already computes, nothing authored separately. Pourquoi : Open Question 2; no authoring, no upkeep, and a shared link that renders nothing is a loss.
+- 2026-07-30 — The sitemap date comes from an optional `updated` frontmatter field, falling back to the publication date; a page listing articles takes the most recent among them. Pourquoi : Open Question 3; it is the only date the content owns, and a file timestamp means nothing after a CI checkout.
+- 2026-07-30 — Registering the site with a search engine's webmaster console is the one measurement kept, verified through a DNS record or a static file. Pourquoi : Open Question 4; the console reports on crawling, ships no code to the visitor and identifies nobody (BR-PYRAMID-2).
+- 2026-08-02 — Image rendering is settled outside this story: article-page renders the cover and the body images (R-ARTICLEPAGE-23 and 26), and tanstack-start-migration carries them over, the cover as a plain `<img>`. Pourquoi : Gap 1 of this story said nobody owned the question; it was closed as stale on 2026-10-06.
+- 2026-10-06 — The design is written against TanStack Start on Netlify, the head each route declares and files generated at build, not against Next's metadata API or `sitemap.ts`. Pourquoi : epic decision of 2026-10-06; the brainstorm of the same day still reasons on Next.
+- 2026-10-06 — One locale: every page declares `fr` and none declares an alternate-language version, so the alternates between translated pairs leave the story. Pourquoi : BR-PYRAMID-11, and items 3 and 4 of the epic, which leave nine French articles under one unmarked locale.
+- 2026-10-06 — A new item, `blog-rolls`, renders the blog home and the category rolls from the index, page copy included, and comes before this story; it is the item robusta-landing-page calls listing-pages. Only the listing-page half of the criteria and the breadcrumb wait on it, the article half does not. Pourquoi : Gap-SEOEXCELLENCE-17; a roll is page copy, not declaration, the reason article-page was split out of migrate-learn-content on 2026-08-01, and folding the rolls in here would double the story.
+- 2026-10-06 — Of the five bodies declaring a second `h1`, the three English ones (`leaving-gmail`, `easy-automation-with-sonoff`, `yield-farming`) leave with item 4, whose translations carry no `h1` in their body; the two French bodies that stay, `yield-farming-fr` and `quel-second-langage`, are corrected in the v2 tree and the frozen v1 tree in one commit, so `corpus-freeze.spec.ts` keeps holding the copies identical. Pourquoi : Gap-SEOEXCELLENCE-18; v1 renders its own `<h1>` above the same bodies and has the same defect, so a lockstep edit costs nothing, and exempting files would weaken the one check guarding the copy, for a tree retire-robusta-v1 deletes anyway.
+- 2026-10-06 — The root keeps `noindex` as the default and each indexable page declares itself indexable. The pages open at go-live, the separate step where robusta.build switches to the Netlify v2 site, the same step robusta-landing-page raises, and not when robusta-landing-page lands, as item 5 of the epic has it. Pourquoi : OQ-SEOEXCELLENCE-19; deleting the root directive also opens the placeholders and the not-found page under the root's title, and every canonical URL names `https://www.robusta.build`, which serves v1 until the switch, so a Netlify host opened earlier gets indexed under addresses that answer a v1 404.
+- 2026-10-06 — `/` declares Robusta Build as a local business in its structured data, with the name, service area and contact the page shows, the same as the Google Business Profile in `documentation/google-business-profile.md`, whose website field moves to the canonical host `https://www.robusta.build`. No other page declares it. Pourquoi : OQ-SEOEXCELLENCE-20; the positioning of 2026-10-06 makes Robusta Build a local business, and a site and a profile stating the same name, area and address is the usual local-search signal.
 
 ## Documentation updates
 
-- change the Overview and the site-configuration line of `root.archi.md` — why: the Overview describes the base as a pipeline producing indexable pages while the v2 site declares `noindex` and ships no sitemap, and the configuration line still names the mandatory keywords this story removes.
-- create an SEO section in the README of `apps/robusta-build`, beside its Routing section — why: what a page must declare, and what the site deliberately refuses to do, is what the next site copies.
+- change the Overview and the site-configuration line of `root.archi.md` — why: the Overview describes a pipeline producing indexable pages while the v2 site declares `noindex` and ships no sitemap, and the configuration line still names the mandatory keywords this story removes.
+- create an SEO section in `apps/robusta-build/README.md`, beside its Routing section — why: what a page declares, and what the site refuses to do, is what the next site copies.
 
 ## Dependencies
 
-- Dep 1: migrate-learn-content — nothing to index before the articles are on the site. `apps/robusta-build/content/articles` holds a `.gitkeep` today; story ACTIVE, design APPROVED on 2026-08-01, implementation not started.
-- Dep 2: article-page — an article route that renders a `RoutePlaceholder` carries no content of its own, so it is not an indexable page by the glossary's own definition, and there is nothing for metadata, structured data or a sitemap entry to describe until it lands. Story ACTIVE, no design yet.
-- Dep 3: robusta-landing-page — for the outcome signal alone, not for implementation: the site-wide `robots: noindex` it lifts is what makes the webmaster console of the decision of 2026-07-30 report anything.
+- Dep 1: tanstack-start-migration, item 2 of the epic — the design is written against TanStack Start and the code lands on it. Story ACTIVE, design DRAFT.
+- Dep 2: default-locale-fr and translate-english-articles, items 3 and 4 — the criteria hold on one unmarked locale and nine French articles, and the three English bodies declaring a second `h1` leave with item 4, whose translations must carry none. Neither has a story.
+- Dep 3: robusta-landing-page, item 5 — for `/` alone: it becomes indexable once it carries copy, its sitemap date reads the articles its notes section lists, and its local business reads the name, service area and contact the page shows. Story ACTIVE.
+- Dep 4: blog-rolls, the new item rendering the blog home and the category rolls — for the listing-page criteria and the breadcrumb only. No story yet.
+- migrate-learn-content and article-page, the two former dependencies, landed on 2026-08-02 as `0282952` and `3ab28e7` — levées.
