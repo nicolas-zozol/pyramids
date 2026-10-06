@@ -109,12 +109,12 @@ yarn build:deps
                                                                       (tsc, each to dist/)
         │
         ▼
-yarn build:robusta / build:dakar ──► next build
+yarn build:robusta-v1 / build:dakar ──► next build
 ```
 
 Apps resolve packages through their compiled `dist/`. A package change is invisible to a running app until it is rebuilt, so `yarn dev:dev` runs the watchers alongside the dev server.
 
-The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build`. Verified end to end on 2026-07-30 from a wiped tree: dakar produced 23/23 static pages on a route table identical to its baseline, robusta 42/42, and a second `yarn install` left `yarn.lock` byte-identical. `apps/robusta-build` joined it on 2026-07-31, producing 4/4 static pages; it produced 62/62 on the fixture corpus the v2 URL scheme shipped with, and produces 25/25 since the eleven articles landed on 2026-08-01 — 23 HTML pages, being the 21 content URLs the corpus derives plus the landing page and `/_not-found`. dakar and robusta are unchanged at 23/23 and 42/42, which is what copying the corpus rather than moving it protects.
+The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta`. Verified end to end on 2026-07-30 from a wiped tree: dakar produced 23/23 static pages on a route table identical to its baseline, robusta 42/42, and a second `yarn install` left `yarn.lock` byte-identical. `apps/robusta-build` joined it on 2026-07-31, producing 4/4 static pages; it produced 62/62 on the fixture corpus the v2 URL scheme shipped with, and produces 25/25 since the eleven articles landed on 2026-08-01 — 23 HTML pages, being the 21 content URLs the corpus derives plus the landing page and `/_not-found`. dakar and robusta are unchanged at 23/23 and 42/42, which is what copying the corpus rather than moving it protects.
 
 Inside the set but install-only, never built by it: `packages/scribe-intel`, `services/scribe-intel-collector`. Outside it entirely, and outside yarn's view: `apps/robusta-design`, `apps/intel-demo` and `services/scribe-intel-backend` carry no `package.json` at all, so despite the `apps/*` glob they are not workspaces — nothing installs or builds them.
 

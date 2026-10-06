@@ -7,7 +7,7 @@ import { corpus } from './corpus.js';
  * The freeze between the two corpora, and the proof the conversion lost nothing.
  *
  * The eleven articles were copied rather than moved, so `apps/robusta` keeps
- * rendering the tree it reads and `yarn build:robusta` keeps producing its 42
+ * rendering the tree it reads and `yarn build:robusta-v1` keeps producing its 42
  * pages (R-MIGRATELEARN-01 and 81). What stops two copies of one corpus
  * diverging is this comparison: it walks the eleven pairs and holds the markdown
  * body — everything after the closing frontmatter delimiter — byte for byte

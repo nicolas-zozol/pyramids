@@ -32,7 +32,7 @@ yarn build:deps      # routing → content → helpers → themes → design-sys
 yarn dev:robusta     # or dev:dakar
 ```
 
-From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
+From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
 
 Editing a shared package while a site runs? Keep a watcher up (`yarn dev:dev`, or `yarn w:<package>`), otherwise the site keeps serving the previous build output.
 

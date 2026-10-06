@@ -60,18 +60,18 @@ yarn clean:install   # clean then reinstall
 
 ```bash
 yarn build:deps      # builds routing → content → helpers → themes → design-system → layouts → links → ctas in order
-yarn build:robusta-build  # build:deps then `next build` for apps/robusta-build (v2)
-yarn build:robusta   # build:deps then `next build` for apps/robusta (v1)
+yarn build:robusta     # build:deps then `vite build` for apps/robusta-build (v2)
+yarn build:robusta-v1  # build:deps then `next build` for apps/robusta (v1)
 yarn build:dakar     # build:deps then `next build` for apps/dakar
 ```
 
 ### Dev servers
 
 ```bash
-yarn dev:robusta-build  # apps/robusta-build with Next.js + Turbopack
-yarn dev:robusta     # apps/robusta with Next.js + Turbopack
+yarn dev:robusta      # apps/robusta-build with Vite
+yarn dev:robusta-v1   # apps/robusta with Next.js + Turbopack
 yarn dev:dakar       # apps/dakar with Next.js + Turbopack
-yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta
+yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta-v1
 ```
 
 When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:routing`, `w:content`, `w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.

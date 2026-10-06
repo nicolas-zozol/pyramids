@@ -41,7 +41,7 @@ Write the body in markdown, and only in markdown. HTML written in an article ren
 
 Images live beside their article, conventionally in an `images/` directory next to it, and are referenced relatively — `./images/vpn.png` from the body or the cover, `../images/shared.png` for the corpus-root folder. The reference is resolved against the article's own place in the corpus and published under the asset root: `blockchain/images/vpn.png` is served at `/article-images/blockchain/images/vpn.png`. So an article can change category without a single image moving. A reference resolving to no file of the corpus is a violation and fails the build; an absolute or external URL passes through untouched.
 
-`public/article-images/` is generated, git-ignored and owned by `yarn copy:assets`, which removes it and rewrites it in full before every build and at the start of `yarn dev:robusta-build`. It publishes only what the published articles reference — 44 files today. It is not a watcher: an image added mid-session reaches the site on the next run.
+`public/article-images/` is generated, git-ignored and owned by `yarn copy:assets`, which removes it and rewrites it in full before every build and at the start of `yarn dev:robusta`. It publishes only what the published articles reference — 44 files today. It is not a watcher: an image added mid-session reaches the site on the next run.
 
 Where a mistake surfaces: `yarn emit:redirects`, the first step of both `build` and `dev`, reads the corpus and fails on the first violation with the file named. `yarn workspace @robusta/robusta-build run test` checks the corpus as it stands — what is published, the locale split, the categories, and the byte-for-byte freeze against the v1 tree.
 
@@ -131,11 +131,11 @@ Brand assets are resolved through the design system's exports map and hashed by 
 Both are root scripts — run them from the repository root, not from here:
 
 ```bash
-yarn build:robusta-build     # build:deps, then next build
-yarn dev:robusta-build       # next dev with Turbopack
+yarn build:robusta     # build:deps, then vite build
+yarn dev:robusta       # vite dev
 ```
 
-This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, `yarn build:robusta-build` must all complete from a clean checkout (BR-PYRAMID-5).
+This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` must all complete from a clean checkout (BR-PYRAMID-5).
 
 ## Deployment
 
@@ -144,7 +144,7 @@ Vercel project `robusta-build-v2`, under `nicoramas-projects`, created 2026-07-3
 - Root Directory: `apps/robusta-build`
 - Include source files outside the Root Directory: on. This is what makes the yarn workspaces resolve; Vercel enables it by default for projects created after 2020-08-27, so verify rather than assume.
 - Install Command: `yarn install`
-- Build Command: `cd ../.. && yarn build:robusta-build`. The `cd` is not decoration. Vercel runs the build command inside the Root Directory, and from there yarn sees only this workspace's four scripts — `build:robusta-build` lives in the root manifest and is not inherited. Plain `yarn build` would resolve, and would fail differently: the site reads the design system's `dist/`, which only `build:deps` produces.
+- Build Command: `cd ../.. && yarn build:robusta`. The `cd` is not decoration. Vercel runs the build command inside the Root Directory, and from there yarn sees only this workspace's four scripts — `build:robusta` lives in the root manifest and is not inherited. Plain `yarn build` would resolve, and would fail differently: the site reads the design system's `dist/`, which only `build:deps` produces.
 - Node: 22, and the only place that decides it is the Vercel project's own Node Version setting. `engines.node` in the root manifest does not override it — tested on 2026-08-01 with both `">=22 <23"` and `"22.x"`, and the project ran Node 24.15.0 either way. The manifest still declares `"22.x"` because that is what a human reads and what other tooling honours, but it has no say in what Vercel installs with.
 
   Set it to 22 for the reason `.nvmrc` gives, not to fix a build: Node 24 was suspected of breaking the install and was not the cause. The same failure reproduces identically on 22.22.2.

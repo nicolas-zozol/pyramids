@@ -7,7 +7,7 @@
 //
 // This page is in a `_design-test/` private folder — Next.js won't expose it
 // as a route (folders prefixed with `_` are excluded from routing). It exists
-// only so `yarn build:robusta` exercises the package wiring. Delete after
+// only so `yarn build:robusta-v1` exercises the package wiring. Delete after
 // the live home page is rebuilt against the design system.
 
 import '@robusta/pyramids-design-system/colors_and_type.css';

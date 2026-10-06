@@ -6,7 +6,7 @@
 # no redirect rule, no header rule, no plugin.
 
 [build]
-  command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta-build"
+  command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta"
   publish = "apps/robusta-build/dist/client"
   # Exit 0 skips the build. A change under these paths exits 1, an unknown
   # cached ref exits 128, and both build.
