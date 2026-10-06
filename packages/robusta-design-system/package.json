@@ -29,6 +29,7 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts src/**/*.tsx",
+    "test": "rm -rf .test-build && tsc -p tsconfig.test.json && node --test \".test-build/**/*.spec.js\"",
     "watch": "tsc -p . --watch"
   },
   "peerDependencies": {

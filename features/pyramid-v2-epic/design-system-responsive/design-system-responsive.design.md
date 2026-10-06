@@ -3,8 +3,15 @@
 **Last update:** 2026-10-06
 **Feature:** design-system-responsive
 **Infix:** RESPONSIVE
-**Status:** DRAFT
+**Status:** APPROVED (2026-10-06 — validated by Nicolas)
 **Sources:** [story](design-system-responsive.story.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../packages/robusta-design-system/design-system.archi.md), [robusta-landing-page story](../robusta-landing-page/robusta-landing-page.story.md)
+
+## Progress — APPROVED 86%
+
+```
+ WIP  Requirements         █████████████████░░░  34/38
+ WIP  Acceptance Criteria  ███████████████░░░░░  10/13
+```
 
 ## Goal
 
@@ -18,6 +25,7 @@ Amendement du 2026-10-06 : `Hero`, `ServicesGrid` et `BrandLogo` cessent de rend
 
 - 2026-08-07 — The scale wins over the rendering it replaces: fourteen font-size literals collapse onto the ten steps below, the closing-CTA headline joins the hero headline at `--t-display`, and the 17/18/19/21 band collapses onto `--t-lead`, so a few surfaces render a couple of pixels away from today's at the widest viewport. Pourquoi : keeping every literal takes fourteen steps, which is not a scale, and would contradict the definition of done asking that no surface declare a size of its own; the clause of the story on the widest viewport speaks of composition, and composition does not move. Arbitration of Open Question 1, accepted as proposed.
 - 2026-08-07 — The eight surface class blocks and the naming rule are documented in the Component vocabulary section of `packages/robusta-design-system/README.md`, where the `.sk-*` classes are already listed. Pourquoi : the class names are a public override surface, and a consumer that cannot read them can override nothing, while the list that already answers the same question for the primitives makes the addition one bullet rather than a new section. Arbitration of Gap 1, accepted as proposed. The bullet belongs to the Documentation updates of the story, which storyman is writing in parallel — this design names the location and writes nothing there.
+- 2026-10-06 — Les specs du package tournent sur `node:test` (Node 22) : `tsc` les compile via `tsconfig.test.json` vers `.test-build/`, `node --test` les lance, sans dépendance nouvelle. Le passage à vitest, convention du repo, reste ouvert une fois `yarn.lock` libéré par la session tanstack-start-migration, au prix d'une ligne d'import par spec. Pourquoi : ajouter vitest écrit dans `yarn.lock`, que cette session tient. Décision de l'éditeur.
 - 2026-10-06 — `storyman refine design-system-responsive` crée la section, y reprend AC-RESPONSIVE-01 à 12 verbatim et ajoute un AC pour le texte de page — par exemple : étant donné `Hero`, `ServicesGrid` et `BrandLogo` rendus avec toutes leurs props de texte, quand Barbot lit la page, textes alternatifs compris, aucun mot du prototype ne lui parvient, et une annotation vide ne laisse ni légende ni flèche. Ce design cite ensuite la section. Why: un AC naît dans la story et le design le cite ; sans lui, R-RESPONSIVE-101 à 107 n'ont aucun critère d'acceptation validé par l'éditeur. Réf : Gap-RESPONSIVE-3.
 
 ## Ubiquitous Language
@@ -138,7 +146,7 @@ Défauts — le texte du prototype, comme pour toutes les props de texte des sur
 
 Un site qui ne passe rien obtient le rendu d'aujourd'hui ; un site qui passe tout ne reçoit plus un mot du prototype. C'est ce second cas que BR-PYRAMID-8 exige et qu'AC-LANDING-2 de robusta-landing-page vérifie sur `/`.
 
-Le texte alternatif « Robusta Build » du wordmark reste fixe : c'est l'équivalent textuel de l'actif de marque que le package fournit (BR-PYRAMID-3), pas un texte de page.
+La marque reste fixe et rendue même quand toutes les props sont passées : le texte alternatif « Robusta Build » du wordmark, équivalent textuel de l'actif de marque que le package fournit (BR-PYRAMID-3), et les deux glyphes 💪 et 🏗 du lockup (R-RESPONSIVE-04). Ce n'est pas du texte de page.
 
 Client code, dans le package `landing` :
 
@@ -195,7 +203,7 @@ Today a surface's layout is inline `style`, which no stylesheet beats without `!
 - The package's layout rules are written at single-class specificity and carry no `!important`. A consuming site overrides one by writing a selector with one class more, and wins regardless of load order — which matters, because the v2 site loads its own `globals.css` before the package's two stylesheets and would lose a tie. Order-independence is the property being bought; "without `!important`" is the story's requirement and follows from it.
 - The `className` and `style` props of each surface root stay, `style` merging last as the per-instance escape hatch. No surface gains a `classNames` prop for its parts: the class names are the override surface, documented in the Component vocabulary section of the package README beside the `.sk-*` primitives, and duplicating them as React props would be a second one.
 
-The layout joins `sketch.css` rather than a third stylesheet. The two-file import order is documented as a contract in `apps/robusta-build/README.md`, in the package README, in `SKILL.md` and in every preview sheet; a third file a consumer can forget renders the surfaces unstyled, which is a silent and total failure, where a contract that cannot be partially satisfied cannot fail that way.
+The layout joins `sketch.css` rather than a new stylesheet. The two-file import order is documented as a contract in `apps/robusta-build/README.md`, in the package README, in `SKILL.md` and in every preview sheet; a new file a consumer can forget renders the surfaces unstyled, which is a silent and total failure, where a contract that cannot be partially satisfied cannot fail that way.
 
 ### The error ramp
 
@@ -224,7 +232,7 @@ The comment block declaring the two names deliberately absent goes with them. Th
 
 One sheet under `preview/` composing the eight surfaces as a page, framed by its own `<style>` and carrying `<meta name="viewport" content="width=device-width, initial-scale=1">`. It cannot link `_card.css`, which pins the body to 700 px with `overflow: hidden` — a frame for a specimen card, not for a page shown at three widths — and it is deliberately unlike `ui_kits/marketing/index.html`, which pins the viewport to 1280.
 
-It restates the surfaces' markup in plain HTML and can drift from the TSX. It is a specimen and not a test: the package has no test of any kind and this story adds none. What makes it worth writing is that the layout it shows is the real one — the class names and the stylesheet the sheet links are what the components render, now that the layout has left the TSX. `preview/` is excluded by `package.json#files`, so the sheet ships nowhere.
+It restates the surfaces' markup in plain HTML and can drift from the TSX. It is the visual specimen, not a test: the tests are the package's unit specs on its rendering and its stylesheets, run by `node:test` (Node 22) after `tsc` compiles them through `tsconfig.test.json` into `.test-build/`, with no new dependency (decision of 2026-10-06). What makes it worth writing is that the layout it shows is the real one — the class names and the stylesheet the sheet links are what the components render, now that the layout has left the TSX. `preview/` is excluded by `package.json#files`, so the sheet ships nowhere.
 
 ## Technical Constraints
 
@@ -258,7 +266,7 @@ Layout:
 - R-RESPONSIVE-22: Every element of a surface that carries layout carries a stable class name, and the layout is declared in `sketch.css` under those names rather than in an inline `style`.
 - R-RESPONSIVE-23: The package's layout rules are written at single-class specificity and carry no `!important`, so a site selector carrying one class more overrides one whatever the load order.
 - R-RESPONSIVE-24: The class names follow one naming rule, are documented in the Component vocabulary section of the package README, and are not duplicated as React props; the `className` and `style` props of each surface root stay, `style` merging last.
-- R-RESPONSIVE-25: The package ships two stylesheets and no third, and the import order the consuming sites declare does not change.
+- R-RESPONSIVE-25: The story adds no stylesheet: the layout lives in `sketch.css`, and the import order the consuming sites declare does not change.
 - R-RESPONSIVE-26: No surface renders more columns below `md` than above it, and every multi-column composition reaches a single column at or before the 320 px floor.
 - R-RESPONSIVE-27: A surface's horizontal padding reads the spacing scale and narrows below `md`.
 - R-RESPONSIVE-28: From 320 px upward, no surface overflows the viewport horizontally and no text is clipped.
@@ -290,7 +298,7 @@ Scope:
 
 Texte de page :
 
-- R-RESPONSIVE-101 : Tout texte que rend une surface ou `BrandLogo`, texte alternatif compris, passe par une prop qu'un site peut remplacer, hors le texte alternatif du wordmark. Réalise BR-PYRAMID-8.
+- R-RESPONSIVE-101 : Tout texte que rend une surface ou `BrandLogo`, texte alternatif compris, passe par une prop qu'un site peut remplacer, hors la marque : le texte alternatif du wordmark et les glyphes 💪 et 🏗 du lockup. Réalise BR-PYRAMID-8.
 - R-RESPONSIVE-102 : `Hero` lit sa légende dans `annotation` ; une `annotation` vide retire du DOM la légende et sa flèche.
 - R-RESPONSIVE-103 : L'image de la mascotte du `Hero` porte toujours un attribut `alt`, lu dans `mascotAlt` ; un `mascotAlt` vide rend la mascotte décorative.
 - R-RESPONSIVE-104 : Une carte de `ServicesGrid` lit sa ligne de lien dans `moreLabel` et `moreHref` : une ancre avec les deux, du texte sans ancre ni `#` avec le libellé seul, rien sans libellé.
@@ -321,7 +329,7 @@ Cas limites à tester :
 - `Hero` avec `annotation=""`, puis avec `annotation={null}` : ni légende ni flèche dans le HTML rendu.
 - `Hero` avec `mascotSrc` et sans `mascotAlt` : `alt="crystal tux"` ; avec `mascotAlt=""` : l'attribut `alt=""` est présent — jamais une `<img>` sans `alt`.
 - `Hero`, `ServicesGrid` et `BrandLogo size="full"` rendus sans aucune prop de texte : le même texte au même endroit qu'avant l'amendement ; la page `_design-test` de v1 garde la tagline de son `BrandLogo`.
-- Les trois rendus avec toutes leurs props de texte, `annotation` vide et des `services` sans `moreLabel` : ni « this is crystal tux. », ni « she lives here. », ni `alt="crystal tux"`, ni « see how it works », ni « senior engineering, hand-built. » dans le HTML. AC-LANDING-2 de robusta-landing-page repose sur ce cas.
+- Les trois rendus avec toutes leurs props de texte, `annotation` vide et des `services` sans `moreLabel` : ni « this is crystal tux. », ni « she lives here. », ni `alt="crystal tux"`, ni « see how it works », ni « senior engineering, hand-built. » dans le HTML ; la marque — 💪, 🏗 et `alt="Robusta Build"` — y reste. AC-LANDING-2 de robusta-landing-page repose sur ce cas.
 - Trois cartes, la première avec `moreLabel` et `moreHref`, la deuxième avec `moreLabel` seul, la troisième sans : une ancre, du texte sans ancre ni `#`, aucune ligne.
 - `BrandLogo` en variante `compact` ou `mark` avec une `tagline` passée : pas de tagline rendue.
 

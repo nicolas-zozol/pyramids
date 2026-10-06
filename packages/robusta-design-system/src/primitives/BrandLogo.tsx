@@ -8,6 +8,8 @@ export interface BrandLogoProps {
    * - `mark`    — just the two emoji glyphs, no wordmark.
    */
   size?: 'compact' | 'full' | 'mark';
+  /** Rendered by the `full` variant alone. Empty: no tagline line. */
+  tagline?: string;
   /**
    * Path or imported module URL for the wordmark PNG. Defaults to the
    * subpath import string `@robusta/pyramids-design-system/assets/robusta-build-wordmark.png`,
@@ -34,17 +36,10 @@ const emojiStyle = (h: number): CSSProperties => ({
     "'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",
 });
 
-/**
- * 💪 + 🏗 + scanned "robusta build" wordmark.
- *
- * The wordmark is a 1603×312 PNG (`assets/robusta-build-wordmark.png`); height
- * is tuned to sit a touch taller than the cap-height of the emoji so the marks
- * read as a single lockup.
- *
- * Server-component-safe.
- */
+/** The 💪 + 🏗 + "robusta build" wordmark lockup, its `full` variant carrying the tagline beneath. */
 export function BrandLogo({
   size = 'compact',
+  tagline = 'senior engineering, hand-built.',
   wordmarkSrc = DEFAULT_WORDMARK_SRC,
   style,
   className,
@@ -106,19 +101,14 @@ export function BrandLogo({
           }}
         />
       </span>
-      {size === 'full' && (
+      {size === 'full' && tagline ? (
         <span
-          style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: 'var(--t-small)',
-            color: 'var(--ink-mute)',
-            marginTop: 10,
-            marginLeft: emojiH * 2 + gap * 2,
-          }}
+          className="sk-brand-logo__tagline"
+          style={{ marginLeft: emojiH * 2 + gap * 2 }}
         >
-          senior engineering, hand-built.
+          {tagline}
         </span>
-      )}
+      ) : null}
     </span>
   );
 }

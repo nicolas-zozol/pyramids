@@ -260,14 +260,20 @@
    ========================================================= */
 
 /* ---------- brand logo ----------
-   Not a surface — a primitive the header and the footer both embed. It
-   carries two rules and no more: the lockup has to be able to shrink, or
-   the wordmark alone is wider than a 320px viewport. The emoji glyph sizes
-   stay inline: they are dimensions of the mark, tuned against the
-   wordmark's 1603×312 ratio, and not type. */
+   Not a surface — a primitive the header and the footer both embed. The
+   lockup has to be able to shrink, or the wordmark alone is wider than a
+   320px viewport. The emoji glyph sizes and the tagline's indent stay
+   inline: they are dimensions of the mark, tuned against the wordmark's
+   1603×312 ratio, and not type. */
 .sk-brand-logo        { max-width: 100%; }
 .sk-brand-logo__lockup   { min-width: 0; max-width: 100%; }
 .sk-brand-logo__wordmark { min-width: 0; max-width: 100%; height: auto; }
+.sk-brand-logo__tagline {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-top: 10px;
+}
 
 /* ---------- site header ---------- */
 .sk-site-header {
@@ -441,6 +447,7 @@
   font-family: var(--font-sans);
   font-size: var(--t-small);
   color: var(--ink);
+  text-decoration: none;
 }
 
 /* ---------- flow diagram ---------- */

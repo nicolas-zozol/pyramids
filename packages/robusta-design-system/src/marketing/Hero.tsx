@@ -21,14 +21,23 @@ export interface HeroProps {
   secondaryCtaHref?: string;
   /** Footnote line beneath the CTA row (e.g. availability indicator). */
   footnote?: ReactNode;
-  /**
-   * Path/URL for the mascot SVG. Defaults to a relative path that consumers
-   * MUST override with an imported asset URL — see README "asset imports".
-   */
+  /** Path/URL for the mascot SVG. Empty hides the mascot, not its caption. */
   mascotSrc?: string;
+  /** Alt text of the mascot. Empty: the mascot is decorative, alt="". */
+  mascotAlt?: string;
+  /** Caption beside the mascot. Empty ('' or null): no caption, no doodle arrow. */
+  annotation?: ReactNode;
   className?: string;
   style?: CSSProperties;
 }
+
+const DEFAULT_ANNOTATION = (
+  <>
+    this is crystal tux.
+    <br />
+    she lives here.
+  </>
+);
 
 const DEFAULT_TITLE = (
   <>
@@ -58,15 +67,7 @@ const DEFAULT_FOOTNOTE = (
   </>
 );
 
-/**
- * Marketing hero — headline + subtitle + dual CTA + mascot illustration.
- * All textual content is prop-driven with the original prototype copy as
- * the default (so consumers see the same surface out of the box).
- *
- * One column below `lg`, where the mascot sits under the copy and the
- * annotation with it; the two-column split and the pointing squiggle are
- * `.sk-hero`'s business in `sketch.css`.
- */
+/** Marketing hero — headline, subtitle, two calls to action and the captioned mascot, every text a prop defaulting to the prototype copy. */
 export function Hero({
   eyebrow = 'independent senior engineering',
   title = DEFAULT_TITLE,
@@ -77,6 +78,8 @@ export function Hero({
   secondaryCtaHref = '#audit',
   footnote = DEFAULT_FOOTNOTE,
   mascotSrc = '',
+  mascotAlt = 'crystal tux',
+  annotation = DEFAULT_ANNOTATION,
   className,
   style,
 }: HeroProps) {
@@ -113,30 +116,34 @@ export function Hero({
 
         <div className="sk-hero__figure">
           {mascotSrc ? (
-            <img className="sk-hero__mascot" src={mascotSrc} alt="crystal tux" />
+            <img className="sk-hero__mascot" src={mascotSrc} alt={mascotAlt} />
           ) : null}
-          <div className="sk-hero__annotation">
-            this is crystal tux.
-            <br />
-            she lives here.
-          </div>
-          <svg className="sk-hero__doodle" viewBox="0 0 80 60" aria-hidden="true">
-            <path
-              d="M70,10 Q40,20 20,40"
-              stroke="var(--ink)"
-              strokeWidth="1.5"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <path
-              d="M22,32 L18,42 L28,42"
-              stroke="var(--ink)"
-              strokeWidth="1.5"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          {annotation ? (
+            <>
+              <div className="sk-hero__annotation">{annotation}</div>
+              <svg
+                className="sk-hero__doodle"
+                viewBox="0 0 80 60"
+                aria-hidden="true"
+              >
+                <path
+                  d="M70,10 Q40,20 20,40"
+                  stroke="var(--ink)"
+                  strokeWidth="1.5"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M22,32 L18,42 L28,42"
+                  stroke="var(--ink)"
+                  strokeWidth="1.5"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </>
+          ) : null}
         </div>
       </div>
     </section>

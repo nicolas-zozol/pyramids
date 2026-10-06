@@ -12,6 +12,10 @@ export interface ServiceItem {
   tag?: string;
   /** Tag tone — controls the colored frame on the tag. */
   tagTone?: SkTagTone;
+  /** Label of the card's link line. Absent or empty: no line. */
+  moreLabel?: string;
+  /** Absent: the label renders as text, never as an anchor. */
+  moreHref?: string;
 }
 
 export interface ServicesGridProps {
@@ -22,6 +26,8 @@ export interface ServicesGridProps {
   style?: CSSProperties;
 }
 
+const DEFAULT_MORE_LABEL = 'see how it works';
+
 const DEFAULT_SERVICES: ServiceItem[] = [
   {
     title: 'the audit',
@@ -30,6 +36,7 @@ const DEFAULT_SERVICES: ServiceItem[] = [
       "we read your code, your incidents, and your last 6 months of prs. you get a 30-page memo with a ranked list of risks and a plan.",
     tag: 'most popular',
     tagTone: 'pink',
+    moreLabel: DEFAULT_MORE_LABEL,
   },
   {
     title: 'embedded eng',
@@ -38,6 +45,7 @@ const DEFAULT_SERVICES: ServiceItem[] = [
       "we sit inside your team — pull rotation, code review, design docs, on-call. we leave you with a smaller backlog and an upgraded bench.",
     tag: 'high stakes',
     tagTone: 'blue',
+    moreLabel: DEFAULT_MORE_LABEL,
   },
   {
     title: 'rebuild surgery',
@@ -46,6 +54,7 @@ const DEFAULT_SERVICES: ServiceItem[] = [
       "you have one piece that's holding the rest hostage. we replace it without rewriting the world. yes, postgres still works.",
     tag: 'scoped',
     tagTone: 'green',
+    moreLabel: DEFAULT_MORE_LABEL,
   },
 ];
 
@@ -54,7 +63,37 @@ interface ServiceCardProps extends ServiceItem {
   tilt: 'left' | 'right';
 }
 
-function ServiceCard({ title, time, body, tag, tagTone, tilt }: ServiceCardProps) {
+interface MoreLineProps {
+  label?: string;
+  href?: string;
+}
+
+function MoreLine({ label, href }: MoreLineProps) {
+  if (!label) return null;
+  const content = (
+    <>
+      {label} <SkArrowRight width={40} />
+    </>
+  );
+  return href ? (
+    <a href={href} className="sk-services-grid__more">
+      {content}
+    </a>
+  ) : (
+    <div className="sk-services-grid__more">{content}</div>
+  );
+}
+
+function ServiceCard({
+  title,
+  time,
+  body,
+  tag,
+  tagTone,
+  moreLabel,
+  moreHref,
+  tilt,
+}: ServiceCardProps) {
   const cardClass = `sk-services-grid__card sk-services-grid__card--tilt-${tilt}`;
   return (
     <div className={cardClass}>
@@ -72,22 +111,14 @@ function ServiceCard({ title, time, body, tag, tagTone, tilt }: ServiceCardProps
           <div className="sk-services-grid__card-title">{title}</div>
           <div className="sk-services-grid__time">{time}</div>
           <p className="sk-services-grid__body">{body}</p>
-          <div className="sk-services-grid__more">
-            see how it works <SkArrowRight width={40} />
-          </div>
+          <MoreLine label={moreLabel} href={moreHref} />
         </div>
       </div>
     </div>
   );
 }
 
-/**
- * "What we do" service grid. Cards have a sticker-offset stamp + wobbly
- * SVG border, both declared in `sketch.css`.
- *
- * One column below `md`, two up to `lg`, three above — a card holding a
- * paragraph is unreadable at a third of a phone's width.
- */
+/** "What we do" grid of service cards, each card closing on its own link line. */
 export function ServicesGrid({
   eyebrow = '// what we do',
   title = 'three ways we work.',
