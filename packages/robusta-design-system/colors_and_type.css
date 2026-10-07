@@ -5,17 +5,13 @@
 
 /* -------- webfont delivery: not here --------
    This stylesheet loads no font. The package owns the families and their
-   fallback order (see --font-sans / --font-script / --font-mono below); the
-   consuming site supplies the loaded face through three custom properties:
-   --font-ibm-plex-sans, --font-ibm-plex-mono, --font-caveat.
+   fallback order (see --font-sans / --font-script / --font-mono below). Each
+   token reads a custom property, --font-ibm-plex-sans, --font-ibm-plex-mono or
+   --font-caveat, then falls back to the face name, then to a system stack.
 
-   A Next.js site sets them with next/font, which self-hosts the faces and
-   issues no third-party request. A consumer with no build step opts into the
-   Google Fonts delivery by also linking
-   `@robusta/pyramids-design-system/fonts.css`.
-
-   A consumer that supplies nothing still resolves a valid family: each token
-   falls back to the face name, then to a system stack. */
+   The robusta site sets no property: it self-hosts the faces from Fontsource
+   under those face names. A consumer with no build step opts into the Google
+   Fonts delivery by also linking `@robusta/pyramids-design-system/fonts.css`. */
 
 :root {
   /* -------- color: paper + ink -------- */

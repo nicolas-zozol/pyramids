@@ -1,6 +1,6 @@
 # Architecture: content
 
-**Last updated:** 2026-08-02
+**Last updated:** 2026-10-07
 
 ## Parent
 
@@ -18,7 +18,7 @@ What it deliberately does not own is any site's tree. The corpus root, where the
 
 Two properties carry the design, and both are answers to defects the v1 reader lives with:
 
-- One traversal per corpus root per process, memoized on the promise rather than on a flag, so a second caller arriving before the first read completes awaits the same read instead of seeing a half-filled index.
+- One traversal per corpus root per loaded copy of the module, memoized on the promise rather than on a flag, so a second caller arriving before the first read completes awaits the same read instead of seeing a half-filled index.
 - Violations are returned, never thrown. The reader reports everything a corpus does wrong at once, and the site decides that a non-empty list fails the build.
 
 ## Diagram
@@ -38,16 +38,16 @@ Two properties carry the design, and both are answers to defects the v1 reader l
 │         │     ├── src/article-slug.ts    slugify, frozen derivation          │
 │         │     └── src/asset-reference.ts every image reference, resolved     │
 │         ▼                                                                    │
-│  src/read-corpus.ts ── one traversal per root per process, result frozen     │
+│  src/read-corpus.ts ── one traversal per root per module copy, result frozen │
 │         │              published only, newest first, then by path            │
 │         │                                                                    │
 │     ┌───┴───────────────┬─────────────────────┬──────────────────────┐       │
 │     ▼                   ▼                     ▼                      ▼       │
-│  read-article-body  copy-corpus-assets  describe-violation   resolveAssetUrl  │
-│  remark → html      corpus →            violation → a line   a reference →    │
-│  one body, on ask   publishDir          naming the file      the URL it is    │
-│  images resolved    the site owns                            served at        │
-│                     that directory                                            │
+│  read-article-body  copy-corpus-assets  describe-violation   resolveAssetUrl │
+│  remark → html      corpus →            violation → a line   a reference →   │
+│  one body, on ask   publishDir          naming the file      the URL it is   │
+│  images resolved    the site owns                            served at       │
+│                     that directory                                           │
 └──────────────────────────────────────────────────────────────────────────────┘
                                         │
                                         ▼
@@ -143,9 +143,9 @@ readFileEntry ── frontmatter · excerpt · published · locale · assets
         │                    │
         │                    └──► violations, accumulated and returned
         ▼
-readCorpus ── published, newest first, frozen, memoized per root per process
+readCorpus ── published, newest first, frozen, memoized per root per module copy
         │
-        ├──► the site's article index ──► urlSet ──► generateStaticParams
+        ├──► the site's article index ──► urlSet ──► the prerender page list
         └──► readArticleBody(entry)   ──► one page's copy
 ```
 
@@ -176,14 +176,14 @@ The URL is derived from the file's place in the corpus, never from the page's pl
 ## Dependencies
 
 - Depends on: `gray-matter` (frontmatter and excerpt), `remark` and `remark-html` (the body), `unist-util-visit` (the image references of a body, on the tree), `slugify` pinned at 1.6.6 (the frozen slug). No React, no Next, no framework.
-- Used by: `apps/robusta-build` — `src/content/corpus.ts` (the site's one `CorpusSpec`), `src/content/article-index.ts` (the index, the body, the resolved URL and the fatal violation), and `scripts/copy-article-images.mjs` (the asset copy, run before `next build`).
+- Used by: `apps/robusta-build` — `src/content/corpus.ts` (the site's one `CorpusSpec`), `src/content/article-index.ts` (the index, the body, the resolved URL and the fatal violation), and `scripts/copy-article-images.mjs` (the asset copy, run before `vite build`). No served request runs it: the prerender reaches it through the two static server functions of `src/page-data`, and the site's import protection keeps it out of the client bundle.
 - Build: `tsc` → `dist/`. Second step of `yarn build:deps`, right after `pyramids-routing`. Watcher: `yarn w:content`.
 
 ## Notes / Gotchas
 
-- Do not change `articleSlug`. A slug that moves breaks an indexed URL, and the v1-to-v2 redirect map was computed from the values it produces. `slugify` stays pinned, and the locale is folded to lowercase before it reaches the charmap because that is what the v1 reader did.
+- Do not change `articleSlug`. A slug that moves breaks an indexed URL, and the v1-to-v2 mapping was computed from the values it produces. `slugify` stays pinned, and the locale is folded to lowercase before it reaches the charmap because that is what the v1 reader did.
 - No site path is written here. A literal corpus root, category or locale value inside this package is the base growing into one site's vocabulary; the review that catches it is a grep.
-- `readCorpus` memoizes the promise, keyed on the resolved root. The memo is per process, which under `next build` means one per static-generation worker — forked workers share no memory, so the traversal count follows the worker count rather than being one for the whole build. A rejected read stays memoized: a corpus that fails to read fails the build, and reading it twice only produces the failure twice.
+- `readCorpus` memoizes the promise, keyed on the resolved root. The memo lives in the module, so the traversal count follows the copies of the package a build loads rather than being one for the whole build: `emit:v1-map`, `copy:assets` and the route-table check each run in a Node process of their own, and `vite build` holds two copies, the one its configuration loads for the prerender page list and the one Vite inlines into the server bundle the prerender calls. A rejected read stays memoized: a corpus that fails to read fails the build, and reading it twice only produces the failure twice.
 - The result is frozen, entries and tag lists included. Every caller shares one read, so a caller sorting the list in place would corrupt the next one's index.
 - Violations never throw, and `missing-corpus-root` is one of them: a root that does not exist is reported like a missing title, so a caller has one failure path instead of two.
 - `published` is exactly `true`. Absent leaves the article out silently and the read names the file; anything else is a violation, so `published: "true"` cannot unpublish an article by a typo.

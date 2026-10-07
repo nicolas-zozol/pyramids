@@ -2,6 +2,8 @@
  * Package page-data — the only path from a route to the content source: two
  * server functions that run at prerender and reach a hydrated page as files.
  *
+ * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
+ * Requirements: R-MIGRATELEARN-44
  * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-61, R-TANSTACK-62, R-TANSTACK-63, R-TANSTACK-65
  */

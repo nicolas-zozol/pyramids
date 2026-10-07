@@ -1,14 +1,14 @@
 # @robusta/pyramids
 
-A yarn-workspaces monorepo that builds several SEO content sites from one shared base: a Vercel + Next.js App Router backbone with React Server Components and ISR, a set of small React packages, and a markdown content pipeline. Each site brings its own content and its own design system; everything else is borrowed.
+A yarn-workspaces monorepo that builds several SEO content sites from one shared base: a set of small React packages and a markdown content pipeline. `apps/robusta` and `apps/dakar` are Next.js App Router sites on Vercel; the v2 robusta site, `apps/robusta-build`, is TanStack Start, prerendered at build and served as files by Netlify. Each site brings its own content and its own design system; everything else is borrowed.
 
-Live sites: robusta.build (`apps/robusta`) and dakar.surf (`apps/dakar`).
+Live sites: robusta.build (`apps/robusta-build`, `noindex` on every page) and dakar.surf (`apps/dakar`).
 
 The project is in a v2 restart — the robusta site is being rebuilt from scratch on a simplified URL scheme and a real design system. Scope and reasoning: `features/pyramid-v2-epic/pyramid-v2.epic.md`.
 
 ## Where things are
 
-- `apps/*` — deployable Next.js sites and the standalone demos
+- `apps/*` — deployable sites and the standalone demos
 - `packages/*` — shared libraries, built to `dist/` and consumed as build output, never as sources
 - `services/*` — the telemetry collector and its docker-compose observability stack
 - `features/*` — the Compound working documents: epics, stories, designs
@@ -24,7 +24,7 @@ The project is in a v2 restart — the robusta site is being rebuilt from scratc
 
 ## Getting started
 
-Node 22 (`.nvmrc`) and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml` — any yarn on your PATH delegates to it, so it no longer matters which one that is. No corepack, and none needed: it is what broke every Vercel deployment of the v2 site, by caching yarn inside the repository where the root `"type": "module"` reaches it — `apps/robusta-build/README.md` has the account.
+Node 22 (`.nvmrc`), 22.12 or later, and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml`: any yarn on your PATH delegates to it. Corepack is not needed, and a corepack cache inside the repository breaks the install: see Yarn on a build agent in `apps/robusta-build/README.md`.
 
 ```bash
 yarn install
@@ -36,4 +36,4 @@ From a clean checkout the whole repository builds with `yarn install`, `yarn bui
 
 Editing a shared package while a site runs? Keep a watcher up (`yarn dev:dev`, or `yarn w:<package>`), otherwise the site keeps serving the previous build output.
 
-Two things bite newcomers: local TypeScript imports must end with `.js` even though the source is `.ts`, and `next build` does not run eslint — `yarn lint` is a separate step.
+Two things bite newcomers: local TypeScript imports must end with `.js` even though the source is `.ts`, and no site's build runs eslint: `yarn lint` is a separate step.

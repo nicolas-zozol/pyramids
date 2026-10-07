@@ -1,30 +1,30 @@
 # @robusta/robusta-build
 
-The version 2 site of robusta.build. Created by the `bootstrap-robusta-build` story of the pyramid-v2 epic as a deployable shell, it has carried page copy since 2026-08-02: the eleven migrated articles render as article pages. Every other content route still renders a placeholder.
+The version 2 site of robusta.build, on TanStack Start and Vite 8. Every page is prerendered to HTML at build, then hydrated, and the browser navigates between pages client-side. Netlify serves the build output as files and runs no code on a request. The eleven migrated articles render as article pages; every other content route renders a placeholder.
 
-The version 1 site lives in `apps/robusta` and is being retired. Its README documents the v1 route scheme; that scheme is not this site's. The v2 scheme is the Routing section below.
+The version 1 site lives in `apps/robusta`, whose README documents the v1 route scheme. The v2 scheme is the Routing section below.
 
 ## Where the truth of this site lives
 
-`src/seopyramids.config.ts` — domain, site name and title, mission, logo, default and other locales, and the blog configuration (roll size, mandatory keywords, author, category resolver). Everything a per-site value should be read from there rather than hardcoded in a component.
+`src/seopyramids.config.ts` — domain, site name and title, mission, logo, default and other locales, and the blog configuration (content root, roll size, mandatory keywords, author). A per-site value is read from there, not hardcoded in a component.
 
-`blogConfig` no longer carries a category resolver: `content-source` removed it when the site gained a real index. What articles exist is answered by `src/content/article-index.ts`, at build time and at no other, per BR-PYRAMID-7.
+What articles exist is answered by `src/content/article-index.ts`, at build time and at no other (BR-PYRAMID-7).
 
-The site is `robots: { index: false, follow: false }` at the root layout, so nothing is indexed while it holds no copy. Removing that directive is an acceptance criterion of `robusta-landing-page`, not a detail to drop in passing.
+Every document carries `robots` `noindex, nofollow`, set in the head of the root route, `src/routes/__root.tsx`. Lifting it belongs to the go-live item of `ROADMAP.md`.
 
 ## Articles
 
-The site's articles are the eleven pieces migrated from v1 on 2026-08-01, and a new one is a markdown file added the same way.
+The site's articles are the eleven pieces migrated from v1, and a new one is a markdown file added the same way.
 
-Where the file goes: anywhere under `content/articles`, at any depth. The tree mirrors v1's folders so a converted file stays findable next to its source, but a folder carries no meaning on v2 — the category is a frontmatter field, and a file at the root of the corpus is as valid as one three directories down. Only `*.md` files are read.
+Where the file goes: anywhere under `content/articles`, at any depth. The tree mirrors v1's folders, but a folder carries no meaning: the category is a frontmatter field, and a file at the root of the corpus is as valid as one three directories down. Only `*.md` files are read.
 
 What the frontmatter must carry, or the build fails naming the file:
 
 - `title` — the article's title, and the source of its slug.
 - `date` — `YYYY-MM-DD`. Quote it, or YAML reads it as a timestamp; the reader accepts both and compares the calendar day.
-- `author` — the name the page shows. Required on the same footing as the title and the date since `article-page`: an article declaring none fails the build naming the file and the field, rather than publishing a page with no author.
+- `author` — the name the page shows. An article declaring none fails the build naming the file and the field.
 - `locale` — `en` or `fr`, the two the site configuration declares. `en` is the default locale and carries no marker in the URL.
-- `published: true` — the boolean, not the string. An article that does not declare itself published is not served (BR-PYRAMID-10), and the build prints the paths it left out. Anything other than a boolean is a violation rather than a silent non-publication.
+- `published: true` — the boolean, not the string. An article that does not declare itself published is not served (BR-PYRAMID-10), and the build prints the paths it left out. Anything other than a boolean is a violation.
 - An excerpt, which is not a field: it is the block of the body before its first `---` separator. An article without one is missing a required field.
 
 What it may carry:
@@ -35,19 +35,19 @@ What it may carry:
 - `translationId` — the value the locale versions of one article share, so a page can link them. It is authored, not derived: lowercase, locale-neutral, a subject name. Two published articles of one locale may not share one.
 - `slug` — pins the slug instead of deriving it. `featured` and any other key the schema does not name travel in the file and cost nothing; the index reads none of them.
 
-The slug is derived and not written: `articleSlug(title, locale)`, the v1 derivation kept frozen so a migrated article keeps the address it was indexed under. A slug never changes once published — renaming an article's title after publication is therefore a redirect question, not a rename.
+The slug is derived, not written: `articleSlug(title, locale)`, the v1 derivation, frozen. Renaming a published article's title changes its URL, and the site serves no redirect.
 
-Write the body in markdown, and only in markdown. HTML written in an article renders as its text alone, and nothing reports it: the renderer drops the tag whole, attributes included, before the sanitizer ever sees it — `<b>C</b>` reaches the page as `C`, and an `<img>` tag reaches it as nothing at all. Emphasis is `**bold**` and `_italic_`, an image is `![alt](./images/file.png)`. The two migrated articles that carry raw HTML carry three fragments between them, each inline emphasis on a word or a letter, which is why their text survived the migration and their emphasis did not.
+Write the body in markdown only. HTML written in an article renders as its text alone, and nothing reports it: the renderer drops the tag whole, attributes included, so `<b>C</b>` reaches the page as `C` and an `<img>` tag as nothing. Emphasis is `**bold**` and `_italic_`, an image is `![alt](./images/file.png)`. Two migrated articles carry three such fragments, inline emphasis that renders as plain text.
 
-Images live beside their article, conventionally in an `images/` directory next to it, and are referenced relatively — `./images/vpn.png` from the body or the cover, `../images/shared.png` for the corpus-root folder. The reference is resolved against the article's own place in the corpus and published under the asset root: `blockchain/images/vpn.png` is served at `/article-images/blockchain/images/vpn.png`. So an article can change category without a single image moving. A reference resolving to no file of the corpus is a violation and fails the build; an absolute or external URL passes through untouched.
+Images live beside their article, conventionally in an `images/` directory next to it, and are referenced relatively: `./images/vpn.png` from the body or the cover, `../images/shared.png` for the corpus-root folder. The reference is resolved against the article's own place in the corpus and published under the asset root: `blockchain/images/vpn.png` is served at `/article-images/blockchain/images/vpn.png`, so an article can change category without an image moving. A reference resolving to no file of the corpus is a violation and fails the build; an absolute or external URL passes through untouched.
 
-`public/article-images/` is generated, git-ignored and owned by `yarn copy:assets`, which removes it and rewrites it in full before every build and at the start of `yarn dev:robusta`. It publishes only what the published articles reference — 44 files today. It is not a watcher: an image added mid-session reaches the site on the next run.
+`public/article-images/` is generated, git-ignored and owned by the `copy:assets` script, which removes it and rewrites it in full before every build and at the start of `yarn dev:robusta`. It publishes only what the published articles reference, 44 files. It is not a watcher: an image added mid-session reaches the site on the next run.
 
-Where a mistake surfaces: `yarn emit:redirects`, the first step of both `build` and `dev`, reads the corpus and fails on the first violation with the file named. `yarn workspace @robusta/robusta-build run test` checks the corpus as it stands — what is published, the locale split, the categories, and the byte-for-byte freeze against the v1 tree.
+Where a mistake surfaces: `emit:v1-map`, a step of both `build` and `dev`, reads the corpus and fails on the first violation with the file named. `yarn workspace @robusta/robusta-build run test` checks the corpus as it stands: what is published, the locale split, the categories, and the byte-for-byte freeze against the v1 tree.
 
 ## Routing
 
-The v2 URL scheme, decided by the `seo-url-scheme` story of the pyramid-v2 epic. This site owns its routing reference the way `apps/robusta/README.md` owns v1's, and it inherits nothing from it.
+The v2 URL scheme. This site owns its routing reference the way `apps/robusta/README.md` owns v1's, and inherits nothing from it.
 
 The shapes, with `articles` as the content root this site names:
 
@@ -60,80 +60,88 @@ The shapes, with `articles` as the content root this site names:
 - `/articles/t/{tag}` — reserved, and built by nothing.
 - `/l/{locale}` in front of any of the above, for a locale that is not the default one. The default locale carries no marker.
 
-Who owns what: the discriminants `l`, `c`, `p` and `t` and the shapes built from them belong to `@robusta/pyramids-routing`; `articles` belongs to this site, written once in `src/routing/scheme.ts` and read from there by `blogConfig.contentRoot`. The roll size is a constant of 12 and not a per-site knob — `ROLL_SIZE`, in the same file.
+Who owns what: the discriminants `l`, `c`, `p` and `t` and the shapes built from them belong to `@robusta/pyramids-routing`; `articles` belongs to this site, written once in `src/routing/scheme.ts` and read from there by `blogConfig.contentRoot`. The roll size is a constant of 12, not a per-site knob: `ROLL_SIZE`, in the same file.
 
 ### The route table
 
-Fourteen route files under `src/app`: seven for the default locale, seven mirroring them under `l/[locale]`. Every one declares `dynamic = 'force-static'` and `dynamicParams = false`, and takes its params from `src/routing/content-urls.ts`, which is `urlSet(urlScheme, await getArticleIndex())` filtered by page kind and by locale scope.
+The routes live under `src/routes`, in TanStack Router's file convention, and the generator writes `src/routeTree.gen.ts` with `.js`-suffixed imports. Beside the root route `__root.tsx`: `/`, `/404`, six content routes for the default locale, the same six under `l/$locale`, and the locale landing `l/$locale/index.tsx`. `<html lang>` follows the `locale` param of the matched route, the default locale when it has none, at prerender and after every client navigation.
 
-That single derivation is the point. A URL it does not contain answers 404 instead of being resolved on demand, `force-static` makes `searchParams` an empty object so no content route can read one even by accident, and there is no second list to pregenerate a URL the site then refuses at request time.
+What they render: the four article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`. The eight listing routes and the locale landing render `RoutePlaceholder` from their params until the stories that own their copy arrive. `/` renders the placeholder home robusta-landing-page replaces, with the notes section `getNotesFeed` feeds. `/404` renders `NotFoundPage`.
 
-What they render: the four article routes render the article, through one shared view — `src/article/ArticleView`, which reads the entry, the body, the cover and the translation, and which the four files reach with nothing but their own param shape. Nine others render `RoutePlaceholder` until the stories that own their copy arrive — the blog homes, the category pages, the roll pages and the locale landing — and `/` carries the wiring placeholder `robusta-landing-page` replaces.
+`getArticlePage` and `getNotesFeed`, in `src/page-data`, are server functions marked static, and the only path from a route to the content. They run at prerender only and leave one JSON file per distinct input under `dist/client/__tsr/staticServerFnCache`. A prerendered page carries its own data; a hydrated page navigating client-side fetches the file. The build's import protection fails on a client import of `src/content`, `@robusta/pyramids-content`, `gray-matter` or `remark`.
 
-21 content URLs today, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles. No roll page in either locale — 8 English articles and 3 French against a roll size of 12 — so `/articles/p/{n}` is produced by nothing until the twelfth published English article arrives. `next build` reports 25 static pages and writes 23 HTML files: those 21, plus the landing page and `/_not-found`. Seven of the fourteen route files pregenerate nothing at all, `/articles/{slug}` and its locale mirror among them: every article claims a category, so no uncategorised article page exists to build.
+A client navigation whose route chunk or data file fails to load ends in a full load of the target address; a second failure at the same address in the same tab renders the site's error state, `src/components/NavigationFailure.tsx`.
 
-Two build-time checks keep the route folders and the configuration honest. `next.config.ts` asserts inside `redirects()` that every route folder the configured content root implies exists, so renaming the content root without renaming the folders fails the build. `scripts/check-route-table.mjs` runs after `next build` and compares the prerender manifest with the derivation — `/` and `/_not-found` excepted, both being outside the content section — and fails if they disagree.
+The prerender walks one list: `/`, `/404`, then every URL `src/routing/content-urls.ts` derives, which is `urlSet(urlScheme, await getArticleIndex())`, built with `buildUrl` by `scripts/prerender-pages.mjs`. Link crawling and path discovery are off. Each page is written under `dist/client` as its canonical path plus `.html`, `/` as `index.html` and `/404` as `404.html`. A URL outside the list is not built and answers 404.
+
+21 content URLs, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles. The build writes 23 HTML files, those 21 plus `index.html` and `404.html`, and 12 data files, one per article and one for the notes feed. Seven route files build no page: `/articles/{slug}` and its mirror, since every article claims a category; the four roll-page routes, since 8 English articles and 3 French stay under a roll size of 12; and the locale landing.
+
+Two build-time checks keep the route files and the configuration in line. `scripts/prerender-pages.mjs` fails the build, naming the content root and the missing files, when a route file the configured content root implies does not exist. `scripts/check-route-table.mjs` runs after `vite build`, compares the written `.html` files, `index.html` and `404.html` excepted, with the derivation, expects one data file per article plus one, and fails on any difference.
 
 ### `/articles/t/{tag}` is reserved and not built
 
-No tag route ships, so `/articles/t/rxjs` answers 404 exactly like a slug that does not exist. The address is spoken for all the same, so the tag page the scheme must stay able to grow finds it free rather than taken by an article published in the meantime. What keeps it free is `validateArticles`: no slug and no category may take the value `l`, `c`, `p` or `t`, and no category may nest. A corpus breaking either rule fails the build naming the offending article, and a tag stays metadata with no page.
+No tag route ships, so `/articles/t/rxjs` answers 404 like a slug that does not exist. `validateArticles` keeps the address free: no slug and no category may take the value `l`, `c`, `p` or `t`, and no category may nest. A corpus breaking either rule fails the build naming the offending article.
 
 ### One URL per page
 
-Four families of non-canonical address redirect permanently to the canonical one, and none of them is hand-written: they are what `buildUrl` and `parseUrl` disagreeing about a path produces.
+The site builds the canonical form of each page and nothing else, and serves no redirect. The other forms get what Netlify answers for a static deploy:
 
-- An explicit page one — `/articles/p/1`, `/articles/c/{category}/p/1` — and a marked default locale — `/l/en/…` — are `redirects()` rules in `next.config.ts`.
-- A trailing slash is `trailingSlash: false`.
-- Letter case is `src/middleware.ts`, the only middleware the site carries. Its matcher fires only on a path containing an uppercase letter, and it excludes `/learn`, so the v1 mapping keeps matching addresses as they were published — `/learn/tag/DeFi` included — and `/_next`, without which every hashed asset under `/_next/static/{buildId}/` would be 308'd to a path that does not exist.
+- An explicit page one, `/articles/p/1` or `/articles/c/{category}/p/1`, and a marked default locale, `/l/en/…`, are not built: 404, with the not-found page.
+- A trailing slash: 301 to the canonical form.
+- An uppercase letter: 301 to the lowercase form when that file exists, 404 otherwise. A file under `/article-images` answers at its exact case, `M87.jpg` included.
+- The canonical path plus `.html`: 200, the same document.
+- Any other path: `404.html`, with status 404. The not-found document loads no client script, so it stays on screen.
 
 ### The v1 mapping
 
-`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, rather than as a hand-kept table: the day an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed — 82 rows, 66 permanent, 6 gone, 10 none, over the real corpus — because the mapping is meant to be reviewable, and a diff is exactly that. The rows moved with the corpus and not by hand: the fixture corpus's 31 article rows became the 14 the real one produces — the eleven articles, plus the locale-marked form of the three French ones — and every other class kept its count.
+`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 66 permanent, 6 gone, 10 none. An article of a non-default locale contributes two permanent rows, its v1 path with no locale segment and the locale-marked form.
 
-- Permanent rows become `redirects()` entries in `next.config.ts`. An article of a non-default locale contributes two: v1 emits its path with no locale segment, which is what search engines hold, and the locale-marked form is mapped too, defensively.
-- Gone rows are answered by `src/app/learn/[...path]/route.ts`, which returns 410 for the retired `/learn` namespace and lets any path carrying an `images` segment fall through to 404.
-- None rows emit nothing and exist to be read: `/portfolio` and `/fr/portfolio` are visibly let go rather than silently forgotten.
-
-None of it is live. The site is `robots: noindex` site-wide until `robusta-landing-page` lifts that flag, and sending indexed v1 URLs at de-indexed targets would trade away exactly what the mapping exists to protect. The redirects switch on with `retire-robusta-v1`.
-
-### `emit:redirects`, and why the config reads JSON
-
-The app's `build` and `dev` scripts both run `emit:redirects` first: `tsc -p tsconfig.routing.json` compiles the routing and content modules to `.routing-dist/` (git-ignored), then `scripts/emit-redirects.mjs` runs them and writes the generated JSON. `next.config.ts` reads that file with `node:fs`.
-
-It reads rather than imports because it cannot import. Next loads the config outside the webpack pipeline, through a require hook whose module resolution runs before the `require.extensions['.ts']` hook it registers, so this repository's `.js`-suffixed local imports resolve to files that do not exist — and `experimental.extensionAlias`, which solves precisely that, belongs to webpack and does not apply here. Independently, the chain would die on the design system's PNG wordmark, a bundler-only import that `src/seopyramids.config.ts` resolves. Emitting the data and reading it back costs one script and no redesign, because the mapping module imports neither Next nor React.
+Nothing serves the mapping and nothing in the build reads it. A v1 address, any `/learn` path included, answers 404 with the not-found page. Whether the old addresses come back is the restore-v1-urls item of `ROADMAP.md`.
 
 ## Styling
 
-The design system is `@robusta/pyramids-design-system`, consumed as a workspace dependency. Per BR-PYRAMID-3 it belongs to this site alone, and per BR-PYRAMID-6 every token the site renders comes from it — the site adds names, never values.
+The design system is `@robusta/pyramids-design-system`, consumed as a workspace dependency. Per BR-PYRAMID-3 it belongs to this site alone, and per BR-PYRAMID-6 every token the site renders comes from it: the site adds names, never values.
 
-The CSS load order in `src/app/layout.tsx` is a contract, not a preference:
+The root route, `src/routes/__root.tsx`, links four stylesheets, and their order is a contract:
 
-1. `./globals.css` — the Tailwind 4 entry. Tailwind emits its preflight inside `@layer base`.
-2. `@robusta/pyramids-design-system/colors_and_type.css` — tokens and element rules. These are unlayered, so they win over preflight.
-3. `@robusta/pyramids-design-system/sketch.css` — the `.sk-*` primitives, which read the tokens the previous file defines.
+1. `src/styles/fonts.css` — the three faces, see Fonts.
+2. `src/styles/globals.css` — the Tailwind 4 entry, run by `@tailwindcss/vite`. Tailwind emits its preflight inside `@layer base`.
+3. `@robusta/pyramids-design-system/colors_and_type.css` — tokens and element rules. These are unlayered, so they win over preflight.
+4. `@robusta/pyramids-design-system/sketch.css` — the `.sk-*` primitives, which read the tokens the previous file defines.
 
-`globals.css` also holds the token bridge: shadcn's expected names (`--background`, `--primary`, and siblings) aliased onto design-system tokens, so the first story that runs `shadcn init` lands on a layer already pointing at the design system. Every entry is an alias; none is a literal. `--destructive` is deliberately absent — the design system ships no error colour, and coining one at site level is what BR-PYRAMID-6 forbids.
+`globals.css` also holds the token bridge: shadcn's expected names (`--background`, `--primary`, `--destructive` and siblings) aliased onto design-system tokens, `--destructive` onto `--brand-error`. Every entry is an alias; none is a literal.
 
-The v2 site does not use DaisyUI, and does not consume `pyramids-layouts`, `pyramids-links` or `pyramids-ctas`, which render DaisyUI classes.
+The site does not use DaisyUI, and does not consume `pyramids-layouts`, `pyramids-links` or `pyramids-ctas`, which render DaisyUI classes.
 
 ## Fonts
 
-The three brand faces are self-hosted through `next/font/google` in the root layout, so a rendered page issues no request to a font CDN. Each loader publishes its face as a custom property — `--font-ibm-plex-sans`, `--font-ibm-plex-mono`, `--font-caveat` — which is the contract `colors_and_type.css` declares. The package keeps owning the family names, their order and their fallbacks.
+`src/styles/fonts.css` self-hosts the three brand faces from Fontsource, latin subset, `font-display: swap`. Vite bundles the woff2 files into the build, so a page issues no request to a font CDN. IBM Plex Sans (300 to 700) and Caveat (600 and 700) come from the variable files of `@fontsource-variable/*`, declared once per weight over the same file; IBM Plex Mono (400 to 600) from the static cuts of `@fontsource/ibm-plex-mono`. Each face carries the family name `colors_and_type.css` falls back to, and the site sets no `--font-*` property.
 
-Do not link `@robusta/pyramids-design-system/fonts.css` here. That file is the opt-in Google Fonts path for consumers with no build step, and loading both fetches every face twice.
+Do not link `@robusta/pyramids-design-system/fonts.css` here. It loads the same faces from Google Fonts, and loading both fetches every face twice.
 
 ## Assets
 
-Brand assets are resolved through the design system's exports map and hashed by the bundler; nothing is copied into `public/`. `src/design-system/assets.ts` is the single seam that normalises what the bundler returns — Next.js hands back a `StaticImageData`, other pipelines hand back a string.
+Brand assets are resolved through the design system's exports map and hashed by Vite under `/assets`; nothing is copied into `public/`. `src/design-system/assets.ts` exports `wordmarkSrc`, the URL the wordmark is published under. Pass it to every `BrandLogo` and `SiteHeader`: their default path does not exist on this site.
 
 ## Commands
 
-Both are root scripts — run them from the repository root, not from here:
+Two root scripts, run from the repository root:
 
 ```bash
-yarn build:robusta     # build:deps, then vite build
-yarn dev:robusta       # vite dev
+yarn build:robusta     # build:deps, then the site's build
+yarn dev:robusta       # the site's dev
 ```
+
+The site's own scripts:
+
+- `build` — `check:source`, `compile:seams`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`.
+- `dev` — `compile:seams`, `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the two page-data functions run on each call and read the corpus.
+- `check:source` — fails on a `'use client'` or `'use server'` directive, or on a local import without its `.js` suffix, anywhere under `src`, the generated route tree excepted.
+- `compile:seams` — `tsc -p tsconfig.routing.json` compiles the routing and content modules to `.routing-dist/`, git-ignored, which the plain-Node scripts import.
+- `emit:v1-map` — writes `src/routing/v1-url-map.generated.json`.
+- `copy:assets` — rewrites `public/article-images/`.
+- `test` — `vitest run`.
+- `lint` — eslint over `src`. No build runs it.
 
 This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` must all complete from a clean checkout (BR-PYRAMID-5).
 
@@ -153,16 +161,18 @@ The dashboard holds the rest:
 - package directory `apps/robusta-build`, base directory empty. Netlify installs and builds at the repository root, reads `.nvmrc` there, and finds `netlify.toml` in the package directory.
 - build command and publish directory empty: `netlify.toml` carries both
 - production branch `main`, branch deploys for `epic/robusta-v2`, the epic's working branch
-- Pretty URLs on. A page answers at its canonical path and at that path plus `.html`; a trailing slash or an uppercase letter answers 301 to the canonical form; an unmatched path gets `404.html` with status 404.
+- Pretty URLs on: the answers listed under One URL per page depend on it, and with it off a trailing slash would answer 200.
 - no environment variable, in particular no `NODE_VERSION`, no `COREPACK_*` and no `YARN_VERSION`
 
 A production deploy costs 15 of the team's 300 monthly credits, a branch deploy none, and a spent balance pauses every site of the team: work goes to the epic branch, and `main` receives merges.
 
-DNS stays at Hover, which is the domain's name server: `@` A `75.2.60.5`, Netlify's load balancer, and `www` CNAME `robusta-build.netlify.app`. Every other record of the zone belongs to another service — mail, `race`, `code`. Netlify holds no DNS zone for the domain, and must not: with one, it renews a wildcard certificate it can only validate through its own name servers, and renewal fails. Without one, its Let's Encrypt certificate covers `robusta.build` and `www.robusta.build`.
+DNS stays at Hover, which is the domain's name server: `@` A `75.2.60.5`, Netlify's load balancer, and `www` CNAME `robusta-build.netlify.app`. Every other record of the zone belongs to another service: mail, `race`, `code`. Netlify holds no DNS zone for the domain, and must not: with one, it renews a wildcard certificate it can only validate through its own name servers, and renewal fails. Without one, its Let's Encrypt certificate covers `robusta.build` and `www.robusta.build`.
 
-### No corepack on a build agent
+### Yarn on a build agent
 
-Corepack broke every deployment of this site on Vercel, on 2026-08-01. Each build died in about five seconds:
+Yarn runs from `.yarn/releases/yarn-4.17.1.cjs`, committed and named by `yarnPath` in `.yarnrc.yml`; any yarn on the PATH delegates to it. A `.cjs` file is CommonJS whatever any manifest says, so it loads wherever it sits.
+
+A corepack cache inside the repository breaks the install within seconds:
 
 ```
 file:///vercel/path0/.vercel/cache/corepack/home/v1/yarn/4.17.1/yarn.js:4
@@ -171,8 +181,4 @@ Error: Dynamic require of "util" is not supported
 Error: Command "yarn install" exited with 1
 ```
 
-yarn's CLI bundle is CommonJS. Node loaded it as an ES module — the `file://` URL and the ESM loader in the stack say so — and its `require` shim threw. Node decides a `.js` file's module type from the nearest `package.json` above it, and Vercel's corepack caches yarn at `.vercel/cache/corepack/...`, inside the repository. The nearest manifest above it is the root one, which declares `"type": "module"`, so the repository's own ESM declaration reaches a file that is not ours.
-
-It never reproduces locally: corepack caches in `~/.cache/node/corepack`, outside any package, so `yarn install` and the full green set pass on a machine while every deployment fails. Raising or lowering the Node version, `engines.node` in any form and `COREPACK_HOME` as a project variable do not fix it.
-
-`.yarn/releases/yarn-4.17.1.cjs` is committed and `.yarnrc.yml` names it in `yarnPath`, Yarn's own documented workflow. A `.cjs` file is CommonJS whatever any manifest says, so it loads wherever it sits, and any yarn on the PATH delegates to it. The cost is a 2.9 MB binary in git. Netlify's build image enables corepack itself, but caches yarn outside the repository, where the root manifest does not reach, and yarn then hands over to `yarnPath`.
+Node takes a `.js` file's module type from the nearest `package.json` above it. Inside the repository that is the root one, which declares `"type": "module"`, so Node loads yarn's CommonJS bundle as an ES module and its `require` shim throws. Vercel's corepack caches there; a local corepack and Netlify's, which the build image enables itself, cache outside the repository, and yarn then hands over to `yarnPath`.

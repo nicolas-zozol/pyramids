@@ -1,6 +1,6 @@
 # Architecture: routing
 
-**Last updated:** 2026-08-02
+**Last updated:** 2026-10-07
 
 ## Parent
 
@@ -18,7 +18,7 @@ What it deliberately does not own is any site's editorial vocabulary. The conten
 
 Zero runtime dependencies, no React import and no Next import. It therefore takes the first slot of `yarn build:deps`, and a second site can adopt the scheme without inheriting the v1 helper surface.
 
-The idea the package turns on: **canonicality is the fixed point of `buildUrl` and `parseUrl`**. A path is canonical when building the parse of it returns the path itself; where the two differ, the path is a redirect source and the built value is its target. The four non-canonical families — an explicit page one, a marked default locale, a trailing slash, an uppercase segment — fall out of that single rule instead of four hand-written redirect tables. `buildUrl` cannot represent any of them, so no link, sitemap entry or redirect target can emit one.
+The idea the package turns on: **canonicality is the fixed point of `buildUrl` and `parseUrl`**. A path is canonical when building the parse of it returns the path itself; where the two differ, the built value is the path's canonical form. The four non-canonical families — an explicit page one, a marked default locale, a trailing slash, an uppercase segment — fall out of that single rule instead of four hand-written lists. `buildUrl` cannot represent any of them, so no link, sitemap entry or row of the v1 mapping can emit one.
 
 ## Diagram
 
@@ -46,7 +46,8 @@ The idea the package turns on: **canonicality is the fixed point of `buildUrl` a
 └──────────────────────────────────────────────────────────────────────────────┘
                                         │
                                         ▼
-                       apps/robusta-build — src/routing/*
+             apps/robusta-build — src/routing, src/routes, src/page-data,
+                                  src/landing, scripts
 ```
 
 ## Key Components
@@ -137,11 +138,11 @@ a path a visitor or a crawler holds
    buildUrl(scheme, page)
         │
         ├── equals the path      ──► canonical: serve it
-        └── differs from it      ──► the path is a redirect source,
-                                     the built value is its target
+        └── differs from it      ──► not canonical: the built value
+                                     is its canonical form
 ```
 
-The four families that fall out, and where each is answered on the site: an explicit `/p/1` and a marked default locale by `redirects()` in `next.config.ts`, a trailing slash by `trailingSlash: false`, letter case by the site's middleware.
+The four families that fall out, and how the site answers each: it prerenders only the URLs `buildUrl` emits and serves no redirect, so an explicit `/p/1` and a marked default locale answer 404; a trailing slash gets the host's 301 to the canonical form, and an uppercase letter the host's 301 to the lowercase form when that file exists, 404 otherwise.
 
 ## Data Flow — the URL set
 
@@ -152,8 +153,8 @@ article index (slug · locale · category?)
 validateArticles ──► violations ──► the caller fails the build
         │  (none)
         ▼
-   urlSet ──► PageUrl[]  ──► generateStaticParams of every route
-        │                 ──► buildUrl for links, redirect targets, the v1 map
+   urlSet ──► PageUrl[]  ──► the prerender page list, the route-table check
+        │                 ──► buildUrl for links and the v1 map
 ```
 
 ## Tests
@@ -166,13 +167,13 @@ validateArticles ──► violations ──► the caller fails the build
 ## Dependencies
 
 - Depends on: nothing at runtime. No dependency, no peer dependency, no React, no Next; `typescript` and `vitest` in `devDependencies` and nothing else. It introduces no second copy of anything.
-- Used by: `apps/robusta-build` — `src/routing/scheme.ts` (the site's one `UrlScheme`), `src/routing/content-urls.ts` (the derivation every route pregenerates from), `src/routing/v1-url-map.ts` (redirect targets) and `scripts/check-route-table.mjs`.
-- Build: `tsc` → `dist/`. First step of `yarn build:deps`, before `pyramids-content`, because it depends on nothing and the site needs its `dist/` before `next build`. Watcher: `yarn w:routing`.
+- Used by: `apps/robusta-build` — `src/routing/scheme.ts` (the site's one `UrlScheme`), `src/routing/content-urls.ts` (the derivation the prerender walks), `src/routing/v1-url-map.ts` (the destinations of the v1 mapping), `buildUrl` in the route modules of `src/routes`, in `src/page-data` and in `src/landing/NotesSection.tsx` (every link), `scripts/prerender-pages.mjs` and `scripts/check-route-table.mjs`.
+- Build: `tsc` → `dist/`. First step of `yarn build:deps`, before `pyramids-content`, because it depends on nothing and the site's build reads its `dist/`. Watcher: `yarn w:routing`.
 
 ## Notes / Gotchas
 
 - The content root is never written here. A literal `articles` inside this package is the base growing into one site's editorial vocabulary, and the review that catches it is a grep.
-- `parseUrl` is a build-time tool — the v1 mapping, the tests, any future canonicality check. Requests are discriminated by the App Router's static segments, never by this parser, so the two cannot disagree at runtime.
+- `parseUrl` is a build-time tool, called by the package's own specs and by nothing in the site. A path is discriminated by the site's route tree, at prerender and on client navigation, never by this parser.
 - `AddressableArticle.category` is one optional string and never a list: BR-PYRAMID-9 stated in the type. A corpus growing a second category on an article fails to compile instead of quietly growing a second address.
 - `validateArticles` returns and never throws. Failing the build is the caller's decision, which is what lets a tool report every violation of a corpus at once.
 - `urlSet` returns no tag page — the segment is reserved and served by nothing — and no landing page, whose copy belongs to the site.

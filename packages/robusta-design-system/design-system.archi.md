@@ -1,6 +1,6 @@
 # Architecture: design-system
 
-**Last updated:** 2026-04-27
+**Last updated:** 2026-10-07
 
 ## Parent
 
@@ -52,7 +52,7 @@ import the brand as one unit.
 │  │   │ PrinciplesList · NotesPreview · CTA         │     │
 │  │   └─────────────────────────────────────────────┘     │
 │                                                         │
-│  All TS components are RSC-safe (no 'use client').      │
+│  No TS component carries a 'use client' directive.      │
 └─────────────────────────────────────────────────────────┘
                          │
                          ▼
@@ -151,22 +151,15 @@ import {
   See `decisions-and-questions.md` Flag F1. Components read CSS variables,
   so the rendered family is whatever the CSS resolves to. **Either edit
   the CSS or edit the README** before adding more components.
-- **`BrandLogo.wordmarkSrc` defaults to a hard-coded fallback string** that
-  is unlikely to resolve. Consumers MUST pass an imported asset URL:
+- **`BrandLogo.wordmarkSrc` defaults to a hard-coded `/_next/static/media/…` path** that resolves nowhere. Consumers pass the URL their bundler gives the asset import, which under Vite is a string:
   ```ts
-  import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
-  <BrandLogo wordmarkSrc={typeof wordmark === 'string' ? wordmark : wordmark.src} />
+  import wordmarkSrc from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+  <BrandLogo wordmarkSrc={wordmarkSrc} />
   ```
-  The reason: `tsc` with `rootDir: src` cannot reach `../assets/` and we
-  don't ship a custom `.d.ts` for PNG modules. Pushing the asset import to
-  the consumer side is also more flexible — apps may provide their own
-  wordmark.
-- **Marketing components are server components.** None mark `'use client'`.
-  Wiring up the booking flow / form submit happens at the consumer-app level
-  via a thin client wrapper.
+  The package imports none of its own assets: `tsc` with `rootDir: src` does not reach `../assets/`, and the package ships no `.d.ts` for PNG modules.
+- **No component carries a `'use client'` directive**, and `src/package-contract.spec.tsx` fails on one. The booking flow and the form submit are wired by the consuming site, in a component of its own around the surface.
 - **The `<button>` tags inside `SkButton` don't have `onClick` handlers** —
-  they're presentational. Consumers wrap the button (or the component
-  containing it) in a `'use client'` parent if they need browser behavior.
+  they're presentational. A consumer that needs browser behavior wraps the button, or the component containing it, in a component of its own.
 - **Defaults preserve the prototype copy** for marketing components. This
   is intentional so the visual demo matches what's been signed off in
   `preview/*.html`. Consumers should override every text-bearing prop for

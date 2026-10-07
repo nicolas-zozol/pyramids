@@ -3,20 +3,8 @@
 **Last update:** 2026-10-06
 **Feature:** tanstack-start-migration
 **Infix:** TANSTACK
-**Status:** APPROVED (2026-10-06)
+**Status:** IMPLEMENTED (2026-10-07, commit 7caa131)
 **Sources:** [story](tanstack-start-migration.story.md), [brainstorm](tanstack-start-migration.brainstorm.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md)
-
-## Progress — APPROVED 100%
-
-```
-      Toolchain              ████████████████████  11/11  ✅
-      Prerender              ████████████████████  6/6    ✅
-      Document and routes    ████████████████████  10/10  ✅
-      Page data              ████████████████████  6/6    ✅
-      Not-found and failure  ████████████████████  4/4    ✅
-      Netlify deployment     ████████████████████  5/5    ✅
-      Acceptance Criteria    ████████████████████  6/6    ✅
-```
 
 ## Goal
 

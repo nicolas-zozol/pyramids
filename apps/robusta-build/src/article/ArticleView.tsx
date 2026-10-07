@@ -1,3 +1,11 @@
+/**
+ * Package article — one article page rendered from its payload, and the one boundary where its body reaches the DOM.
+ *
+ * Design: features/pyramid-v2-epic/article-page/article-page.design.md
+ * Requirements: R-ARTICLEPAGE-02, R-ARTICLEPAGE-03, R-ARTICLEPAGE-04, R-ARTICLEPAGE-05, R-ARTICLEPAGE-41, R-ARTICLEPAGE-42, R-ARTICLEPAGE-43, R-ARTICLEPAGE-61, R-ARTICLEPAGE-62, R-ARTICLEPAGE-63, R-ARTICLEPAGE-65
+ * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Requirements: R-TANSTACK-47, R-TANSTACK-48
+ */
 import { SkTag } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.js';
 import type { ArticlePage } from '../page-data/index.js';

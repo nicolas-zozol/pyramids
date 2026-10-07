@@ -1,3 +1,11 @@
+/**
+ * Package landing — the home page's notes section, every string it renders supplied by the site.
+ *
+ * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
+ * Requirements: R-MIGRATELEARN-44
+ * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Requirements: R-TANSTACK-65
+ */
 import { NotesPreview, type NotePost } from '@robusta/pyramids-design-system';
 import { buildUrl } from '@robusta/pyramids-routing';
 import { urlScheme } from '../routing/scheme.js';

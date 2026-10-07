@@ -4,22 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository
 
-`@robusta/pyramids` — a yarn-workspaces monorepo that powers multiple SEO content sites from a shared component/library base. Deployed on Vercel using Next.js (App Router) with React Server Components and ISR. TypeScript is the default everywhere. Some packages (telemetry, services) target Node + Express.
+`@robusta/pyramids` — a yarn-workspaces monorepo that powers multiple SEO content sites from a shared component/library base. `apps/robusta` and `apps/dakar` are Next.js App Router sites with React Server Components and ISR, deployed on Vercel; `apps/robusta-build`, the v2 site, is TanStack Start on Netlify. TypeScript is the default everywhere. Some packages (telemetry, services) target Node + Express.
 
 The three workspace roots are:
 
-- `apps/*` — deployable Next.js sites and standalone front/server demos
+- `apps/*` — deployable sites and standalone front/server demos
 - `packages/*` — shared libraries consumed by the apps (built to `dist/`)
 - `services/*` — backend services (Express collector + docker-compose observability stack)
 
 ## Apps
 
-- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, and where new work goes. Tailwind 4 with shadcn, its own design system, no DaisyUI. It carries the v2 route table and the eleven articles migrated from v1 — 25 static pages, under `content/articles`, with their images published under `/article-images`. An article page renders since article-page landed on 2026-08-02; the nine listing routes and the home page are still placeholders, the latter until robusta-landing-page. See its own README and `robusta-build.archi.md`.
+- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, served at robusta.build by Netlify, and where new work goes. TanStack Start on Vite 8: every page prerendered at build, then hydrated, no code run on a request. Tailwind 4 with shadcn, its own design system, no DaisyUI. It carries the v2 route table and the eleven articles migrated from v1, under `content/articles`, with their images published under `/article-images`: 23 prerendered pages. Each article renders as an article page; the nine listing routes and the home page are placeholders, the latter until robusta-landing-page. See its own README and `robusta-build.archi.md`.
 - `@robusta/build` — `apps/robusta`. robusta.build version 1: blog under `/learn`, portfolio, prosemirror. Being retired — do not add to it, and do not refactor it.
 - `@robusta/dakar` — `apps/dakar`. dakar.surf, the surf guide. Uses MapLibre, has a `[locale]` segment and spot pages. Live, and out of the v2 scope.
 - intel-demo — `apps/intel-demo`. Vite front + server demo for the scribe-intel SDK. Not a workspace: it carries no `package.json`.
 
-Each Next.js app has a `src/seopyramids.config.ts` that defines `domain`, `siteName`, `defaultLocale`, `otherLocales`, blog roll size, etc. — that's the per-site source of truth.
+Each site has a `src/seopyramids.config.ts` that defines `domain`, `siteName`, `defaultLocale`, `otherLocales`, blog roll size, etc. — that's the per-site source of truth.
 
 `apps/robusta` documents the v1 routing scheme (locale, `page`, `s` discriminants for ISR) in its own README. Preserve that structure when editing v1; the v2 scheme is its own — discriminants `l`, `c`, `p`, `t` under a site-named content root — and is documented in the Routing section of `apps/robusta-build/README.md`.
 
@@ -48,7 +48,7 @@ Run from the repo root unless noted.
 
 ### Install / clean
 
-Node 22 (`.nvmrc`) and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml` — the yarn on your PATH delegates to it, so `yarn install` runs the version the repository declares and nothing here assumes a globally installed yarn. Corepack is not used and not needed: it is what broke every Vercel deployment of the v2 site on 2026-08-01, by caching yarn inside the repository where the root `"type": "module"` makes Node load it as an ES module, and it must not be enabled on a build agent — the account is in `apps/robusta-build/README.md`. `packageManager: "yarn@4.17.1"` stays declared, and is what a corepack shim or an editor reads, but `yarnPath` is what decides which binary runs. `.yarnrc.yml` also sets `nodeLinker: node-modules`, so the on-disk layout that `tsc`, `next build` and vitest expect is the one produced; unknown CLI options are errors under yarn 4, not warnings.
+Node 22 (`.nvmrc`), 22.12 or later for TanStack Start, and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml` — the yarn on your PATH delegates to it. Corepack is not needed, and a corepack cache inside the repository breaks the install: see Yarn on a build agent in `apps/robusta-build/README.md`. `packageManager: "yarn@4.17.1"` is what a corepack shim or an editor reads; `yarnPath` decides which binary runs. `.yarnrc.yml` also sets `nodeLinker: node-modules`, the layout `tsc`, `next build`, Vite and vitest expect and Netlify requires; unknown CLI options are errors under yarn 4, not warnings.
 
 ```bash
 yarn install         # install everything
@@ -82,18 +82,19 @@ When editing shared package code while a dev server is running, keep the watcher
 yarn lint            # eslint over packages/**/src/**/*.{ts,tsx}
 ```
 
-Each Next.js app also has its own `next lint`. Note: `next.config.ts` in both apps sets `eslint.ignoreDuringBuilds: true`, so lint is **not gated by the build** — run it explicitly.
+Each site also has its own `lint`, `next lint` on the two Next.js apps and eslint over `src` on `apps/robusta-build`. Lint is **not gated by any build** (`eslint.ignoreDuringBuilds: true` in both `next.config.ts`) — run it explicitly.
 
 Prettier config lives in `prettier.config.js` (single quotes, semi, trailing comma all, printWidth 80, tailwindcss plugin, proseWrap always).
 
 ### Tests
 
-Three workspaces declare a `test` script, and that script is the whole command:
+Four workspaces declare a `test` script, and that script is the whole command:
 
 ```bash
 yarn workspace @robusta/pyramids-routing run test   # 78 tests — the URL scheme
-yarn workspace @robusta/pyramids-content run test   # 85 tests — the reading contract, on fixture corpora
-yarn workspace @robusta/robusta-build run test      # 28 tests — the v2 site's own corpus
+yarn workspace @robusta/pyramids-content run test   # 98 tests — the reading contract, on fixture corpora
+yarn workspace @robusta/pyramids-design-system run test   # 54 tests — the design system, on node --test
+yarn workspace @robusta/robusta-build run test      # 92 tests — the v2 site: corpus, page data, build scripts
 ```
 
 Vitest is also installed in `apps/robusta`, `packages/scribe-intel` and `packages/helpers`, which declare no script; invoke it from the workspace itself:
@@ -127,7 +128,7 @@ import { getOpenAiKey } from '../api/get-key.js';  // local — `.js` even thoug
 - Functional components only; never `React.FC`. Define `interface FooProps` and a plain function.
 - Favor named exports; file name = component name in PascalCase (`Header.tsx`).
 - Use directories in lowercase-with-dashes.
-- Prefer RSC + ISR over client components. Limit client-side state.
+- On `apps/robusta` and `apps/dakar`, prefer RSC + ISR over client components. `apps/robusta-build` has no server component: its build fails on a `'use client'` or `'use server'` under `src`. Limit client-side state.
 - Use Effector when a single user action would require coordinating >3 related `useState` hooks or sharing state across siblings without prop-drilling dispatch.
 - Do **not** refactor existing component code for style/lint — that explodes diff size. Only modify what's required for the task.
 
@@ -135,7 +136,7 @@ import { getOpenAiKey } from '../api/get-key.js';  // local — `.js` even thoug
 
 Which rule applies depends on the site.
 
-`apps/robusta-build`, the v2 site, does not use DaisyUI. Its colours, type, spacing and radii come from `@robusta/pyramids-design-system` and from nowhere else — BR-PYRAMID-6 in `business-rules.md`. The site may add a name, never a value: `src/app/globals.css` aliases the names a third-party token layer expects onto design-system tokens, and every entry there is an alias. Components come from shadcn on Tailwind 4. Do not reach for `pyramids-layouts`, `pyramids-links` or `pyramids-ctas` from this site — they render DaisyUI classes and the shadcn decision deprecates them.
+`apps/robusta-build`, the v2 site, does not use DaisyUI. Its colours, type, spacing and radii come from `@robusta/pyramids-design-system` and from nowhere else — BR-PYRAMID-6 in `business-rules.md`. The site may add a name, never a value: `src/styles/globals.css` aliases the names a third-party token layer expects onto design-system tokens, and every entry there is an alias. Components come from shadcn on Tailwind 4. Do not reach for `pyramids-layouts`, `pyramids-links` or `pyramids-ctas` from this site — they render DaisyUI classes and the shadcn decision deprecates them.
 
 The rest of this section governs `apps/robusta` and `apps/dakar`, which are on DaisyUI and stay there.
 
@@ -173,14 +174,14 @@ On `apps/robusta` and `apps/dakar`: `@robusta/scribe-intel` exposes a `Telemetry
 
 - MongoDB: never put methods on Mongoose models — keep them as data, use separate Domain Objects.
 - Use `nuqs` for URL search-param state.
-- Use `next/image` with a descriptive `alt` for every image a component of the site renders. Which image the rest of the rule governs differs:
+- On `apps/robusta` and `apps/dakar`, use `next/image` with a descriptive `alt` for every image a component of the site renders. Which image the rest of the rule governs differs:
   - `sizes` is required when the image is `fill` or otherwise responsive: without it Next assumes `100vw` and the browser fetches a full-viewport-width file whatever the slot's real size. On an image of known dimensions it selects nothing — the generated `srcset` is a fixed 1x/2x pair — so don't add one there.
   - An imported image (`import cover from './cover.png'`, or `await import()`) carries `width`, `height` and `blurDataURL` on the module itself: never restate them by hand. A `src` computed as a string at build time has no dimensions to read, which is the case `fill` plus `sizes` answers.
   - WebP comes from the optimizer, whose default `formats` is `['image/webp']`, not from the source file. Sources stay PNG or JPEG; converting them ahead of time buys nothing.
-  - A body derived from markdown is outside this rule. `remark-html` sanitizes by default, so a body carries neither `next/image` nor any utility class; it reaches the DOM through `dangerouslySetInnerHTML` with a CSS Module, as Next's own `blog-starter` example does. Detail in `features/pyramid-v2-epic/article-page/article-page.design.md`.
+- On `apps/robusta-build`, an article cover is a plain `<img>` filling its 16:9 box, served from the asset root with no image optimizer. An article body is markdown rendered by `remark-html`, which sanitizes by default, so it carries no utility class; it reaches the DOM through `dangerouslySetInnerHTML` with a CSS Module. Detail in `features/pyramid-v2-epic/article-page/article-page.design.md`.
 - Component-local images live next to the component; only put genuine public assets in `public/`.
 - Avoid `any` — use `unknown` or precise types. Prefer interfaces over `type` for object shapes.
-- TypeScript path alias resolution in tests: vitest configs use `vite-tsconfig-paths`.
+- TypeScript path alias resolution in tests: the v2 site's vitest config sets Vite's `resolve.tsconfigPaths`.
 
 ## Compound documents
 

@@ -1,3 +1,11 @@
+/**
+ * Package design-system — the site's one seam onto the design system's asset URLs.
+ *
+ * Design: features/pyramid-v2-epic/bootstrap-robusta-build/bootstrap-robusta-build.design.md
+ * Requirements: R-BOOTSTRAP-28
+ * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Requirements: R-TANSTACK-50
+ */
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
 
 /**
