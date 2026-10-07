@@ -3,15 +3,8 @@
 **Last update:** 2026-10-07
 **Feature:** design-system-responsive
 **Infix:** RESPONSIVE
-**Status:** APPROVED (2026-10-06 — validated by Nicolas)
+**Status:** IMPLEMENTED (2026-10-07, commit 2848cb7)
 **Sources:** [story](design-system-responsive.story.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../packages/robusta-design-system/design-system.archi.md), [robusta-landing-page story](../robusta-landing-page/robusta-landing-page.story.md)
-
-## Progress — APPROVED 100%
-
-```
-      Requirements         ████████████████████  38/38  ✅
-      Acceptance Criteria  ████████████████████  13/13  ✅
-```
 
 ## Goal
 

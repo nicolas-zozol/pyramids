@@ -1,180 +1,75 @@
 # Architecture: design-system
 
 **Last updated:** 2026-10-07
+**Kind:** module
 
 ## Parent
 
 - [root](../../root.archi.md)
 
-## Children
-
-_None._
-
 ## Overview
 
-`@robusta/pyramids-design-system` is the **brand layer** of the monorepo —
-the hand-drawn sketchnote visual language for robusta.build. Unlike
-`pyramids-themes` (pure JS-side design tokens) and `pyramids-layouts`
-(generic UI primitives), this package bundles three things that travel
-together: (1) the brand CSS (paper, ink, sketch palette + typography),
-(2) the brand assets (Crystal Tux mascot SVGs, the wordmark PNG), and
-(3) presentational React components that render those assets against
-that CSS. All three ship from a single workspace package so consumers
-import the brand as one unit.
+`@robusta/pyramids-design-system` est le design system du site robusta.build : son langage visuel sketchnote dessiné à la main, livré en un seul module — deux feuilles de style de Design tokens et de classes, les assets de marque, six primitives React et huit surfaces marketing rendues contre ces feuilles. Il appartient au site robusta seul (BR-PYRAMID-3), et ce site tire de lui tous ses Design tokens (BR-PYRAMID-6). Il ne fournit aucune Page copy : chaque texte qu'un composant rend est une prop dont le défaut est le texte du prototype `ui_kits/marketing/*.jsx`, et un site passe toutes celles des surfaces qu'il publie (BR-PYRAMID-8). Les composants sont présentationnels : ni état, ni gestionnaire d'événement, ni directive `'use client'` ou `'use server'`, ni lecture du viewport en JavaScript ; tout le responsive est en CSS. Ce n'est ni `pyramids-themes`, les tokens JS des sites DaisyUI, ni une bibliothèque de composants génériques.
+
+## Apps, modules, packages
+
+- package `primitives` — `src/primitives/` : `BrandLogo`, le lockup 💪 🏗 et le wordmark, et `SkButton`, `SkCallout`, `SkTag`, `SkInput`, `SkArrowRight`, chacune rendue sur une classe `.sk-*` de `sketch.css`.
+- package `marketing` — `src/marketing/` : `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview` et `CTA`, les surfaces d'une page marketing, composées des primitives. Leur mise en page est dans `sketch.css`, sous une classe par élément ; leur racine prend `className` et `style`.
+- `colors_and_type.css` — les Design tokens dans `:root` et les styles d'élément, de `html` à `pre`. Aucune police chargée.
+- `sketch.css` — les classes `.sk-*` des primitives, la mise en page des huit surfaces, puis la section responsive.
+- `fonts.css` — IBM Plex Sans, IBM Plex Mono et Caveat depuis Google Fonts, pour un consommateur sans build ; le site robusta ne le charge pas.
+- `assets/` — Crystal Tux en quatre poses SVG, la pose de base aussi en PNG, et le wordmark `robusta-build-wordmark.png`, 1603×312.
+- `preview/` — les planches HTML du système, dont `marketing-page.html`, les huit surfaces en une page à redimensionner depuis 320 px ; `ui_kits/marketing/`, le prototype JSX des surfaces ; `uploads/`, les images sources ; `SKILL.md`, le skill de la marque. Aucun n'est livré : `package.json#files` s'arrête à `dist`, `*.css`, `assets` et `README.md`.
+- `src/test-support/` — le rendu statique et la lecture des fichiers livrés, pour les specs ; hors build.
 
 ## Diagram
 
 ```
-┌──────────── @robusta/pyramids-design-system ────────────┐
-│                                                         │
-│  CSS (root of package, imported via subpath exports)    │
-│  ├ colors_and_type.css   — vars: --paper / --ink /      │
-│  │                         --font-sans / --t-h1 / ...   │
-│  └ sketch.css            — .sk-box / .sk-btn /          │
-│                            .sk-callout / .sk-arrow-right│
-│                                                         │
-│  ASSETS (root/assets/, imported via subpath exports)    │
-│  ├ crystal-tux*.svg                                     │
-│  ├ crystal-tux.png                                      │
-│  └ robusta-build-wordmark.png                           │
-│                                                         │
-│  TS COMPONENTS (src/, built to dist/)                   │
-│  ├ src/index.ts (barrel)                                │
-│  │                                                      │
-│  │   ┌────── primitives/ (stable, reusable) ──────┐     │
-│  │   │ BrandLogo · SkButton · SkCallout            │     │
-│  │   │ SkTag · SkInput · SkArrowRight              │     │
-│  │   └─────────────────────────────────────────────┘     │
-│  │                                                      │
-│  │   ┌────── marketing/ (page-level surfaces) ────┐     │
-│  │   │ Hero · SiteHeader · SiteFooter              │     │
-│  │   │ ServicesGrid · FlowDiagram                  │     │
-│  │   │ PrinciplesList · NotesPreview · CTA         │     │
-│  │   └─────────────────────────────────────────────┘     │
-│                                                         │
-│  No TS component carries a 'use client' directive.      │
-└─────────────────────────────────────────────────────────┘
-                         │
-                         ▼
-                apps/robusta · apps/dakar · apps/intel-demo
-                consume CSS + assets + components
+  Arrow = depends on. Packages and stylesheets of module
+  `@robusta/pyramids-design-system`. No loop.
+
+  src/index.ts  the library API, re-exports both packages
+       │                     │
+       ↓                     ↓
+  `marketing` ──────────→ `primitives`
+  8 surfaces              6 primitives
+       │                     │
+       │ class names         │ class names
+       ↓                     ↓
+  sketch.css  .sk-* rules, surface layout, the five @media widths
+       │
+       │ var(--…)
+       ↓
+  colors_and_type.css  tokens in :root, element styles
+
+  Omitted: both packages → colors_and_type.css, inline var(--…).
+  fonts.css stands apart, linked first by a consumer with no build.
 ```
 
-## Key Components
+## Boundaries
 
-### Primitives (`src/primitives/`)
+### library API of module `@robusta/pyramids-design-system`
 
-| Component         | File                          | Responsibility                                                        |
-|-------------------|-------------------------------|-----------------------------------------------------------------------|
-| `BrandLogo`       | `BrandLogo.tsx`               | 💪 + 🏗 emoji + scanned wordmark PNG. Sizes: `compact` / `full` / `mark`. `wordmarkSrc` prop accepts a string or imported asset URL. |
-| `SkButton`        | `SkButton.tsx`                | Wraps `.sk-btn` / `.sk-btn--primary` / `.sk-btn--ghost`.              |
-| `SkCallout`       | `SkCallout.tsx`               | Wraps `.sk-callout` (speech-bubble framing).                          |
-| `SkTag`           | `SkTag.tsx`                   | Wraps `.sk-tag` family. `tone`: `default` / `pink` / `blue` / `green`.|
-| `SkInput`         | `SkInput.tsx`                 | Renders `.sk-input-wrap > .sk-input` — separate wrapper + input style props. |
-| `SkArrowRight`    | `SkArrowRight.tsx`            | Hand-drawn rightward arrow (CSS background SVG).                      |
+Client code : les packages `landing`, `page-data`, `article`, `routes` et `design-system` de l'app `@robusta/robusta-build` ; la page `src/app/_design-test/page.tsx` de l'app `@robusta/build`.
 
-### Marketing surfaces (`src/marketing/`)
+Composants, depuis `.` :
 
-| Component         | File                          | Responsibility                                                        |
-|-------------------|-------------------------------|-----------------------------------------------------------------------|
-| `Hero`            | `Hero.tsx`                    | Headline + subtitle + dual CTA + mascot.                              |
-| `SiteHeader`      | `SiteHeader.tsx`              | Top nav: logo, nav links, primary CTA.                                |
-| `SiteFooter`      | `SiteFooter.tsx`              | 4-column footer with brand block + 3 link columns + bottom line.      |
-| `ServicesGrid`    | `ServicesGrid.tsx`            | 3-column "what we do" cards with sticker offset + wobbly border.      |
-| `FlowDiagram`     | `FlowDiagram.tsx`             | Horizontal numbered-step flow on dotted-grid paper background.        |
-| `PrinciplesList`  | `PrinciplesList.tsx`          | 2-column checkmark + key + sub list.                                  |
-| `NotesPreview`    | `NotesPreview.tsx`            | 2-column blog-post preview rows with date + title + tag.              |
-| `CTA`             | `CTA.tsx`                     | Closing CTA: mascot + headline + email input + button + footnote.    |
+- `BrandLogo` — le lockup ; `size` vaut `compact`, `full` ou `mark`, `tagline` n'est rendue que par `full`. `wordmarkSrc` est à passer : son défaut, `/_next/static/media/robusta-build-wordmark.png`, ne résout nulle part, et le module n'importe aucun de ses propres assets.
+- `SkButton` — une ancre `.sk-btn` avec `href`, un `<button>` sans gestionnaire sinon ; `SkButtonProps` est une union de types, pas une `interface`.
+- `SkCallout`, `SkTag`, `SkInput`, `SkArrowRight` — une classe `.sk-*` chacune ; `SkTag` prend `tone`, `default`, `pink`, `blue` ou `green`.
+- `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview`, `CTA` — chaque texte rendu, texte alternatif compris, est une prop ; seule la marque est fixe, le texte alternatif du wordmark et les glyphes 💪 🏗. Chaque call to action est une ancre vers `primaryCtaHref`, `secondaryCtaHref` ou `ctaHref`. Le champ e-mail de `CTA` n'envoie rien : le site branche l'envoi dans un composant à lui.
+- Types de données : `NavLink`, `FooterColumn`, `FooterLink`, `ServiceItem`, `FlowStep`, `Principle`, `NotePost`, et les props de chaque composant. Un `FooterLink` et la ligne de lien d'une carte de `ServicesGrid`, `moreLabel` et `moreHref`, rendent une ancre avec un `href`, leur libellé en texte sans.
 
-Every marketing surface accepts its content as props with **defaults that
-match the original `ui_kits/marketing/*.jsx` prototype copy** — so consumers
-that don't override anything see the prototype out of the box.
+Feuilles de style, sous-chemins de `exports`, chargées une fois par site dans cet ordre :
 
-## Public API
+- `colors_and_type.css` — papier et encre ; les rampes `--brand-primary`, `--brand-secondary`, `--brand-accent` et `--brand-error`, chacune en base, `-soft` et `-deep` ; les familles `--font-sans`, `--font-script` et `--font-mono` ; l'échelle `--t-*`, dix pas en `clamp()` de 320 à 1536 px ; `--lh-*`, `--sp-1` à `--sp-9`, `--r-*`, `--measure` à 68ch ; les surligneurs `.highlight-*`. Chaque famille lit `--font-ibm-plex-sans`, `--font-ibm-plex-mono` ou `--font-caveat`, puis le nom de la face, puis une pile système ; le site robusta ne pose aucune de ces propriétés et auto-héberge les faces sous ces noms.
+- `sketch.css` — les classes `.sk-*` ; la mise en page des surfaces sous `.sk-<surface>`, `.sk-<surface>__<part>` et `--<modifier>`, en spécificité d'une classe et sans `!important`, qu'un sélecteur du site portant une classe de plus surcharge quel que soit l'ordre de chargement ; 40, 48, 64, 80 et 96rem, chacune dans un seul `@media (min-width)`, la base étant la mise en page étroite.
 
-```ts
-// import '@robusta/pyramids-design-system/colors_and_type.css';
-// import '@robusta/pyramids-design-system/sketch.css';
-// import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
-// import tuxSvg   from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
-
-import {
-  // primitives
-  BrandLogo,    type BrandLogoProps,
-  SkButton,     type SkButtonProps,
-  SkCallout,    type SkCalloutProps,
-  SkTag,        type SkTagProps, type SkTagTone,
-  SkInput,      type SkInputProps,
-  SkArrowRight, type SkArrowRightProps,
-  // marketing
-  Hero,           type HeroProps,
-  SiteHeader,     type SiteHeaderProps,     type NavLink,
-  SiteFooter,     type SiteFooterProps,     type FooterColumn,
-  ServicesGrid,   type ServicesGridProps,   type ServiceItem,
-  FlowDiagram,    type FlowDiagramProps,    type FlowStep,
-  PrinciplesList, type PrinciplesListProps, type Principle,
-  NotesPreview,   type NotesPreviewProps,   type NotePost,
-  CTA,            type CTAProps,
-} from '@robusta/pyramids-design-system';
-```
-
-## Subpath exports map
-
-```
-.                                            → dist/index.{js,d.ts}     (barrel)
-./sketch.css                                 → ./sketch.css
-./colors_and_type.css                        → ./colors_and_type.css
-./assets/crystal-tux.svg                     → ./assets/crystal-tux.svg
-./assets/crystal-tux.png                     → ./assets/crystal-tux.png
-./assets/crystal-tux-head.svg                → ./assets/crystal-tux-head.svg
-./assets/crystal-tux-waving.svg              → ./assets/crystal-tux-waving.svg
-./assets/crystal-tux-thinking.svg            → ./assets/crystal-tux-thinking.svg
-./assets/robusta-build-wordmark.png          → ./assets/robusta-build-wordmark.png
-```
+Assets, sous `./assets/` : `crystal-tux.svg`, `crystal-tux.png`, `crystal-tux-head.svg`, `crystal-tux-waving.svg`, `crystal-tux-thinking.svg`, `robusta-build-wordmark.png`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
 
 ## Dependencies
 
-- **Depends on:** `react` only. No workspace-level dependency.
-- **Used by:** (intended) `apps/robusta` (smoke test page added in this
-  iteration; live home-page rebuild deferred to a follow-up feature),
-  later `apps/dakar` and `apps/intel-demo`.
-- **Build:** `tsc → dist/`. Runs as the **third** step in `yarn build:deps`,
-  immediately after `pyramids-themes` and before `pyramids-layouts`. The
-  CSS and assets are not produced by `tsc`; they ship as static files at
-  the package root and are exposed via the `exports` map.
-
-## Notes / Gotchas
-
-- **The `colors_and_type.css` `@import` line loads IBM Plex Sans / IBM Plex
-  Mono / Caveat from Google Fonts.** This contradicts the `README.md`'s
-  stated stack of Caveat / Kalam / Architects Daughter / JetBrains Mono.
-  See `decisions-and-questions.md` Flag F1. Components read CSS variables,
-  so the rendered family is whatever the CSS resolves to. **Either edit
-  the CSS or edit the README** before adding more components.
-- **`BrandLogo.wordmarkSrc` defaults to a hard-coded `/_next/static/media/…` path** that resolves nowhere. Consumers pass the URL their bundler gives the asset import, which under Vite is a string:
-  ```ts
-  import wordmarkSrc from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
-  <BrandLogo wordmarkSrc={wordmarkSrc} />
-  ```
-  The package imports none of its own assets: `tsc` with `rootDir: src` does not reach `../assets/`, and the package ships no `.d.ts` for PNG modules.
-- **No component carries a `'use client'` directive**, and `src/package-contract.spec.tsx` fails on one. The booking flow and the form submit are wired by the consuming site, in a component of its own around the surface.
-- **The `<button>` tags inside `SkButton` don't have `onClick` handlers** —
-  they're presentational. A consumer that needs browser behavior wraps the button, or the component containing it, in a component of its own.
-- **Defaults preserve the prototype copy** for marketing components. This
-  is intentional so the visual demo matches what's been signed off in
-  `preview/*.html`. Consumers should override every text-bearing prop for
-  real production pages.
-- **`crystal-tux.png` and `crystal-tux.svg` are duplicates** in different
-  formats. Prefer the SVG. The PNG is kept for callers that genuinely need
-  raster (e.g. OG-image rendering pipelines).
-- **`robusta-build-wordmark.png` is 1603×312** — heavier than ideal. A
-  vectorized SVG version is a worthwhile follow-up. Tracked as flag F2 in
-  `decisions-and-questions.md`.
-- **`preview/*.html` and `ui_kits/marketing/*.jsx` are NOT shipped** in the
-  npm tarball. They live only in the source repo as historical reference
-  / Storybook-equivalent specimens. The `package.json#files` whitelist
-  enforces this.
-- **No tests.** This package is a presentational TSX layer; the only
-  meaningful "test" is `yarn workspace @robusta/pyramids-design-system run
-  build` succeeding. Visual regression should happen at the consumer-app
-  level (or via a future Storybook integration of `preview/`).
+- Depends on : `react` seul, en peer `^19.1.1` ; aucun autre module du dépôt, aucune dépendance runtime.
+- Used by : l'app `@robusta/robusta-build` — `NotesPreview` et `NotePost` dans `landing` et `page-data`, `SkTag` dans `article`, `BrandLogo` et `SkCallout` dans `routes`, les deux feuilles de style liées par `src/routes/__root.tsx`, le wordmark dans `design-system` ; l'app `@robusta/build`, par sa page `_design-test` seule. `apps/dakar` ne l'importe pas.
+- Build : `tsc` compile `src/` vers `dist/`, cinquième étape de `yarn build:deps`, entre `pyramids-themes` et `pyramids-layouts` ; `yarn w:design-system` ne surveille que le TypeScript. Les feuilles de style et les assets sont servis depuis la racine du module par la map `exports`, sans copie : un serveur de dev voit une modification CSS sans rebuild.
+- Tests : 54 tests `node:test` dans huit specs à côté des sources, par `yarn workspace @robusta/pyramids-design-system run test`, qui les compile avec `tsconfig.test.json` vers `.test-build/` puis lance `node --test`. Les specs rendent les composants en arbre d'éléments avec `react` seul et lisent les feuilles de style livrées ; `src/package-contract.spec.tsx` échoue sur un composant exporté en plus, une taille de police inline hors glyphes du lockup, une directive, une lecture du viewport, un composant qui lit `--brand-error`, ou une dépendance autre que `react` en peer.

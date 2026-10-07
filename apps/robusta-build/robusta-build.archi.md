@@ -21,7 +21,7 @@
 - package `content` — la déclaration du corpus, `corpus.ts` : racine `content/articles`, Locale lue dans le frontmatter, Asset root `public/article-images` servi sous `/article-images`. Ses accès : `getArticleIndex`, seul endroit où une violation du corpus devient fatale, `getArticleBody`, `getAssetUrl`, `findArticle`, `findTranslation`. L'import protection du build l'interdit côté client.
 - package `routing` — `urlScheme` et `ROLL_SIZE` dans `scheme.ts`, seul endroit où `articles` est écrit ; `contentUrls`, la dérivation unique des URL de contenu ; `v1UrlMap`, la correspondance v1, écrite dans `v1-url-map.generated.json` et lue par rien.
 - package `design-system` — `wordmarkSrc`, l'URL sous laquelle Vite publie le wordmark du design system.
-- package `styles` — `fonts.css`, les trois polices auto-hébergées depuis Fontsource, et `globals.css`, l'entrée Tailwind 4 et le pont de tokens, des alias seulement (BR-PYRAMID-6).
+- package `styles` — `fonts.css`, les trois polices auto-hébergées depuis Fontsource, et `globals.css`, l'entrée Tailwind 4 et le pont de tokens : les noms qu'attend shadcn, `--destructive` sur `--brand-error` compris, tous des alias de tokens du design system (BR-PYRAMID-6).
 - package `scripts` — les étapes Node du build : `check-source.mjs` sur le source de `src`, puis, sur `routing` et `content` compilés sous `.routing-dist`, `prerender-pages.mjs`, la liste de prérendu que lit `vite.config.ts`, `check-route-table.mjs`, `emit-v1-map.mjs` et `copy-article-images.mjs`.
 - `src/seopyramids.config.ts` — la Site configuration ; les quatre valeurs de sa section de contenu viennent de `routing`.
 

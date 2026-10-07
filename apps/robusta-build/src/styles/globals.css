@@ -1,3 +1,13 @@
+/**
+ * Package styles — the site's own stylesheets: the three brand faces, self-hosted, and the Tailwind 4 entry carrying the token bridge.
+ *
+ * Design: features/pyramid-v2-epic/bootstrap-robusta-build/bootstrap-robusta-build.design.md
+ * Requirements: R-BOOTSTRAP-10, R-BOOTSTRAP-25, R-BOOTSTRAP-27
+ * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Requirements: R-TANSTACK-07, R-TANSTACK-45
+ * Design: features/pyramid-v2-epic/design-system-responsive/design-system-responsive.design.md
+ * Requirements: R-RESPONSIVE-64, R-RESPONSIVE-85
+ */
 @import 'tailwindcss';
 
 /* =========================================================

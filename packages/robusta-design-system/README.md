@@ -8,9 +8,7 @@ This design system gives Robusta Build a distinctive, **hand-drawn sketchnote** 
 
 ## Install
 
-This package ships as `@robusta/pyramids-design-system` in the
-`@robusta/pyramids` yarn-workspaces monorepo. To consume it from another
-workspace:
+This package ships as `@robusta/pyramids-design-system` in the `@robusta/pyramids` yarn-workspaces monorepo. To consume it from another workspace:
 
 ```jsonc
 // apps/<your-app>/package.json
@@ -21,8 +19,7 @@ workspace:
 }
 ```
 
-Then `yarn install` from the repo root. The package is built as part of
-`yarn build:deps` (between `pyramids-themes` and `pyramids-layouts`).
+Then `yarn install` from the repo root. The package is built as part of `yarn build:deps` (between `pyramids-themes` and `pyramids-layouts`).
 
 ## Import — CSS
 
@@ -35,7 +32,7 @@ import '@robusta/pyramids-design-system/sketch.css';
 
 The robusta site links them from the head of its root route, `apps/robusta-build/src/routes/__root.tsx`.
 
-`colors_and_type.css` defines the CSS variables (`--paper`, `--ink`, `--font-sans`, `--t-h1`, …) and loads no font: the header of that file says how a consumer supplies the faces. `fonts.css`, linked before it, is the Google Fonts delivery for a consumer with no build step. `sketch.css` defines the hand-drawn primitives (`.sk-box`, `.sk-btn`, `.sk-callout`, `.sk-arrow-right`, …) and depends on those variables.
+`colors_and_type.css` defines the CSS variables (`--paper`, `--ink`, `--font-sans`, `--t-h1`, …) and loads no font: the header of that file says how a consumer supplies the faces. `fonts.css`, linked before it, is the Google Fonts delivery for a consumer with no build step. `sketch.css` defines the hand-drawn primitives (`.sk-box`, `.sk-btn`, `.sk-callout`, `.sk-arrow-right`, …) and the layout of the marketing surfaces, and depends on those variables.
 
 ## Import — assets
 
@@ -60,7 +57,7 @@ Available assets:
 import {
   // primitives — stable, reusable
   BrandLogo, SkButton, SkCallout, SkTag, SkInput, SkArrowRight,
-  // marketing surfaces — page-level, content-coupled today
+  // marketing surfaces — page-level
   Hero, SiteHeader, SiteFooter,
   ServicesGrid, FlowDiagram, PrinciplesList, NotesPreview, CTA,
 } from '@robusta/pyramids-design-system';
@@ -83,18 +80,15 @@ export default function Page() {
 }
 ```
 
-No component carries a `'use client'` directive, and `src/package-contract.spec.tsx` fails on one. Form submission for the CTA email input and click handlers for the booking buttons are wired by the consuming site, in a component of its own around the surface.
+No component carries a `'use client'` or `'use server'` directive or reads the viewport in JavaScript, and `src/package-contract.spec.tsx` fails on any of them. Every call to action of `Hero`, `SiteHeader` and `CTA` is an anchor to its `primaryCtaHref`, `secondaryCtaHref` or `ctaHref`. Submitting the CTA email input is wired by the consuming site, in a component of its own around the surface.
 
-Each marketing component accepts its content as props with sensible
-defaults that match the original `ui_kits/marketing/*.jsx` prototype. See
-the per-component `interface FooProps` in `dist/marketing/*.d.ts` for the
-full surface, or `design-system.archi.md` for the architectural map.
+Every text a marketing surface or `BrandLogo` renders, alternative text included, comes from a prop whose default is the copy of the `ui_kits/marketing/*.jsx` prototype. The brand lockup alone is fixed: the wordmark's alt text and the 💪 🏗 glyphs. A site passes every text prop of the surfaces it publishes (BR-PYRAMID-8).
+
+`SkButton` renders an anchor when given an `href`, a button otherwise. A footer item and a service card's link line take an optional `href`; without one, the label renders as text and no anchor. The props are typed in `dist/**/*.d.ts`; the architectural map is `design-system.archi.md`.
 
 ---
 
 ## Sources
-
-This system was built **from the brief alone** — no codebase, Figma file, or existing decks were attached. As a result, all visual assets (logo, mascot, components) are originals interpreted from the written direction. If a real codebase or Figma exists, re-attach it and we'll re-derive the system to match.
 
 **Brand inputs used:**
 - written direction document ("Robusta Build — Design System Direction")
@@ -109,7 +103,7 @@ This system was built **from the brief alone** — no codebase, Figma file, or e
 README.md                  — you are here
 SKILL.md                   — agent skill manifest (Claude Code compatible)
 colors_and_type.css        — css vars: color, type scale, semantic styles, paper textures
-sketch.css                 — hand-drawn primitives: rough boxes, arrows, buttons, callouts
+sketch.css                 — hand-drawn primitives, marketing surface layout, breakpoints
 
 assets/
   crystal-tux.svg          — full body, standing
@@ -172,19 +166,23 @@ The voice is the design. Get the writing right and the visuals follow.
 
 ### palette
 
-A near-monochrome system with three accent hues used as **highlights, not fills**. Color appears on perhaps 5–10% of any composition.
+A near-monochrome system: paper and ink, with three brand ramps used sparingly. Color appears on perhaps 5–10% of any composition.
 
-| token | hex | role |
-|---|---|---|
-| `--paper`        | `#fafaf7` | primary background — warm off-white, like printer paper |
-| `--paper-2`      | `#f3f1ea` | secondary panels |
-| `--ink`          | `#1a1a1a` | every stroke, every body letter |
-| `--ink-mute`     | `#6b6b66` | captions and side-notes |
-| `--accent-blue`  | `#3b6ef0` | links, primary annotations |
-| `--accent-green` | `#2e9c5e` | success, "yes", checkmarks |
-| `--accent-pink`  | `#e94e8a` | accent, mascot beak, scribble underlines |
+- `--paper` `#fafaf7` — primary background, warm off-white like printer paper
+- `--paper-2` `#f3f1ea` — secondary panels
+- `--ink` `#1a1a1a` — every stroke and heading
+- `--ink-soft` `#2b2b2b` — body text
+- `--ink-mute` `#6b6b66` — captions and side notes
+- `--brand-primary` `#562571` — royal purple, the primary action
+- `--brand-secondary` `#FFCC3F` — champagne gold, warmer secondary actions
+- `--brand-accent` `#0B65C2` — signal blue, links and focus rings
+- `--brand-error` `#b3261e` — errors
 
-Soft variants (`--accent-blue-soft`, etc.) exist as **highlighter washes** — think of a light yellow marker swept under a word. Never as full backgrounds.
+Each brand ramp has a `-soft` tint and a `-deep` tone. The `-soft` tints are highlighter washes — think of a light marker swept under a word — never full backgrounds. The `-deep` tones are hover and pressed states.
+
+The error ramp, `--brand-error`, `--brand-error-soft` and `--brand-error-deep`, is consumed by no component of the package: a consuming site aliases its own semantic name onto it, as the v2 site does with `--destructive`, and coins no color. The base reads 6.25:1 against `--paper`, as text on paper and as a fill under paper text.
+
+`--accent-blue`, `--accent-green`, `--accent-pink`, their `-soft` variants and `--accent-yellow-soft` are aliases onto the brand ramps: blue onto the accent, green onto the primary, pink onto the secondary's deep tone.
 
 ### typography
 
@@ -197,15 +195,42 @@ Hand-drawn means handwritten typography.
 
 > ⚠️ All four families ship via Google Fonts CDN. If you have brand-licensed alternatives (Shantell Sans, Caveat Brush, a custom hand), drop the `.woff2` files in `fonts/` and update `colors_and_type.css`.
 
-Body type runs **larger than usual** (19px) because handwriting at small sizes is illegible. Don't push below 14px ever.
+The type scale is ten `--t-*` steps, each a `clamp()` running from its size at 320px to its size at 1536px, so text shrinks continuously as the viewport narrows:
 
-Line length is a token as well: `--measure`, 68ch — the width a body of text stays readable at, and what a text-heavy page is held to. In characters and not pixels on purpose: a measure written in px stops being a measure the moment the type scale moves, and this scale is going to move.
+- `--t-display` — 34–80px, the largest text of a surface: the hero and closing-CTA headlines
+- `--t-h1` — 28–56px, a section headline
+- `--t-h2` — 24–40px
+- `--t-h3` — 20–28px
+- `--t-h4` — 18–20px
+- `--t-lead` — 17–19px, one step above running text: intro, eyebrow, nav and button labels
+- `--t-body` — 16–17px, running text and the font size of `html`
+- `--t-small` — 14–15px, captions, side notes, footer links
+- `--t-tiny` — 12–13px, the smallest labels
+- `--t-code` — 13–14px, monospace
+
+No component of the package declares a font size: every text size reads one of these steps. The emoji glyphs of `BrandLogo` are sized with the lockup, not as type.
+
+Line length is a token: `--measure`, 68ch, the width a text-heavy page holds its body to. Written in characters, it follows the type scale.
 
 ### spacing & layout
 
 - a loose 4px-based scale (`--sp-1` through `--sp-9`) — but we **deliberately allow a few px of irregularity** between sibling elements when it sells the hand-drawn feel.
 - **no perfect grids.** if a row of three things is laid out, allow ~6–10px of vertical jitter between them. CSS `transform: rotate(-0.6deg)` on a card is encouraged.
 - generous whitespace. paper is allowed to breathe.
+
+### responsive
+
+The package switches at five breakpoints, the Tailwind default set shadcn sits on, restated in plain CSS: the package imports no Tailwind theme.
+
+- `sm` — 40rem, 640px
+- `md` — 48rem, 768px
+- `lg` — 64rem, 1024px
+- `xl` — 80rem, 1280px
+- `2xl` — 96rem, 1536px
+
+Each width is written once, in one `@media (min-width: …)` block of the responsive section closing `sketch.css`; no `--bp-*` custom property exists. The rules are mobile-first: the base rule set is the narrow layout and each block widens it. 320px is a floor, not a breakpoint: no rule keys on it, and no surface scrolls sideways there. A consuming site picks no breakpoint of its own; on Tailwind 4, its `md:` switches at the same width as the surfaces.
+
+`preview/marketing-page.html` composes the eight surfaces as one page, to resize from 320px up.
 
 ### backgrounds
 
@@ -266,7 +291,7 @@ This system **avoids icon fonts** — they look too geometric and clean. Icons s
 
 ## Component vocabulary
 
-The visual language is built from these motifs (all available as CSS classes in `sketch.css`):
+The visual language is built from these motifs, CSS classes of `sketch.css` except the highlighter washes, which live in `colors_and_type.css`:
 
 - **rough boxes** — `.sk-box` — wobbly SVG-path rectangles for cards, panels, sections.
 - **stickers** — `.sk-sticker` — boxes with a 4px solid offset behind, conveying weight without shadow.
@@ -279,6 +304,10 @@ The visual language is built from these motifs (all available as CSS classes in 
 - **tags** — `.sk-tag` — small inline labels.
 - **buttons** — `.sk-btn`, `.sk-btn--primary`, `.sk-btn--ghost`.
 - **inputs** — `.sk-input` inside `.sk-input-wrap`.
+
+The marketing surfaces carry their layout as classes of `sketch.css`, one block per surface named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, and `.sk-brand-logo` for the logo. A part is `.sk-<surface>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
+
+These class names are the override surface of the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A surface root takes `className` and `style`, `style` applied last; no surface takes a prop per part.
 
 ---
 
@@ -299,4 +328,4 @@ The visual language is built from these motifs (all available as CSS classes in 
 
 - **No source materials.** Built entirely from the written brief. Re-derive against real codebase/Figma when available.
 - **Fonts are Google Fonts substitutions.** Caveat / Kalam / Architects Daughter / JetBrains Mono are all CDN-loaded. If brand fonts exist, swap them in.
-- **One product surface only** (`ui_kits/marketing`). Robusta Build appears to be services-led — no app product was implied.
+- **One product surface only** (`ui_kits/marketing`).
