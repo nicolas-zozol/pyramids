@@ -83,9 +83,14 @@ describe('the package', () => {
     );
   });
 
-  it('keeps every component server-component-safe', () => {
+  it('carries no client or server directive and reads no viewport in JavaScript', () => {
     for (const [path, source] of Object.entries(componentSources())) {
-      assert.doesNotMatch(source, /['"]use client['"]/, path);
+      assert.doesNotMatch(source, /['"]use (client|server)['"]/, path);
+      assert.doesNotMatch(
+        source,
+        /\bwindow\b|matchMedia|innerWidth|visualViewport/,
+        path,
+      );
     }
   });
 
