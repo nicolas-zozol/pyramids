@@ -1,58 +1,59 @@
-# Story : Responsive pass over the robusta design system
+# Story : Passe responsive sur le design system robusta
 
-**Dernière mise à jour :** 2026-10-06
+**Dernière mise à jour :** 2026-10-07
 **Feature :** design-system-responsive
 **Infix :** RESPONSIVE
 **Status :** ACTIVE
 
 ## Story
 
-As the publisher of robusta.build, I want the design system's surfaces to hold on a phone and its calls to action to be real links, so that the first page meant for the public can be shipped without the site patching its own design system.
+En tant qu'éditeur de robusta.build, je veux que les surfaces du design system tiennent sur un téléphone et que ses calls to action soient de vrais liens, afin de publier la première page destinée au public sans que le site ait à rapiécer son propre design system.
 
 ## Contexte & objectif
 
-`packages/robusta-design-system` was validated by eye, on a desktop, one component at a time. It carries no `@media`, no `clamp()`, no `minmax()` and no viewport unit anywhere, and its layout lives in inline styles a stylesheet cannot override without `!important` — which BR-PYRAMID-6 forbids the consuming site from doing at all, since a site adds names and never values. The repair is in the package or it is nowhere. The arbitration of 2026-07-30, on Gap 1 of `robusta-landing-page.brainstorm.md`, is one sentence: responsive is MANDATORY. Mobile-first indexing makes it an SEO defect as much as a usability one.
+`packages/robusta-design-system` a été validé à l'œil, sur desktop, un composant à la fois. Avant cette story, il ne portait aucun `@media`, aucun `clamp()`, aucun `minmax()` ni aucune unité de viewport, et sa mise en page vivait dans des styles inline qu'une feuille de style ne surcharge pas sans `!important` — ce que BR-PYRAMID-6 interdit au site consommateur, qui ajoute des noms et jamais des valeurs. La réparation est dans le package ou nulle part. L'arbitrage du 2026-07-30, sur le Gap 1 de `robusta-landing-page.brainstorm.md`, tient en une phrase : le responsive est OBLIGATOIRE. Avec l'indexation mobile-first, c'est un défaut SEO autant qu'un défaut d'usage.
 
-This is item 1 of the epic's À faire and item 1 of the ROADMAP's Next because it blocks robusta-landing-page, which is the first page of the v2 site meant to be indexed and read by a stranger. Three more defects of the same package travel with it, and none of them is worth a second pass over the same files.
+C'est l'item 1 du À faire de l'epic et l'item 1 du Next de la ROADMAP, parce qu'il bloque robusta-landing-page, la première page du site v2 destinée à être indexée et lue par un inconnu. Les autres défauts du même package voyagent avec lui : aucun ne vaut un second passage sur les mêmes fichiers.
 
-## What is broken today
+## Ce que la story répare
 
-- Layout. The hero is a fixed `1.3fr 1fr` grid with an 88 px headline and 48 px of side padding, the footer a fixed four-column grid, the services a `repeat(3, 1fr)`. On a 390 px screen the page scrolls sideways and clips.
-- Type. The scale is frozen in pixels, `--t-h1: 56px` at every viewport, and no surface reads it: 35 inline `fontSize` literals across the eight surfaces and `BrandLogo`, so a fluid scale changes nothing until the surfaces consume it. The article page, landed on 2026-08-02, inherits the scale and could neither change it nor work around it — a fluid scale is written in the design system's own file and in no site's (BR-PYRAMID-6).
-- Calls to action. Every one nests an `<a>` inside a `<button>` — four of them, in `Hero`, `CTA` and `SiteHeader` — which is invalid HTML, a WCAG 4.1.2 failure and unreliable as a followed link for a crawler. The footer's three link columns render `href="#"`, `FooterColumn.items` being plain strings with nowhere to carry a destination.
-- Error colour. The design system ships none, which is why the v2 site's token bridge carries no `--destructive` and says so in three places. Decision of 2026-07-31: the design system decides the value, the site aliases it and coins nothing.
+- Mise en page. Le hero était une grille fixe `1.3fr 1fr` avec un titre de 88 px et 48 px de marge latérale, le footer une grille fixe à quatre colonnes, les services un `repeat(3, 1fr)`. Sur un écran de 390 px, la page défilait de côté et rognait.
+- Typographie. L'échelle était figée en pixels, `--t-h1: 56px` à tous les viewports, et aucune surface ne la lisait : 35 littéraux `fontSize` inline dans les huit surfaces et `BrandLogo`, si bien qu'une échelle fluide ne changeait rien tant que les surfaces ne la consommaient pas. La page article, livrée le 2026-08-02, hérite de l'échelle et ne pouvait ni la changer ni la contourner : une échelle fluide s'écrit dans le fichier du design system, dans celui d'aucun site (BR-PYRAMID-6).
+- Calls to action. Chacun imbriquait un `<a>` dans un `<button>` — quatre, dans `Hero`, `CTA` et `SiteHeader` —, ce qui est du HTML invalide, un échec WCAG 4.1.2 et un lien peu fiable pour un crawler. Les trois colonnes de liens du footer rendaient `href="#"`, `FooterColumn.items` étant de simples chaînes sans place pour une destination.
+- Couleur d'erreur. Le design system n'en livrait aucune, d'où l'absence de `--destructive` dans le token bridge du site v2, qui le disait à trois endroits. Décision du 2026-07-31 : le design system décide la valeur, le site l'aliase et ne crée rien.
+- Texte de page. `Hero`, `ServicesGrid` et la variante `full` de `BrandLogo` rendaient du texte du prototype quelles que soient leurs props, ce que BR-PYRAMID-8 interdit (décision du 2026-10-06).
 
 ## Acceptance Criteria
 
 Ada développe le site, Barbot le visite, Tux le construit depuis un Clean checkout.
 
-- AC-RESPONSIVE-01: Given the eight surfaces composed as a full page, when Barbot loads it at 320, 640, 768 and 1280 px, then nothing scrolls sideways at any width and no text is clipped. Realizes R-RESPONSIVE-26, 27 and 28.
-- AC-RESPONSIVE-02: Given that page at 1280 px and above, when Ada compares it with what the package renders today, then each surface keeps its composition, the sizes the collapse onto the scale moved being the only difference she finds. Realizes R-RESPONSIVE-07 and 29.
-- AC-RESPONSIVE-03: Given the hero headline, when Barbot narrows the viewport from 1280 to 320 px, then its size shrinks continuously rather than in steps. Realizes R-RESPONSIVE-01.
-- AC-RESPONSIVE-04: Given any text a surface renders, when Ada inspects its computed size, then it traces to a `--t-*` step and to no literal declared by a component or by `sketch.css`. Realizes R-RESPONSIVE-03.
-- AC-RESPONSIVE-05: Given the hero, the closing CTA and the header, when a crawler reads the page, then each call to action is one anchor carrying its destination, and no anchor sits inside a button. Realizes R-RESPONSIVE-41 and 42.
-- AC-RESPONSIVE-06: Given the three `SkButton` calls of the v1 `_design-test` page, none of which passes an `href`, when Tux builds, then each renders a button, the page compiles unchanged and the build stays green. Realizes R-RESPONSIVE-41, 45 and 84.
-- AC-RESPONSIVE-07: Given a footer column carrying one item with a destination and one without, when Barbot reads the footer, then the first is a followable anchor and the second is text carrying no anchor and no `#`. Realizes R-RESPONSIVE-43.
-- AC-RESPONSIVE-08: Given Ada overriding a surface's layout from the site's own stylesheet with a selector carrying one class more than the package's, when the page renders, then her rule wins and she writes no `!important`. Realizes R-RESPONSIVE-22, 23 and 24.
-- AC-RESPONSIVE-09: Given a shadcn component rendering `bg-destructive`, when Barbot loads the page, then the colour resolves, and the site's stylesheet declares no colour literal. Realizes BR-PYRAMID-6 and R-RESPONSIVE-61 and 64.
-- AC-RESPONSIVE-10: Given a clean checkout, when Tux runs the green set, then dakar builds 23/23, robusta 42/42 and robusta-build 25/25, and the article page renders as it did. Realizes BR-PYRAMID-5 and R-RESPONSIVE-84.
-- AC-RESPONSIVE-11: Given the package's CSS, when Ada searches it for a breakpoint width, then each of the five appears once and no sixth width appears anywhere. Realizes R-RESPONSIVE-21.
-- AC-RESPONSIVE-12: Given a surface rendered from a server component of the v2 site, when Tux builds, then no surface carries `'use client'` and the site gains no client bundle from the design system. Realizes R-RESPONSIVE-82.
+- AC-RESPONSIVE-01 : Étant donné les huit surfaces composées en une page complète, quand Barbot la charge à 320, 640, 768 et 1280 px, alors rien ne défile de côté à aucune largeur et aucun texte n'est rogné. Réalise R-RESPONSIVE-26, 27 et 28.
+- AC-RESPONSIVE-02 : Étant donné cette page à 1280 px et au-delà, quand Ada la compare au rendu du package avant cette story, alors chaque surface garde sa composition, et les seules différences qu'elle trouve sont les tailles que le rabattement sur l'échelle a déplacées. Réalise R-RESPONSIVE-07 et 29.
+- AC-RESPONSIVE-03 : Étant donné le titre du hero, quand Barbot réduit le viewport de 1280 à 320 px, alors sa taille diminue en continu, pas par paliers. Réalise R-RESPONSIVE-01.
+- AC-RESPONSIVE-04 : Étant donné tout texte qu'une surface rend, quand Ada inspecte sa taille calculée, alors elle remonte à un pas `--t-*` et à aucun littéral déclaré par un composant ou par `sketch.css`. Réalise R-RESPONSIVE-03.
+- AC-RESPONSIVE-05 : Étant donné le hero, le CTA de clôture et l'en-tête, quand un crawler lit la page, alors chaque call to action est une seule ancre portant sa destination, et aucune ancre ne se trouve dans un bouton. Réalise R-RESPONSIVE-41 et 42.
+- AC-RESPONSIVE-06 : Étant donné un `SkButton` appelé sans `href`, quand Barbot lit la page, alors il trouve un bouton ; et étant donné les appels du package qui compilaient avant cette story, quand Tux construit le Green set, alors chacun compile inchangé. Réalise R-RESPONSIVE-41 et 45.
+- AC-RESPONSIVE-07 : Étant donné une colonne de footer portant un item avec destination et un item sans, quand Barbot lit le footer, alors le premier est une ancre qu'il peut suivre et le second un texte sans ancre ni `#`. Réalise R-RESPONSIVE-43.
+- AC-RESPONSIVE-08 : Étant donné Ada qui surcharge la mise en page d'une surface depuis la feuille de style du site, avec un sélecteur portant une classe de plus que celui du package, quand la page rend, alors sa règle l'emporte et elle n'écrit aucun `!important`. Réalise R-RESPONSIVE-22, 23 et 24.
+- AC-RESPONSIVE-09 : Étant donné un composant shadcn qui rend `bg-destructive`, quand Barbot charge la page, alors la couleur se résout, et la feuille de style du site ne déclare aucun littéral de couleur. Réalise BR-PYRAMID-6 et R-RESPONSIVE-61 et 64.
+- AC-RESPONSIVE-10 : Étant donné un Clean checkout, quand Tux lance le Green set, alors dakar construit 23/23, robusta 42/42 et robusta-build prérend ses 23 pages, et la page article rend comme avant. Réalise BR-PYRAMID-5 et R-RESPONSIVE-84.
+- AC-RESPONSIVE-11 : Étant donné le CSS du package, quand Ada y cherche une largeur de breakpoint, alors chacune des cinq apparaît une fois et aucune sixième largeur n'apparaît nulle part. Réalise R-RESPONSIVE-21.
+- AC-RESPONSIVE-12 : Étant donné les surfaces et les primitives du package, quand Ada en lit les sources, alors aucune ne porte de directive `'use client'` ni `'use server'`, et aucune ne lit le viewport en JavaScript : tout le responsive est en CSS. Réalise R-RESPONSIVE-82.
 - AC-RESPONSIVE-13 : Étant donné `Hero`, `ServicesGrid` et la variante `full` de `BrandLogo` rendus avec toutes leurs props de texte (`annotation`, `mascotAlt`, `moreLabel` et `moreHref` de chaque carte, `tagline`), quand Barbot lit la page, textes alternatifs compris, alors aucun mot du prototype ne lui parvient, et une annotation vide ne laisse ni légende ni flèche ; rendus sans aucune de ces props, ils gardent le rendu d'aujourd'hui, même texte au même endroit. Réalise BR-PYRAMID-8 et R-RESPONSIVE-101 à 107.
 
 ## Definition of done
 
-- The eight marketing surfaces hold at `sm` (640 px), `md` (768 px) and `xl` (1280 px) with no text clipped and nothing scrolling sideways, and keep their present composition at the widest. 320 px is a floor and not a breakpoint: nothing scrolls sideways there either.
-- The breakpoints live in one place in the package's CSS and the README names them; a consuming site never chooses one.
-- A full-page preview under `preview/` shows the eight surfaces composed, at the widths above — the package has no test of any kind and its preview sheets are per-component.
-- The layout of a surface no longer lives in inline styles: a consuming site can override it from a stylesheet without `!important`.
-- The type scale is fluid, written once in `colors_and_type.css`, and the surfaces render their type through it — no surface declares a font size of its own.
-- `SkButton` takes an optional `href` and renders an anchor when given one, `FooterColumn.items` carry a label and a destination, and every call to action of the package renders one interactive element with none nested inside it. Both changes are additive and no existing consumer breaks (decision of 2026-07-30).
-- The design system ships an error ramp of three — a base, its wash and its pressed tone — and the v2 site's token bridge aliases `--destructive` onto the base instead of recording its absence.
-- The package gains tokens, classes and props; it gains no new component and no new surface (decision of 2026-08-02).
-- The surfaces stay server-component-safe: no `'use client'`, and no viewport read in JavaScript.
-- The green set stays green from a clean checkout (BR-PYRAMID-5): dakar 23/23, robusta 42/42, robusta-build 25/25, with the article page and the `_design-test` smoke page of v1 still rendering.
-- Does not cover the landing page itself, its copy or its composition (robusta-landing-page); the README's stale font-stack claim (font-stack-readme, item 5); the weight of the wordmark (vectorize-wordmark).
+- Les huit surfaces marketing tiennent à `sm` (640 px), `md` (768 px) et `xl` (1280 px) sans texte rogné ni défilement latéral, et gardent leur composition actuelle à la plus grande largeur. 320 px est un plancher, pas un breakpoint : rien n'y défile de côté non plus.
+- Les breakpoints vivent à un seul endroit du CSS du package et le README les nomme ; un site consommateur n'en choisit jamais.
+- Une preview pleine page sous `preview/` montre les huit surfaces composées, aux largeurs ci-dessus. C'est le spécimen visuel ; les preuves automatiques sont les specs `node:test` du package (décision du 2026-10-06 du design doc).
+- La mise en page d'une surface ne vit plus dans des styles inline : un site consommateur la surcharge depuis une feuille de style sans `!important`.
+- L'échelle typographique est fluide, écrite une fois dans `colors_and_type.css`, et les surfaces rendent leur texte à travers elle : aucune surface ne déclare de taille de police propre.
+- `SkButton` prend un `href` optionnel et rend une ancre quand il en reçoit un, les `FooterColumn.items` portent un libellé et une destination, et chaque call to action du package rend un seul élément interactif, sans autre imbriqué. Les deux changements sont additifs et aucun consommateur existant ne casse (décision du 2026-07-30).
+- Le design system livre une rampe d'erreur de trois tons, `--brand-error`, `--brand-error-soft` et `--brand-error-deep`, et le token bridge du site v2, `apps/robusta-build/src/styles/globals.css`, aliase `--destructive` sur la base au lieu de consigner son absence.
+- Le package gagne des tokens, des classes et des props ; il ne gagne ni composant ni surface (décision du 2026-08-02).
+- Aucune surface ni primitive du package ne porte de directive `'use client'` ni `'use server'`, et aucune ne lit le viewport en JavaScript : tout le responsive est en CSS.
+- Le Green set reste vert depuis un Clean checkout (BR-PYRAMID-5) : dakar 23/23, robusta 42/42, robusta-build 23 pages prérendues, et la page article rend comme avant.
+- Hors périmètre : la landing page elle-même, son texte et sa composition (robusta-landing-page) ; l'affirmation périmée du README sur la font stack (font-stack-readme, item 5) ; le poids du wordmark (vectorize-wordmark).
 
 ## Boundaries
 
@@ -60,7 +61,7 @@ Le contrat de référence est la section Boundaries de [`design-system-responsiv
 
 ### API library du module `@robusta/pyramids-design-system` — modifiée
 
-Client code : app `@robusta/robusta-build` (package `landing` et pont de tokens), app `@robusta/build` (page `_design-test`).
+Client code : app `@robusta/robusta-build`, son package `landing` et son token bridge `src/styles/globals.css`.
 
 - `SkButtonProps` — un `href` optionnel : une ancre avec, un bouton sans.
 - `FooterColumn.items` — des `FooterLink`, un libellé et une destination optionnelle.
@@ -69,23 +70,28 @@ Client code : app `@robusta/robusta-build` (package `landing` et pont de tokens)
 
 ## Décisions
 
-- 2026-08-07 — The package adopts the breakpoint scale shadcn sits on, which is Tailwind's default set: `sm` 40rem, `md` 48rem, `lg` 64rem, `xl` 80rem, `2xl` 96rem — 640, 768, 1024, 1280 and 1536 px. Pourquoi : `apps/robusta-build` is Tailwind 4 with shadcn, so a site writing `md:` and a surface's own `@media` switch at the same width rather than at two nearby ones. The package is plain CSS and imports no Tailwind theme: it restates those values, which is what makes this a decision to record and not an inheritance. Arbitration of Gap 1, which settled the widths — "use modern standard, if possible those of shadcn"; the proof artefact is carried over from the proposition, a full-page preview under `preview/` plus the v2 site's own build.
-- 2026-08-07 — The breakpoints are fixed in one place in the package's CSS and named by its README, and `ubiquitous-language.md` gains `Breakpoint` on the values above. Pourquoi : BR-PYRAMID-6 forbids a site inventing one, so every later story cites these widths, and unnamed they get quoted as bare numbers and drift. The glossary entry is epicman's to record as registrar, never this story's to write. Arbitration of Gap 2, accepted as proposed.
-- 2026-08-07 — The design system ships one error ramp of the shape its brand ramps already have: a red that sits with the ink and the paper, its wash and its pressed tone, with the v2 bridge aliasing `--destructive` onto the base. Pourquoi : the decision of 2026-07-31 asked the design system to settle the value before a component needs one, and matching the existing ramps costs nothing today and saves a second pass. Arbitration of Open Question 1, accepted as proposed.
-- 2026-08-07 — The `.sk-*` primitive classes and the eight surface blocks are documented together in the README's Component vocabulary section, naming rule included. Pourquoi : Gap 1 of `design-system-responsive.design.md` made the surface class names a public override surface, which is how a site overrides a layout from a stylesheet without `!important`, and none of the five locations of the plan below documented them — a consumer who cannot read the names overrides nothing. Arbitration of that gap, accepted as proposed; the design doc stays the reference for the mechanism.
-- 2026-10-06 — The design system stops rendering page copy of its own: `HeroProps` gains `annotation` and `mascotAlt`, an empty annotation hiding the caption and its arrow, and the same defect is fixed in `ServicesGrid` (« see how it works ») and in the full variant of `BrandLogo`. Pourquoi : BR-PYRAMID-8 forbids a design system any page copy, yet `Hero` renders « this is crystal tux. she lives here. » and the alt text « crystal tux » whatever props it receives, so AC-LANDING-2 cannot hold, and the fix costs least while this story still has `Hero.tsx` open. Arbitration of Gap-LANDING-10 in `robusta-landing-page.story.md`, accepted as proposed (`lgtm`).
+- 2026-08-07 — Le package adopte l'échelle de breakpoints sur laquelle repose shadcn, le jeu par défaut de Tailwind : `sm` 40rem, `md` 48rem, `lg` 64rem, `xl` 80rem, `2xl` 96rem — 640, 768, 1024, 1280 et 1536 px. Pourquoi : `apps/robusta-build` est en Tailwind 4 avec shadcn, donc un `md:` du site et un `@media` d'une surface basculent à la même largeur plutôt qu'à deux largeurs voisines. Le package est en CSS pur et n'importe aucun thème Tailwind : il reprend ces valeurs, ce qui en fait une décision à consigner et non un héritage. Arbitrage du Gap 1, qui a fixé les largeurs — « use modern standard, if possible those of shadcn » ; l'artefact de preuve vient de la proposition : une preview pleine page sous `preview/` plus le build du site v2.
+- 2026-08-07 — Les breakpoints sont fixés à un seul endroit du CSS du package et nommés par son README, et `ubiquitous-language.md` gagne `Breakpoint` sur les valeurs ci-dessus. Pourquoi : BR-PYRAMID-6 interdit à un site d'en inventer un, donc chaque story suivante cite ces largeurs, et sans nom elles se citent en nombres nus et dérivent. L'entrée du glossaire revient à epicman, greffier, jamais à cette story. Arbitrage du Gap 2, accepté tel que proposé.
+- 2026-08-07 — Le design system livre une rampe d'erreur de la forme de ses rampes de marque : un rouge qui s'accorde avec l'encre et le papier, sa teinte douce et sa teinte profonde, et le bridge v2 aliase `--destructive` sur la base. Pourquoi : la décision du 2026-07-31 demandait au design system de fixer la valeur avant qu'un composant en ait besoin, et s'aligner sur les rampes existantes ne coûte rien et évite un second passage. Arbitrage de l'Open Question 1, acceptée telle que proposée.
+- 2026-08-07 — Les classes primitives `.sk-*` et les huit blocs de surface sont documentés ensemble dans la section Component vocabulary du README, règle de nommage comprise. Pourquoi : le Gap 1 de `design-system-responsive.design.md` a fait des noms de classe des surfaces une surface publique de surcharge — c'est ainsi qu'un site surcharge une mise en page sans `!important` — et aucun lieu du plan de documentation ne les documentait : un consommateur qui ne peut pas lire les noms ne surcharge rien. Arbitrage de ce gap, accepté tel que proposé ; le design doc reste la référence du mécanisme.
+- 2026-10-06 — Le design system cesse de rendre du texte de page qui lui est propre : `HeroProps` gagne `annotation` et `mascotAlt`, une annotation vide masquant la légende et sa flèche, et le même défaut est corrigé dans `ServicesGrid` (« see how it works ») et dans la variante `full` de `BrandLogo`. Pourquoi : BR-PYRAMID-8 interdit tout texte de page à un design system, or `Hero` rendait « this is crystal tux. she lives here. » et le texte alternatif « crystal tux » quelles que soient ses props, donc AC-LANDING-2 ne pouvait pas tenir, et la correction coûte le moins pendant que cette story a `Hero.tsx` ouvert. Arbitrage du Gap-LANDING-10 de `robusta-landing-page.story.md`, accepté tel que proposé (`lgtm`).
 - 2026-10-06 — Le design est amendé pour le texte de page (R-RESPONSIVE-101 à 107 : `annotation` et `mascotAlt` de `Hero`, `moreLabel` et `moreHref` des cartes de `ServicesGrid`, `tagline` de la variante `full` de `BrandLogo`) et repasse en DRAFT pour la réapprobation de l'éditeur. Pourquoi : l'implémentation part d'un design approuvé, et le WIP de `4963dc0`, antérieur à l'amendement, ne porte aucune de ces props ; il sera confronté au design une fois réapprouvé. Constat des sources, qui clôt Gap-RESPONSIVE-1.
+- 2026-10-07 — Le site v2 prérend 23 pages, 21 URLs de contenu plus `/` et `/404` : AC-RESPONSIVE-10 et la Definition of done attendent 23 pages prérendues au lieu de 25/25 ; dakar 23/23 et robusta 42/42 ne bougent pas. Pourquoi : le site a quitté Next.js pour TanStack Start sur Netlify (`af89ec1`). Arbitrage de l'éditeur.
+- 2026-10-07 — Aucune surface ni primitive du package ne porte `'use client'` ni `'use server'`, et tout le responsive est en CSS ; la story ne parle plus de server component ni de client bundle. Pourquoi : le site v2 est prérendu puis hydraté, sans server component, donc le design system est dans son bundle client, et son build échoue sur l'une ou l'autre directive sous `src`. Arbitrage de l'éditeur.
+- 2026-10-07 — La page `_design-test` de v1 cesse de servir de preuve, dans les AC comme dans les Boundaries : c'est un dossier privé de Next, jamais une route, dont le build ne vérifie que les types. AC-RESPONSIVE-06 garde son objet. Arbitrage de l'éditeur.
+- 2026-10-07 — Le token bridge du site v2 est `apps/robusta-build/src/styles/globals.css`, et non plus `src/app/globals.css`. Constat des sources après `af89ec1`.
+- 2026-10-07 — Le package a ses propres tests : 54 specs `node:test`, vertes ce jour ; la Definition of done ne dit plus le contraire. Pourquoi : décision du 2026-10-06 du design doc. Arbitrage de l'éditeur.
 
 ## Documentation updates
 
-- change the typography section of `packages/robusta-design-system/README.md` — the scale becomes fluid, and the sentence promising that this scale is going to move is what moves. The stale font-stack claim in the same section stays where it is: it belongs to font-stack-readme.
-- create a responsive paragraph under Visual foundations in the same README — why: the widths the package holds, and the breakpoints it switches at, cannot be read off inline styles by a consumer; state that they are the Tailwind default set shadcn sits on, restated in plain CSS rather than imported.
-- change the palette section of the same README — why: the error ramp and what it is for.
-- change the Component vocabulary section of the same README — why: the `.sk-*` primitive classes are already listed there, and the eight surface blocks plus the naming rule become a public override surface a consumer has to be able to read.
-- change `packages/robusta-design-system/design-system.archi.md` — why: the CSS block of its diagram, the `SkButton` and `SiteFooter` rows of its component tables, and the gotcha stating that the buttons are presentational.
-- change the Styling section of `apps/robusta-build/README.md` and the `--destructive` gotcha of `apps/robusta-build/robusta-build.archi.md` — why: both record the absence of an error colour as deliberate, and it stops being absent.
+- change la section typography de `packages/robusta-design-system/README.md` — why: l'échelle devient fluide, et la phrase qui promettait que cette échelle allait bouger est ce qui bouge. L'affirmation périmée sur la font stack, dans la même section, reste en place : elle appartient à font-stack-readme.
+- create un paragraphe responsive sous Visual foundations dans le même README — why: un consommateur ne lit pas dans les composants les largeurs que le package tient ni les breakpoints où il bascule ; dire qu'il s'agit du jeu par défaut de Tailwind sur lequel repose shadcn, repris en CSS pur et non importé.
+- change la section palette du même README — why: la rampe d'erreur et son usage.
+- change la section Component vocabulary du même README — why: les classes primitives `.sk-*` y sont déjà listées, et les huit blocs de surface avec leur règle de nommage deviennent une surface publique de surcharge qu'un consommateur doit pouvoir lire.
+- change `packages/robusta-design-system/design-system.archi.md` — why: le bloc CSS de son diagramme, les lignes `SkButton` et `SiteFooter` de ses tables de composants, et le gotcha qui dit les boutons présentationnels.
+- change la section Styling de `apps/robusta-build/README.md` et le gotcha `--destructive` de `apps/robusta-build/robusta-build.archi.md` — why: les deux consignent l'absence de couleur d'erreur comme voulue, et elle cesse d'être absente.
 
 ## Dependencies
 
-- Dep 1: none blocking. The work sits inside `packages/robusta-design-system`, which has been on `dev` and inside `build:deps` since 2026-07-30, between `pyramids-themes` and `pyramids-layouts`.
-- Dep 2: this story is itself the dependency of robusta-landing-page (item 2 of À faire), whose own Dependencies section still numbers the epic items of an earlier ordering and does not name this one.
+- Dep 1 : aucune bloquante. Le travail tient dans `packages/robusta-design-system`, sur `dev` et dans `build:deps` depuis le 2026-07-30, entre `pyramids-themes` et `pyramids-layouts`.
+- Dep 2 : cette story est elle-même la Dep 1 de robusta-landing-page, dont elle bloque l'implémentation.

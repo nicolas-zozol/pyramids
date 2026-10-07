@@ -1,16 +1,16 @@
 # Design: Responsive pass over the robusta design system
 
-**Last update:** 2026-10-06
+**Last update:** 2026-10-07
 **Feature:** design-system-responsive
 **Infix:** RESPONSIVE
 **Status:** APPROVED (2026-10-06 — validated by Nicolas)
 **Sources:** [story](design-system-responsive.story.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../packages/robusta-design-system/design-system.archi.md), [robusta-landing-page story](../robusta-landing-page/robusta-landing-page.story.md)
 
-## Progress — APPROVED 86%
+## Progress — APPROVED 100%
 
 ```
- WIP  Requirements         █████████████████░░░  34/38
- WIP  Acceptance Criteria  ███████████████░░░░░  10/13
+      Requirements         ████████████████████  38/38  ✅
+      Acceptance Criteria  ████████████████████  13/13  ✅
 ```
 
 ## Goal
@@ -93,7 +93,7 @@ An item carrying an `href` renders an anchor. An item carrying none renders its 
 
 The optional destination is what makes the package's own defaults honest. `DEFAULT_COLUMNS` declares twelve labels and the package knows none of the site's URLs (BR-PYRAMID-8), so the defaults declare no destination and render as text; a site supplying `columns` supplies real links.
 
-The additive constraint costs nothing here, verified rather than assumed: `SiteFooter` has no call site in the repository. The only consumers of the package are `apps/robusta-build`, which imports `NotesPreview`, `BrandLogo`, `SkCallout` and `SkTag`, and `apps/robusta`, whose `_design-test` page imports `BrandLogo`, `SkButton` and `SkTag`. `apps/dakar` imports the package nowhere. So the widening of `items` breaks no compiling call site, and `SkButton`'s union keeps the three `_design-test` calls valid as written.
+La contrainte additive ne coûte rien ici, constat et non supposition : `SiteFooter` n'a aucun appel dans le dépôt. Les seuls consommateurs du package sont `apps/robusta-build`, qui importe `NotesPreview`, `BrandLogo`, `SkCallout`, `SkTag` et le type `NotePost`, et `apps/robusta`, qui importe `BrandLogo`, `SkButton` et `SkTag` ; `apps/dakar` ne l'importe nulle part. L'élargissement de `items` ne casse donc aucun appel qui compile, et l'union de `SkButton` garde valides tels qu'écrits ses trois appels existants, dont aucun ne passe de `href`.
 
 ### `Hero`, `ServicesGrid`, `BrandLogo` — le texte de page passe par des props
 
@@ -219,14 +219,14 @@ The value is the design system's to decide (decision of 2026-07-31), and what co
 
 No component of the package consumes the ramp, and that is the point — the system settles the value before a component needs one.
 
-### `apps/robusta-build/src/app/globals.css` — the bridge stops recording an absence
+### `apps/robusta-build/src/styles/globals.css` — le bridge cesse de consigner une absence
 
-Four lines, all aliases, no literal:
+Quatre lignes, toutes des alias, aucun littéral :
 
-- `--destructive: var(--brand-error)` and `--destructive-foreground: var(--paper)` in `:root`.
-- `--color-destructive` and `--color-destructive-foreground` in `@theme inline`, which is how Tailwind 4 emits `bg-destructive` and its siblings.
+- `--destructive: var(--brand-error)` et `--destructive-foreground: var(--paper)` dans `:root`.
+- `--color-destructive` et `--color-destructive-foreground` dans `@theme inline`, par où Tailwind 4 émet `bg-destructive` et ses voisines.
 
-The comment block declaring the two names deliberately absent goes with them. This is the only site file this story touches.
+Le bloc de commentaire qui déclarait les deux noms absents à dessein part avec elles. C'est le seul fichier du site que touche cette story.
 
 ### `preview/` — one full-page sheet
 
@@ -236,15 +236,15 @@ It restates the surfaces' markup in plain HTML and can drift from the TSX. It is
 
 ## Technical Constraints
 
-- The package is `packages/robusta-design-system`, published as `@robusta/pyramids-design-system`, `type: module`, built by `tsc` to `dist/` and consumed as build output. It is the third step of `yarn build:deps`, between `pyramids-themes` and `pyramids-layouts`.
+- Le package est `packages/robusta-design-system`, publié sous `@robusta/pyramids-design-system`, `type: module`, construit par `tsc` vers `dist/` et consommé comme build output. Il est dans `yarn build:deps`, entre `pyramids-themes` et `pyramids-layouts`.
 - `tsc` compiles `src/` only. The CSS and the assets ship as static files at the package root and reach a consumer through the `exports` map in subpaths, with no copy step into `dist/`. A CSS edit therefore needs no rebuild and no watcher — under `nodeLinker: node-modules` a workspace resolves through a symlink, so a running dev server sees the edited file — while a `.tsx` edit needs `yarn w:design-system`, which runs `tsc --watch` and watches no CSS.
 - Local TypeScript imports end with `.js` though the source is `.ts` / `.tsx`. The barrels and the cross-component imports of this package already follow it.
 - Functional components only, never `React.FC`; an `interface FooProps` and a plain function; named exports. `SkButtonProps` becoming a type alias is the one exception the union forces, and it is a props type rather than a component.
-- Server-component-safe: no `'use client'` anywhere, and no viewport read in JavaScript. Every responsive behaviour is CSS, which is also what keeps the surfaces usable from a React Server Component of the v2 site.
+- Aucune directive : aucune surface ni primitive ne porte `'use client'` ni `'use server'`, et aucune ne lit le viewport en JavaScript ; tout le responsive est en CSS. Le build du site v2 échoue sur l'une ou l'autre directive sous son `src` (`check:source`), un contrôle qui ne lit pas les sources du package : la règle y tient par le package lui-même.
 - The package depends on `react` alone, at peer `^19.1.1`, and gains no dependency here. It cannot use `next/image`: images stay `<img>` sized by CSS.
 - A media query cannot read a CSS custom property, and the package ships plain CSS through no PostCSS step, so `@custom-media` is unavailable too. The five widths are literals in five `@media` preludes and nowhere else.
 - BR-PYRAMID-6 — a site's design tokens come from its design system alone. The consuming site aliases a name onto a token and coins no value, which is why `--destructive` has to exist here before the bridge can name it, and why the fluid scale is written in `colors_and_type.css` and in no site's file. BR-PYRAMID-3 keeps the package robusta's alone; BR-PYRAMID-8 keeps the package's default copy out of what a site publishes, and is why a default footer item declares no destination.
-- BR-PYRAMID-5 — the green set stays green from a clean checkout: dakar 23/23, robusta 42/42, robusta-build 25/25 static pages. The v1 `_design-test` page and the v2 article page are the two rendered proofs; the article page reads `--t-*` through the element rules of `colors_and_type.css` and through `ArticleProse.module.css`, so a scale change reaches it without it changing.
+- BR-PYRAMID-5 — le Green set reste vert depuis un Clean checkout : dakar 23/23, robusta 42/42, et robusta-build prérend ses 23 pages, 21 URLs de contenu plus `/` et `/404`. La page article v2 est la preuve rendue : elle lit l'échelle à travers les règles d'élément de `colors_and_type.css` et la classe `.sk-tag` de `SkTag`, et `ArticleProse.module.css` ne déclare aucune taille propre, si bien qu'un changement d'échelle l'atteint sans qu'elle change.
 - React n'émet pas un attribut qui vaut `undefined`, et émet `alt=""` pour une chaîne vide. `mascotAlt` a donc une chaîne pour défaut et n'atteint jamais l'`<img>` en `undefined` : c'est ce qui tient l'attribut `alt` de R-RESPONSIVE-103.
 - Node 22, yarn 4.17.1, React 19.1.1 stable everywhere, TypeScript 5. `next.config.ts` sets `eslint.ignoreDuringBuilds: true` in both Next apps, so `yarn lint` is run explicitly and is not gated by a build.
 
@@ -291,9 +291,9 @@ Colour:
 Scope:
 
 - R-RESPONSIVE-81: The package gains tokens, classes and props, and gains no component and no surface.
-- R-RESPONSIVE-82: Every surface stays server-component-safe: no `'use client'`, and no viewport read in JavaScript.
+- R-RESPONSIVE-82 : Aucune surface ni primitive ne porte de directive `'use client'` ni `'use server'`, et aucune ne lit le viewport en JavaScript : tout le responsive est en CSS.
 - R-RESPONSIVE-83: The package's dependencies do not change, and it renders images as `<img>` sized by CSS.
-- R-RESPONSIVE-84: The green set builds from a clean checkout — dakar 23/23, robusta 42/42, robusta-build 25/25 — with the v2 article page and the v1 `_design-test` page still rendering. Realizes BR-PYRAMID-5.
+- R-RESPONSIVE-84 : Le Green set se construit depuis un Clean checkout : dakar 23/23, robusta 42/42, et robusta-build prérend ses 23 pages ; la page article v2 rend comme avant. Réalise BR-PYRAMID-5.
 - R-RESPONSIVE-85: The only site file this story touches is the v2 token bridge, and it touches it with aliases alone. Realizes BR-PYRAMID-3 and BR-PYRAMID-6.
 
 Texte de page :
@@ -308,27 +308,27 @@ Texte de page :
 
 ## Acceptance Criteria
 
-Ada develops the site, Barbot visits, Tux builds from a clean checkout.
+Ada développe le site, Barbot le visite, Tux le construit depuis un Clean checkout.
 
-- AC-RESPONSIVE-01: Given the eight surfaces composed as a full page, when Barbot loads it at 320, 640, 768 and 1280 px, then nothing scrolls sideways at any width and no text is clipped. Realizes R-RESPONSIVE-26, 27 and 28.
-- AC-RESPONSIVE-02: Given that page at 1280 px and above, when Ada compares it with what the package renders today, then each surface keeps its composition, the sizes the collapse onto the scale moved being the only difference she finds. Realizes R-RESPONSIVE-07 and 29.
-- AC-RESPONSIVE-03: Given the hero headline, when Barbot narrows the viewport from 1280 to 320 px, then its size shrinks continuously rather than in steps. Realizes R-RESPONSIVE-01.
-- AC-RESPONSIVE-04: Given any text a surface renders, when Ada inspects its computed size, then it traces to a `--t-*` step and to no literal declared by a component or by `sketch.css`. Realizes R-RESPONSIVE-03.
-- AC-RESPONSIVE-05: Given the hero, the closing CTA and the header, when a crawler reads the page, then each call to action is one anchor carrying its destination, and no anchor sits inside a button. Realizes R-RESPONSIVE-41 and 42.
-- AC-RESPONSIVE-06: Given the three `SkButton` calls of the v1 `_design-test` page, none of which passes an `href`, when Tux builds, then each renders a button, the page compiles unchanged and the build stays green. Realizes R-RESPONSIVE-41, 45 and 84.
-- AC-RESPONSIVE-07: Given a footer column carrying one item with a destination and one without, when Barbot reads the footer, then the first is a followable anchor and the second is text carrying no anchor and no `#`. Realizes R-RESPONSIVE-43.
-- AC-RESPONSIVE-08: Given Ada overriding a surface's layout from the site's own stylesheet with a selector carrying one class more than the package's, when the page renders, then her rule wins and she writes no `!important`. Realizes R-RESPONSIVE-22, 23 and 24.
-- AC-RESPONSIVE-09: Given a shadcn component rendering `bg-destructive`, when Barbot loads the page, then the colour resolves, and the site's stylesheet declares no colour literal. Realizes BR-PYRAMID-6 and R-RESPONSIVE-61 and 64.
-- AC-RESPONSIVE-10: Given a clean checkout, when Tux runs the green set, then dakar builds 23/23, robusta 42/42 and robusta-build 25/25, and the article page renders as it did. Realizes BR-PYRAMID-5 and R-RESPONSIVE-84.
-- AC-RESPONSIVE-11: Given the package's CSS, when Ada searches it for a breakpoint width, then each of the five appears once and no sixth width appears anywhere. Realizes R-RESPONSIVE-21.
-- AC-RESPONSIVE-12: Given a surface rendered from a server component of the v2 site, when Tux builds, then no surface carries `'use client'` and the site gains no client bundle from the design system. Realizes R-RESPONSIVE-82.
+- AC-RESPONSIVE-01 : Étant donné les huit surfaces composées en une page complète, quand Barbot la charge à 320, 640, 768 et 1280 px, alors rien ne défile de côté à aucune largeur et aucun texte n'est rogné. Réalise R-RESPONSIVE-26, 27 et 28.
+- AC-RESPONSIVE-02 : Étant donné cette page à 1280 px et au-delà, quand Ada la compare au rendu du package avant cette story, alors chaque surface garde sa composition, et les seules différences qu'elle trouve sont les tailles que le rabattement sur l'échelle a déplacées. Réalise R-RESPONSIVE-07 et 29.
+- AC-RESPONSIVE-03 : Étant donné le titre du hero, quand Barbot réduit le viewport de 1280 à 320 px, alors sa taille diminue en continu, pas par paliers. Réalise R-RESPONSIVE-01.
+- AC-RESPONSIVE-04 : Étant donné tout texte qu'une surface rend, quand Ada inspecte sa taille calculée, alors elle remonte à un pas `--t-*` et à aucun littéral déclaré par un composant ou par `sketch.css`. Réalise R-RESPONSIVE-03.
+- AC-RESPONSIVE-05 : Étant donné le hero, le CTA de clôture et l'en-tête, quand un crawler lit la page, alors chaque call to action est une seule ancre portant sa destination, et aucune ancre ne se trouve dans un bouton. Réalise R-RESPONSIVE-41 et 42.
+- AC-RESPONSIVE-06 : Étant donné un `SkButton` appelé sans `href`, quand Barbot lit la page, alors il trouve un bouton ; et étant donné les appels du package qui compilaient avant cette story, quand Tux construit le Green set, alors chacun compile inchangé. Réalise R-RESPONSIVE-41 et 45.
+- AC-RESPONSIVE-07 : Étant donné une colonne de footer portant un item avec destination et un item sans, quand Barbot lit le footer, alors le premier est une ancre qu'il peut suivre et le second un texte sans ancre ni `#`. Réalise R-RESPONSIVE-43.
+- AC-RESPONSIVE-08 : Étant donné Ada qui surcharge la mise en page d'une surface depuis la feuille de style du site, avec un sélecteur portant une classe de plus que celui du package, quand la page rend, alors sa règle l'emporte et elle n'écrit aucun `!important`. Réalise R-RESPONSIVE-22, 23 et 24.
+- AC-RESPONSIVE-09 : Étant donné un composant shadcn qui rend `bg-destructive`, quand Barbot charge la page, alors la couleur se résout, et la feuille de style du site ne déclare aucun littéral de couleur. Réalise BR-PYRAMID-6 et R-RESPONSIVE-61 et 64.
+- AC-RESPONSIVE-10 : Étant donné un Clean checkout, quand Tux lance le Green set, alors dakar construit 23/23, robusta 42/42 et robusta-build prérend ses 23 pages, et la page article rend comme avant. Réalise BR-PYRAMID-5 et R-RESPONSIVE-84.
+- AC-RESPONSIVE-11 : Étant donné le CSS du package, quand Ada y cherche une largeur de breakpoint, alors chacune des cinq apparaît une fois et aucune sixième largeur n'apparaît nulle part. Réalise R-RESPONSIVE-21.
+- AC-RESPONSIVE-12 : Étant donné les surfaces et les primitives du package, quand Ada en lit les sources, alors aucune ne porte de directive `'use client'` ni `'use server'`, et aucune ne lit le viewport en JavaScript : tout le responsive est en CSS. Réalise R-RESPONSIVE-82.
 - AC-RESPONSIVE-13 : Étant donné `Hero`, `ServicesGrid` et la variante `full` de `BrandLogo` rendus avec toutes leurs props de texte (`annotation`, `mascotAlt`, `moreLabel` et `moreHref` de chaque carte, `tagline`), quand Barbot lit la page, textes alternatifs compris, alors aucun mot du prototype ne lui parvient, et une annotation vide ne laisse ni légende ni flèche ; rendus sans aucune de ces props, ils gardent le rendu d'aujourd'hui, même texte au même endroit. Réalise BR-PYRAMID-8 et R-RESPONSIVE-101 à 107.
 
 Cas limites à tester :
 
 - `Hero` avec `annotation=""`, puis avec `annotation={null}` : ni légende ni flèche dans le HTML rendu.
 - `Hero` avec `mascotSrc` et sans `mascotAlt` : `alt="crystal tux"` ; avec `mascotAlt=""` : l'attribut `alt=""` est présent — jamais une `<img>` sans `alt`.
-- `Hero`, `ServicesGrid` et `BrandLogo size="full"` rendus sans aucune prop de texte : le même texte au même endroit qu'avant l'amendement ; la page `_design-test` de v1 garde la tagline de son `BrandLogo`.
+- `Hero`, `ServicesGrid` et `BrandLogo size="full"` rendus sans aucune prop de texte : le même texte au même endroit qu'avant l'amendement.
 - Les trois rendus avec toutes leurs props de texte, `annotation` vide et des `services` sans `moreLabel` : ni « this is crystal tux. », ni « she lives here. », ni `alt="crystal tux"`, ni « see how it works », ni « senior engineering, hand-built. » dans le HTML ; la marque — 💪, 🏗 et `alt="Robusta Build"` — y reste. AC-LANDING-2 de robusta-landing-page repose sur ce cas.
 - Trois cartes, la première avec `moreLabel` et `moreHref`, la deuxième avec `moreLabel` seul, la troisième sans : une ancre, du texte sans ancre ni `#`, aucune ligne.
 - `BrandLogo` en variante `compact` ou `mark` avec une `tagline` passée : pas de tagline rendue.
