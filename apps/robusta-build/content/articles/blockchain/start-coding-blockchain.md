@@ -8,6 +8,7 @@ category: blockchain
 published: true
 author: Nicolas Zozol
 featured: true
+translationId: start-coding-blockchain
 ---
 
 Setup as quick as possible your professional environment for learning web3 coding.

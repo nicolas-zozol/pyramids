@@ -8,6 +8,7 @@ category: typescript
 published: true
 author: Nicolas Zozol
 featured: true
+translationId: completes-with
 ---
 
 How to complete an observable when the other completes ?

@@ -8,6 +8,7 @@ category: web
 published: true
 author: Nicolas Zozol
 featured: true
+translationId: easy-automation-with-sonoff
 ---
 
 Turn on and off your old electric heater with code. You can save money and lower CO2 with

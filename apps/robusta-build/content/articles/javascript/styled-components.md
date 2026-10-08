@@ -7,6 +7,7 @@ image: ../images/styled-logo.png
 category: javascript
 published: true
 author: Nicolas Zozol
+translationId: styled-components
 ---
 
 Styled component is a technology that scales css. It's great, but there are some 

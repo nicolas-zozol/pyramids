@@ -63,7 +63,7 @@ For example I use Metamask for my 400% APY farming on Elrond that I harvest almo
 
 ### Ledger with Metamask and DeFi
 
-Metamask was not designed for DeFi, but for receiving and storing native tokens. Before interacting with smart contracts, you have to allow Blind Signing for each tokens you play with.
+Ledger was not designed for DeFi, but for receiving and storing native tokens. Before interacting with smart contracts, you have to allow Blind Signing for each tokens you play with.
 
 ![Blind signing](./images/blind-signing.png)
 

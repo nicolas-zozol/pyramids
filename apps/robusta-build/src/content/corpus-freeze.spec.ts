@@ -47,12 +47,16 @@ async function articlesUnder(root: string): Promise<string[]> {
     .sort();
 }
 
-const pairs = await articlesUnder(V2);
+const pairs = await articlesUnder(V1);
 
 describe('the frozen v1 corpus and its conversion', () => {
-  it('holds the same eleven articles at the same relative paths', async () => {
+  /**
+   * The v2 tree may hold more than the eleven: the French translations of the
+   * English articles sit beside their originals and have no v1 counterpart.
+   */
+  it('finds each of the eleven v1 articles at the same relative path in the v2 tree', async () => {
     expect(pairs).toHaveLength(11);
-    expect(await articlesUnder(V1)).toEqual(pairs);
+    expect(await articlesUnder(V2)).toEqual(expect.arrayContaining(pairs));
   });
 
   for (const path of pairs) {

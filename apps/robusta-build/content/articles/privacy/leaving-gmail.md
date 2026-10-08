@@ -7,6 +7,7 @@ image: ./images/gmail.png
 category: privacy
 published: true
 author: Nicolas Zozol
+translationId: leaving-gmail
 ---
 
 GMail was a revolution in 2004. Is Google too big now ?

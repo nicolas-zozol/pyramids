@@ -107,13 +107,27 @@ async function filesUnder(directory: string): Promise<string[]> {
     .sort();
 }
 
+/**
+ * The French translations of the six English articles, written beside their
+ * originals and unpublished until `fr` becomes the default locale, so each one
+ * first appears at its final address.
+ */
+const UNPUBLISHED_TRANSLATIONS = [
+  'blockchain/ledger-contre-metamask.md',
+  'blockchain/outillage-solidity.md',
+  'javascript/bien-appliquer-classname-styled-components.md',
+  'javascript/typescript/terminer-observable-rxjs.md',
+  'privacy/quitter-gmail.md',
+  'web/domotique-facile-avec-sonoff.md',
+];
+
 describe('the migrated corpus, read through the site’s own declaration', () => {
-  it('holds eleven published articles, with no violation and no unpublished path', async () => {
+  it('holds eleven published articles, with no violation, the six translations left unpublished', async () => {
     const { articles, unpublished, violations } = await read();
 
     expect(violations).toEqual([]);
     expect(articles).toHaveLength(11);
-    expect(unpublished).toEqual([]);
+    expect([...unpublished].sort()).toEqual(UNPUBLISHED_TRANSLATIONS);
   });
 
   it('addresses them at the slugs the v1 mapping was computed from', async () => {
@@ -180,7 +194,7 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
     expect(byLocale).toEqual({ en: 8, fr: 3 });
   });
 
-  it('pairs the two translated articles, each pair holding one English and one French', async () => {
+  it('pairs the two translated articles, the six others waiting on their unpublished French version', async () => {
     const { articles } = await read();
     const paired = articles.filter(
       (entry) => entry.translationId !== undefined,
@@ -192,9 +206,15 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
       pairs.set(key, [...(pairs.get(key) ?? []), entry.locale].sort());
     }
 
-    expect(paired).toHaveLength(4);
+    expect(paired).toHaveLength(10);
     expect([...pairs.entries()].sort()).toEqual([
+      ['completes-with', ['en']],
+      ['easy-automation-with-sonoff', ['en']],
       ['gatsby-to-nextjs', ['en', 'fr']],
+      ['leaving-gmail', ['en']],
+      ['ledger-versus-metamask', ['en']],
+      ['start-coding-blockchain', ['en']],
+      ['styled-components', ['en']],
       ['yield-farming', ['en', 'fr']],
     ]);
   });
