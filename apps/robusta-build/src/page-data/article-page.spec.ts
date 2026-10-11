@@ -31,8 +31,8 @@ describe('articlePage', () => {
     const english = await articlePage({ locale: 'en', slug: YIELD_EN });
     const french = await articlePage({ locale: 'fr', slug: YIELD_FR });
 
-    expect(english.categoryUrl).toBe('/articles/c/blockchain');
-    expect(french.categoryUrl).toBe('/l/fr/articles/c/blockchain');
+    expect(english.categoryUrl).toBe('/l/en/articles/c/blockchain');
+    expect(french.categoryUrl).toBe('/articles/c/blockchain');
   });
 
   it('writes the date as the article’s locale writes it, at build', async () => {
@@ -48,12 +48,12 @@ describe('articlePage', () => {
     const french = await articlePage({ locale: 'fr', slug: YIELD_FR });
 
     expect(english.translation).toEqual({
-      url: `/l/fr/articles/c/blockchain/${YIELD_FR}`,
+      url: `/articles/c/blockchain/${YIELD_FR}`,
       locale: 'fr',
       label: 'français',
     });
     expect(french.translation).toEqual({
-      url: `/articles/c/blockchain/${YIELD_EN}`,
+      url: `/l/en/articles/c/blockchain/${YIELD_EN}`,
       locale: 'en',
       label: 'English',
     });

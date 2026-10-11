@@ -1,5 +1,6 @@
 import { useRouterState } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { FailedNavigationPage } from './FailedNavigationPage.js';
 
 export interface ReloadMemory {
   has(key: string): boolean;
@@ -43,15 +44,7 @@ export function NavigationFailure() {
   if (outcome === 'reloading') {
     return null;
   }
-  return (
-    <main style={{ padding: 'var(--sp-8) var(--sp-6)' }}>
-      <h1>this page failed to load</h1>
-      <p>
-        <a href={href}>try this address again</a> or{' '}
-        <a href="/">go back to the home page</a>.
-      </p>
-    </main>
-  );
+  return <FailedNavigationPage href={href} />;
 }
 
 function tabMemory(): ReloadMemory {

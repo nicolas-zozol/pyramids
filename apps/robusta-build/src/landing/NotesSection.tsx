@@ -3,7 +3,7 @@
  *
  * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
  * Requirements: R-MIGRATELEARN-44
- * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-65
  */
 import { NotesPreview, type NotePost } from '@robusta/pyramids-design-system';

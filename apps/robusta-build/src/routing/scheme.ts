@@ -11,7 +11,8 @@ export const ROLL_SIZE = 12;
  * The site's one scheme instance, so no route composes a `UrlScheme` of its own.
  *
  * It is a leaf module on purpose. `seopyramids.config.ts` reads these four
- * values into `blogConfig` rather than the other way round, because the site
+ * values into `blogConfig`, and the two Locales into its root, rather than the
+ * other way round, because the site
  * configuration resolves the design system's wordmark through a bundler-only
  * PNG import, and the plain-Node build scripts have to reach the scheme
  * without it. `articles` is still written
@@ -19,7 +20,7 @@ export const ROLL_SIZE = 12;
  */
 export const urlScheme: UrlScheme = {
   contentRoot: 'articles',
-  defaultLocale: 'en',
-  otherLocales: ['fr'],
+  defaultLocale: 'fr',
+  otherLocales: ['en'],
   rollSize: ROLL_SIZE,
 };

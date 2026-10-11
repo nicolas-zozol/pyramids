@@ -4,7 +4,7 @@
  * (AC-URLSCHEME-42). Run after `vite build`, on what the prerender wrote under
  * `dist/client`.
  *
- * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-24, R-TANSTACK-25, R-TANSTACK-26
  */
 import { existsSync } from 'node:fs';

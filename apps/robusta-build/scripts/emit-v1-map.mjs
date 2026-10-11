@@ -6,7 +6,7 @@
  * in the build reads it and no redirect is served from it; restore-v1-urls is
  * the item that will.
  *
- * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-09
  */
 import { mkdirSync, writeFileSync } from 'node:fs';

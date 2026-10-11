@@ -3,7 +3,7 @@
  * local import that does not end in `.js`, anywhere under `src`. The generated
  * route tree is the generator's, not the site's, and is skipped.
  *
- * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-11
  */
 import { readdir, readFile } from 'node:fs/promises';

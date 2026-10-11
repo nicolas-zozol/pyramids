@@ -6,12 +6,22 @@ import type { ArticleIndexEntry } from '../content/article-index.js';
  *
  * It is a function of the article index rather than a hand-kept table, which is
  * what keeps it from drifting: the day an article claims `solidity`, the rows
- * that mention it change without an edit. The three exported constants are the
- * v1 inventory no article index can produce — the raw markdown URLs, the tag
- * URLs, the declared category paths — read once from the v1 code and frozen.
+ * that mention it change without an edit. The exported constants are the v1
+ * inventory no article index can produce — the Locales v1 published, the raw
+ * markdown URLs, the tag URLs, the declared category paths — read once from the
+ * v1 code and frozen. Every source is computed with them alone; only the
+ * destinations read the scheme of the v2 site, each in the language of its v1
+ * page.
  *
  * This module imports nothing from React on purpose: it is executed by
  * `scripts/emit-v1-map.mjs` in plain Node.
+ *
+ * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
+ * Requirements: R-URLSCHEME-14, R-URLSCHEME-15, R-URLSCHEME-25, R-URLSCHEME-26, R-URLSCHEME-27, R-URLSCHEME-28
+ * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
+ * Requirements: R-MIGRATELEARN-61
+ * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
+ * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
  */
 
 export type V1Destination =
@@ -24,6 +34,12 @@ export interface V1MappingRow {
   destination: V1Destination;
   note?: string;
 }
+
+/** The Locales v1 published under `/learn`: `en` unmarked, `fr` under `/learn/fr`. */
+export const V1_LOCALES: Pick<UrlScheme, 'defaultLocale' | 'otherLocales'> = {
+  defaultLocale: 'en',
+  otherLocales: ['fr'],
+};
 
 /** From `apps/robusta/src/logic/categories/robusta-categories.ts`. */
 export const V1_DECLARED_CATEGORY_PATHS: readonly string[][] = [
@@ -104,15 +120,16 @@ const V1_ARTICLE_DISCRIMINANT = 's';
 const V1_ROLL_DISCRIMINANT = 'page';
 const V1_HOME = '/learn';
 
+/** Every v1 address, led to the page `scheme` builds in the language of its v1 page. */
 export function v1UrlMap(
   scheme: UrlScheme,
   articles: readonly ArticleIndexEntry[],
 ): V1MappingRow[] {
-  const locales = [scheme.defaultLocale, ...scheme.otherLocales];
+  const locales = [V1_LOCALES.defaultLocale, ...V1_LOCALES.otherLocales];
 
   return [
     ...blogHomeRows(scheme, locales),
-    ...blogRollRows(scheme, locales),
+    ...blogRollRows(locales),
     ...categoryRows(scheme, locales, articles),
     ...articleRows(scheme, articles),
     ...tagRows(scheme, articles),
@@ -126,7 +143,7 @@ export function v1UrlMap(
 
 function blogHomeRows(scheme: UrlScheme, locales: readonly string[]): V1MappingRow[] {
   return locales.map((locale) => ({
-    from: v1Path(scheme, locale, []),
+    from: v1Path(locale, []),
     destination: {
       kind: 'permanent' as const,
       to: buildUrl(scheme, { kind: 'blog-home', locale, page: 1 }),
@@ -134,12 +151,9 @@ function blogHomeRows(scheme: UrlScheme, locales: readonly string[]): V1MappingR
   }));
 }
 
-function blogRollRows(
-  scheme: UrlScheme,
-  locales: readonly string[],
-): V1MappingRow[] {
+function blogRollRows(locales: readonly string[]): V1MappingRow[] {
   return locales.map((locale) => ({
-    from: v1Path(scheme, locale, [V1_ROLL_DISCRIMINANT, ':n']),
+    from: v1Path(locale, [V1_ROLL_DISCRIMINANT, ':n']),
     destination: {
       kind: 'none' as const,
       why: 'v1 never generated one: its corpus of 11 articles never reached the roll size of 12',
@@ -167,12 +181,12 @@ function categoryRows(
         path.length > 1 ? `flattened to its leaf '${leaf}'` : undefined;
 
       rows.push({
-        from: v1Path(scheme, locale, path),
+        from: v1Path(locale, path),
         destination: { kind: 'permanent', to },
         ...(note === undefined ? {} : { note }),
       });
       rows.push({
-        from: v1Path(scheme, locale, [...path, V1_ROLL_DISCRIMINANT, ':n']),
+        from: v1Path(locale, [...path, V1_ROLL_DISCRIMINANT, ':n']),
         destination: { kind: 'permanent', to },
         note: 'the page number is dropped',
       });
@@ -191,13 +205,14 @@ function categoryRows(
  * `/learn/{category}/s/{slug}` is what v1 published for a French article as much
  * as for an English one.
  *
- * The fixture corpus hid this: it costs nothing until an article of a
- * non-default locale exists. With the real corpus it costs three rows, whose
- * true addresses would otherwise fall through to the `/learn/:path*` namespace
- * rule and answer 410 Gone — three indexed article URLs retired by accident.
+ * The fixture corpus hid this: it costs nothing until an article of a Locale
+ * other than v1's default exists. With the real corpus it costs three rows,
+ * whose true addresses would otherwise fall through to the `/learn/:path*`
+ * namespace rule and answer 410 Gone — three indexed article URLs retired by
+ * accident.
  *
- * A non-default-locale article gets a second row at the locale-marked form,
- * reaching the same v2 URL. That costs three rows and matches what the category
+ * An article of a Locale other than v1's default gets a second row at the
+ * locale-marked form, reaching the same v2 URL. That costs three rows and matches what the category
  * class already does, AC-URLSCHEME-62 requiring `/learn/fr/javascript/page/2` to
  * have a destination.
  */
@@ -225,12 +240,12 @@ function articleRows(
       };
 
       const rows: V1MappingRow[] = [
-        { from: v1Path(scheme, scheme.defaultLocale, tail), destination },
+        { from: v1Path(V1_LOCALES.defaultLocale, tail), destination },
       ];
 
-      if (article.locale !== scheme.defaultLocale) {
+      if (article.locale !== V1_LOCALES.defaultLocale) {
         rows.push({
-          from: v1Path(scheme, article.locale, tail),
+          from: v1Path(article.locale, tail),
           destination,
           note: `the locale-marked form; v1 published this article at the unmarked one`,
         });
@@ -242,7 +257,8 @@ function articleRows(
 
 /**
  * A tag reaches the category page of the same name when that category has a
- * page, and the blog home otherwise. A tag is never promoted to a category to
+ * page, and the blog home otherwise, both in v1's default Locale: v1 published
+ * its tag pages unmarked. A tag is never promoted to a category to
  * make a redirect land: an article carries at most one category
  * (BR-PYRAMID-9), and the address a tag page would take is reserved and unbuilt.
  */
@@ -256,7 +272,7 @@ function tagRows(
       from: url,
       destination: {
         kind: 'permanent' as const,
-        to: categoryOrHome(scheme, scheme.defaultLocale, tag, articles),
+        to: categoryOrHome(scheme, V1_LOCALES.defaultLocale, tag, articles),
       },
     };
   });
@@ -367,8 +383,8 @@ function v1CategoryPath(category: string): string[] {
   return declared === undefined ? [category] : [...declared];
 }
 
-function v1Path(scheme: UrlScheme, locale: string, tail: readonly string[]): string {
+function v1Path(locale: string, tail: readonly string[]): string {
   const segments =
-    locale === scheme.defaultLocale ? [...tail] : [locale, ...tail];
+    locale === V1_LOCALES.defaultLocale ? [...tail] : [locale, ...tail];
   return segments.length === 0 ? V1_HOME : `${V1_HOME}/${segments.join('/')}`;
 }

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { urlScheme } from '../routing/scheme.js';
 import { notesFeed } from './notes-feed.js';
 
 /**
@@ -22,10 +23,20 @@ describe('notesFeed', () => {
 
     expect(yieldFarming).toEqual({
       title: 'Provenance des rendements du Yield Farming dans la blockchain',
-      href: '/l/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+      href: '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
       tag: 'blockchain',
       date: 'nov 30',
     });
+  });
+
+  it('feeds the home page, four places wide, the three French articles at their unmarked URLs', async () => {
+    const home = await notesFeed({ locale: urlScheme.defaultLocale, limit: 4 });
+
+    expect(home.map((post) => post.href).sort()).toEqual([
+      '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+      '/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
+      '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+    ]);
   });
 
   it('takes the head of the locale’s articles, so a smaller limit is a prefix of a larger one', async () => {

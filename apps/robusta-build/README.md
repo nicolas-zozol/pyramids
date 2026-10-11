@@ -14,7 +14,7 @@ Every document carries `robots` `noindex, nofollow`, set in the head of the root
 
 ## Articles
 
-The site's articles are the eleven pieces migrated from v1, and a new one is a markdown file added the same way.
+The site publishes the eleven pieces migrated from v1, and a new article is a markdown file added the same way.
 
 Where the file goes: anywhere under `content/articles`, at any depth. The tree mirrors v1's folders, but a folder carries no meaning: the category is a frontmatter field, and a file at the root of the corpus is as valid as one three directories down. Only `*.md` files are read.
 
@@ -23,7 +23,7 @@ What the frontmatter must carry, or the build fails naming the file:
 - `title` — the article's title, and the source of its slug.
 - `date` — `YYYY-MM-DD`. Quote it, or YAML reads it as a timestamp; the reader accepts both and compares the calendar day.
 - `author` — the name the page shows. An article declaring none fails the build naming the file and the field.
-- `locale` — `en` or `fr`, the two the site configuration declares. `en` is the default locale and carries no marker in the URL.
+- `locale` — `fr` or `en`, the two the site configuration declares. `fr` is the default locale and carries no marker in the URL.
 - `published: true` — the boolean, not the string. An article that does not declare itself published is not served (BR-PYRAMID-10), and the build prints the paths it left out. Anything other than a boolean is a violation.
 - An excerpt, which is not a field: it is the block of the body before its first `---` separator. An article without one is missing a required field.
 
@@ -60,7 +60,7 @@ The shapes, with `articles` as the content root this site names:
 - `/articles/t/{tag}` — reserved, and built by nothing.
 - `/l/{locale}` in front of any of the above, for a locale that is not the default one. The default locale carries no marker.
 
-Who owns what: the discriminants `l`, `c`, `p` and `t` and the shapes built from them belong to `@robusta/pyramids-routing`; `articles` belongs to this site, written once in `src/routing/scheme.ts` and read from there by `blogConfig.contentRoot`. The roll size is a constant of 12, not a per-site knob: `ROLL_SIZE`, in the same file.
+Who owns what: the discriminants `l`, `c`, `p` and `t` and the shapes built from them belong to `@robusta/pyramids-routing`; `articles` and the two locales belong to this site, written once in `src/routing/scheme.ts` and read from there by `src/seopyramids.config.ts`. The roll size is a constant of 12, not a per-site knob: `ROLL_SIZE`, in the same file.
 
 ### The route table
 
@@ -70,11 +70,11 @@ What they render: the four article routes render `src/article/ArticleView` from 
 
 `getArticlePage` and `getNotesFeed`, in `src/page-data`, are server functions marked static, and the only path from a route to the content. They run at prerender only and leave one JSON file per distinct input under `dist/client/__tsr/staticServerFnCache`. A prerendered page carries its own data; a hydrated page navigating client-side fetches the file. The build's import protection fails on a client import of `src/content`, `@robusta/pyramids-content`, `gray-matter` or `remark`.
 
-A client navigation whose route chunk or data file fails to load ends in a full load of the target address; a second failure at the same address in the same tab renders the site's error state, `src/components/NavigationFailure.tsx`.
+A client navigation whose route chunk or data file fails to load ends, through `src/components/NavigationFailure.tsx`, in a full load of the target address; a second failure at the same address in the same tab renders the site's error state, `FailedNavigationPage`.
 
 The prerender walks one list: `/`, `/404`, then every URL `src/routing/content-urls.ts` derives, which is `urlSet(urlScheme, await getArticleIndex())`, built with `buildUrl` by `scripts/prerender-pages.mjs`. Link crawling and path discovery are off. Each page is written under `dist/client` as its canonical path plus `.html`, `/` as `index.html` and `/404` as `404.html`. A URL outside the list is not built and answers 404.
 
-21 content URLs, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles. The build writes 23 HTML files, those 21 plus `index.html` and `404.html`, and 12 data files, one per article and one for the notes feed. Seven route files build no page: `/articles/{slug}` and its mirror, since every article claims a category; the four roll-page routes, since 8 English articles and 3 French stay under a roll size of 12; and the locale landing.
+21 content URLs, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles, 7 of them unmarked for the 3 French articles and 14 under `/l/en` for the 8 English ones. The build writes 23 HTML files, those 21 plus `index.html` and `404.html`, and 12 data files, one per article and one for the notes feed. Seven route files build no page: `/articles/{slug}` and its mirror, since every article claims a category; the four roll-page routes, since no locale reaches a roll size of 12; and the locale landing.
 
 Two build-time checks keep the route files and the configuration in line. `scripts/prerender-pages.mjs` fails the build, naming the content root and the missing files, when a route file the configured content root implies does not exist. `scripts/check-route-table.mjs` runs after `vite build`, compares the written `.html` files, `index.html` and `404.html` excepted, with the derivation, expects one data file per article plus one, and fails on any difference.
 
@@ -86,7 +86,7 @@ No tag route ships, so `/articles/t/rxjs` answers 404 like a slug that does not 
 
 The site builds the canonical form of each page and nothing else, and serves no redirect. The other forms get what Netlify answers for a static deploy:
 
-- An explicit page one, `/articles/p/1` or `/articles/c/{category}/p/1`, and a marked default locale, `/l/en/…`, are not built: 404, with the not-found page.
+- An explicit page one, `/articles/p/1` or `/articles/c/{category}/p/1`, and a marked default locale, `/l/fr/…`, are not built: 404, with the not-found page.
 - A trailing slash: 301 to the canonical form.
 - An uppercase letter: 301 to the lowercase form when that file exists, 404 otherwise. A file under `/article-images` answers at its exact case, `M87.jpg` included.
 - The canonical path plus `.html`: 200, the same document.
@@ -94,7 +94,9 @@ The site builds the canonical form of each page and nothing else, and serves no 
 
 ### The v1 mapping
 
-`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 66 permanent, 6 gone, 10 none. An article of a non-default locale contributes two permanent rows, its v1 path with no locale segment and the locale-marked form.
+`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 66 permanent, 6 gone, 10 none.
+
+The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr` under `/learn/fr`. Only the destinations read this site's scheme, each a page in the language of the v1 page: `/learn/fr/blockchain` leads to `/articles/c/blockchain`, `/learn` to `/l/en/articles`, and a tag row to an English page. A French article contributes two permanent rows, its v1 path with no locale segment and the `/learn/fr` form, both leading to its unmarked address.
 
 Nothing serves the mapping and nothing in the build reads it. A v1 address, any `/learn` path included, answers 404 with the not-found page. Whether the old addresses come back is the restore-v1-urls item of `ROADMAP.md`.
 

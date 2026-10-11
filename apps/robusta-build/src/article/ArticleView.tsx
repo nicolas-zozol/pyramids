@@ -3,8 +3,10 @@
  *
  * Design: features/pyramid-v2-epic/article-page/article-page.design.md
  * Requirements: R-ARTICLEPAGE-02, R-ARTICLEPAGE-03, R-ARTICLEPAGE-04, R-ARTICLEPAGE-05, R-ARTICLEPAGE-41, R-ARTICLEPAGE-42, R-ARTICLEPAGE-43, R-ARTICLEPAGE-61, R-ARTICLEPAGE-62, R-ARTICLEPAGE-63, R-ARTICLEPAGE-65
- * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-47, R-TANSTACK-48
+ * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
+ * Requirements: R-DEFAULTLOCALE-43
  */
 import { SkTag } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.js';
@@ -82,18 +84,19 @@ export function ArticleView({ page }: ArticleViewProps) {
         <ArticleProse html={html} />
 
         <nav
-          aria-label="Ways on from this article"
+          aria-label="Pour continuer la lecture"
+          lang="fr"
           style={{ marginTop: 'var(--sp-7)', color: 'var(--fg-3)' }}
         >
           {categoryUrl !== undefined && (
             <p>
-              {'Filed in '}
+              {'Classé dans '}
               <SiteLink href={categoryUrl}>{article.category}</SiteLink>
             </p>
           )}
           {translation !== undefined && (
             <p>
-              Also in{' '}
+              {'Autre langue : '}
               <SiteLink
                 href={translation.url}
                 hrefLang={translation.locale}

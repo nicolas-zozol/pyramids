@@ -34,6 +34,26 @@ const covered: ArticlePage = {
   },
 };
 
+const english: ArticlePage = {
+  ...covered,
+  article: {
+    ...covered.article,
+    slug: 'a-fixture-in-english',
+    locale: 'en',
+    title: 'An article with a cover',
+  },
+  categoryUrl: '/l/en/articles/c/web',
+  writtenDate: 'March 5, 2024',
+  translation: {
+    url: '/articles/c/web/a-fixture',
+    locale: 'fr',
+    label: 'français',
+  },
+};
+
+const endOfPage = (html: string): string =>
+  html.slice(html.indexOf('<nav'), html.indexOf('</nav>') + '</nav>'.length);
+
 describe('ArticleView', () => {
   it('renders the title, the written date, the author and the body', async () => {
     const html = await renderInRouter(<ArticleView page={coverless} />);
@@ -87,8 +107,44 @@ describe('ArticleView', () => {
     );
 
     expect(html).toContain(
-      '<p>Filed in <a href="/l/fr/articles/c/web">web</a></p>',
+      '<p>Classé dans <a href="/l/fr/articles/c/web">web</a></p>',
     );
+  });
+
+  it('declares its end of page in French, whatever the article’s locale', async () => {
+    const french = endOfPage(
+      await renderInRouter(<ArticleView page={covered} />),
+    );
+    const inEnglish = endOfPage(
+      await renderInRouter(<ArticleView page={english} />),
+    );
+
+    expect(french).toMatch(/^<nav [^>]*lang="fr"/);
+    expect(french).toMatch(/^<nav [^>]*aria-label="Pour continuer la lecture"/);
+    expect(inEnglish).toMatch(/^<nav [^>]*lang="fr"/);
+    expect(inEnglish).toMatch(
+      /^<nav [^>]*aria-label="Pour continuer la lecture"/,
+    );
+  });
+
+  it('keeps the article of an English page in English, only its end of page in French', async () => {
+    const html = await renderInRouter(<ArticleView page={english} />);
+
+    expect(html).toMatch(/<article lang="en">/);
+    expect(endOfPage(html)).toContain('Classé dans ');
+  });
+
+  it('names the other language in its own language, after a French lead', async () => {
+    const html = endOfPage(
+      await renderInRouter(<ArticleView page={english} />),
+    );
+
+    expect(html).toMatch(
+      /<p>Autre langue\u00a0: <a [^>]*href="\/articles\/c\/web\/a-fixture"[^>]*>français<\/a><\/p>/,
+    );
+    expect(html).toMatch(/<a [^>]*hreflang="fr"/i);
+    expect(html).toMatch(/<a [^>]* lang="fr"/);
+    expect(html).not.toMatch(/Filed in|Also in/);
   });
 
   it('renders no other-locale link when the payload carries no translation', async () => {

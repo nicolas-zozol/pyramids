@@ -46,29 +46,33 @@ const SLUGS = [
   'easy-automation-with-sonoff-and-javascript',
 ];
 
-/** What `urlSet` derives from the eleven articles: no roll page, neither locale reaching 12. */
+/**
+ * What `urlSet` derives from the eleven articles: no roll page, neither locale
+ * reaching 12. The three French articles are unmarked, the eight English ones
+ * under `/l/en`.
+ */
 const URLS = [
   '/articles',
   '/articles/c/blockchain',
   '/articles/c/javascript',
-  '/articles/c/privacy',
-  '/articles/c/typescript',
-  '/articles/c/web',
-  '/articles/c/blockchain/ledger-versus-metamask',
-  '/articles/c/blockchain/the-source-of-yield-farming-profits',
-  '/articles/c/blockchain/tooling-for-solidity-coders',
-  '/articles/c/javascript/applying-correctly-classname-with-styled-components',
-  '/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs',
-  '/articles/c/privacy/leaving-gmail',
-  '/articles/c/typescript/completing-a-rxjs-observable-with-another',
-  '/articles/c/web/easy-automation-with-sonoff-and-javascript',
-  '/l/fr/articles',
-  '/l/fr/articles/c/blockchain',
-  '/l/fr/articles/c/javascript',
-  '/l/fr/articles/c/theory',
-  '/l/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
-  '/l/fr/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
-  '/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+  '/articles/c/theory',
+  '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+  '/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
+  '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+  '/l/en/articles',
+  '/l/en/articles/c/blockchain',
+  '/l/en/articles/c/javascript',
+  '/l/en/articles/c/privacy',
+  '/l/en/articles/c/typescript',
+  '/l/en/articles/c/web',
+  '/l/en/articles/c/blockchain/ledger-versus-metamask',
+  '/l/en/articles/c/blockchain/the-source-of-yield-farming-profits',
+  '/l/en/articles/c/blockchain/tooling-for-solidity-coders',
+  '/l/en/articles/c/javascript/applying-correctly-classname-with-styled-components',
+  '/l/en/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs',
+  '/l/en/articles/c/privacy/leaving-gmail',
+  '/l/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
+  '/l/en/articles/c/web/easy-automation-with-sonoff-and-javascript',
 ];
 
 const MARKDOWN_IMAGE = /!\[[^\]]*\]\(\s*<?([^>\s)]+)>?/g;
@@ -325,6 +329,32 @@ describe('what the corpus lights up', () => {
     expect(built.filter((url) => url.includes('/p/'))).toEqual([]);
   });
 
+  it('serves seven of them unmarked, in French, and fourteen under /l/en', async () => {
+    const pages = urlSet(urlScheme, await getArticleIndex());
+    const unmarked = pages.filter((page) => page.locale === 'fr');
+    const english = pages.filter((page) => page.locale === 'en');
+
+    expect(unmarked).toHaveLength(7);
+    expect(
+      unmarked.every((page) => !buildUrl(urlScheme, page).startsWith('/l/')),
+    ).toBe(true);
+    expect(english).toHaveLength(14);
+    expect(
+      english.every((page) => buildUrl(urlScheme, page).startsWith('/l/en/')),
+    ).toBe(true);
+  });
+
+  it('gives a category a page only in the Locales whose articles claim it', async () => {
+    const built = urlSet(urlScheme, await getArticleIndex()).map((page) =>
+      buildUrl(urlScheme, page),
+    );
+
+    expect(built).toContain('/l/en/articles/c/web');
+    expect(built).not.toContain('/articles/c/web');
+    expect(built).toContain('/articles/c/theory');
+    expect(built).not.toContain('/l/en/articles/c/theory');
+  });
+
   /**
    * R-MIGRATELEARN-61. v1 emitted `[...post.categories, 's', post.slug]` for every
    * article whatever its locale, so an article row's source carries no locale
@@ -342,13 +372,13 @@ describe('what the corpus lights up', () => {
       of('/learn/theory/s/quel-langage-pour-progresser-dans-sa-carriere'),
     ).toEqual({
       kind: 'permanent',
-      to: '/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+      to: '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
     });
     expect(
       of('/learn/fr/theory/s/quel-langage-pour-progresser-dans-sa-carriere'),
     ).toEqual({
       kind: 'permanent',
-      to: '/l/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+      to: '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
     });
   });
 
@@ -380,7 +410,7 @@ describe('what the corpus lights up', () => {
       )?.destination,
     ).toEqual({
       kind: 'permanent',
-      to: '/articles/c/typescript/completing-a-rxjs-observable-with-another',
+      to: '/l/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
     });
   });
 });

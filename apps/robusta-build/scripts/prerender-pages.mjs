@@ -4,7 +4,7 @@
  * under `.routing-dist`, and refuses a route tree that does not follow the
  * configured content root.
  *
- * Design: features/pyramid-v2-epic/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-21, R-TANSTACK-23, R-TANSTACK-26
  */
 import { existsSync } from 'node:fs';

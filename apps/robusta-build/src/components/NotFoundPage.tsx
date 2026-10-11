@@ -2,10 +2,10 @@
 export function NotFoundPage() {
   return (
     <main style={{ padding: 'var(--sp-8) var(--sp-6)' }}>
-      <h1>page not found</h1>
-      <p>Nothing is published at this address.</p>
+      <h1>page introuvable</h1>
+      <p>Aucune page n’est publiée à cette adresse.</p>
       <p>
-        <a href="/">back to the home page</a>
+        <a href="/">retour à l’accueil</a>
       </p>
     </main>
   );

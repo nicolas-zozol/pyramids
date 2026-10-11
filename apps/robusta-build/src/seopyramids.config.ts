@@ -37,8 +37,8 @@ const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
   // subpath — no brand file is copied into `public/`. `logo` is a bare URL and
   // `domain` is absolute, so the root-relative hashed path is prefixed here.
   logo: `${url}${wordmarkSrc}`,
-  defaultLocale: 'en',
-  otherLocales: ['fr'],
+  defaultLocale: urlScheme.defaultLocale,
+  otherLocales: [...urlScheme.otherLocales],
   blogConfig: {
     // The content section's four values come from the site's scheme module, so
     // the route table and the site configuration cannot state different ones.

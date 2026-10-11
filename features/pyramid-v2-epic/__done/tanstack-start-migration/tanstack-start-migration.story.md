@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-10-07
 **Feature :** tanstack-start-migration
 **Infix :** TANSTACK
-**Status :** LANDED (2026-10-07, commit 7caa131)
+**Status :** DONE (2026-10-07, commit 9396d94 sur epic/robusta-v2, forcé)
 
 ## Story
 
@@ -109,6 +109,7 @@ Les library APIs des packages `page-data`, `routes`, `article`, `landing` et `co
 - 2026-10-06 — AC-TANSTACK-5 est fusionné dans AC-TANSTACK-1 et AC-TANSTACK-6 est retiré ; leurs numéros ne sont pas réutilisés. Pourquoi : html-lang-locale demandait AC-TANSTACK-8 ; Nicolas, « AC-TANSTACK-6 : on s'en fiche, ignore ».
 - 2026-10-06 — Le repli JSON de R-TANSTACK-66 n'est pas nécessaire : en production, AC-TANSTACK-2 et le parcours de R-TANSTACK-104 passent en navigation client, les données arrivant en fichiers `/__tsr/staticServerFnCache/*.json`.
 - 2026-10-06 — La clause dakar d'AC-TANSTACK-7 est tenue pour acquise sans vérification. Pourquoi : Nicolas, « dakar est out pour l'instant, on suppose que c'est ok ».
+- 2026-10-07 — DONE forcé malgré deux contrôles de la Definition of Done en échec : le commit LANDED `9396d94` n'est pas sur la branche d'intégration `main`, et l'entrée `Canonical URL` de `ubiquitous-language.md` reste à faire dans Documentation updates. Pourquoi : Nicolas, « force storyman done tanstack-start-migration ».
 
 ## Open Questions & Gaps
 

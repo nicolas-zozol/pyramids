@@ -35,9 +35,9 @@ describe('NotesSection', () => {
 
   it('points "all articles" at the blog home of the locale it is given', () => {
     const html = renderToStaticMarkup(
-      <NotesSection posts={posts} locale="fr" />,
+      <NotesSection posts={posts} locale="en" />,
     );
 
-    expect(html).toMatch(/<a href="\/l\/fr\/articles"[^>]*>[^<]*all articles/);
+    expect(html).toMatch(/<a href="\/l\/en\/articles"[^>]*>[^<]*all articles/);
   });
 });

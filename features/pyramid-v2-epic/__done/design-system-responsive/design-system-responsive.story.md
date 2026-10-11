@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-10-07
 **Feature :** design-system-responsive
 **Infix :** RESPONSIVE
-**Status :** LANDED (2026-10-07, commit 2848cb7)
+**Status :** DONE (2026-10-07, commit 262dec6 sur epic/robusta-v2, forcé)
 
 ## Story
 
@@ -94,6 +94,7 @@ Client code : app `@robusta/robusta-build`, son package `landing` et son token b
 - 2026-10-06 — Le design system cesse de rendre du texte de page qui lui est propre : `Hero`, `ServicesGrid` et la variante `full` de `BrandLogo` le prennent en props. Pourquoi : BR-PYRAMID-8 l'interdit, et AC-LANDING-2 ne pouvait pas tenir ; Gap-LANDING-10 accepté (`lgtm`).
 - 2026-10-06 — Les specs du package tournent sur `node:test`, sans dépendance nouvelle ; le passage à vitest reste ouvert. Pourquoi : ajouter vitest écrivait dans `yarn.lock`, alors tenu par tanstack-start-migration.
 - 2026-10-07 — Le Green set attend 23 pages prérendues pour robusta-build, et aucune surface ni primitive ne porte `'use client'` ni `'use server'`. Pourquoi : le site v2 est passé sur TanStack Start (`af89ec1`), prérendu puis hydraté, et son build échoue sur l'une ou l'autre directive. Arbitrage de l'éditeur.
+- 2026-10-07 — DONE forcé avec un contrôle de la Definition of Done levé : le commit LANDED `262dec6` est poussé sur `origin/epic/robusta-v2` mais n'est pas mergé sur la branche d'intégration `main`. Les autres contrôles passent : 54/54 specs du package, 92/92 tests de robusta-build, build v2 vert, documentation livrée, aucun fix ouvert. Pourquoi : Nicolas, « force storyman done design-system-responsive ».
 
 ## Documentation updates
 
