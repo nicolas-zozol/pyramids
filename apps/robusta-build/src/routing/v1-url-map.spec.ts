@@ -2,13 +2,20 @@ import { buildUrl, urlSet } from '@robusta/pyramids-routing';
 import { describe, expect, it } from 'vitest';
 import { getArticleIndex } from '../content/article-index.js';
 import { urlScheme } from './scheme.js';
-import { V1_LOCALES, v1UrlMap, type V1MappingRow } from './v1-url-map.js';
+import {
+  V1_ARTICLE_SLUGS,
+  V1_LOCALES,
+  v1UrlMap,
+  type V1MappingRow,
+} from './v1-url-map.js';
 
 /**
  * The v1 address space and the outcome of each address, extracted once from the
  * map committed before `fr` became the site's default Locale
  * (`git show HEAD:apps/robusta-build/src/routing/v1-url-map.generated.json`).
- * What v1 published does not move when the v2 site changes its Locales.
+ * What v1 published does not move when the v2 site changes its Locales or
+ * publishes a translation. One outcome moved since: `completes-with-fr.md` was
+ * Gone until its French translation was published, and now redirects to it.
  */
 const V1_INVENTORY: readonly (readonly [
   string,
@@ -107,7 +114,7 @@ const V1_INVENTORY: readonly (readonly [
   ['/learn/privacy/leaving-gmail.md', 'permanent'],
   ['/learn/theory/quel-second-langage.md', 'permanent'],
   ['/learn/web/easy-automation-with-sonoff.md', 'permanent'],
-  ['/learn/javascript/s/completes-with-fr.md', 'gone'],
+  ['/learn/javascript/s/completes-with-fr.md', 'permanent'],
   ['/learn/javascript/s/es6-7.md', 'gone'],
   ['/learn/javascript/s/javascript-build.md', 'gone'],
   ['/learn/javascript/s/redux-en.md', 'gone'],
@@ -134,7 +141,7 @@ describe('V1_LOCALES', () => {
 });
 
 describe('v1UrlMap over the site’s corpus', () => {
-  it('lists the same eighty-two v1 addresses in the same order, each with the same outcome', async () => {
+  it('lists the same eighty-two v1 addresses in the same order, the French raw markdown of completes-with now redirected', async () => {
     const rows = await mapOfTheSite();
 
     expect(rows.map((row) => [row.from, row.destination.kind])).toEqual(
@@ -142,11 +149,11 @@ describe('v1UrlMap over the site’s corpus', () => {
     );
   });
 
-  it('counts sixty-six permanent rows, six gone and ten without destination', async () => {
+  it('counts sixty-seven permanent rows, five gone and ten without destination', async () => {
     const kinds = (await mapOfTheSite()).map((row) => row.destination.kind);
 
-    expect(kinds.filter((kind) => kind === 'permanent')).toHaveLength(66);
-    expect(kinds.filter((kind) => kind === 'gone')).toHaveLength(6);
+    expect(kinds.filter((kind) => kind === 'permanent')).toHaveLength(67);
+    expect(kinds.filter((kind) => kind === 'gone')).toHaveLength(5);
     expect(kinds.filter((kind) => kind === 'none')).toHaveLength(10);
   });
 
@@ -178,7 +185,7 @@ describe('v1UrlMap over the site’s corpus', () => {
       row.destination.kind === 'permanent' ? [row.destination.to] : [],
     );
 
-    expect(destinations).toHaveLength(66);
+    expect(destinations).toHaveLength(67);
     expect(destinations.filter((to) => !built.has(to))).toEqual([]);
   });
 
@@ -202,13 +209,37 @@ describe('v1UrlMap over the site’s corpus', () => {
   it('leads a v1 category no article of its Locale claims to the blog roll of that Locale', async () => {
     const rows = await mapOfTheSite();
 
-    expect(destinationOf(rows, '/learn/fr/web')).toEqual({
+    expect(destinationOf(rows, '/learn/fr/blockchain/solidity')).toEqual({
       kind: 'permanent',
       to: '/articles',
     });
     expect(destinationOf(rows, '/learn/javascript/react')).toEqual({
       kind: 'permanent',
       to: '/l/en/articles',
+    });
+  });
+
+  it('gives an article v1 never published no v1 address, a translation included', async () => {
+    const index = await getArticleIndex();
+    const unknownToV1 = index.filter(
+      (entry) => !V1_ARTICLE_SLUGS.includes(entry.slug),
+    );
+    const sources = v1UrlMap(urlScheme, index).map((row) => row.from);
+
+    expect(unknownToV1.map((entry) => entry.slug)).toContain('quitter-gmail');
+    expect(
+      unknownToV1.filter((entry) =>
+        sources.some((from) => from.endsWith(`/s/${entry.slug}`)),
+      ),
+    ).toEqual([]);
+  });
+
+  it('leads a French v1 category its translations now claim to its French page', async () => {
+    const rows = await mapOfTheSite();
+
+    expect(destinationOf(rows, '/learn/fr/web')).toEqual({
+      kind: 'permanent',
+      to: '/articles/c/web',
     });
   });
 

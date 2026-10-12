@@ -60,7 +60,10 @@ describe('articlePage', () => {
   });
 
   it('carries no translation key for an article with no published pair', async () => {
-    const page = await articlePage({ locale: 'en', slug: 'leaving-gmail' });
+    const page = await articlePage({
+      locale: 'fr',
+      slug: 'quel-langage-pour-progresser-dans-sa-carriere',
+    });
 
     expect(page).not.toHaveProperty('translation');
   });

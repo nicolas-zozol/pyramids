@@ -9,7 +9,8 @@ import type { ArticleIndexEntry } from '../content/article-index.js';
  * that mention it change without an edit. The exported constants are the v1
  * inventory no article index can produce — the Locales v1 published, the raw
  * markdown URLs, the tag URLs, the declared category paths — read once from the
- * v1 code and frozen. Every source is computed with them alone; only the
+ * v1 code and frozen, the slugs of the articles v1 published among them.
+ * Every source is computed with them alone; only the
  * destinations read the scheme of the v2 site, each in the language of its v1
  * page.
  *
@@ -68,6 +69,25 @@ export const V1_TAG_URLS: readonly string[] = [
   '/learn/tag/react',
   '/learn/tag/rxjs',
   '/learn/tag/back',
+];
+
+/**
+ * The slugs of the eleven articles v1 published. An article of the v2 corpus
+ * outside this list, a translation written after v1, has no v1 address, so it
+ * gets no article row.
+ */
+export const V1_ARTICLE_SLUGS: readonly string[] = [
+  'ledger-versus-metamask',
+  'tooling-for-solidity-coders',
+  'provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+  'the-source-of-yield-farming-profits',
+  'pourquoi-jai-migre-de-gatsby-vers-nextjs',
+  'why-i-made-the-migration-from-gatsby-toward-nextjs',
+  'completing-a-rxjs-observable-with-another',
+  'easy-automation-with-sonoff-and-javascript',
+  'quel-langage-pour-progresser-dans-sa-carriere',
+  'applying-correctly-classname-with-styled-components',
+  'leaving-gmail',
 ];
 
 /**
@@ -221,7 +241,10 @@ function articleRows(
   articles: readonly ArticleIndexEntry[],
 ): V1MappingRow[] {
   return articles
-    .filter((article) => article.category !== undefined)
+    .filter(
+      (article) =>
+        article.category !== undefined && V1_ARTICLE_SLUGS.includes(article.slug),
+    )
     .flatMap((article) => {
       const category = article.category as string;
       const tail = [

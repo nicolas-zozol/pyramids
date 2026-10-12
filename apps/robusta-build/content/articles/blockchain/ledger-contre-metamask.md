@@ -5,7 +5,7 @@ locale: "fr"
 date: "2022-01-20"
 image: ./images/ledger-vs-metamask.png
 category: blockchain
-published: false
+published: true
 author: Nicolas Zozol
 featured: true
 translationId: ledger-versus-metamask

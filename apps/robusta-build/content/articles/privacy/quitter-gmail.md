@@ -5,7 +5,7 @@ locale: "fr"
 date: "2019-05-24"
 image: ./images/gmail.png
 category: privacy
-published: false
+published: true
 author: Nicolas Zozol
 translationId: leaving-gmail
 ---

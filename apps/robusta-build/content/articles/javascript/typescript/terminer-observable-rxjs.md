@@ -5,7 +5,7 @@ locale: 'fr'
 date: '2021-05-23'
 image: ../images/stop.png
 category: typescript
-published: false
+published: true
 author: Nicolas Zozol
 featured: true
 translationId: completes-with

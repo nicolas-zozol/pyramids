@@ -5,7 +5,7 @@ locale: 'fr'
 date: '2021-01-04'
 image: ./images/lili-sonoff.jpg
 category: web
-published: false
+published: true
 author: Nicolas Zozol
 featured: true
 translationId: easy-automation-with-sonoff

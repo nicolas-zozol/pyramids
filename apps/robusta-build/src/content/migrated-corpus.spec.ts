@@ -33,6 +33,12 @@ import { corpus } from './corpus.js';
  */
 
 const SLUGS = [
+  'ledger-contre-metamask',
+  'les-bons-outils-pour-coder-en-solidity',
+  'terminer-un-observable-rxjs-avec-un-autre',
+  'domotique-facile-avec-sonoff-et-javascript',
+  'bien-appliquer-classname-avec-styled-components',
+  'quitter-gmail',
   'ledger-versus-metamask',
   'tooling-for-solidity-coders',
   'provenance-des-rendements-du-yield-farming-dans-la-blockchain',
@@ -47,18 +53,27 @@ const SLUGS = [
 ];
 
 /**
- * What `urlSet` derives from the eleven articles: no roll page, neither locale
- * reaching 12. The three French articles are unmarked, the eight English ones
- * under `/l/en`.
+ * What `urlSet` derives from the seventeen articles: no roll page, neither
+ * locale reaching 12. The nine French articles are unmarked, the eight English
+ * ones under `/l/en`.
  */
 const URLS = [
   '/articles',
   '/articles/c/blockchain',
   '/articles/c/javascript',
+  '/articles/c/privacy',
   '/articles/c/theory',
+  '/articles/c/typescript',
+  '/articles/c/web',
+  '/articles/c/blockchain/ledger-contre-metamask',
+  '/articles/c/blockchain/les-bons-outils-pour-coder-en-solidity',
   '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+  '/articles/c/javascript/bien-appliquer-classname-avec-styled-components',
   '/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
+  '/articles/c/privacy/quitter-gmail',
   '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+  '/articles/c/typescript/terminer-un-observable-rxjs-avec-un-autre',
+  '/articles/c/web/domotique-facile-avec-sonoff-et-javascript',
   '/l/en/articles',
   '/l/en/articles/c/blockchain',
   '/l/en/articles/c/javascript',
@@ -111,30 +126,16 @@ async function filesUnder(directory: string): Promise<string[]> {
     .sort();
 }
 
-/**
- * The French translations of the six English articles, written beside their
- * originals and unpublished until `fr` becomes the default locale, so each one
- * first appears at its final address.
- */
-const UNPUBLISHED_TRANSLATIONS = [
-  'blockchain/ledger-contre-metamask.md',
-  'blockchain/outillage-solidity.md',
-  'javascript/bien-appliquer-classname-styled-components.md',
-  'javascript/typescript/terminer-observable-rxjs.md',
-  'privacy/quitter-gmail.md',
-  'web/domotique-facile-avec-sonoff.md',
-];
-
 describe('the migrated corpus, read through the site’s own declaration', () => {
-  it('holds eleven published articles, with no violation, the six translations left unpublished', async () => {
+  it('holds seventeen published articles, with no violation, the six translations published', async () => {
     const { articles, unpublished, violations } = await read();
 
     expect(violations).toEqual([]);
-    expect(articles).toHaveLength(11);
-    expect([...unpublished].sort()).toEqual(UNPUBLISHED_TRANSLATIONS);
+    expect(articles).toHaveLength(17);
+    expect(unpublished).toEqual([]);
   });
 
-  it('addresses them at the slugs the v1 mapping was computed from', async () => {
+  it('addresses them at the eleven slugs of v1 and the six of their translations', async () => {
     const { articles } = await read();
 
     expect(articles.map((entry) => entry.slug).sort()).toEqual(
@@ -185,7 +186,7 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
     );
   });
 
-  it('splits into eight English and three French articles, the two locale defects corrected', async () => {
+  it('splits into eight English and nine French articles, the two locale defects corrected', async () => {
     const { articles } = await read();
     const byLocale = articles.reduce<Record<string, number>>(
       (count, entry) => ({
@@ -195,10 +196,10 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
       {},
     );
 
-    expect(byLocale).toEqual({ en: 8, fr: 3 });
+    expect(byLocale).toEqual({ en: 8, fr: 9 });
   });
 
-  it('pairs the two translated articles, the six others waiting on their unpublished French version', async () => {
+  it('pairs every English article with its French translation, the theory article alone in French', async () => {
     const { articles } = await read();
     const paired = articles.filter(
       (entry) => entry.translationId !== undefined,
@@ -210,15 +211,15 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
       pairs.set(key, [...(pairs.get(key) ?? []), entry.locale].sort());
     }
 
-    expect(paired).toHaveLength(10);
+    expect(paired).toHaveLength(16);
     expect([...pairs.entries()].sort()).toEqual([
-      ['completes-with', ['en']],
-      ['easy-automation-with-sonoff', ['en']],
+      ['completes-with', ['en', 'fr']],
+      ['easy-automation-with-sonoff', ['en', 'fr']],
       ['gatsby-to-nextjs', ['en', 'fr']],
-      ['leaving-gmail', ['en']],
-      ['ledger-versus-metamask', ['en']],
-      ['start-coding-blockchain', ['en']],
-      ['styled-components', ['en']],
+      ['leaving-gmail', ['en', 'fr']],
+      ['ledger-versus-metamask', ['en', 'fr']],
+      ['start-coding-blockchain', ['en', 'fr']],
+      ['styled-components', ['en', 'fr']],
       ['yield-farming', ['en', 'fr']],
     ]);
   });
@@ -320,21 +321,21 @@ describe('the copy step, over the site’s corpus', () => {
  * same derivation (AC-MIGRATELEARN-61).
  */
 describe('what the corpus lights up', () => {
-  it('derives twenty-one content URLs, and no roll page in either locale', async () => {
+  it('derives thirty content URLs, and no roll page in either locale', async () => {
     const pages = urlSet(urlScheme, await getArticleIndex());
     const built = pages.map((page) => buildUrl(urlScheme, page));
 
     expect([...built].sort()).toEqual([...URLS].sort());
-    expect(built).toHaveLength(21);
+    expect(built).toHaveLength(30);
     expect(built.filter((url) => url.includes('/p/'))).toEqual([]);
   });
 
-  it('serves seven of them unmarked, in French, and fourteen under /l/en', async () => {
+  it('serves sixteen of them unmarked, in French, and fourteen under /l/en', async () => {
     const pages = urlSet(urlScheme, await getArticleIndex());
     const unmarked = pages.filter((page) => page.locale === 'fr');
     const english = pages.filter((page) => page.locale === 'en');
 
-    expect(unmarked).toHaveLength(7);
+    expect(unmarked).toHaveLength(16);
     expect(
       unmarked.every((page) => !buildUrl(urlScheme, page).startsWith('/l/')),
     ).toBe(true);
@@ -350,7 +351,7 @@ describe('what the corpus lights up', () => {
     );
 
     expect(built).toContain('/l/en/articles/c/web');
-    expect(built).not.toContain('/articles/c/web');
+    expect(built).toContain('/articles/c/web');
     expect(built).toContain('/articles/c/theory');
     expect(built).not.toContain('/l/en/articles/c/theory');
   });
@@ -382,7 +383,7 @@ describe('what the corpus lights up', () => {
     });
   });
 
-  it('lists every article at its unmarked source, and only the French ones twice', async () => {
+  it('lists every article v1 published at its unmarked source, and only the French ones twice', async () => {
     const rows = v1UrlMap(urlScheme, await getArticleIndex());
     // The raw markdown rows share the `/s/` discriminant and are a class of
     // their own: they end in `.md`, an article row ends in a slug.

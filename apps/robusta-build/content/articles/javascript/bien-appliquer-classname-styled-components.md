@@ -5,7 +5,7 @@ locale: "fr"
 date: "2020-11-05"
 image: ../images/styled-logo.png
 category: javascript
-published: false
+published: true
 author: Nicolas Zozol
 translationId: styled-components
 ---
