@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { BrandLogo } from '../primitives/BrandLogo.js';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
 
 export interface FooterLink {
   /** The text of the item. */
@@ -24,6 +25,8 @@ export interface SiteFooterProps {
   copyright?: string;
   /** Bottom-right line. Original prototype self-references the design system. */
   versionLine?: string;
+  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
 }
@@ -74,6 +77,7 @@ export function SiteFooter({
   columns = DEFAULT_COLUMNS,
   copyright = '© robusta build · made by hand, with care.',
   versionLine = '// v1.0 · the system you\'re reading is itself.',
+  linkComponent: Link = PlainLink,
   className,
   style,
 }: SiteFooterProps) {
@@ -92,9 +96,9 @@ export function SiteFooter({
             {col.items.map((it) => (
               <li key={it.label}>
                 {it.href ? (
-                  <a href={it.href} className="sk-site-footer__link">
+                  <Link href={it.href} className="sk-site-footer__link">
                     {it.label}
-                  </a>
+                  </Link>
                 ) : (
                   <span className="sk-site-footer__text">{it.label}</span>
                 )}

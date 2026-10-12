@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { SkArrowRight } from '../primitives/SkArrowRight.js';
 import { SkButton } from '../primitives/SkButton.js';
+import type { SkLinkComponent } from '../primitives/SkLink.js';
 
 export interface HeroProps {
   /** Small overline label above the headline. */
@@ -27,6 +28,8 @@ export interface HeroProps {
   mascotAlt?: string;
   /** Caption beside the mascot. Empty ('' or null): no caption, no doodle arrow. */
   annotation?: ReactNode;
+  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
 }
@@ -80,6 +83,7 @@ export function Hero({
   mascotSrc = '',
   mascotAlt = 'crystal tux',
   annotation = DEFAULT_ANNOTATION,
+  linkComponent,
   className,
   style,
 }: HeroProps) {
@@ -101,12 +105,18 @@ export function Hero({
           <p className="sk-hero__subtitle">{subtitle}</p>
           <div className="sk-hero__actions">
             {primaryCtaLabel ? (
-              <SkButton variant="primary" href={primaryCtaHref}>
+              <SkButton
+                variant="primary"
+                href={primaryCtaHref}
+                linkComponent={linkComponent}
+              >
                 {primaryCtaLabel}
               </SkButton>
             ) : null}
             {secondaryCtaLabel ? (
-              <SkButton href={secondaryCtaHref}>{secondaryCtaLabel}</SkButton>
+              <SkButton href={secondaryCtaHref} linkComponent={linkComponent}>
+                {secondaryCtaLabel}
+              </SkButton>
             ) : null}
           </div>
           {footnote ? (

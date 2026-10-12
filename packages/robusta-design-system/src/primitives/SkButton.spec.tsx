@@ -6,6 +6,7 @@ import {
   textNodes,
   type HostElement,
 } from '../test-support/render-static.js';
+import type { SkLinkProps } from './SkLink.js';
 import { SkButton } from './SkButton.js';
 
 function only(tree: ReturnType<typeof renderStatic>): HostElement {
@@ -34,6 +35,31 @@ describe('SkButton without an href', () => {
 
   it('forwards the attributes of a button', () => {
     assert.equal(attribute(button, 'type'), 'submit');
+  });
+});
+
+describe('SkButton with an href and a linkComponent', () => {
+  function ProbeLink(props: SkLinkProps) {
+    return <a data-probe="" {...props} />;
+  }
+
+  const anchor = only(
+    renderStatic(
+      <SkButton variant="ghost" href="/contact" linkComponent={ProbeLink}>
+        écrire
+      </SkButton>,
+    ),
+  );
+
+  it('renders its anchor through the linkComponent, with the class list and destination', () => {
+    assert.equal(attribute(anchor, 'data-probe'), '');
+    assert.equal(attribute(anchor, 'href'), '/contact');
+    assert.equal(attribute(anchor, 'className'), 'sk-btn sk-btn--ghost');
+    assert.deepEqual(textNodes([anchor]), ['écrire']);
+  });
+
+  it('does not hand the linkComponent down as an attribute', () => {
+    assert.equal('linkComponent' in anchor.props, false);
   });
 });
 

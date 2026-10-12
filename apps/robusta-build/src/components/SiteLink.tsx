@@ -1,24 +1,17 @@
+import type { SkLinkProps } from '@robusta/pyramids-design-system';
 import { Link } from '@tanstack/react-router';
-import type { ReactNode } from 'react';
-
-interface SiteLinkProps {
-  /** A URL `buildUrl` produced. */
-  href: string;
-  hrefLang?: string;
-  lang?: string;
-  children: ReactNode;
-}
 
 const CURRENT_PAGE_ONLY = { exact: true };
+const NO_ACTIVE_CLASS = {};
 
-/** The one place a built URL becomes a router link, so no route path is composed elsewhere. */
-export function SiteLink({ href, hrefLang, lang, children }: SiteLinkProps) {
+/** The one place a built URL becomes a router link, and the link component the site hands the design system. */
+export function SiteLink({ href, children, ...anchor }: SkLinkProps) {
   return (
     <Link
+      {...anchor}
       to={href}
-      hrefLang={hrefLang}
-      lang={lang}
       activeOptions={CURRENT_PAGE_ONLY}
+      activeProps={NO_ACTIVE_CLASS}
     >
       {children}
     </Link>

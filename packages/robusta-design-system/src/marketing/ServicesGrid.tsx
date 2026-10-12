@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { SkArrowRight } from '../primitives/SkArrowRight.js';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
 import { SkTag, type SkTagTone } from '../primitives/SkTag.js';
 
 export interface ServiceItem {
@@ -22,6 +23,8 @@ export interface ServicesGridProps {
   eyebrow?: string;
   title?: string;
   services?: ServiceItem[];
+  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
 }
@@ -61,14 +64,16 @@ const DEFAULT_SERVICES: ServiceItem[] = [
 interface ServiceCardProps extends ServiceItem {
   /** Alternating ±0.4° tilt, so the row of cards does not read as a grid. */
   tilt: 'left' | 'right';
+  linkComponent: SkLinkComponent;
 }
 
 interface MoreLineProps {
   label?: string;
   href?: string;
+  linkComponent: SkLinkComponent;
 }
 
-function MoreLine({ label, href }: MoreLineProps) {
+function MoreLine({ label, href, linkComponent: Link }: MoreLineProps) {
   if (!label) return null;
   const content = (
     <>
@@ -76,9 +81,9 @@ function MoreLine({ label, href }: MoreLineProps) {
     </>
   );
   return href ? (
-    <a href={href} className="sk-services-grid__more">
+    <Link href={href} className="sk-services-grid__more">
       {content}
-    </a>
+    </Link>
   ) : (
     <div className="sk-services-grid__more">{content}</div>
   );
@@ -93,6 +98,7 @@ function ServiceCard({
   moreLabel,
   moreHref,
   tilt,
+  linkComponent,
 }: ServiceCardProps) {
   const cardClass = `sk-services-grid__card sk-services-grid__card--tilt-${tilt}`;
   return (
@@ -111,7 +117,11 @@ function ServiceCard({
           <div className="sk-services-grid__card-title">{title}</div>
           <div className="sk-services-grid__time">{time}</div>
           <p className="sk-services-grid__body">{body}</p>
-          <MoreLine label={moreLabel} href={moreHref} />
+          <MoreLine
+            label={moreLabel}
+            href={moreHref}
+            linkComponent={linkComponent}
+          />
         </div>
       </div>
     </div>
@@ -123,6 +133,7 @@ export function ServicesGrid({
   eyebrow = '// what we do',
   title = 'three ways we work.',
   services = DEFAULT_SERVICES,
+  linkComponent = PlainLink,
   className,
   style,
 }: ServicesGridProps) {
@@ -140,6 +151,7 @@ export function ServicesGrid({
             key={s.title}
             {...s}
             tilt={i % 2 === 0 ? 'left' : 'right'}
+            linkComponent={linkComponent}
           />
         ))}
       </div>

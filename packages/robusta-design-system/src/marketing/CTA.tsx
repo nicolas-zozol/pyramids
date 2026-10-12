@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { SkButton } from '../primitives/SkButton.js';
+import type { SkLinkComponent } from '../primitives/SkLink.js';
 import { SkInput } from '../primitives/SkInput.js';
 
 export interface CTAProps {
@@ -15,6 +16,8 @@ export interface CTAProps {
   footnote?: string;
   /** Path/URL for the waving-mascot SVG. Empty hides the mascot. */
   mascotSrc?: string;
+  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
 }
@@ -35,6 +38,7 @@ export function CTA({
   ctaHref = '#book',
   footnote = 'no newsletter funnel. one human reads it. promise.',
   mascotSrc = '',
+  linkComponent,
   className,
   style,
 }: CTAProps) {
@@ -57,7 +61,11 @@ export function CTA({
           />
         ) : null}
         {ctaLabel ? (
-          <SkButton variant="primary" href={ctaHref}>
+          <SkButton
+            variant="primary"
+            href={ctaHref}
+            linkComponent={linkComponent}
+          >
             {ctaLabel}
           </SkButton>
         ) : null}

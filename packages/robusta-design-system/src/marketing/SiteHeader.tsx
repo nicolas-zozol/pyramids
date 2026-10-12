@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { BrandLogo } from '../primitives/BrandLogo.js';
 import { SkButton } from '../primitives/SkButton.js';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
 
 export interface NavLink {
   label: string;
@@ -16,6 +17,8 @@ export interface SiteHeaderProps {
   ctaLabel?: string;
   /** Href for the CTA button. */
   ctaHref?: string;
+  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
 }
@@ -40,6 +43,7 @@ export function SiteHeader({
   links = DEFAULT_LINKS,
   ctaLabel = 'book a call',
   ctaHref = '#book',
+  linkComponent: Link = PlainLink,
   className,
   style,
 }: SiteHeaderProps) {
@@ -47,17 +51,17 @@ export function SiteHeader({
 
   return (
     <header className={merged} style={style}>
-      <a href="/" className="sk-site-header__brand">
+      <Link href="/" className="sk-site-header__brand">
         <BrandLogo size="compact" wordmarkSrc={wordmarkSrc} />
-      </a>
+      </Link>
       <nav className="sk-site-header__nav">
         {links.map((l) => (
-          <a key={l.href} href={l.href} className="sk-site-header__link">
+          <Link key={l.href} href={l.href} className="sk-site-header__link">
             {l.label}
-          </a>
+          </Link>
         ))}
         {ctaLabel ? (
-          <SkButton variant="primary" href={ctaHref}>
+          <SkButton variant="primary" href={ctaHref} linkComponent={Link}>
             {ctaLabel}
           </SkButton>
         ) : null}

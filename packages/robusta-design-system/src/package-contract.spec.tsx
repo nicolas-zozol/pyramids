@@ -94,6 +94,17 @@ describe('the package', () => {
     }
   });
 
+  it('imports no router and creates no React context, its links injected by prop alone', () => {
+    for (const [path, source] of Object.entries(componentSources())) {
+      assert.doesNotMatch(source, /createContext|useContext/, path);
+      assert.doesNotMatch(
+        source,
+        /from ['"](@tanstack\/|next\/|react-router)/,
+        path,
+      );
+    }
+  });
+
   it('consumes the error ramp in no component', () => {
     for (const [path, source] of Object.entries(componentSources())) {
       assert.doesNotMatch(source, /--brand-error/, path);

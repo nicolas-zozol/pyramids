@@ -4,3 +4,4 @@ export { SkCallout, type SkCalloutProps } from './SkCallout.js';
 export { SkTag, type SkTagProps, type SkTagTone } from './SkTag.js';
 export { SkInput, type SkInputProps } from './SkInput.js';
 export { SkArrowRight, type SkArrowRightProps } from './SkArrowRight.js';
+export type { SkLinkComponent, SkLinkProps } from './SkLink.js';

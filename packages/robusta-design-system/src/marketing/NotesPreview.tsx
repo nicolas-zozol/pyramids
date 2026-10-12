@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { SkArrowRight } from '../primitives/SkArrowRight.js';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
 import { SkTag, type SkTagTone } from '../primitives/SkTag.js';
 
 export interface NotePost {
@@ -19,6 +20,8 @@ export interface NotesPreviewProps {
   allLinkLabel?: string;
   allLinkHref?: string;
   posts?: NotePost[];
+  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
 }
@@ -60,6 +63,7 @@ export function NotesPreview({
   allLinkLabel = 'all notes',
   allLinkHref = '#notes',
   posts = DEFAULT_POSTS,
+  linkComponent: Link = PlainLink,
   className,
   style,
 }: NotesPreviewProps) {
@@ -73,14 +77,14 @@ export function NotesPreview({
           <h2 className="sk-notes-preview__title">{title}</h2>
         </div>
         {allLinkLabel ? (
-          <a href={allLinkHref} className="sk-notes-preview__all">
+          <Link href={allLinkHref} className="sk-notes-preview__all">
             {allLinkLabel} <SkArrowRight width={50} verticalAlign="middle" />
-          </a>
+          </Link>
         ) : null}
       </div>
       <div className="sk-notes-preview__list">
         {posts.map((p, i) => (
-          <a key={i} href={p.href ?? '#'} className="sk-notes-preview__post">
+          <Link key={i} href={p.href ?? '#'} className="sk-notes-preview__post">
             <div className="sk-notes-preview__date">{p.date}</div>
             <div className="sk-notes-preview__post-body">
               <div className="sk-notes-preview__post-title">{p.title}</div>
@@ -90,7 +94,7 @@ export function NotesPreview({
                 </div>
               ) : null}
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

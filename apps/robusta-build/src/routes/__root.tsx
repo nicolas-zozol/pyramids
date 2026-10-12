@@ -8,6 +8,7 @@ import {
   useParams,
 } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
+import { Footer, Header } from '@/chrome/index.js';
 import { urlScheme } from '@/routing/scheme.js';
 import { getSeoPyramidsConfig } from '@/seopyramids.config.js';
 import fontsCss from '@/styles/fonts.css?url';
@@ -48,7 +49,9 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <Header />
         {children}
+        <Footer />
         {isNotFoundDocument ? null : <Scripts />}
       </body>
     </html>

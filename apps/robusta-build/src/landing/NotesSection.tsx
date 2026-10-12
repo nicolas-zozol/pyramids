@@ -1,39 +1,41 @@
-/**
- * Package landing — the home page's notes section, every string it renders supplied by the site.
- *
- * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
- * Requirements: R-MIGRATELEARN-44
- * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
- * Requirements: R-TANSTACK-65
- */
 import { NotesPreview, type NotePost } from '@robusta/pyramids-design-system';
 import { buildUrl } from '@robusta/pyramids-routing';
+import { SiteLink } from '../components/SiteLink.js';
 import { urlScheme } from '../routing/scheme.js';
+import { getSeoPyramidsConfig } from '../seopyramids.config.js';
 
-interface NotesSectionProps {
+export interface NotesSectionProps {
   posts: NotePost[];
   /** The blog home "all articles" targets; the default locale when absent. */
   locale?: string;
 }
 
-/**
- * `NotesPreview` fed with the posts it receives, every string it renders being
- * the site's (BR-PYRAMID-8).
- */
+/** `NotesPreview` on the posts it receives, every text from the page copy; nothing on an empty feed. */
 export function NotesSection({ posts, locale }: NotesSectionProps) {
-  const of = locale ?? urlScheme.defaultLocale;
+  if (posts.length === 0) return null;
+
+  const { landing, categoryLabels } = getSeoPyramidsConfig().pageCopy;
 
   return (
     <NotesPreview
-      eyebrow="// latest articles"
-      title="what we publish."
-      allLinkLabel="all articles"
+      eyebrow={landing.notes.eyebrow}
+      title={landing.notes.title}
+      allLinkLabel={landing.notes.allLinkLabel}
       allLinkHref={buildUrl(urlScheme, {
         kind: 'blog-home',
-        locale: of,
+        locale: locale ?? urlScheme.defaultLocale,
         page: 1,
       })}
-      posts={posts}
+      posts={posts.map((post) => labelled(post, categoryLabels))}
+      linkComponent={SiteLink}
     />
   );
+}
+
+function labelled(
+  { tag, ...post }: NotePost,
+  categoryLabels: Record<string, string>,
+): NotePost {
+  const label = tag === undefined ? undefined : categoryLabels[tag];
+  return label === undefined ? post : { ...post, tag: label };
 }

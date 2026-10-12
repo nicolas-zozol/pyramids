@@ -3,6 +3,7 @@ import type {
   ButtonHTMLAttributes,
   ReactNode,
 } from 'react';
+import { PlainLink, type SkLinkComponent } from './SkLink.js';
 
 type SkButtonBase = {
   /** Visual variant — maps to `.sk-btn--primary` / `.sk-btn--ghost` */
@@ -11,10 +12,17 @@ type SkButtonBase = {
 };
 
 type SkButtonAsButton = SkButtonBase &
-  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & { href?: never };
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
+    href?: never;
+    linkComponent?: never;
+  };
 
 type SkButtonAsAnchor = SkButtonBase &
-  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'children'> & { href: string };
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'children'> & {
+    href: string;
+    /** Renders the anchor, a router link for instance; a plain `<a>` when absent. */
+    linkComponent?: SkLinkComponent;
+  };
 
 /**
  * A union rather than one widened interface, so the rest props are checked
@@ -43,8 +51,8 @@ function skButtonClass(
  * Hand-drawn sketchnote button. Pure presentational wrapper over the
  * `.sk-btn` family of CSS classes shipped in `sketch.css`.
  *
- * Given an `href` it renders an anchor, given none the button it has always
- * rendered. `.sk-btn` already declares `display: inline-flex` and
+ * Given an `href` it renders an anchor, through `linkComponent` when one is
+ * given, and given none the button it has always rendered. `.sk-btn` already declares `display: inline-flex` and
  * `text-decoration: none`, so the two branches look alike and the class list
  * is computed identically for both.
  *
@@ -53,17 +61,23 @@ function skButtonClass(
  */
 export function SkButton(props: SkButtonProps) {
   if (props.href !== undefined) {
-    const { variant, className, children, ...rest } = props as SkButtonAsAnchor;
+    const {
+      variant,
+      className,
+      children,
+      linkComponent: Link = PlainLink,
+      ...rest
+    } = props as SkButtonAsAnchor;
     return (
-      <a className={skButtonClass(variant, className)} {...rest}>
+      <Link className={skButtonClass(variant, className)} {...rest}>
         {children}
-      </a>
+      </Link>
     );
   }
 
   const { variant, className, children, ...rest } = props as Omit<
     SkButtonAsButton,
-    'href'
+    'href' | 'linkComponent'
   >;
   return (
     <button className={skButtonClass(variant, className)} {...rest}>

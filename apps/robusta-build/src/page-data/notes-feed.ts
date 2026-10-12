@@ -6,7 +6,7 @@ import {
 import { articleUrl } from './article-url.js';
 import type { NotesFeedRequest } from './types.js';
 
-/** The newest published articles of one locale as notes posts, newest first. */
+/** The newest published articles of one locale as notes posts, newest first, each date written as that locale writes it. */
 export async function notesFeed({
   locale,
   limit,
@@ -33,32 +33,15 @@ function notePost(article: ArticleIndexEntry): NotePost {
     title: article.title,
     href: articleUrl(article),
     ...(article.category === undefined ? {} : { tag: article.category }),
-    date: shortDate(article.date),
+    date: shortDate(article.date, article.locale),
   };
 }
 
-const MONTHS = [
-  'jan',
-  'feb',
-  'mar',
-  'apr',
-  'may',
-  'jun',
-  'jul',
-  'aug',
-  'sep',
-  'oct',
-  'nov',
-  'dec',
-];
-
-/**
- * `2021-11-30` into `nov 30`, the short lowercase form the design system's own
- * examples use. Read off the `YYYY-MM-DD` string rather than through a `Date`,
- * so no timezone can move a date by a day and no runtime locale can rename a
- * month.
- */
-function shortDate(date: string): string {
-  const [, month, day] = date.split('-');
-  return `${MONTHS[Number(month) - 1]} ${day}`;
+function shortDate(date: string, locale: string): string {
+  // Formatted in UTC from the calendar date: the build machine's zone would move it by one.
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  }).format(new Date(`${date}T00:00:00Z`));
 }
