@@ -1,111 +1,129 @@
 # Ubiquitous Language
 
-The shared vocabulary of Pyramids. Every story, design doc and business rule uses these terms and no synonyms. A term that does not appear here is either implementation detail or a term still to be agreed — propose it before using it in a rule.
+Le vocabulaire partagé de Pyramids.
 
-Bootstrapped on 2026-07-29 from the existing code and from the pyramid-v2 epic. Terms marked _v1_ describe the legacy site and are expected to disappear with v2. Three terms were added on 2026-07-30 by `bulkman resolve` as delegated registrar, from arbitrations C4 and LANDING Open Question 1 of `pyramid-v2.bulk.md`: Page copy, Indexable page, Related articles. Four more on 2026-07-31 by the same path, from Gaps 2 and 3 of `seo-url-scheme.design.md` and Gaps 2 and 3 of `unblock-build.design.md`: Tag, Content root, Clean checkout, Green set. The same day, epicman as registrar added Canonical URL and corrected the roll-size clause of Blog roll, from Gaps 1 and 2 of `seo-url-scheme.story.md`, then added Published article and Translation identifier from Gap 1 of `content-source.design.md`. Published article closes a term the glossary had been using without defining, in its Related articles entry. On 2026-08-01, epicman as registrar added Asset root, from the arbitration of Gap 2 of `migrate-learn-content.design.md`: the four tests route a definition to the glossary rather than to `business-rules.md`, and the registrar records the wording the arbitration supplied rather than coining one. On 2026-08-02, the same registrar corrected Content source, which still announced an open point of the v2 epic: both halves of that point are closed — request time by BR-PYRAMID-7, recorded on 2026-07-30, and build time by the measurement of `content-source.story.md`, dated 2026-07-31 and shipped as `82c154f`, which found one read per build process and none on a served request. The entry cites the rule by identifier rather than restating it, and nothing is recorded in `business-rules.md`: the correction is a definition, and the rule that settles the question already exists.
+## Produit
 
-## Product
+Pyramid : La base réutilisable qui transforme du contenu et un design system en
+site SEO déployable. Ce n'est pas un site en soi ; c'est ce à partir de quoi
+plusieurs sites sont construits.
 
-Pyramid
-: The reusable base that turns content plus a design system into a deployable SEO site. It is not a site itself; it is what several sites are built from.
+Site : Un domaine déployé construit sur la pyramid — robusta.build, dakar.surf.
+Un site possède son contenu, son design system et sa configuration ; il emprunte
+tout le reste.
 
-Site
-: One deployed domain built on the pyramid — robusta.build, dakar.surf. A site owns its content, its design system and its configuration; it borrows everything else.
+Site configuration : La source de vérité propre à chaque site : domaine, nom et
+titre du site, mission, logo, locale par défaut, autres locales, réglages du
+blog, et la page copy que le site ne tire pas de ses articles. Elle vit dans `src/seopyramids.config.ts`, à l'intérieur du site.
 
-Site configuration
-: The per-site source of truth: domain, site name and title, mission, logo, default locale, other locales, blog settings. Lives in `src/seopyramids.config.ts` inside the site.
+Design system : L'identité visuelle d'un site : les tokens de couleur et de
+typographie, les assets de marque, et les primitives et surfaces de page
+construites dessus. Un design system par site ; les sites ne les partagent pas.
 
-Design system
-: The visual identity of one site: colour and typography tokens, brand assets, and the primitives and page surfaces built on them. One design system per site; they are not shared between sites.
+Design token : Une valeur visuelle nommée (couleur, police, espacement), exposée
+comme variable CSS et consommée par les composants. Les tokens sont le seul
+moyen admis pour qu'un composant connaisse une couleur.
 
-Design token
-: A named visual value (colour, font, spacing) exposed as a CSS variable and consumed by components. Tokens are the only sanctioned way for a component to know a colour.
+Breakpoint : Une largeur d'écran à partir de laquelle la mise en page d'une
+surface change. Le design system d'un site les fixe ; celui de robusta.build en
+a cinq, `sm`, `md`, `lg`, `xl` et `2xl` : 40, 48, 64, 80 et 96rem. 320 px, la
+largeur minimale que tiennent les surfaces, n'en est pas un.
 
-Landing page
-: The home page of a site, built from the site's design system. It is a marketing surface, distinct from any content page.
+Landing page : La page d'accueil d'un site, construite à partir de son design
+system. C'est une surface marketing, distincte de toute page de contenu.
 
-Page copy
-: The wording a visitor reads on a page, supplied by the site that publishes it.
+Page copy : Le texte qu'un visiteur lit sur une page, fourni par le site qui la
+publie. Un texte dessiné dans un asset de marque, comme le wordmark, n'en est
+pas : il appartient au design system.
 
-## Content
+## Contenu
 
-Article
-: A piece of written content published on a site, addressed by its slug. The v2 term. _v1_ called the same thing a post and served it under `/learn`.
+Article : Un contenu écrit publié sur un site, adressé par son slug. C'est le
+terme v2. La _v1_ appelait la même chose un post et la servait sous `/learn`.
 
-Published article
-: An article a site serves, which it does only when the article declares itself published (BR-PYRAMID-10); an article that does not is written and kept, and carries no page.
+Published article : Un article qu'un site sert, ce qu'il ne fait que si
+l'article se déclare publié (BR-PYRAMID-10) ; un article qui ne le fait pas est
+écrit et conservé, et n'a pas de page.
 
-Category
-: The classification an article belongs to. An article claims at most one (BR-PYRAMID-9), which is what makes a category readable in an article's address, and a category is exactly one segment: categories do not nest. Each category has its own page. _v1_ declared nested paths such as `javascript/typescript`; on v2 such a path names its leaf.
+Category : La classification à laquelle appartient un article. Un article en
+revendique au plus une (BR-PYRAMID-9), ce qui rend une category lisible dans
+l'adresse d'un article, et une category tient en exactement un segment : les
+categories ne s'imbriquent pas. Chaque category a sa propre page. La _v1_
+déclarait des chemins imbriqués comme `javascript/typescript` ; en v2, un tel
+chemin désigne sa feuille.
 
-Tag
-: A classification an article may carry freely, any number of them, alongside the single category it may claim (BR-PYRAMID-9). A tag is metadata: it has no page of its own today, and the URL scheme reserves an address for the tag page it must stay able to grow.
+Tag : Une classification qu'un article peut porter librement, en nombre
+quelconque, à côté de la seule category qu'il peut revendiquer (BR-PYRAMID-9).
+Un tag est une métadonnée : il n'a pas de page propre aujourd'hui, et le schéma
+d'URL réserve une adresse pour la page de tag qu'il doit pouvoir accueillir.
 
-Blog roll
-: The paginated list of articles shown on a category or blog home page. Its length per page is the roll size, a constant of 12 rather than a per-site setting: a site configuration exposes the value, it does not choose it.
+Blog roll : La liste paginée d'articles affichée sur une page de category ou sur
+l'accueil du blog. Sa longueur par page est la roll size, une constante de 12 et
+non un réglage par site : une site configuration expose la valeur, elle ne la
+choisit pas.
 
-Slug
-: The stable, URL-safe identifier of an article or category. A slug never changes once published — changing it breaks indexed URLs.
+Slug : L'identifiant stable d'un article ou d'une category, utilisable tel quel
+dans une URL. Un slug ne change jamais une fois publié — le changer casse des
+URL indexées.
 
-Locale
-: The language a page is served in. A site has one default locale, which carries no marker in the URL, and zero or more other locales, which do.
+Locale : La langue dans laquelle une page est servie. Un site a une locale par
+défaut, qui ne porte aucun marqueur dans l'URL, et zéro ou plusieurs autres
+locales, qui en portent un.
 
-Translation identifier
-: The durable value shared by the locale versions of one article, which is what makes them linkable to each other.
+Translation identifier : La valeur durable que partagent les versions d'un même
+article dans chaque locale, et qui permet de les relier entre elles.
 
-Content source
-: Where a site's articles come from — today, markdown files shipped with the site, in a tree the site declares and the shared base knows how to read. It is read while a site builds, once per build process, and never while a site serves a request (BR-PYRAMID-7).
+Content source : L'origine des articles d'un site — aujourd'hui, des fichiers
+markdown livrés avec le site, dans une arborescence que le site déclare et que
+la base partagée sait lire. Elle est lue pendant la build d'un site, une fois
+par processus de build, et jamais pendant qu'un site sert une requête
+(BR-PYRAMID-7).
 
-Content root
-: The single segment under which a site publishes its content section, named by the site configuration. `articles` for robusta.build; another site names its own.
+Content root : Le segment unique sous lequel un site publie sa section de
+contenu, nommé par la site configuration. `articles` pour robusta.build ; un
+autre site nomme le sien.
 
-Asset root
-: The URL prefix under which a site publishes the files its articles reference. It is not the content root: it carries no page, it addresses files rather than pages, and a site names its own.
+Asset root : Le préfixe d'URL sous lequel un site publie les fichiers que ses
+articles référencent. Ce n'est pas le content root : il ne porte aucune page, il
+adresse des fichiers et non des pages, et chaque site nomme le sien.
 
-Discriminant
-: A segment of a URL that states what kind of page follows. The v2 set is four — `l` for the locale, `c` for a category, `p` for a roll page, and `t`, which reserves the address of a tag page the scheme keeps possible without building it. They belong to the shared base, they are reserved words at every level of the scheme, and they exist so pages can be pregenerated at build time instead of resolved at runtime. _v1_ used the locale, `page` for the blog roll and `s` for a post.
+Discriminant : Un segment d'URL qui indique quel type de page suit. Le jeu v2 en
+compte quatre — `l` pour la locale, `c` pour une category, `p` pour une page de
+roll, et `t`, qui réserve l'adresse d'une page de tag que le schéma garde
+possible sans la construire. Ils appartiennent à la base partagée, ce sont des
+mots réservés à chaque niveau du schéma, et ils existent pour que les pages
+puissent être prégénérées à la build au lieu d'être résolues au runtime. La _v1_
+utilisait la locale, `page` pour le blog roll et `s` pour un post.
 
-Canonical URL
-: The single form of a URL under which a site serves a page — the form the scheme itself produces. Every other form addressing the same page, such as an explicit first roll page, a marked default locale, a trailing slash or a different letter case, redirects to it permanently. Canonicality is the property of being that form, not a second term.
+Canonical URL : La forme unique d'une URL sous laquelle un site sert une page —
+celle que produit le schéma lui-même. Toute autre forme qui adresse la même
+page, comme une première page de roll explicite, une locale par défaut marquée,
+un slash final ou une casse différente, y redirige de façon permanente. La
+canonicité est la propriété d'être cette forme, pas un second terme.
 
-Indexable page
-: A page a site offers to search engines. A page is indexable when it is addressed by a URL of its own and carries content of its own; a page that only routes, redirects, or repeats what another page already holds is not.
+Indexable page : Une page qu'un site propose aux moteurs de recherche. Une page
+est indexable quand elle est adressée par une URL qui lui est propre et porte un
+contenu qui lui est propre ; une page qui ne fait que router, rediriger, ou
+répéter ce qu'une autre page contient déjà ne l'est pas.
 
-Related articles
-: The articles a site offers a reader at the end of an article, chosen among published articles of the same locale from the categories and tags they share. An article with nothing relevant to offer has no related articles, and the set is then empty.
+Related articles : Les articles qu'un site propose à un lecteur à la fin d'un
+article, choisis parmi les published articles de la même locale d'après les
+categories et les tags qu'ils partagent. Un article qui n'a rien de pertinent à
+proposer n'a pas de related articles, et l'ensemble est alors vide.
 
-## Delivery
+## Livraison
 
-Workspace
-: One yarn package in the monorepo. Three kinds: an app (a deployable site or demo), a package (a shared library), a service (a backend process).
+Workspace : Un package yarn du monorepo. Trois sortes : une app (un site
+déployable ou une démo), un module (une bibliothèque partagée), un service (un
+processus backend).
 
-Build chain
-: The ordered rebuild of the shared packages that must complete before any site builds. A site never reads a package's sources, only its build output.
+Build chain : La reconstruction ordonnée des packages partagés, qui doit aboutir
+avant la build de tout site. Un site ne lit jamais les sources d'un package,
+seulement son build output.
 
-Clean checkout
-: A checkout carrying no installed dependency and no build output anywhere in its ancestry. A git worktree beside an installed repository is not one.
+Clean checkout : Un checkout sans aucune dépendance installée ni build output
+nulle part dans son ascendance. Un worktree git à côté d'un dépôt déjà installé
+n'en est pas un.
 
-Green set
-: The named collection of workspaces that must build from a clean checkout: the build chain plus every site the repository claims to ship.
-
-Watcher
-: A rebuild loop kept running during development so a package edit reaches the running site. Without it, the site keeps serving the previous build output.
-
-## Observability
-
-Telemetry
-: Structured logs and spans emitted by a site and shipped to the collector. Available in the base, deliberately switched off for the v2 site.
-
-Intent
-: A named, hierarchical, lifecycle-tracked visitor action — the product-analytics unit of the intel tool. Two client implementations exist; both are stubs today.
-
-## Method
-
-Epic
-: A body of work grouping several stories, recorded in `features/<epic>/<epic>.epic.md`.
-
-Story
-: One feature, recorded in `features/<epic>/<feature>/<feature>.story.md`, active until landed. The unit of work.
-
-Business rule
-: A constraint the business can decide on, stated in the terms above and independent of any solution. Registry: `business-rules.md`.
+Green set : L'ensemble nommé des workspaces qui doivent se construire depuis un
+clean checkout : la build chain plus chaque site que le dépôt prétend livrer.

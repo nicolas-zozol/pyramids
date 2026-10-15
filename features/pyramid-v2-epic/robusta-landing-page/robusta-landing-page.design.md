@@ -31,9 +31,8 @@ Version de HEAD de `business-rules.md`.
 
 - BR-PYRAMID-3 — Each site must carry its own design system, which no other site may reuse.
 - BR-PYRAMID-5 — The build chain of a site must complete from a clean checkout of the repository.
-- BR-PYRAMID-6 — A site's design tokens must come from its design system alone.
+- BR-PYRAMID-6 — Les design tokens et les breakpoints d'un site doivent provenir de son seul design system.
 - BR-PYRAMID-8 — A site must supply the page copy of every page it publishes; its design system must supply no page copy.
-- Règle validée par Nicolas, en attente du registre, sans numéro : « Les breakpoints d'un site doivent venir de son design system seul. »
 
 ## Boundaries
 
@@ -310,7 +309,7 @@ R-LANDING-1 à 16 sont ceux du brainstorm du 2026-07-29 ; ce design numérote à
 
 ### Garde-fous
 
-- R-LANDING-101 : `landing` et `chrome` ne posent ni classe hors du design system, ni style inline, ni `@media`, ni variante responsive Tailwind : à chaque Breakpoint, la mise en page est celle des surfaces (BR-PYRAMID-6, règle validée sur les breakpoints).
+- R-LANDING-101 : `landing` et `chrome` ne posent ni classe hors du design system, ni style inline, ni `@media`, ni variante responsive Tailwind : à chaque Breakpoint, la mise en page est celle des surfaces (BR-PYRAMID-6).
 - R-LANDING-102 : aucune page du site ne mène à un CV : ni `<iframe>`, ni lien vers un `.pdf`, ni lien vers un profil CV, `toptal.com/resume` compris ; une spec le vérifie sur la page copy, le rendu de `/` et le corpus.
 
 ## Acceptance Criteria
@@ -337,6 +336,6 @@ Edge cases to test:
 ## Dependencies
 
 - Depends on : default-locale-fr, landée et non commitée, dans le working tree — `fr` par défaut, `<html lang="fr">` sur `/`, flux de notes français. Ce design s'écrit par-dessus.
-- Depends on : `Breakpoint` au glossaire et la règle sur les breakpoints au registre (Dep 4 de la story) ; le terme s'emploie ici comme la story l'a décidé.
+- Depends on : `Breakpoint` au glossaire et BR-PYRAMID-6 étendue aux breakpoints (Dep 4 de la story, levée le 2026-10-15).
 - translate-english-articles : de trois à neuf articles français ; la spec de R-LANDING-45 échoue tant qu'une Category nouvelle, `web` ou `privacy`, n'a pas son libellé.
 - Blocks : blog-rolls (colonnes du pied de page ; `categoryLabels` est le libellé qu'une page de Category reprendra), seo-excellence (le `head` de `/` est posé ici, le reste lui revient), go-live.
