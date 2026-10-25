@@ -3,19 +3,8 @@
 **Last update:** 2026-10-08
 **Feature:** robusta-landing-page
 **Infix:** LANDING
-**Status:** APPROVED (2026-10-11)
+**Status:** IMPLEMENTED (2026-10-15, commit 79b4eb0)
 **Sources:** [story](robusta-landing-page.story.md), [brainstorm](robusta-landing-page.brainstorm.md), [epic](../pyramid-v2.epic.md), [design-system-responsive](../__done/design-system-responsive/design-system-responsive.design.md), [tanstack-start-migration](../__done/tanstack-start-migration/tanstack-start-migration.design.md), [default-locale-fr](../default-locale-fr/default-locale-fr.design.md)
-
-## Progress — APPROVED 92%
-
-```
-      Design system        ████████████████████  3/3  ✅
-      Site configuration   ████████████████████  5/5  ✅
-      Chrome               ████████████████████  3/3  ✅
-      Landing              ████████████████████  6/6  ✅
-      Garde-fous           ████████████████████  2/2  ✅
- WIP  Acceptance Criteria  ██████████████░░░░░░  5/7
-```
 
 ## Goal
 

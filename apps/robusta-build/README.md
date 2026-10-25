@@ -1,12 +1,14 @@
 # @robusta/robusta-build
 
-The version 2 site of robusta.build, on TanStack Start and Vite 8. Every page is prerendered to HTML at build, then hydrated, and the browser navigates between pages client-side. Netlify serves the build output as files and runs no code on a request. The eleven migrated articles render as article pages; every other content route renders a placeholder.
+The version 2 site of robusta.build, on TanStack Start and Vite 8. Every page is prerendered to HTML at build, then hydrated, and the browser navigates between pages client-side. Netlify serves the build output as files and runs no code on a request. `/` is the landing page, each published article an article page, and every other content route renders a placeholder.
 
 The version 1 site lives in `apps/robusta`, whose README documents the v1 route scheme. The v2 scheme is the Routing section below.
 
 ## Where the truth of this site lives
 
-`src/seopyramids.config.ts` — domain, site name and title, mission, logo, default and other locales, and the blog configuration (content root, roll size, mandatory keywords, author). A per-site value is read from there, not hardcoded in a component.
+`src/seopyramids.config.ts` — domain, site name and title, mission, logo, default and other locales, the blog configuration (content root, roll size, mandatory keywords, author), the contact and the page copy. A per-site value is read from there, not hardcoded in a component.
+
+`contact` holds the e-mail address and the LinkedIn profile URL every call to action leads to. `pageCopy` holds every text `/`, the header and the footer display, alternative text included, in plain text and in the default locale: the title and description of `/`, the text of each surface, and `categoryLabels`, the tag a note shows for its category, none when the category has no label. Every other page takes its title and description from `siteTitle` and `mission`. The site passes every text prop of each design-system surface it renders, from `pageCopy` or empty to hide the element (BR-PYRAMID-8).
 
 What articles exist is answered by `src/content/article-index.ts`, at build time and at no other (BR-PYRAMID-7).
 
@@ -14,7 +16,7 @@ Every document carries `robots` `noindex, nofollow`, set in the head of the root
 
 ## Articles
 
-The site publishes the eleven pieces migrated from v1, and a new article is a markdown file added the same way.
+The site publishes seventeen articles, the eleven migrated from v1 and six French translations, and a new article is a markdown file added the same way.
 
 Where the file goes: anywhere under `content/articles`, at any depth. The tree mirrors v1's folders, but a folder carries no meaning: the category is a frontmatter field, and a file at the root of the corpus is as valid as one three directories down. Only `*.md` files are read.
 
@@ -66,7 +68,11 @@ Who owns what: the discriminants `l`, `c`, `p` and `t` and the shapes built from
 
 The routes live under `src/routes`, in TanStack Router's file convention, and the generator writes `src/routeTree.gen.ts` with `.js`-suffixed imports. Beside the root route `__root.tsx`: `/`, `/404`, six content routes for the default locale, the same six under `l/$locale`, and the locale landing `l/$locale/index.tsx`. `<html lang>` follows the `locale` param of the matched route, the default locale when it has none, at prerender and after every client navigation.
 
-What they render: the four article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`. The eight listing routes and the locale landing render `RoutePlaceholder` from their params until the stories that own their copy arrive. `/` renders the placeholder home robusta-landing-page replaces, with the notes section `getNotesFeed` feeds. `/404` renders `NotFoundPage`.
+What they render: the four article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`. The eight listing routes and the locale landing render `RoutePlaceholder` from their params. `/` renders `LandingPage`, from `src/landing`: `Hero`, `PrinciplesList`, the notes section and `CTA`, in that order, inside a `<main>`. The notes section shows the four newest articles of the default locale, from `getNotesFeed`, and is absent when that locale publishes none. `/404` renders `NotFoundPage`.
+
+The root document, `src/routes/__root.tsx`, renders `Header` before and `Footer` after every page, the 404 and the failed-navigation state included. Both come from `src/chrome`: `SiteHeader` with the wordmark to `/` and the contact call to action, no navigation link; `SiteFooter` with the tagline and the copyright, no link column. They declare the default locale as their `lang`, so a page under `/l/en` reads them in French.
+
+The surfaces that render a link get `SiteLink`, from `src/components`, as their `linkComponent`: an internal link becomes a router `Link`, and an `https:` or `mailto:` URL stays a plain anchor.
 
 `getArticlePage` and `getNotesFeed`, in `src/page-data`, are server functions marked static, and the only path from a route to the content. They run at prerender only and leave one JSON file per distinct input under `dist/client/__tsr/staticServerFnCache`. A prerendered page carries its own data; a hydrated page navigating client-side fetches the file. The build's import protection fails on a client import of `src/content`, `@robusta/pyramids-content`, `gray-matter` or `remark`.
 
@@ -74,7 +80,7 @@ A client navigation whose route chunk or data file fails to load ends, through `
 
 The prerender walks one list: `/`, `/404`, then every URL `src/routing/content-urls.ts` derives, which is `urlSet(urlScheme, await getArticleIndex())`, built with `buildUrl` by `scripts/prerender-pages.mjs`. Link crawling and path discovery are off. Each page is written under `dist/client` as its canonical path plus `.html`, `/` as `index.html` and `/404` as `404.html`. A URL outside the list is not built and answers 404.
 
-21 content URLs, derived from the eleven migrated articles: 2 blog homes, 8 category pages and 11 articles, 7 of them unmarked for the 3 French articles and 14 under `/l/en` for the 8 English ones. The build writes 23 HTML files, those 21 plus `index.html` and `404.html`, and 12 data files, one per article and one for the notes feed. Seven route files build no page: `/articles/{slug}` and its mirror, since every article claims a category; the four roll-page routes, since no locale reaches a roll size of 12; and the locale landing.
+30 content URLs, derived from the seventeen articles: 2 blog homes, 11 category pages and 17 articles, 16 of them unmarked for the 9 French articles and 14 under `/l/en` for the 8 English ones. The build writes 32 HTML files, those 30 plus `index.html` and `404.html`, and 18 data files, one per article and one for the notes feed. Seven route files build no page: `/articles/{slug}` and its mirror, since every article claims a category; the four roll-page routes, since no locale reaches a roll size of 12; and the locale landing.
 
 Two build-time checks keep the route files and the configuration in line. `scripts/prerender-pages.mjs` fails the build, naming the content root and the missing files, when a route file the configured content root implies does not exist. `scripts/check-route-table.mjs` runs after `vite build`, compares the written `.html` files, `index.html` and `404.html` excepted, with the derivation, expects one data file per article plus one, and fails on any difference.
 
@@ -94,9 +100,9 @@ The site builds the canonical form of each page and nothing else, and serves no 
 
 ### The v1 mapping
 
-`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 66 permanent, 6 gone, 10 none.
+`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 67 permanent, 5 gone, 10 none.
 
-The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr` under `/learn/fr`. Only the destinations read this site's scheme, each a page in the language of the v1 page: `/learn/fr/blockchain` leads to `/articles/c/blockchain`, `/learn` to `/l/en/articles`, and a tag row to an English page. A French article contributes two permanent rows, its v1 path with no locale segment and the `/learn/fr` form, both leading to its unmarked address.
+The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr` under `/learn/fr`. Only the destinations read this site's scheme, each a page in the language of the v1 page: `/learn/fr/blockchain` leads to `/articles/c/blockchain`, `/learn` to `/l/en/articles`, and a tag row to an English page. A French article of v1 contributes two permanent rows, its v1 path with no locale segment and the `/learn/fr` form, both leading to its unmarked address. An article v1 did not publish, absent from `V1_ARTICLE_SLUGS`, has no row.
 
 Nothing serves the mapping and nothing in the build reads it. A v1 address, any `/learn` path included, answers 404 with the not-found page. Whether the old addresses come back is the restore-v1-urls item of `ROADMAP.md`.
 
@@ -123,7 +129,7 @@ Do not link `@robusta/pyramids-design-system/fonts.css` here. It loads the same 
 
 ## Assets
 
-Brand assets are resolved through the design system's exports map and hashed by Vite under `/assets`; nothing is copied into `public/`. `src/design-system/assets.ts` exports `wordmarkSrc`, the URL the wordmark is published under. Pass it to every `BrandLogo` and `SiteHeader`: their default path does not exist on this site.
+Brand assets are resolved through the design system's exports map and hashed by Vite under `/assets`; nothing is copied into `public/`. `src/design-system/assets.ts` exports the published URLs: `wordmarkSrc`, the wordmark, and `heroMascotSrc` and `ctaMascotSrc`, the mascots of `Hero` and `CTA`. Pass `wordmarkSrc` to every `BrandLogo`, `SiteHeader` and `SiteFooter`: their default path does not exist on this site.
 
 ## Commands
 

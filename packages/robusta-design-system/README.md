@@ -14,7 +14,7 @@ This package ships as `@robusta/pyramids-design-system` in the `@robusta/pyramid
 // apps/<your-app>/package.json
 {
   "dependencies": {
-    "@robusta/pyramids-design-system": "1.0.0"
+    "@robusta/pyramids-design-system": "workspace:*"
   }
 }
 ```
@@ -53,36 +53,35 @@ Available assets:
 
 ## Import — components
 
+The package exports six primitives, `BrandLogo`, `SkButton`, `SkCallout`, `SkTag`, `SkInput` and `SkArrowRight`, and eight marketing surfaces, `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview` and `CTA`, each with its props type, plus `SkLinkProps` and `SkLinkComponent`.
+
 ```tsx
-import {
-  // primitives — stable, reusable
-  BrandLogo, SkButton, SkCallout, SkTag, SkInput, SkArrowRight,
-  // marketing surfaces — page-level
-  Hero, SiteHeader, SiteFooter,
-  ServicesGrid, FlowDiagram, PrinciplesList, NotesPreview, CTA,
-} from '@robusta/pyramids-design-system';
-
+import { SiteHeader, type SkLinkProps } from '@robusta/pyramids-design-system';
 import wordmarkSrc from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+import { Link } from '@tanstack/react-router';
 
-export default function Page() {
+function RouterLink({ href, ...anchor }: SkLinkProps) {
+  return <Link {...anchor} to={href} />;
+}
+
+export function Header() {
   return (
-    <>
-      <SiteHeader wordmarkSrc={wordmarkSrc} />
-      <Hero />              {/* defaults match the prototype copy */}
-      <ServicesGrid />
-      <FlowDiagram />
-      <PrinciplesList />
-      <NotesPreview />
-      <CTA />
-      <SiteFooter wordmarkSrc={wordmarkSrc} />
-    </>
+    <SiteHeader
+      wordmarkSrc={wordmarkSrc}
+      links={[{ label: 'articles', href: '/articles' }]}
+      ctaLabel="me contacter"
+      ctaHref="mailto:nicolas@robusta.build"
+      linkComponent={RouterLink}
+    />
   );
 }
 ```
 
 No component carries a `'use client'` or `'use server'` directive or reads the viewport in JavaScript, and `src/package-contract.spec.tsx` fails on any of them. Every call to action of `Hero`, `SiteHeader` and `CTA` is an anchor to its `primaryCtaHref`, `secondaryCtaHref` or `ctaHref`. Submitting the CTA email input is wired by the consuming site, in a component of its own around the surface.
 
-Every text a marketing surface or `BrandLogo` renders, alternative text included, comes from a prop whose default is the copy of the `ui_kits/marketing/*.jsx` prototype. The brand lockup alone is fixed: the wordmark's alt text and the 💪 🏗 glyphs. A site passes every text prop of the surfaces it publishes (BR-PYRAMID-8).
+`SiteHeader`, `SiteFooter`, `Hero`, `CTA`, `NotesPreview` and `ServicesGrid` take a `linkComponent`, an `SkLinkComponent`, and so does `SkButton` given an `href`. It renders every anchor of the surface, those of its buttons included, with the `href`, `className` and children the anchor would carry; without one, the anchor is a plain `<a>`. The package imports no router and creates no React context.
+
+Every text a marketing surface or `BrandLogo` renders, alternative text included, comes from a prop whose default is the copy of the `ui_kits/marketing/*.jsx` prototype. The brand lockup alone is fixed: the wordmark's alt text and the 💪 🏗 glyphs. A site passes every text prop of the surfaces it publishes (BR-PYRAMID-8). The robusta site does so in `apps/robusta-build/src/landing` and `src/chrome`, from its site configuration's `pageCopy`.
 
 `SkButton` renders an anchor when given an `href`, a button otherwise. A footer item and a service card's link line take an optional `href`; without one, the label renders as text and no anchor. The props are typed in `dist/**/*.d.ts`; the architectural map is `design-system.archi.md`.
 
@@ -105,11 +104,7 @@ SKILL.md                   — agent skill manifest (Claude Code compatible)
 colors_and_type.css        — css vars: color, type scale, semantic styles, paper textures
 sketch.css                 — hand-drawn primitives, marketing surface layout, breakpoints
 
-assets/
-  crystal-tux.svg          — full body, standing
-  crystal-tux-head.svg     — head only, for inline annotations
-  crystal-tux-waving.svg   — waving with "hi there!" speech bubble
-  crystal-tux-thinking.svg — thinking pose with thought cloud
+assets/                    — mascot and wordmark, listed under Import — assets
 
 ui_kits/
   marketing/
@@ -186,14 +181,9 @@ The error ramp, `--brand-error`, `--brand-error-soft` and `--brand-error-deep`, 
 
 ### typography
 
-Hand-drawn means handwritten typography.
-
-- **`--font-display`: Caveat** (Google Fonts) — flowing handwriting for h1/h2 and big quotes.
-- **`--font-hand`: Kalam** — body copy. More legible, still handwritten.
-- **`--font-annot`: Architects Daughter** — small annotations, captions, button labels.
-- **`--font-mono`: JetBrains Mono** — code. The one piece of the system that should *not* look hand-drawn — code is precise, and we honor that.
-
-> ⚠️ All four families ship via Google Fonts CDN. If you have brand-licensed alternatives (Shantell Sans, Caveat Brush, a custom hand), drop the `.woff2` files in `fonts/` and update `colors_and_type.css`.
+- `--font-sans`: IBM Plex Sans — body, headings and UI. `--font-display`, `--font-hand` and `--font-annot` are aliases onto it.
+- `--font-script`: Caveat — the logo and rare hand-drawn accents.
+- `--font-mono`: IBM Plex Mono — code.
 
 The type scale is ten `--t-*` steps, each a `clamp()` running from its size at 320px to its size at 1536px, so text shrinks continuously as the viewport narrows:
 
@@ -321,11 +311,3 @@ These class names are the override surface of the layout. Every layout rule of t
 - ❌ Inter, Roboto, system-ui, SF Pro, or any clean geometric sans
 - ❌ ruler-perfect alignment everywhere — the system *needs* a touch of irregularity
 - ❌ an icon for every label
-
----
-
-## Caveats
-
-- **No source materials.** Built entirely from the written brief. Re-derive against real codebase/Figma when available.
-- **Fonts are Google Fonts substitutions.** Caveat / Kalam / Architects Daughter / JetBrains Mono are all CDN-loaded. If brand fonts exist, swap them in.
-- **One product surface only** (`ui_kits/marketing`).
