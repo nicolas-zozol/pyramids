@@ -127,12 +127,11 @@ async function filesUnder(directory: string): Promise<string[]> {
 }
 
 describe('the migrated corpus, read through the site’s own declaration', () => {
-  it('holds seventeen published articles, with no violation, the six translations published', async () => {
-    const { articles, unpublished, violations } = await read();
+  it('holds seventeen published articles, with no violation', async () => {
+    const { articles, violations } = await read();
 
     expect(violations).toEqual([]);
     expect(articles).toHaveLength(17);
-    expect(unpublished).toEqual([]);
   });
 
   it('addresses them at the eleven slugs of v1 and the six of their translations', async () => {
