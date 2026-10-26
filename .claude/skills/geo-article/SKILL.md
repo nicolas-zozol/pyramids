@@ -24,7 +24,7 @@ Out of scope, flagged in the report but never done here:
 
 Read before writing, they override anything below:
 
-- `business-rules.md` — BR-PYRAMID-9 (one category at most), BR-PYRAMID-10 (published only when declared), BR-PYRAMID-11 (robusta.build is French only).
+- `business-rules.md` — BR-PYRAMID-9 (one category at most), BR-PYRAMID-10 (published only when declared), BR-ROBUSTA-1 (robusta.build serves several locales, English by default).
 - `ubiquitous-language.md` — Article, Category, Tag, Slug, Locale, Translation identifier.
 - The reading contract: `packages/pyramids-content/src/contract.ts`.
 
