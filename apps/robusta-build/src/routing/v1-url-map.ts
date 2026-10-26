@@ -1,4 +1,4 @@
-import { buildUrl, type UrlScheme } from '@robusta/pyramids-routing';
+import { buildUrl, type UrlScheme } from './url-scheme/index.js';
 import type { ArticleIndexEntry } from '../content/article-index.js';
 
 /**

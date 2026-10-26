@@ -24,7 +24,7 @@ export default defineConfig(async () => ({
       router: { addExtensions: 'js' },
       importProtection: {
         client: {
-          specifiers: ['@robusta/pyramids-content', 'gray-matter', 'remark'],
+          specifiers: ['gray-matter', 'remark'],
           files: ['**/src/content/**'],
         },
       },

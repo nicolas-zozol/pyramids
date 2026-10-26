@@ -42,7 +42,7 @@ const V1_SLUGS: Readonly<Record<string, string>> = {
  */
 const V1_CORPUS = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  '../../../apps/robusta/content/blog',
+  '../../../../../apps/robusta/content/blog',
 );
 
 describe('articleSlug', () => {

@@ -7,8 +7,14 @@
  * Requirements: R-TANSTACK-07, R-TANSTACK-45
  * Design: features/pyramid-v2-epic/__done/design-system-responsive/design-system-responsive.design.md
  * Requirements: R-RESPONSIVE-64, R-RESPONSIVE-85
+ * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Requirements: R-MULTILINGUAL-01
  */
 @import 'tailwindcss';
+
+/* No markup lives in these two packages: their words are not class candidates. */
+@source not '../routing/url-scheme';
+@source not '../content/corpus-reader';
 
 /* =========================================================
    Token bridge — aliases only

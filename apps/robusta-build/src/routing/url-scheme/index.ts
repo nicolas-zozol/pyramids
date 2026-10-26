@@ -1,8 +1,10 @@
 /**
- * Package @robusta/pyramids-routing — the v2 URL scheme as pure string
- * functions: the discriminants, the canonical builder, the parser, the URL set.
+ * Package url-scheme — the v2 URL scheme as pure string functions: the
+ * discriminants, the canonical builder, the parser, the URL set.
  *
- * Design: features/pyramid-v2-epic/seo-url-scheme/seo-url-scheme.design.md
+ * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Requirements: R-MULTILINGUAL-01, R-MULTILINGUAL-02, R-MULTILINGUAL-05
+ * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
  * Requirements: R-URLSCHEME-1, R-URLSCHEME-2, R-URLSCHEME-3, R-URLSCHEME-4, R-URLSCHEME-6, R-URLSCHEME-7, R-URLSCHEME-8, R-URLSCHEME-9, R-URLSCHEME-10, R-URLSCHEME-11, R-URLSCHEME-12, R-URLSCHEME-21, R-URLSCHEME-22, R-URLSCHEME-31
  */
 export {

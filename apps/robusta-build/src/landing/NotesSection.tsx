@@ -1,5 +1,5 @@
 import { NotesPreview, type NotePost } from '@robusta/pyramids-design-system';
-import { buildUrl } from '@robusta/pyramids-routing';
+import { buildUrl } from '../routing/url-scheme/index.js';
 import { SiteLink } from '../components/SiteLink.js';
 import { urlScheme } from '../routing/scheme.js';
 import { getSeoPyramidsConfig } from '../seopyramids.config.js';

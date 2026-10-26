@@ -6,7 +6,7 @@ import type { ArticleEntry, CorpusSpec } from './contract.js';
 import { resolveAssetUrl } from './asset-reference.js';
 import { copyCorpusAssets } from './copy-corpus-assets.js';
 import { readCorpus } from './read-corpus.js';
-import { article, writeCorpus } from '../test/corpus-fixture.js';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
 
 const ASSETS = {
   publishDir: '',

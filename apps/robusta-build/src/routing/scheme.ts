@@ -1,4 +1,4 @@
-import type { UrlScheme } from '@robusta/pyramids-routing';
+import type { UrlScheme } from './url-scheme/index.js';
 
 /**
  * The roll size is a constant of 12, not a per-site knob — decision of

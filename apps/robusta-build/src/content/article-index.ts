@@ -5,7 +5,7 @@ import {
   resolveAssetUrl,
   type ArticleBody,
   type ArticleEntry,
-} from '@robusta/pyramids-content';
+} from './corpus-reader/index.js';
 import { corpus } from './corpus.js';
 
 /**

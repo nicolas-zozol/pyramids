@@ -93,3 +93,20 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 
 - Choix : arrêt à l'approbation. Le design n'est pas APPROVED par Nicolas, la requête interdit à boss de l'approuver, et OQ-8 est ouverte (rloq). Aucune implémentation, prérequis compris. Aucun commit.
 - Reprise : Nicolas tranche OQ-8 et passe le design à APPROVED ; relancer la même requête, boss repart d'un `designman update` qui intègre OQ-8, puis de l'implémentation (prérequis d'abord, commit à part).
+
+## 2026-10-26 — boss multilingual-site, étape 1 (prérequis), rloq
+
+- Branche : `epic/robusta-v2`, conforme. Seul `CLAUDE.md` portait des modifications non commitées de Nicolas, conservées.
+- Périmètre : R-MULTILINGUAL-01 à 05 seulement, aucun changement de schéma. Arrêt avant commit, à la demande de Nicolas.
+- Référence avant déplacement : 147 + 78 + 98 tests, design system 75, 32 fichiers HTML prérendus dans `apps/robusta-build/dist/client`.
+- Agent : codeman, pas tddman. Le prérequis est un déplacement sans comportement nouveau ; seule la spec de R-MULTILINGUAL-05 est écrite test-first.
+- R-MULTILINGUAL-04 : `tsconfig.routing.json` inclut `src/routing/url-scheme` ; `src/routing/counterparts.ts` n'existe pas encore, il y entrera avec son étape.
+- Les chaînes de log au build (préfixe `[pyramids-content]`) restent telles quelles : aucun changement de comportement.
+- `CLAUDE.md` : éditions ciblées sur `build:deps`, les watchers, les commandes de test et la phrase sur les specs du corpus. Les modifications de Nicolas restent dans le même fichier : le commit proposé les embarque, sauf `git add -p`.
+- Docs restantes (README du site, `root.archi.md`, `robusta-build.archi.md`, ROADMAP) : laissées à docman et archiman au land, selon le plan de la story.
+- Résultat vérifié par boss : site 330 tests (147 + 78 + 98 + 7 de la spec R-MULTILINGUAL-05, `apps/robusta-build/src/self-contained-packages.spec.ts`), design system 75, lint et `tsc --noEmit` du site verts, `build:deps`, `build:robusta`, `build:robusta-v1` verts. Les 32 fichiers HTML prérendus sont les mêmes, au même contenu une fois les hash d'asset et l'horodatage TanStack normalisés ; la v1 map est inchangée.
+- Ajout de codeman, accepté : `@source not` sur les deux répertoires dans `src/styles/globals.css`. Sans lui, Tailwind lisait le mot `visible` d'un titre de spec déplacée et générait une utility de plus. Directive de scan, aucune valeur : BR-PYRAMID-6 non touchée.
+- La spec R-05 autorise les specs à importer `src/test-support`, où le design place `corpus-fixture.ts`.
+- `apps/robusta`, `apps/dakar`, `services` et les autres modules ne référencent aucun des deux workspaces (git grep vide).
+- Index git : `git mv` a indexé les renommages ; le reste n'est pas indexé. Rien n'est commité.
+- Aucune OQ pertinente.

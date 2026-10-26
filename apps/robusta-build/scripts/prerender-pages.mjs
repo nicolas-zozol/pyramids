@@ -25,7 +25,9 @@ const CONTENT_SHAPES = [
 
 /** `/`, `/404`, then every URL contentUrls derives (R-URLSCHEME-30 checked first). */
 export async function prerenderPages() {
-  const { buildUrl } = await import('@robusta/pyramids-routing');
+  const { buildUrl } = await import(
+    join(compiled, 'routing/url-scheme/index.js')
+  );
   const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
   const { contentUrls } = await import(
     join(compiled, 'routing/content-urls.js')

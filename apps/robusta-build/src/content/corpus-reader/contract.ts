@@ -5,9 +5,9 @@
  * value (R-CONTENTSOURCE-21): a site declares its own tree through `CorpusSpec`
  * and the base calls back into nothing (R-CONTENTSOURCE-22).
  *
- * `ArticleEntry` is structurally an `AddressableArticle` of
- * `@robusta/pyramids-routing`, which is how the two contracts meet without
- * either package importing the other.
+ * `ArticleEntry` is structurally an `AddressableArticle` of `url-scheme`,
+ * which is how the two contracts meet without either package importing the
+ * other.
  */
 
 export type LocaleSource = 'frontmatter' | { pathSegment: number };

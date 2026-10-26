@@ -3,7 +3,7 @@ import {
   validateArticles,
   type PageUrl,
   type SchemeViolation,
-} from '@robusta/pyramids-routing';
+} from './url-scheme/index.js';
 import {
   getArticleIndex,
   type ArticleIndexEntry,

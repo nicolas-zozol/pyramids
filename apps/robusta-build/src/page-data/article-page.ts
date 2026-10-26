@@ -1,4 +1,4 @@
-import { buildUrl } from '@robusta/pyramids-routing';
+import { buildUrl } from '../routing/url-scheme/index.js';
 import {
   getArticleBody,
   getAssetUrl,

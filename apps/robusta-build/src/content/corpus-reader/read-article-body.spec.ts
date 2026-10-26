@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { article, writeCorpus } from '../test/corpus-fixture.js';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
 import type { CorpusSpec } from './contract.js';
 import { readArticleBody } from './read-article-body.js';
 import { readCorpus } from './read-corpus.js';

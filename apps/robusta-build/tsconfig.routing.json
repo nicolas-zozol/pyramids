@@ -15,6 +15,7 @@
     "src/routing/scheme.ts",
     "src/routing/v1-url-map.ts",
     "src/routing/content-urls.ts",
+    "src/routing/url-scheme",
     "src/content"
   ]
 }

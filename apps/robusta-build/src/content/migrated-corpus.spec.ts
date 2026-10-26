@@ -13,8 +13,8 @@ import {
   readArticleBody,
   readCorpus,
   type CorpusSpec,
-} from '@robusta/pyramids-content';
-import { buildUrl, urlSet } from '@robusta/pyramids-routing';
+} from './corpus-reader/index.js';
+import { buildUrl, urlSet } from '../routing/url-scheme/index.js';
 import { afterAll, describe, expect, it } from 'vitest';
 import { urlScheme } from '../routing/scheme.js';
 import { v1UrlMap } from '../routing/v1-url-map.js';

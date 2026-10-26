@@ -1,11 +1,19 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { sep } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+  type MockInstance,
+} from 'vitest';
 import {
   article,
   writeCorpus,
   writeNeighbourhood,
-} from '../test/corpus-fixture.js';
+} from '../../test-support/corpus-fixture.js';
 import type { CorpusSpec } from './contract.js';
 import { readCorpus } from './read-corpus.js';
 
@@ -55,7 +63,7 @@ function touchedPaths(): string[] {
 }
 
 describe('the traversal', () => {
-  let log: ReturnType<typeof vi.spyOn>;
+  let log: MockInstance<typeof console.log>;
 
   beforeEach(() => {
     log = vi.spyOn(console, 'log').mockImplementation(() => {});

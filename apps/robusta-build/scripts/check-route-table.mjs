@@ -72,7 +72,9 @@ async function main() {
   const compiled = join(app, '.routing-dist');
   const client = join(app, 'dist/client');
 
-  const { buildUrl } = await import('@robusta/pyramids-routing');
+  const { buildUrl } = await import(
+    join(compiled, 'routing/url-scheme/index.js')
+  );
   const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
   const { contentUrls } = await import(
     join(compiled, 'routing/content-urls.js')

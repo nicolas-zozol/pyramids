@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { article, writeCorpus } from '../test/corpus-fixture.js';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
 import type { ArticleEntry, CorpusSpec } from './contract.js';
 import { readArticleBody } from './read-article-body.js';
 import { readCorpus } from './read-corpus.js';
@@ -466,7 +466,7 @@ describe('readCorpus — the schema', () => {
  * The real corpus is 11 articles at a roll size of 12, so `next build` produces
  * no `/articles/p/{n}` at all and stops exercising the roll. The shape is
  * exercised here on the input side — an index long enough to paginate, in one
- * order — and in the 13 `urlSet` tests of `pyramids-routing` on the derivation
+ * order — and in the 13 `urlSet` tests of `url-scheme` on the derivation
  * side, which is where a page count is computed from a roll size.
  */
 describe('readCorpus — a corpus longer than one roll page', () => {

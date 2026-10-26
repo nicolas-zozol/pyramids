@@ -1,4 +1,4 @@
-import { buildUrl } from '@robusta/pyramids-routing';
+import { buildUrl } from '@/routing/url-scheme/index.js';
 import { createFileRoute } from '@tanstack/react-router';
 import { RoutePlaceholder } from '@/components/RoutePlaceholder.js';
 import { urlScheme } from '@/routing/scheme.js';

@@ -1,4 +1,4 @@
-import type { CorpusSpec } from '@robusta/pyramids-content';
+import type { CorpusSpec } from './corpus-reader/index.js';
 
 /**
  * Where this site's articles live, declared as data (R-CONTENTSOURCE-22).

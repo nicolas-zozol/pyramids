@@ -10,7 +10,7 @@
   publish = "apps/robusta-build/dist/client"
   # Exit 0 skips the build. A change under these paths exits 1, an unknown
   # cached ref exits 128, and both build.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/robusta-build packages/pyramids-routing packages/pyramids-content packages/robusta-design-system package.json yarn.lock .yarnrc.yml .nvmrc"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/robusta-build packages/robusta-design-system package.json yarn.lock .yarnrc.yml .nvmrc"
 
 [build.environment]
   # Netlify's default, --ignore-optional, is an unknown option to yarn 4.
