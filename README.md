@@ -36,4 +36,4 @@ From a clean checkout the whole repository builds with `yarn install`, `yarn bui
 
 A site reads the build output of the shared packages: while one is edited and a site runs, keep its watcher up (`yarn w:<package>`, or `yarn dev:dev` for v1).
 
-Two things bite newcomers: local TypeScript imports must end with `.js` even though the source is `.ts`, and no site's build runs eslint: `yarn lint` is a separate step.
+Two things bite newcomers: a local TypeScript import ends with `.js` even though the source is `.ts`, except in `apps/robusta-build` and the design system, where it names the `.ts` or `.tsx` file itself; and no site's build runs eslint: `yarn lint` is a separate step.

@@ -13,6 +13,8 @@
  * Requirements: R-LANDING-21, R-LANDING-22, R-LANDING-23
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-46, R-MULTILINGUAL-65
+ * Design: features/pyramid-v2-epic/ts-import-extensions/ts-import-extensions.design.md
+ * Requirements: R-TSIMPORTS-01, R-TSIMPORTS-21, R-TSIMPORTS-61, R-TSIMPORTS-62
  */
 
 export * from './primitives/index.ts';

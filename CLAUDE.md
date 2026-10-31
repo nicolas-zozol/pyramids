@@ -62,14 +62,15 @@ netlify-cli n'est pas une dépendance du dépôt et `netlify` n'est pas dans le 
 
 ### Imports TypeScript
 
-Un import local finit par `.js`, même si la source est `.ts` ou `.tsx` :
+Dans `apps/robusta-build` et `packages/robusta-design-system`, un import local, alias `@/` compris, nomme l'extension du fichier importé, `.ts` ou `.tsx`, et un import de dossier son `index.ts`. Un import en `.js`, sans extension ou à extension fausse fait échouer le build du site (`check:source`) ou les tests du design system.
+
+Dans `apps/robusta`, `apps/dakar` et les autres modules de `packages/`, un import local finit par `.js`, même si la source est `.ts` ou `.tsx`. Un import sans `.js` rencontré en passant se signale, il ne se corrige pas en silence.
 
 ```ts
-import dotenv from 'dotenv';                       // dépendance : pas d'extension
-import { getOpenAiKey } from '../api/get-key.js';  // local : .js
+import dotenv from 'dotenv';                            // dépendance : pas d'extension
+import { SiteLink } from '../components/SiteLink.tsx';  // v2 et design system : extension du fichier
+import { getOpenAiKey } from '../api/get-key.js';       // v1, dakar, autres modules : .js
 ```
-
-Un import local sans `.js` rencontré en passant se signale, il ne se corrige pas en silence.
 
 ### React et TypeScript
 

@@ -242,7 +242,7 @@ Client code : l'app `@robusta/robusta-build` (`moduleResolution: Bundler`) et l'
 - Gap-TSIMPORTS-1: AC-TSIMPORTS-2 et la phrase de la story « `dist/` garde ses exports, ses types et des specifiers en `.js` » supposent que `tsc` réécrit les `.d.ts`. `tsc` 5.7.3 ne réécrit que le JS : `dist/index.d.ts` portera `export * from './primitives/index.ts'`.
 - Proposition: accepter les specifiers `.ts` et `.tsx` dans les `.d.ts`. AC-TSIMPORTS-2 devient « aucun specifier du JS émis dans `dist/`, `.test-build` et `.routing-dist` ne désigne un `.ts` ou un `.tsx`, les deux clients de `dist/` passent leur type-check, et les scripts `.mjs` qui importent `.routing-dist` n'ont pas changé » ; la phrase de la story suit.
 - Rationale: vérifié sous `Node` et `Bundler`, les résolutions des deux clients : un `.d.ts` qui importe `./B.tsx` se résout vers `B.d.ts`. Réécrire les `.d.ts` ajouterait une étape au build du module pour un défaut qu'aucun client ne voit ; sortir le design system du périmètre laisserait deux règles dans le code v2.
-- Resolution:
+- Resolution: lgtm (Nicolas, 2026-10-31)
 
 ## Next Steps
 

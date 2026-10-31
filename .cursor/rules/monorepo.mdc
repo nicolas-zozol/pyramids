@@ -3,33 +3,19 @@ description:
 globs: 
 alwaysApply: true
 ---
-I want to build multiple SEO content websites that are similar.
-So my current tech stack is a monorepo with yarn workspaces, and next.js deployed with SSR with React Server Components (RSC). We use typescript over javascript almost everywhere.
-It is deployed on Vercel
+I build multiple similar SEO content websites in a monorepo with yarn workspaces. We use typescript over javascript almost everywhere. `apps/robusta` (robusta.build v1) and `apps/dakar` (dakar.surf) are next.js with React Server Components (RSC), deployed on Vercel; `apps/robusta-build` (robusta.build v2) is TanStack Start, prerendered at build and served by Netlify.
 
-VERY important: When adding a local file import, always import typescript files using '.js' extension. If you touch a file that contains an typescript import without '.js', don't add it yourself, but put a warning.
-Example:
+VERY important, local TypeScript imports:
+
+- In `apps/robusta-build` and `packages/robusta-design-system`, import a local file by its real extension, `.ts` or `.tsx`, and a folder by its `index.ts`. The site's build and the design system's tests fail on a local import in `.js`, without extension or with the wrong extension.
+- In `apps/robusta`, `apps/dakar` and the other modules of `packages/`, always import typescript files using the '.js' extension. If you touch a file that contains a typescript import without '.js', don't add it yourself, but put a warning.
 
 ```ts
 import dotenv from 'dotenv'; // not local
-import { getOpenAiKey } from '../api/get-open-ai-key.js'; // local, add .js
+import { SiteLink } from '../components/SiteLink.tsx'; // apps/robusta-build: real extension
+import { getOpenAiKey } from '../api/get-open-ai-key.js'; // v1, dakar, other modules: .js
 ```
-
-
-For the Seo Pyramids project, it will make many websites, starting with dakar.surf and robusta.build.
 
 Components are made with react, typescript and tailwind.
 
-The sites are in /pyramids/apps
-So we have /pyramids/apps/dakar and /pyramids/apps/robusta. Then package.json goes into each directory
-
-The shared components across all sites (buttons, column-layouts, cta..) are in /pyramids/packages
-
-So we have /pyramids/packages/layouts and /pyramids/packages/ctas.  Then package.json goes into each directory.
-
-/pyramids/packages/imagine is a package that is used to generate images with openai. It is a wrapper around the openai api.
-NEVER execute a script by yourself in /imagine/script. It costs AI token, it's expensive
-
-The structure of packages/ will probably change it the time: some package will be merged, other will appear.
-
-
+The sites are in /pyramids/apps and the shared components (buttons, column-layouts, cta..) in /pyramids/packages, each with its own package.json.

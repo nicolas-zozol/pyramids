@@ -40,3 +40,35 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Tri : aucune entrée ouverte par designman. Gap-TSIMPORTS-1 reste ouvert dans le brainstorm, assumé par le design.
 - Décisions de designman acceptées sans entrée : `check-source.mjs` lit les specifiers dans l'arbre syntaxique de `typescript` (déjà requis au build par `compile:seams`), plus par regex ; une extension fausse est refusée par le site ; `vi.mock` et voisins sont lus ; le design system porte son propre contrôle, `src/import-specifiers.spec.ts`.
 - Choix : DRAFT → APPROVED, `validated by boss`.
+
+## D5 : Gap-TSIMPORTS-1, réponse de Nicolas
+
+- Phase : reprise en Phase 6
+- Réponse : `lgtm (Nicolas, 2026-10-31)`, inscrite dans le brainstorm. Les `.d.ts` de `dist/` gardent leurs specifiers `.ts`/`.tsx`.
+- Suite : story (AC-TSIMPORTS-2, Boundary) et design (library API) affirment déjà la Proposition. Aucun `storyman update` ni `designman update`.
+
+## D6 : commit du refactoring
+
+- Phase : implémentation
+- Relecture : 115 fichiers. 104 ne changent que des specifiers (vérifié par normalisation `.ts`/`.tsx` → `.js` contre HEAD). Les autres : `check-source.mjs` et son spec, l'arbre de routes régénéré, les specifiers cités de `self-contained-packages.spec.ts`, les trois `tsconfig`, `vite.config.ts`, `moduleSources()` et `import-specifiers.spec.ts` du design system. Rien hors périmètre.
+- `verify.sh` vert : build:deps, build:robusta (34 HTML), build:robusta-v1, build:dakar, 464 tests du site, 99 du design system, lint du site, `tsc --noEmit`.
+- JS émis : 0 specifier `.ts`/`.tsx` ni alias dans `dist/` (18 js), `.test-build` (32) et `.routing-dist` (45). Identique aux références après normalisation des guillemets, sauf `test-support/package-files.js` (`moduleSources()` ajouté). `dist/client` : 159 fichiers, identiques aux références au timestamp `u:` du prérendu près.
+- Choix : le bloc Progress et les fichiers Compound restent hors du commit (AC-TSIMPORTS-5) ; le land retire le bloc.
+- Commit : `6423560`.
+
+## D7 : Clean checkout (AC-TSIMPORTS-3)
+
+- Worktree détaché dans le scratchpad au commit `6423560`, aucun `node_modules` ni `dist` dans son ascendance, retiré ensuite ; la branche n'a pas bougé.
+- `yarn install` à neuf, puis build:deps, build:dakar, build:robusta-v1, build:robusta : verts. 464 tests du site, 99 du design system, lint du site, `tsc --noEmit` : verts. `dist/client` : 159 fichiers, 34 HTML, 53 fichiers de données, identiques aux références au timestamp près. Aucun fichier suivi modifié par la build (v1 map et arbre de routes inchangés).
+- Le `lint` du design system sort en 127 (`command not found: eslint`) : défaut antérieur à la story, eslint absent de ses devDependencies. Hors périmètre, non corrigé : Loose end au land.
+- Choix : AC-TSIMPORTS-3 tenu, à cette exception connue près. Bloc Progress à 100 %.
+
+## D8 : land (`storyman submit`)
+
+- Les cinq étapes sont faites. `land` est l'alias de `submit` : la story passe en SUBMITTED, pas LANDED (grammaire actuelle de storyman, LANDED se lit SUBMITTED).
+- docman : CLAUDE.md, `.cursor/rules/monorepo.mdc`, README.md, `apps/robusta-build/README.md`. Il a aussi élagué de monorepo.mdc la stack périmée et le paragraphe sur `packages/imagine`, qui n'existe plus : accepté.
+- archiman : les trois `*.archi.md` et l'en-tête de `packages/robusta-design-system/src/index.ts` (commentaire seul ; 99 tests du design system rejoués, verts).
+- epicman : puce dans Fait, décision du 2026-10-31 qui renverse la clause `.js` de R-TANSTACK-06 et R-TANSTACK-11, phrase `dist/` corrigée, À faire 9 drop-compile-seams (débloqué) et 10 design-system-lint, Loose end design-system-lint au ROADMAP.
+- Laissé tel quel : « Landed » dans la liste des stories de l'epic, comme ses voisines ; Gap-TSIMPORTS-1 reste dans le brainstorm avec sa Resolution remplie, à la demande de Nicolas.
+- Écarts d'archiman check non traités (en-têtes de code, hors périmètre du land) : R-TSIMPORTS-04 absent de l'en-tête de `src/router.tsx`, R-TSIMPORTS-21 cité côté design system seulement, `check:source` absent du bloc CLI de `robusta-build.archi.md`, en-tête de `test-support/package-files.ts` sans `moduleSources()`.
+- Commit : `docs(pyramid-v2): land ts-import-extensions`, message court plutôt que celui, trop long, proposé par storyman.
