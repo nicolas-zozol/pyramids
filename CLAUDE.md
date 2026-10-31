@@ -102,6 +102,13 @@ The specs of `apps/robusta-build/src/content/corpus-reader` build a corpus on di
 
 There is no root-level `yarn test`.
 
+
+### Netlify CLI
+
+netlify-cli is not a dependency of the repository and `netlify` is not on the PATH: run it as `npx netlify-cli <command>`. npx keeps it in `~/.npm/_npx`; the login token lives in `~/Library/Preferences/netlify/config.json`. A deploy from the CLI is a draft deploy: never pass `--prod`.
+
+
+
 ## Conventions enforced in this repo
 
 These come from `.cursor/rules/*.mdc` and apply to all generated code.
@@ -150,19 +157,6 @@ For a non-trivial component, expose `extraClasses?: string` and merge with `twCs
 
 Tailwind config adds a `mob` breakpoint (= `max: md`, the inverse of `sm`). Prefer `mob:hidden`, `mob:flex-col`, etc. Use `sm` and `lg`; ignore `md`/`xl`/`2xl` unless already present (don't strip them).
 
-### Server actions / Zod (`*.action.ts`, `*.zod.ts`)
-
-- Action files start with `'use server'` and use `next-safe-action` (`createSafeActionClient().schema(...).action(...)`).
-- Zod schemas live in `src/models/validation/*.zod.ts` and are **shared between client and server** (single source of truth).
-- Compose small schemas; don't put DB internals in the action return shape.
-- Client side: call via `useAction` from `next-safe-action/hooks`.
-- Tests: vitest, mock `getServerSession` etc. via `vi.mocked`.
-
-### Telemetry
-
-Not on the v2 site. BR-PYRAMID-2 states that a site built on the version 2 base must not track visitor intents, so `apps/robusta-build` wires no telemetry client and depends on `@robusta/scribe-intel` nowhere. Do not add one there, whatever the section below says.
-
-On `apps/robusta` and `apps/dakar`: `@robusta/scribe-intel` exposes a `Telemetry` class (log/error/component) wrapping OpenTelemetry. Add `Telemetry.component(...)` at the top of pages / components / functions where logging is wanted, and use `Telemetry.log` / `Telemetry.error` consistently.
 
 ### Other
 
