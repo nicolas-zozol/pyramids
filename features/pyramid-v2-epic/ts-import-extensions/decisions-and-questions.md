@@ -27,3 +27,16 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Choix : la suite assume la Proposition (specifiers `.ts`/`.tsx` acceptés dans les `.d.ts`, les deux clients de `dist/` passent leur type-check). L'alternative, une réécriture des `.d.ts` après `tsc` dans le build du module, reste ouverte pour Nicolas ; elle s'ajoute sans défaire le reste.
 - Décisions affirmées par bsman et acceptées sans entrée : le route tree généré n'est plus exempté du contrôle (`addExtensions: true`), le design system porte son propre contrôle dans une spec, aucun bump de version, `root.archi.md` et `robusta-build.archi.md` ajoutés au plan de documentation.
 - Cas limites retenus : extension TS fausse (`./Bar.ts` pour `Bar.tsx`) refusée, chemin `vi.mock` en `.js` refusé.
+
+## D3 : item ROADMAP drop-compile-seams
+
+- Phase : story
+- Constat : OQ-TSIMPORTS-1 tranchée en item séparé, aucun item n'existait.
+- Choix : boss ajoute `drop-compile-seams` aux Loose ends de `ROADMAP.md`, pas à Next : c'est une dette technique, sans effet visible, qui ne doit pas passer devant blog-rolls.
+
+## D4 : design, approbation
+
+- Phase : design (`ts-import-extensions.design.md`)
+- Tri : aucune entrée ouverte par designman. Gap-TSIMPORTS-1 reste ouvert dans le brainstorm, assumé par le design.
+- Décisions de designman acceptées sans entrée : `check-source.mjs` lit les specifiers dans l'arbre syntaxique de `typescript` (déjà requis au build par `compile:seams`), plus par regex ; une extension fausse est refusée par le site ; `vi.mock` et voisins sont lus ; le design system porte son propre contrôle, `src/import-specifiers.spec.ts`.
+- Choix : DRAFT → APPROVED, `validated by boss`.
