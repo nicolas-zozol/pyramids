@@ -1,10 +1,10 @@
 # @robusta/pyramids
 
-A yarn-workspaces monorepo that builds several SEO content sites from one shared base: a set of small React packages and a markdown content pipeline. `apps/robusta` and `apps/dakar` are Next.js App Router sites on Vercel; the v2 robusta site, `apps/robusta-build`, is TanStack Start, prerendered at build and served as files by Netlify. Each site brings its own content and its own design system; everything else is borrowed.
+A yarn-workspaces monorepo that builds several SEO content sites from one shared base, a set of small React modules. `apps/robusta` and `apps/dakar` are Next.js App Router sites on Vercel; the v2 robusta site, `apps/robusta-build`, is TanStack Start, prerendered at build and served as files by Netlify. Each site carries its content and a design system, which several sites may share (BR-PYRAMID-3); what a single site uses lives in that site (BR-PYRAMID-12).
 
 Live sites: robusta.build (`apps/robusta-build`, `noindex` on every page) and dakar.surf (`apps/dakar`).
 
-The project is in a v2 restart — the robusta site is being rebuilt from scratch on a simplified URL scheme and a real design system. Scope and reasoning: `features/pyramid-v2-epic/pyramid-v2.epic.md`.
+The v2 epic, `features/pyramid-v2-epic/pyramid-v2.epic.md`, rebuilds the robusta site on a simplified URL scheme and a design system.
 
 ## Where things are
 
@@ -28,12 +28,12 @@ Node 22 (`.nvmrc`), 22.12 or later, and yarn 4.17.1, whose binary is committed a
 
 ```bash
 yarn install
-yarn build:deps      # routing → content → helpers → themes → design-system → layouts → links → ctas
+yarn build:deps      # helpers → themes → design-system → layouts → links → ctas
 yarn dev:robusta     # or dev:dakar
 ```
 
 From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
 
-Editing a shared package while a site runs? Keep a watcher up (`yarn dev:dev`, or `yarn w:<package>`), otherwise the site keeps serving the previous build output.
+A site reads the build output of the shared packages: while one is edited and a site runs, keep its watcher up (`yarn w:<package>`, or `yarn dev:dev` for v1).
 
 Two things bite newcomers: local TypeScript imports must end with `.js` even though the source is `.ts`, and no site's build runs eslint: `yarn lint` is a separate step.

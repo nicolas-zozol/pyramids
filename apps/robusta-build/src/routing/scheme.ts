@@ -2,7 +2,13 @@
  * Package routing — the site's URL scheme instance and its Locales, and the derivations the build and the pages read from them.
  *
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
- * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-24, R-MULTILINGUAL-26, R-MULTILINGUAL-61
+ * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-24, R-MULTILINGUAL-26, R-MULTILINGUAL-61, R-MULTILINGUAL-101
+ * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
+ * Requirements: R-URLSCHEME-2, R-URLSCHEME-7, R-URLSCHEME-11, R-URLSCHEME-12, R-URLSCHEME-14, R-URLSCHEME-15, R-URLSCHEME-22, R-URLSCHEME-25, R-URLSCHEME-26, R-URLSCHEME-27, R-URLSCHEME-28
+ * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
+ * Requirements: R-MIGRATELEARN-61
+ * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
+ * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
  */
 import type { UrlScheme } from './url-scheme/index.js';
 

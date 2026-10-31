@@ -1,9 +1,9 @@
 # Story : robusta.build en trois langues, l'anglais par défaut
 
-**Dernière mise à jour :** 2026-10-26
+**Dernière mise à jour :** 2026-10-31
 **Feature :** multilingual-site
 **Infix :** MULTILINGUAL
-**Status :** ACTIVE
+**Status :** LANDED (2026-10-31, commit fb4803b)
 
 ## Story
 
@@ -11,34 +11,53 @@
 
 ## Contexte & objectif
 
-Le 2026-10-25, BR-ROBUSTA-1 remplace BR-PYRAMID-11 : robusta.build sert ses pages dans plusieurs Locales, `en` par défaut, avec `fr` et `es`. Le site met désormais en avant RB Compound ; les PME françaises restent un positionnement parmi d'autres, non mis en avant. Aujourd'hui le site sert `fr` sans marqueur et `en` sous `/l/en` (default-locale-fr, `6bcbca6`), et sa Site configuration n'a qu'un bloc de page copy, en français.
+Le 2026-10-25, BR-ROBUSTA-1 remplace BR-PYRAMID-11 : robusta.build sert ses pages en `en`, Locale par défaut, `fr` et `es`, et sa landing page présente RB Compound, une offre de services en deux versions, open source et gratuite, ou complète et seulement avec un accompagnement payant. Toutes les Locales portent un préfixe, la Locale par défaut comprise, pour qu'un changement de Locale par défaut ne déplace plus aucune URL ; la story défait en partie default-locale-fr. En prérequis, `@robusta/pyramids-routing` et `@robusta/pyramids-content`, que seul ce site utilisait, sont devenus des packages du site (BR-PYRAMID-12).
 
-Toutes les Locales portent un préfixe, `en`, `fr` et `es`, la Locale par défaut comprise : changer de Locale par défaut ne déplacera plus aucune URL. La landing page d'une Locale est `/en`, sans barre finale comme toute URL que `buildUrl` produit ; `/` redirige vers `/en`, et `/en/` reçoit le 301 que Netlify sert déjà vers la forme sans barre. Le premier segment étant toujours une Locale, le discriminant `l` disparaît des URL ; le schéma reste lisible sans la content source (BR-PYRAMID-1). Cette story défait en partie default-locale-fr : Locale par défaut, adresses, `<html lang>` et texte français constant de la 404 et de la fin d'article.
+## Livré
 
-Le corpus compte 8 articles anglais et 9 français publiés, et aucun article espagnol. Huit paires se traduisent : les six traductions publiées par `a3408ff` ont l'anglais pour original, les deux paires venues de v1, `yield-farming-fr` et `pourquoi-migration-gatsby-next-js`, le français. Un article n'existe que dans les Locales où une version publiée existe (BR-PYRAMID-10) : sans version espagnole, il n'a aucune adresse sous le préfixe `es` et aucun lien n'y mène. `/es` n'a que sa landing page, page copy en espagnol, sans section de notes ni repli vers l'anglais. Le site ne détecte pas la langue du navigateur ; l'en-tête de chaque page mène aux autres Locales.
+Prérequis en commit à part, `05cb2c5` ; design system `2346f83` ; site `fb4803b`. Site 455 tests, design system 87 ; lint, `tsc`, `build:deps`, `build:robusta` et `build:robusta-v1` verts.
 
-Une traduction obsolète est signalée par la build, jamais dépubliée : une coquille corrigée dans l'original dépublierait sinon toutes ses traductions. Seul le traducteur la redéclare à jour.
+### Requirements
 
-RB Compound est une offre de services de Nicolas, pour les équipes et responsables techniques qui veulent produire du logiciel avec des agents IA (décision du 2026-10-26). Elle a deux versions, deux offres distinctes, que la landing page présente chacune par son propre schéma de workflow, la surface `FlowDiagram` du design system :
+- R-MULTILINGUAL-01 : le code de `packages/pyramids-routing/src` passe dans `src/routing/url-scheme/`, celui de `packages/pyramids-content/src` dans `src/content/corpus-reader/`, dans un commit à part et avant tout changement de schéma ; ce commit sert les mêmes 30 URL de contenu, le même corpus et la même v1 map qu'aujourd'hui (BR-PYRAMID-12).
+- R-MULTILINGUAL-02 : leurs specs, 78 et 98, suivent leur code et passent dans `yarn workspace @robusta/robusta-build run test`.
+- R-MULTILINGUAL-03 : les deux workspaces disparaissent : répertoires, dépendances `workspace:*` du site, étapes de `build:deps`, watchers `w:routing` et `w:content`, chemins de la règle `ignore` de `netlify.toml`, spécificateur `@robusta/pyramids-content` d'`importProtection`. Le design system reste la seule dépendance workspace du site (BR-PYRAMID-13). `routing.archi.md` et `content.archi.md` suivent leur code, inchangés, pour archiman.
+- R-MULTILINGUAL-04 : `tsconfig.routing.json` inclut `src/routing/url-scheme` et `src/routing/counterparts.ts` ; les scripts importent `.routing-dist/…` et plus aucun module par son nom.
+- R-MULTILINGUAL-05 : `url-scheme` et `corpus-reader` n'importent rien hors de leur répertoire ; le content root, la racine du corpus et les Locales ne s'écrivent que dans `src/routing/scheme.ts` et `src/content/corpus.ts`. Une spec échoue sur un import qui sort de l'un des deux répertoires.
+- R-MULTILINGUAL-21 : `buildUrl` préfixe toute page de `/{locale}`, la Locale par défaut comprise ; la landing page d'une Locale est `/{locale}`, sans barre finale ; `l` n'est plus un discriminant (BR-ROBUSTA-1, BR-PYRAMID-1).
+- R-MULTILINGUAL-22 : `parseUrl` lit les formes préfixées avec ses tolérances actuelles et rend `undefined` pour tout premier segment qui n'est pas une Locale connue.
+- R-MULTILINGUAL-23 : `landingPages` rend les trois landing pages ; `urlSet` rend toujours la seule section de contenu, et une Locale autre que la Locale par défaut n'y a d'accueil de blog que si elle porte un article.
+- R-MULTILINGUAL-24 : `urlScheme` déclare `en` par défaut, puis `fr` et `es` ; `Locale` est l'union de ces trois valeurs.
+- R-MULTILINGUAL-25 : sept fichiers de route sous `src/routes/$locale/`, la landing et les six formes de contenu, remplacent `routes/index.tsx`, `routes/articles/**` et `routes/l/**` ; `prerender-pages` vérifie ces sept fichiers et prérend les landing pages, `/404`, puis les URL de contenu, et rien à `/`.
+- R-MULTILINGUAL-26 : `/` répond 301 vers `/en` par la règle de `netlify.toml`, dont l'en-tête cesse d'affirmer « no redirect rule ». Une spec vérifie que la cible de la règle vaut `buildUrl` de la landing page de la Locale par défaut ; `check-route-table` échoue si `dist/client/index.html` existe.
+- R-MULTILINGUAL-27 : `check-route-table` compare les pages HTML écrites, `404.html` exclue, aux landing pages plus les URL de contenu ; il attend un fichier de données par article, par flux de notes demandé et par page portant une `PageUrl`.
+- R-MULTILINGUAL-28 : la page 404 est en anglais, texte constant, `lang="en"`, et son lien de retour mène à la landing page de la Locale par défaut.
+- R-MULTILINGUAL-41 : `pageCopy` porte un bloc complet par Locale ; une Locale ou un texte manquant échoue au typecheck (BR-PYRAMID-8).
+- R-MULTILINGUAL-42 : `<html lang>`, en-tête, pied de page, landing page, titres des placeholders, fin d'article, titre et description de repli de chaque page suivent la Locale de la page ; `siteTitle` et `mission` cèdent la place à `pageCopy[locale].head`.
+- R-MULTILINGUAL-43 : un libellé de Category se lit par `getCategoryLabel` seul ; sans libellé dans la Locale de la page, la build échoue en nommant la Category et la Locale.
+- R-MULTILINGUAL-44 : la page copy anglaise est écrite sur le positionnement RB Compound, offre de services aux équipes et responsables techniques qui produisent du logiciel avec des agents IA ; `fr` et `es` la traduisent section pour section, schémas compris, et la page copy française tournée vers les PME de Toulouse disparaît. Les noms d'agents, `rloq` et `APPROVED` restent tels quels dans les trois Locales.
+- R-MULTILINGUAL-45 : la landing page d'une Locale demande le flux de notes de sa Locale, quatre au plus ; un flux vide ne rend aucune section, ce qui est le cas d'`es`.
+- R-MULTILINGUAL-46 : `FlowDiagram` gagne `id`, optionnel, `approach` par défaut ; une spec du design system couvre l'`id` passé et le défaut (BR-PYRAMID-13).
+- R-MULTILINGUAL-47 : `LandingPage` rend `Hero`, deux `FlowDiagram`, `PrinciplesList`, `NotesSection` et `CTA`, dans cet ordre ; chaque texte des deux schémas vient de `landing.openSource` ou `landing.complete`, aucun défaut du prototype ne s'affiche (R-LANDING-83, BR-PYRAMID-8). Le CTA reste le contact, e-mail et LinkedIn, qui mène à l'accompagnement.
+- R-MULTILINGUAL-48 : chaque schéma décrit le workflow tel qu'il existe (§Code Routine de Compound), une étape par stade, ses agents nommés. Version open source : l'epic par epicman, la story par storyman, le design par designman, sa validation, DRAFT → APPROVED, puis l'implémentation test-first par tddman ; ni codeman, ni docman, ni archiman. Version complète : la story, le brainstorm par bsman, le design et sa validation, l'implémentation par tddman ou codeman, la documentation par docman et archiman. Le caveat du premier dit la version gratuite et pas encore publiée ; celui du second dit que boss enchaîne le pipeline, piloté par le slang comme rloq, et que cette version n'existe qu'avec un accompagnement personnalisé payant.
+- R-MULTILINGUAL-49 : `PrinciplesList` reste, réorientée : chaque principe énonce une règle que le workflow applique dans ses deux versions, la documentation avant le code, une story par feature avec ses critères d'acceptation, des contrats écrits avant le code, un glossaire employé par chaque document ; jamais un résultat promis.
+- R-MULTILINGUAL-50 : chaque `href` du rendu des trois landing pages, en-tête et pied de page compris, est le `mailto:` du contact, `contact.linkedIn` ou un chemin que `buildUrl` produit ; une spec le vérifie. Aucun lien ne mène donc à un dépôt ni à une page du plugin open source ; l'ajouter le jour de sa publication change la page copy et cette spec (item 15 de l'epic).
+- R-MULTILINGUAL-61 : `counterpartsOf` applique les règles du bloc `routing` et ne rend que de vrais équivalents.
+- R-MULTILINGUAL-62 : le loader racine obtient la Locale et les contreparties de chaque page par `parseUrl` puis `getCounterparts`, au prérendu ; le 404 n'en a aucune.
+- R-MULTILINGUAL-63 : le wordmark mène à la landing page de la Locale de la page ; l'en-tête porte un lien par autre Locale, libellé par le `localeName` de cette Locale et marqué de son `lang` et `hreflang`, vers la contrepartie ou, à défaut, la landing page de cette Locale.
+- R-MULTILINGUAL-64 : `ArticlePage.versions` liste toutes les autres versions publiées, tirées de `counterpartsOf` ; `ArticleView` les lie toutes, sa fin d'article rédigée dans la Locale de l'article.
+- R-MULTILINGUAL-65 : `SiteHeader` gagne `homeHref` et `NavLink.locale`, optionnels ; une spec du design system couvre les deux, une autre le balisage inchangé sans eux.
+- R-MULTILINGUAL-81 : une traduction déclare `original: { locale, fingerprint }` dans son frontmatter ; un article sans cette déclaration est son propre original.
+- R-MULTILINGUAL-82 : l'empreinte suit la définition du bloc `corpus-reader`, calculée sur le contenu des fichiers seul (BR-PYRAMID-5).
+- R-MULTILINGUAL-83 : une déclaration mal formée est une violation `malformed-original`, qui fait échouer la build.
+- R-MULTILINGUAL-84 : `readCorpus` rend les notices `stale-translation`, `untracked-pair` et `missing-original` à part des violations ; aucune ne bloque ni ne dépublie un article (BR-PYRAMID-10 inchangée).
+- R-MULTILINGUAL-85 : `check:translations` imprime chaque notice avec la valeur à recopier, une fois par build, et sort en 0.
+- R-MULTILINGUAL-86 : les huit traductions actuelles déclarent leur original dans le même changement : les six fichiers français traduits par `a3408ff` déclarent `en`, `blockchain/yield-farming.md` et `javascript/why-migration-gatsby-next.md` déclarent `fr`. Une spec sur le corpus réel n'attend aucune notice.
+- R-MULTILINGUAL-101 : `v1-url-map.generated.json` est régénéré ; mêmes 82 lignes, même ordre, mêmes issues, seules changent les destinations et les champs `defaultLocale` et `otherLocales` de l'en-tête.
 
-- la version open source, simple et gratuite : epicman, storyman, designman et tddman, de l'epic à l'implémentation test-first, sans brainstorm, ni boss, ni codeman, docman ou archiman ;
-- la version complète, avec le brainstorm, codeman, la documentation par docman et archiman, boss et le vocabulaire slang comme rloq : elle n'existe qu'avec un accompagnement personnalisé et payant d'une entreprise, jamais seule.
+### Acceptance Criteria
 
-La landing page décrit le workflow tel qu'il existe (§Code Routine de Compound et ses agents : epicman, storyman, bsman, designman, tddman et codeman, docman et archiman, boss), sans prix ni promesse de résultat ; un chiffre factuel comme « vingt ans de logiciel » reste permis. Son appel à l'action reste le contact actuel, e-mail et LinkedIn, qui mène à l'accompagnement. La version open source n'est pas encore publiée : ce sera un plugin, présenté à la manière de Superpowers, extrait plus tard de l'existant. La landing page le dit et ne lie aucun dépôt tant que le plugin n'est pas publié ; ajouter ce lien sera un changement de page copy, hors de cette story.
-
-La page copy anglaise est écrite directement sur ce positionnement ; `fr` et `es` la traduisent, et la page copy française actuelle, tournée vers les PME de Toulouse, est remplacée. Aucun item à part ne réécrit la landing page. Hors périmètre : l'extraction et la publication du plugin open source (item d'À faire de l'epic), hreflang, x-default et sitemap (seo-excellence), les articles sur RB Compound, et les traductions espagnoles des articles, publiées plus tard comme contenu.
-
-Le schéma et la lecture du corpus vivent dans deux modules, `@robusta/pyramids-routing` et `@robusta/pyramids-content`, dont le seul consommateur est `apps/robusta-build`. Ce qu'un seul site utilise appartient à ce site (BR-PYRAMID-12) : leur code redevient des packages du site, en première étape de cette story. `@robusta/pyramids-design-system` reste un module (BR-PYRAMID-13), mais `SiteHeader` y gagne deux ajouts optionnels : l'adresse d'accueil du wordmark, aujourd'hui `/` en dur, et une Locale par lien.
-
-## Prérequis : le schéma et la lecture du corpus deviennent des packages du site
-
-- Le code de `packages/pyramids-routing` et `packages/pyramids-content` devient des packages de `apps/robusta-build`, auprès de `src/routing/scheme.ts` et `src/content/corpus.ts` ; noms et emplacements au design. Leurs specs suivent, 78 et 98 tests.
-- Aucun changement de comportement dans cette étape : le site sert les mêmes 30 URL de contenu, le même corpus et la même v1 map qu'aujourd'hui.
-- Les deux workspaces disparaissent, avec leurs étapes de `build:deps` et leurs watchers `w:routing` et `w:content` ; le design system reste la seule dépendance workspace du site.
-- Le code du schéma et de la lecture du corpus ne contient l'arborescence d'aucun site : la Site configuration et `CorpusSpec` déclarent le content root, la racine du corpus et les Locales.
-- Les scripts de build en Node pur (`check-route-table`, `prerender-pages`, `copy-article-images`) importent aujourd'hui le `dist` des deux modules ; la façon dont ils atteignent le code rapatrié revient au design.
-
-## Acceptance Criteria
+Les sept validés le 2026-10-31, AC-MULTILINGUAL-2 sur un deploy Netlify CLI (alias `dev`).
 
 - AC-MULTILINGUAL-1 : Given le corpus publié et un clean checkout du dépôt, sans les workspaces `pyramids-routing` et `pyramids-content`, When le site est construit et testé, Then la build aboutit, et chaque URL de contenu commence par la Locale de sa page : `/en/articles/c/privacy/leaving-gmail` et `/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain` répondent 200, le site compte toujours 30 URL de contenu, 14 sous `/en/…` et 16 sous `/fr/…`, et `/en`, `/fr` et `/es` sont les trois landing pages, sans barre finale.
 - AC-MULTILINGUAL-2 : Given le site publié sur un branch deploy, When un visiteur ou un crawler ouvre `/`, Then il reçoit une redirection permanente (301) vers `/en`, et `/en/`, `/fr/` ou `/es/` une redirection permanente vers la même adresse sans barre finale ; une ancienne adresse sans préfixe ou sous `/l/en`, comme `/articles/c/blockchain` ou `/l/en/articles`, répond 404, sans redirection. Les redirections sont servies par l'hébergeur : `vite dev` ne les applique pas.
@@ -53,66 +72,77 @@ Le schéma et la lecture du corpus vivent dans deux modules, `@robusta/pyramids-
 Packages de l'app `@robusta/robusta-build` [modified] :
 
 ```
-  routes · page-data · landing · scripts de build
+  routes · page-data · chrome · landing · scripts de build
       │
-      ├──library──→  package `routing` [modified]   reçoit le code de `pyramids-routing`
+      ├──library──→  package `routing` [modified]   url-scheme [new], counterparts [new]
       │
-      └──library──→  package `content` [modified]   reçoit le code de `pyramids-content`
+      └──library──→  package `content` [modified]   corpus-reader [new]
 ```
 
-Hors figure, autre zoom : le module `@robusta/pyramids-design-system` [modified], dont l'en-tête du site est le client.
+Hors figure, autre zoom : le module `@robusta/pyramids-design-system` [modified], dont `chrome` et `landing` sont les clients.
 
 ### HTTP API of app `@robusta/robusta-build` — modified
 
 Client code : navigateurs et crawlers.
 
-- `GET /` — 301 vers `/en`, première redirection du site v2, servie par l'hébergeur · avant : 200, la landing page française
-- `GET /{en|fr|es}` — 200, la landing page de la Locale, `<html lang>` à cette Locale, page copy RB Compound · avant : `/` seule, `/l/en` non construite
-- `GET /{en|fr|es}/` — 301 vers la même adresse sans barre finale, comportement que Netlify sert déjà
-- `GET /{en|fr}/articles…` — 200, les pages de la Locale · avant : `fr` sans marqueur, `en` sous `/l/en`
-- `GET /es/articles…` — 404 tant qu'aucun article espagnol n'est publié
-- `GET /articles…`, `GET /l/{locale}/…` et toute adresse inconnue — 404, `404.html` en anglais, retour vers la landing page anglaise · avant : 200 pour `/articles…` et `/l/en/…`
+- `GET /` — 301 vers `/en`, unique règle `[[redirects]]` de `netlify.toml`, sans `force` · avant : 200, la landing page française
+- `GET /{en|fr|es}` — 200, la landing page de la Locale, page copy RB Compound
+- `GET /{en|fr|es}/` — 301 de l'hébergeur vers la forme sans barre finale
+- `GET /{en|fr}/articles…` — 200, 30 URL de contenu, 14 et 16 · avant : `fr` sans marqueur, `en` sous `/l/en`
+- `GET /es/articles…`, `GET /articles…`, `GET /l/…` et toute adresse inconnue — 404, `404.html` en anglais, retour vers `/en`
+
+### library API of package `url-scheme` in package `routing` — new
+
+- `UrlScheme`, `buildUrl`, `parseUrl`, `urlSet`, `validateArticles`, repris de `@robusta/pyramids-routing` ; `landingPages` nouveau ; `LOCALE_DISCRIMINANT` supprimé
+- chaque URL commence par sa Locale ; la landing page d'une Locale s'écrit `/{locale}`, sans barre finale
 
 ### library API of package `routing` in app `@robusta/robusta-build` — modified
 
-Client code : routes, `page-data`, `landing`, scripts de build ; ils importent le point d'entrée du package, plus le workspace.
+- `urlScheme` : `en` par défaut, puis `fr` et `es` ; `Locale`, l'union des trois
+- `counterpartsOf`, nouveau, dans `counterparts.ts` : la même page dans chaque autre Locale, jamais de repli ; atteint par les handlers de `page-data` seuls
 
-- reçoit `UrlScheme`, `buildUrl`, `parseUrl`, `urlSet`, `validateArticles` et les discriminants de l'ancien module, à l'identique
-- `UrlScheme` · modifié — chaque Locale porte son préfixe, la Locale par défaut comprise ; la forme sans marqueur et le discriminant `l` disparaissent
-- `buildUrl`, `urlSet` · même signature — chaque URL produite commence par sa Locale, et la landing page d'une Locale s'écrit sans barre finale
+### library API of package `corpus-reader` in package `content` — new
 
-### library API of package `content` in app `@robusta/robusta-build` — modified
+- `readCorpus`, `readArticleBody`, `articleSlug`, `describeViolation`, `copyCorpusAssets`, `resolveAssetUrl`, repris de `@robusta/pyramids-content`
+- `ArticleEntry.original` (`{ locale, fingerprint }`), violation `malformed-original`, `CorpusRead.translationNotices` (`stale-translation`, `untracked-pair`, `missing-original`) et `describeTranslationNotice`, nouveaux
 
-Client code : `src/content`, `page-data`, scripts de build.
+### library API of packages `content`, `page-data` et Site configuration in app `@robusta/robusta-build` — modified
 
-- reçoit `CorpusSpec`, `readCorpus`, `readArticleBody`, `articleSlug`, `describeViolation`, `copyCorpusAssets` et `resolveAssetUrl` de l'ancien module, à l'identique
-- `ArticleEntry` · modifié — porte de quoi connaître l'original d'une traduction et l'état à jour ou obsolète de celle-ci ; forme au design
-- signalement des traductions obsolètes ou non suivies · nouveau — produit à la lecture du corpus, distinct des violations, sans bloquer la publication
+- `getTranslationNotices` nouveau, `findTranslation` supprimé
+- `getCounterparts` nouveau ; `ArticlePage.versions` remplace `translation`
+- `pageCopy: Record<Locale, PageCopy>`, lu par `getPageCopy` et `getCategoryLabel` seuls ; `siteTitle` et `mission` supprimés
+
+### CLI API of app `@robusta/robusta-build` — new
+
+- `check:translations` : une ligne par notice, exit 0 ; exit 1 sur une violation du corpus. `build` l'enchaîne.
 
 ### library API of module `@robusta/pyramids-design-system` — modified
 
-Client code : l'en-tête du site, `src/chrome`, et la landing page, `src/landing`, de `apps/robusta-build`. Le design system reste un module (BR-PYRAMID-13) ; ses autres usages ne changent pas.
+- `SiteHeaderProps.homeHref`, `NavLink.locale` et `FlowDiagramProps.id`, optionnels ; sans eux, le balisage d'avant
 
-- `SiteHeaderProps` · modifié — gagne une adresse d'accueil optionnelle pour le wordmark, `/` par défaut ; nom au design
-- `NavLink` · modifié — gagne une Locale optionnelle, rendue en `lang` et `hreflang` sur le lien ; nom au design
-- `FlowDiagram` · utilisé deux fois sur une même page, une instance par version de RB Compound ; sa section porte aujourd'hui un `id="approach"` en dur ; la landing page fournit chaque texte, le reste au design
+## Décisions
+
+- 2026-10-26 — La landing page d'une Locale est `/en`, sans barre finale ; `/en/` reçoit le 301 de l'hébergeur. Pourquoi : OQ-MULTILINGUAL-6, aucune URL de `buildUrl` ne finit par une barre.
+- 2026-10-30 — Un libellé de Category manquant fait échouer la build par `check-route-table`, qui refuse toute page portant le repli Suspense `<!--$!-->` ; le log du prérendu nomme la Category et la Locale. Pourquoi : levée sous une frontière Suspense, l'erreur de `getCategoryLabel` est journalisée et la page sort en 200, `failOnError` ne la voit pas.
+- 2026-10-30 — `counterparts.ts` est atteint par les handlers de `page-data`, `getCounterparts` et `getArticlePage`, jamais par du code client. Pourquoi : `ArticlePage.versions` vient de `counterpartsOf` (R-MULTILINGUAL-64).
+- 2026-10-30 — L'état d'échec de navigation est en anglais constant, `lang="en"`, comme la 404, et les deux renvoient vers `/en`. Pourquoi : `PageCopy` n'a aucun champ pour lui ; `/en` évite le saut 301 et marche sous `vite dev`.
+- 2026-10-30 — La route racine recharge son loader à chaque navigation client (`shouldReload`, `staleReloadMode: 'blocking'`). Pourquoi : sans cela, `<html lang>` et l'en-tête gardaient la Locale de la première page.
+- 2026-10-30 — `untracked-pair` liste les versions d'un translation identifier qui ne déclarent pas d'original ; un cycle de déclarations ne signale rien. Pourquoi : lecture littérale de R-MULTILINGUAL-84 ; un cycle ne naît que d'une édition humaine.
+- 2026-10-31 — AC-MULTILINGUAL-2 vérifié sur https://dev--robusta-build.netlify.app : `/` en 301 vers `/en`, `/en/`, `/fr/` et `/es/` en 301 vers la forme sans barre, `/articles/c/blockchain`, `/l/en/articles` et `/articles` en 404, la 404 servie en anglais.
 
 ## Documentation updates
 
-- change l'entrée `Locale` de `ubiquitous-language.md` — why: chaque Locale porte un marqueur dans l'URL, la Locale par défaut comprise.
-- change l'entrée `Canonical URL` de `ubiquitous-language.md`, dans la même passe que l'item 6 d'À faire (canonical-url-glossary) — why: une Locale par défaut marquée devient la forme canonique, et `/` est la seule redirection du site.
-- change les entrées `Pyramid`, `Discriminant` (« appartiennent à la base partagée ») et `Content source` (« que la base partagée sait lire ») de `ubiquitous-language.md` — why: le schéma et la lecture du corpus ne font plus partie de la base partagée.
-- create les termes de l'original d'un article et de la traduction obsolète dans `ubiquitous-language.md`, noms fixés au design — why: la gestion des traductions en a besoin.
-- change §Routing, §One URL per page, §The v1 mapping et la description du déploiement Netlify (« no redirect rule ») de `apps/robusta-build/README.md` — why: formes préfixées, fin du discriminant `l`, redirection de `/`, destinations de la v1 map.
-- change §Articles de `apps/robusta-build/README.md` — why: les Locales `en`, `fr`, `es`, et ce qu'un article déclare sur son original et sa mise à jour.
-- change la composition de la landing page dans `apps/robusta-build/README.md` (§What they render) et le package `landing` de `apps/robusta-build/robusta-build.archi.md`, via archiman — why: deux `FlowDiagram` présentent les deux versions de RB Compound.
-- change les mentions de `pyramids-routing` et `pyramids-content` dans `apps/robusta-build/README.md` — why: ce sont des packages du site.
-- change l'exemple et la description de `SiteHeader` dans `packages/robusta-design-system/README.md` — why: adresse d'accueil du wordmark et Locale par lien.
-- change `build:deps`, les commandes de test, les watchers, la phrase sur les discriminants `l`, `c`, `p`, `t` et « `/` is the landing page » dans `CLAUDE.md` — why: deux workspaces disparaissent, leurs tests passent dans le site, `l` sort du schéma v2 et les landing pages passent sous leur Locale.
-- change la liste des modules et l'Overview de `root.archi.md`, via archiman — why: le site n'a plus que le design system comme dépendance workspace.
-- delete `packages/pyramids-routing/routing.archi.md` et `packages/pyramids-content/content.archi.md`, ou les fusionner dans `apps/robusta-build/robusta-build.archi.md`, via archiman — why: leurs modules disparaissent.
+- changed §Routing, §The route table, §One URL per page, §The v1 mapping et §Deployment de `apps/robusta-build/README.md` : formes préfixées, sans discriminant `l`, `/` en 301 comme seule redirection, nouvelles destinations de la v1 map.
+- changed §Articles, §Commands, la composition de la landing page, le décompte des fichiers (34 HTML, 53 fichiers de données) et la mention de BR-PYRAMID-3 dans `apps/robusta-build/README.md`.
+- changed l'exemple et la description de `SiteHeader`, avec `homeHref`, `NavLink.locale` et `FlowDiagram.id`, dans `packages/robusta-design-system/README.md`.
+- changed le commentaire de `build:deps` et la première phrase de `README.md` (BR-PYRAMID-3, BR-PYRAMID-12).
+- checked `CLAUDE.md` : rien de faux ni de manquant, inchangé.
+- changed `root.archi.md`, `apps/robusta-build/robusta-build.archi.md` et `packages/robusta-design-system/design-system.archi.md`, via archiman ; created `src/routing/url-scheme/url-scheme.archi.md` et `src/content/corpus-reader/corpus-reader.archi.md`, qui remplacent `routing.archi.md` et `content.archi.md`.
+- change la définition d'`untracked-pair` dans §Articles de `apps/robusta-build/README.md` — why: la notice liste les versions qui ne déclarent pas d'original, pas seulement quand aucune ne le fait.
+- change les entrées `Locale`, `Canonical URL` (même passe que canonical-url-glossary), `Pyramid`, `Discriminant`, `Content source`, `Design system`, `Site` et `Site configuration` de `ubiquitous-language.md` — why: Locales toutes préfixées, `l` hors du schéma, schéma et corpus hors de la base partagée, BR-PYRAMID-3, `siteTitle` et `mission` supprimés.
+- create les termes `Original`, `Stale translation`, `RB Compound` et `Module` dans `ubiquitous-language.md` — why: suivi des traductions, landing page, BR-PYRAMID-12 et 13.
 
 ## Dependencies
 
-- BR-PYRAMID-12 et BR-PYRAMID-13, sur lesquelles s'appuie l'étape prérequis, sont validées et au registre depuis le 2026-10-25.
-- Débloque : seo-excellence (hreflang, x-default, sitemap et canonical URLs sur le schéma préfixé), restore-v1-urls (nouvelles destinations), go-live.
+- BR-PYRAMID-12 et BR-PYRAMID-13, au registre depuis le 2026-10-25 — levée.
+- Débloque : seo-excellence (hreflang, sitemap et Canonical URL sur `counterpartsOf` et `landingPages`), restore-v1-urls (destinations régénérées), go-live, ts-import-extensions (sa Dep 1).

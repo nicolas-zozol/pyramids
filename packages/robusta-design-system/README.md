@@ -68,14 +68,17 @@ export function Header() {
   return (
     <SiteHeader
       wordmarkSrc={wordmarkSrc}
-      links={[{ label: 'articles', href: '/articles' }]}
-      ctaLabel="me contacter"
+      homeHref="/en"
+      links={[{ label: 'Français', href: '/fr', locale: 'fr' }]}
+      ctaLabel="contact me"
       ctaHref="mailto:nicolas@robusta.build"
       linkComponent={RouterLink}
     />
   );
 }
 ```
+
+`homeHref` is the wordmark's target, `/` when absent. A `NavLink` given a `locale` writes it as the `lang` and `hrefLang` of its anchor. `FlowDiagram` takes the `id` of its section, `approach` when absent: two diagrams on one page need two.
 
 No component carries a `'use client'` or `'use server'` directive or reads the viewport in JavaScript, and `src/package-contract.spec.tsx` fails on any of them. Every call to action of `Hero`, `SiteHeader` and `CTA` is an anchor to its `primaryCtaHref`, `secondaryCtaHref` or `ctaHref`. Submitting the CTA email input is wired by the consuming site, in a component of its own around the surface.
 

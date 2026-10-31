@@ -3,20 +3,8 @@
 **Last update:** 2026-10-26
 **Feature:** multilingual-site
 **Infix:** MULTILINGUAL
-**Status:** APPROVED (2026-10-26 — validated by Nicolas)
+**Status:** IMPLEMENTED (2026-10-31, commit fb4803b)
 **Sources:** [story](multilingual-site.story.md), [brainstorm](multilingual-site.brainstorm.md), [epic](../pyramid-v2.epic.md), [default-locale-fr](../default-locale-fr/default-locale-fr.design.md), [robusta-landing-page](../robusta-landing-page/robusta-landing-page.design.md)
-
-## Progress — APPROVED 97%
-
-```
-      Prérequis : packages du site          ████████████████████  5/5
-      Schéma préfixé et redirection         ████████████████████  8/8
-      Page copy par Locale                  ████████████████████  10/10
-      Contreparties et sélecteur de Locale  ████████████████████  5/5
-      Original et traduction obsolète       ████████████████████  6/6
-      v1 map                                ████████████████████  1/1
- WIP  Acceptance Criteria                   █████████████████░░░  6/7
-```
 
 ## Goal
 
