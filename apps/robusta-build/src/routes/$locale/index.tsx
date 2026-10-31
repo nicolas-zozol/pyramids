@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { LandingPage } from '@/landing/index.js';
-import { getNotesFeed } from '@/page-data/index.js';
-import { getPageCopy } from '@/seopyramids.config.js';
+import { LandingPage } from '@/landing/index.ts';
+import { getNotesFeed } from '@/page-data/index.ts';
+import { getPageCopy } from '@/seopyramids.config.ts';
 
 const NOTES_LIMIT = 4;
 

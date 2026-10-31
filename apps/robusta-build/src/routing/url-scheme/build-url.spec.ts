@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildUrl } from './build-url.js';
-import type { UrlScheme } from './scheme.js';
+import { buildUrl } from './build-url.ts';
+import type { UrlScheme } from './scheme.ts';
 
 const scheme: UrlScheme = {
   contentRoot: 'articles',

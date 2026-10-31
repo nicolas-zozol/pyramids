@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
-import { BrandLogo } from '../primitives/BrandLogo.js';
-import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
+import { BrandLogo } from '../primitives/BrandLogo.tsx';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.tsx';
 
 export interface FooterLink {
   /** The text of the item. */

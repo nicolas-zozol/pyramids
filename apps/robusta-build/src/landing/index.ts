@@ -10,5 +10,5 @@
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-45, R-MULTILINGUAL-47, R-MULTILINGUAL-50
  */
-export { LandingPage, type LandingPageProps } from './LandingPage.js';
-export { NotesSection, type NotesSectionProps } from './NotesSection.js';
+export { LandingPage, type LandingPageProps } from './LandingPage.tsx';
+export { NotesSection, type NotesSectionProps } from './NotesSection.tsx';

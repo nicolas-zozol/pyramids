@@ -1,8 +1,8 @@
-import { buildUrl } from '@/routing/url-scheme/index.js';
+import { buildUrl } from '@/routing/url-scheme/index.ts';
 import { createFileRoute } from '@tanstack/react-router';
-import { RoutePlaceholder } from '@/components/RoutePlaceholder.js';
-import { urlScheme } from '@/routing/scheme.js';
-import { getPageCopy } from '@/seopyramids.config.js';
+import { RoutePlaceholder } from '@/components/RoutePlaceholder.tsx';
+import { urlScheme } from '@/routing/scheme.ts';
+import { getPageCopy } from '@/seopyramids.config.ts';
 
 export const Route = createFileRoute('/$locale/articles/')({
   component: BlogHomePage,

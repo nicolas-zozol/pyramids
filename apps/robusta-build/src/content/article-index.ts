@@ -18,8 +18,8 @@ import {
   type ArticleBody,
   type ArticleEntry,
   type TranslationNotice,
-} from './corpus-reader/index.js';
-import { corpus } from './corpus.js';
+} from './corpus-reader/index.ts';
+import { corpus } from './corpus.ts';
 
 /**
  * The seam `seo-url-scheme` left and `content-source` implemented. The name the

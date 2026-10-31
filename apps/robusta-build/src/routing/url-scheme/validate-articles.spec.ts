@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { validateArticles } from './validate-articles.js';
-import type { AddressableArticle, UrlScheme } from './scheme.js';
+import { validateArticles } from './validate-articles.ts';
+import type { AddressableArticle, UrlScheme } from './scheme.ts';
 
 const scheme: UrlScheme = {
   contentRoot: 'articles',

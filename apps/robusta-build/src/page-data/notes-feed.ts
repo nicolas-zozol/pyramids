@@ -2,9 +2,9 @@ import type { NotePost } from '@robusta/pyramids-design-system';
 import {
   getArticleIndex,
   type ArticleIndexEntry,
-} from '../content/article-index.js';
-import { articleUrl } from './article-url.js';
-import type { NotesFeedRequest } from './types.js';
+} from '../content/article-index.ts';
+import { articleUrl } from './article-url.ts';
+import type { NotesFeedRequest } from './types.ts';
 
 /** The newest published articles of one locale as notes posts, newest first, each date written as that locale writes it. */
 export async function notesFeed({

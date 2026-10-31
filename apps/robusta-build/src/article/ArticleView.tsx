@@ -10,10 +10,10 @@
  */
 import { SkTag } from '@robusta/pyramids-design-system';
 import { Fragment } from 'react';
-import { SiteLink } from '../components/SiteLink.js';
-import type { ArticlePage } from '../page-data/index.js';
-import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
-import { ArticleProse } from './ArticleProse.js';
+import { SiteLink } from '../components/SiteLink.tsx';
+import type { ArticlePage } from '../page-data/index.ts';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.ts';
+import { ArticleProse } from './ArticleProse.tsx';
 
 interface ArticleViewProps {
   page: ArticlePage;

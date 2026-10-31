@@ -6,10 +6,10 @@
  * Design: features/pyramid-v2-epic/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-21, R-LANDING-22, R-LANDING-23
  */
-export { BrandLogo, type BrandLogoProps } from './BrandLogo.js';
-export { SkButton, type SkButtonProps } from './SkButton.js';
-export { SkCallout, type SkCalloutProps } from './SkCallout.js';
-export { SkTag, type SkTagProps, type SkTagTone } from './SkTag.js';
-export { SkInput, type SkInputProps } from './SkInput.js';
-export { SkArrowRight, type SkArrowRightProps } from './SkArrowRight.js';
-export type { SkLinkComponent, SkLinkProps } from './SkLink.js';
+export { BrandLogo, type BrandLogoProps } from './BrandLogo.tsx';
+export { SkButton, type SkButtonProps } from './SkButton.tsx';
+export { SkCallout, type SkCalloutProps } from './SkCallout.tsx';
+export { SkTag, type SkTagProps, type SkTagTone } from './SkTag.tsx';
+export { SkInput, type SkInputProps } from './SkInput.tsx';
+export { SkArrowRight, type SkArrowRightProps } from './SkArrowRight.tsx';
+export type { SkLinkComponent, SkLinkProps } from './SkLink.tsx';

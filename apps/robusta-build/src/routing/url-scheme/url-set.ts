@@ -3,7 +3,7 @@ import {
   type AddressableArticle,
   type PageUrl,
   type UrlScheme,
-} from './scheme.js';
+} from './scheme.ts';
 
 /** One landing per known locale, the default one first. */
 export function landingPages(scheme: UrlScheme): PageUrl[] {

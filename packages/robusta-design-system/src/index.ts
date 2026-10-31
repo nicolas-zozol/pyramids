@@ -15,5 +15,5 @@
  * Requirements: R-MULTILINGUAL-46, R-MULTILINGUAL-65
  */
 
-export * from './primitives/index.js';
-export * from './marketing/index.js';
+export * from './primitives/index.ts';
+export * from './marketing/index.ts';

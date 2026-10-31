@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { fingerprint } from './fingerprint.js';
+import { fingerprint } from './fingerprint.ts';
 
 const LEAVING_GMAIL = {
   title: 'Leaving Gmail',

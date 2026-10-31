@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { CorpusViolation } from './contract.js';
-import { describeViolation } from './describe-violation.js';
+import type { CorpusViolation } from './contract.ts';
+import { describeViolation } from './describe-violation.ts';
 
 /**
  * R-CONTENTSOURCE-09: every message about an article names the file a publisher

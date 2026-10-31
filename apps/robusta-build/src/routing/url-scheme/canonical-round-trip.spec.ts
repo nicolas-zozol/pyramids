@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildUrl } from './build-url.js';
-import { parseUrl } from './parse-url.js';
-import type { PageUrl, UrlScheme } from './scheme.js';
+import { buildUrl } from './build-url.ts';
+import { parseUrl } from './parse-url.ts';
+import type { PageUrl, UrlScheme } from './scheme.ts';
 
 /**
  * The property that carries the whole scheme (R-URLSCHEME-21):

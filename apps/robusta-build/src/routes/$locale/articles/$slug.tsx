@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ArticleView } from '@/article/ArticleView.js';
-import { getArticlePage } from '@/page-data/index.js';
+import { ArticleView } from '@/article/ArticleView.tsx';
+import { getArticlePage } from '@/page-data/index.ts';
 
 export const Route = createFileRoute('/$locale/articles/$slug')({
   loader: ({ params }) =>

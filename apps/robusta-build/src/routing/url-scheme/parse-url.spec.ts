@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { parseUrl } from './parse-url.js';
-import type { UrlScheme } from './scheme.js';
+import { parseUrl } from './parse-url.ts';
+import type { UrlScheme } from './scheme.ts';
 
 const scheme: UrlScheme = {
   contentRoot: 'articles',

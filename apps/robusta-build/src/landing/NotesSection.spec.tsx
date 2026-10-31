@@ -1,9 +1,9 @@
 import type { NotePost } from '@robusta/pyramids-design-system';
 import { describe, expect, it } from 'vitest';
-import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
-import { anchorsTo, htmlText } from '../test-support/markup.js';
-import { renderInRouter } from '../test-support/render-in-router.js';
-import { NotesSection } from './NotesSection.js';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.ts';
+import { anchorsTo, htmlText } from '../test-support/markup.ts';
+import { renderInRouter } from '../test-support/render-in-router.tsx';
+import { NotesSection } from './NotesSection.tsx';
 
 const theory: NotePost = {
   title: 'Quel second langage apprendre ?',

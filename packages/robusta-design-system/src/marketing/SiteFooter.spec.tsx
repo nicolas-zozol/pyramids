@@ -7,8 +7,8 @@ import {
   hostElements,
   renderStatic,
   textNodes,
-} from '../test-support/render-static.js';
-import { SiteFooter } from './SiteFooter.js';
+} from '../test-support/render-static.ts';
+import { SiteFooter } from './SiteFooter.tsx';
 
 describe('SiteFooter item', () => {
   const tree = renderStatic(

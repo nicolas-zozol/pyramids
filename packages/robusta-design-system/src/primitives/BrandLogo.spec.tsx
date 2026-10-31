@@ -5,8 +5,8 @@ import {
   renderStatic,
   textNodes,
   type HostElement,
-} from '../test-support/render-static.js';
-import { BrandLogo } from './BrandLogo.js';
+} from '../test-support/render-static.ts';
+import { BrandLogo } from './BrandLogo.tsx';
 
 const PROTOTYPE_TAGLINE = 'senior engineering, hand-built.';
 const BRAND_MARK = ['💪', '🏗', 'Robusta Build'];

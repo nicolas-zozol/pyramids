@@ -5,9 +5,9 @@ import {
   renderStatic,
   textNodes,
   type HostElement,
-} from '../test-support/render-static.js';
-import type { SkLinkProps } from './SkLink.js';
-import { SkButton } from './SkButton.js';
+} from '../test-support/render-static.ts';
+import type { SkLinkProps } from './SkLink.tsx';
+import { SkButton } from './SkButton.tsx';
 
 function only(tree: ReturnType<typeof renderStatic>): HostElement {
   const [element] = tree;

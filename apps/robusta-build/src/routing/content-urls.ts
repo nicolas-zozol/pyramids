@@ -3,12 +3,12 @@ import {
   validateArticles,
   type PageUrl,
   type SchemeViolation,
-} from './url-scheme/index.js';
+} from './url-scheme/index.ts';
 import {
   getArticleIndex,
   type ArticleIndexEntry,
-} from '../content/article-index.js';
-import { urlScheme } from './scheme.js';
+} from '../content/article-index.ts';
+import { urlScheme } from './scheme.ts';
 
 /**
  * The one derivation of the URL set that feeds every route's pregeneration

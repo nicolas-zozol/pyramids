@@ -9,8 +9,8 @@ import {
   renderStatic,
   textNodes,
   type HostElement,
-} from '../test-support/render-static.js';
-import { ServicesGrid, type ServiceItem } from './ServicesGrid.js';
+} from '../test-support/render-static.ts';
+import { ServicesGrid, type ServiceItem } from './ServicesGrid.tsx';
 
 const AUDIT: ServiceItem = {
   title: "L'audit",

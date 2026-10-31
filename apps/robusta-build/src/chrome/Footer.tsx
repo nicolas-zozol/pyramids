@@ -1,7 +1,7 @@
 import { SiteFooter } from '@robusta/pyramids-design-system';
-import { SiteLink } from '../components/SiteLink.js';
-import { wordmarkSrc } from '../design-system/assets.js';
-import { getPageCopy } from '../seopyramids.config.js';
+import { SiteLink } from '../components/SiteLink.tsx';
+import { wordmarkSrc } from '../design-system/assets.ts';
+import { getPageCopy } from '../seopyramids.config.ts';
 
 const NO_COLUMN: never[] = [];
 

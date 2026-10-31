@@ -1,20 +1,20 @@
 import { createMemoryHistory, createRouter } from '@tanstack/react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { pageCounterparts } from '../page-data/page-counterparts.js';
-import { LOCALES } from '../routing/scheme.js';
-import type { PageUrl } from '../routing/url-scheme/index.js';
-import { getPageCopy } from '../seopyramids.config.js';
-import { Route as LandingRoute } from './$locale/index.js';
-import { Route as RootRoute } from './__root.js';
-import { routeTree } from '../routeTree.gen.js';
+import { pageCounterparts } from '../page-data/page-counterparts.ts';
+import { LOCALES } from '../routing/scheme.ts';
+import type { PageUrl } from '../routing/url-scheme/index.ts';
+import { getPageCopy } from '../seopyramids.config.ts';
+import { Route as LandingRoute } from './$locale/index.tsx';
+import { Route as RootRoute } from './__root.tsx';
+import { routeTree } from '../routeTree.gen.ts';
 
 const getCounterparts = vi.hoisted(() =>
   vi.fn<(call: { data: PageUrl }) => Promise<PageUrl[]>>(),
 );
 
 /** The server function needs the Start runtime; its handler's own function answers in its place. */
-vi.mock('../page-data/index.js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../page-data/index.js')>()),
+vi.mock('../page-data/index.ts', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../page-data/index.ts')>()),
   getCounterparts,
   getNotesFeed: async () => [],
 }));

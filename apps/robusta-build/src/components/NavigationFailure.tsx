@@ -1,6 +1,6 @@
 import { useRouterState } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { FailedNavigationPage } from './FailedNavigationPage.js';
+import { FailedNavigationPage } from './FailedNavigationPage.tsx';
 
 export interface ReloadMemory {
   has(key: string): boolean;

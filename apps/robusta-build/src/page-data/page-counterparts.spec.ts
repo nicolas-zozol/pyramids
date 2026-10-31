@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { urlScheme } from '../routing/scheme.js';
-import { buildUrl, parseUrl } from '../routing/url-scheme/index.js';
-import { pageCounterparts } from './page-counterparts.js';
+import { urlScheme } from '../routing/scheme.ts';
+import { buildUrl, parseUrl } from '../routing/url-scheme/index.ts';
+import { pageCounterparts } from './page-counterparts.ts';
 
 async function counterpartsAt(path: string): Promise<string[]> {
   const page = parseUrl(urlScheme, path);

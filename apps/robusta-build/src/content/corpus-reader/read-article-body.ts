@@ -5,8 +5,8 @@ import type { Root } from 'mdast';
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
 import { visit } from 'unist-util-visit';
-import { resolveAssetUrl } from './asset-reference.js';
-import type { ArticleBody, ArticleEntry, CorpusSpec } from './contract.js';
+import { resolveAssetUrl } from './asset-reference.ts';
+import type { ArticleBody, ArticleEntry, CorpusSpec } from './contract.ts';
 
 /**
  * The one place an article body is rendered (R-CONTENTSOURCE-06). It takes the

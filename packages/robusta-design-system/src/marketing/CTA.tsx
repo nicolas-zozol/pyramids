@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
-import { SkButton } from '../primitives/SkButton.js';
-import type { SkLinkComponent } from '../primitives/SkLink.js';
-import { SkInput } from '../primitives/SkInput.js';
+import { SkButton } from '../primitives/SkButton.tsx';
+import type { SkLinkComponent } from '../primitives/SkLink.tsx';
+import { SkInput } from '../primitives/SkInput.tsx';
 
 export interface CTAProps {
   /** Big section headline. */

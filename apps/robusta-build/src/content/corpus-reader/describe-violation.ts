@@ -1,4 +1,4 @@
-import type { CorpusViolation } from './contract.js';
+import type { CorpusViolation } from './contract.ts';
 
 /**
  * One line per violation, naming the file a publisher has to open

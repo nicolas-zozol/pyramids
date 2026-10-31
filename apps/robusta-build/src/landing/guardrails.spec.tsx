@@ -2,14 +2,14 @@ import { readdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { Footer, Header } from '../chrome/index.js';
-import { notesFeed } from '../page-data/notes-feed.js';
-import { pageCounterparts } from '../page-data/page-counterparts.js';
-import { LOCALES } from '../routing/scheme.js';
-import { getSeoPyramidsConfig } from '../seopyramids.config.js';
-import { classNames, hrefs } from '../test-support/markup.js';
-import { renderInRouter } from '../test-support/render-in-router.js';
-import { LandingPage } from './index.js';
+import { Footer, Header } from '../chrome/index.ts';
+import { notesFeed } from '../page-data/notes-feed.ts';
+import { pageCounterparts } from '../page-data/page-counterparts.ts';
+import { LOCALES } from '../routing/scheme.ts';
+import { getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { classNames, hrefs } from '../test-support/markup.ts';
+import { renderInRouter } from '../test-support/render-in-router.tsx';
+import { LandingPage } from './index.ts';
 
 const SOURCES = ['src/landing', 'src/chrome'];
 const STYLESHEETS = [

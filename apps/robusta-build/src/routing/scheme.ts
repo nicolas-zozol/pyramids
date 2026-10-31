@@ -10,7 +10,7 @@
  * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
  */
-import type { UrlScheme } from './url-scheme/index.js';
+import type { UrlScheme } from './url-scheme/index.ts';
 
 /**
  * The roll size is a constant of 12, not a per-site knob — decision of

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { ArticlePage } from '../page-data/index.js';
-import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
-import { htmlText } from '../test-support/markup.js';
-import { renderInRouter } from '../test-support/render-in-router.js';
-import { ArticleView } from './ArticleView.js';
+import type { ArticlePage } from '../page-data/index.ts';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.ts';
+import { htmlText } from '../test-support/markup.ts';
+import { renderInRouter } from '../test-support/render-in-router.tsx';
+import { ArticleView } from './ArticleView.tsx';
 
 /**
  * A fixture page rather than the corpus: every migrated article declares a

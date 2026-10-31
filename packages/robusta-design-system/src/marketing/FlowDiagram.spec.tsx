@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { byTag, renderStatic } from '../test-support/render-static.js';
-import { FlowDiagram } from './FlowDiagram.js';
+import { byTag, renderStatic } from '../test-support/render-static.ts';
+import { FlowDiagram } from './FlowDiagram.tsx';
 
 function sectionOf(node: Parameters<typeof renderStatic>[0]) {
   const [section] = byTag(renderStatic(node), 'section');

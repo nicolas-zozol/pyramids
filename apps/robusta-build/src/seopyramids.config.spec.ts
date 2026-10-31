@@ -1,15 +1,15 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { getArticleIndex } from './content/article-index.js';
-import { LOCALES, urlScheme, type Locale } from './routing/scheme.js';
+import { getArticleIndex } from './content/article-index.ts';
+import { LOCALES, urlScheme, type Locale } from './routing/scheme.ts';
 import {
   getCategoryLabel,
   getPageCopy,
   getSeoPyramidsConfig,
   type FlowCopy,
   type PageCopy,
-} from './seopyramids.config.js';
+} from './seopyramids.config.ts';
 
 const AGENT_WORDS =
   /\b(epicman|storyman|bsman|designman|tddman|codeman|docman|archiman|boss|rloq|DRAFT|APPROVED)\b/g;

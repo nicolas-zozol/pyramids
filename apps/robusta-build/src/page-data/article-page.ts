@@ -1,10 +1,10 @@
-import { buildUrl } from '../routing/url-scheme/index.js';
-import { getArticleBody, getAssetUrl } from '../content/article-index.js';
-import { findArticle } from '../content/article-lookup.js';
-import { urlScheme } from '../routing/scheme.js';
-import { articlePageUrl } from './article-url.js';
-import { pageCounterparts } from './page-counterparts.js';
-import type { ArticleKey, ArticlePage } from './types.js';
+import { buildUrl } from '../routing/url-scheme/index.ts';
+import { getArticleBody, getAssetUrl } from '../content/article-index.ts';
+import { findArticle } from '../content/article-lookup.ts';
+import { urlScheme } from '../routing/scheme.ts';
+import { articlePageUrl } from './article-url.ts';
+import { pageCounterparts } from './page-counterparts.ts';
+import type { ArticleKey, ArticlePage } from './types.ts';
 
 /** Everything one article page renders, read from the seams at build. */
 export async function articlePage({

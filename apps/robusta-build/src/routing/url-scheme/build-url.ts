@@ -2,8 +2,8 @@ import {
   CATEGORY_DISCRIMINANT,
   ROLL_PAGE_DISCRIMINANT,
   TAG_DISCRIMINANT,
-} from './discriminants.js';
-import type { PageUrl, UrlScheme } from './scheme.js';
+} from './discriminants.ts';
+import type { PageUrl, UrlScheme } from './scheme.ts';
 
 /**
  * Emits the canonical form and nothing else: every URL starts with `/{locale}`,

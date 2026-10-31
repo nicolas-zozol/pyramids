@@ -21,7 +21,7 @@ export default defineConfig(async () => ({
         failOnError: true,
       },
       pages: await prerenderPages(),
-      router: { addExtensions: 'js' },
+      router: { addExtensions: true },
       importProtection: {
         client: {
           specifiers: ['gray-matter', 'remark'],

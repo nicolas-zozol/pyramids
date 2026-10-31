@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import type { CSSProperties, ReactNode } from 'react';
-import * as designSystem from './index.js';
+import * as designSystem from './index.ts';
 import {
   BrandLogo,
   CTA,
@@ -17,13 +17,13 @@ import {
   SkCallout,
   SkInput,
   SkTag,
-} from './index.js';
-import { componentSources, packageFile } from './test-support/package-files.js';
+} from './index.ts';
+import { componentSources, packageFile } from './test-support/package-files.ts';
 import {
   hostElements,
   renderStatic,
   textNodes,
-} from './test-support/render-static.js';
+} from './test-support/render-static.ts';
 
 const MASCOT = '/assets/crystal-tux.svg';
 const LOCKUP_GLYPHS = ['💪', '🏗'];

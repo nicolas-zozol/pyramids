@@ -1,4 +1,4 @@
-import type { CorpusSpec } from './corpus-reader/index.js';
+import type { CorpusSpec } from './corpus-reader/index.ts';
 
 /**
  * Where this site's articles live, declared as data (R-CONTENTSOURCE-22).

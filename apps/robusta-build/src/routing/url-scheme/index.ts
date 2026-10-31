@@ -13,16 +13,16 @@ export {
   ROLL_PAGE_DISCRIMINANT,
   TAG_DISCRIMINANT,
   isReservedSegment,
-} from './discriminants.js';
+} from './discriminants.ts';
 
 export type {
   AddressableArticle,
   PageUrl,
   SchemeViolation,
   UrlScheme,
-} from './scheme.js';
+} from './scheme.ts';
 
-export { buildUrl } from './build-url.js';
-export { parseUrl } from './parse-url.js';
-export { landingPages, urlSet } from './url-set.js';
-export { validateArticles } from './validate-articles.js';
+export { buildUrl } from './build-url.ts';
+export { parseUrl } from './parse-url.ts';
+export { landingPages, urlSet } from './url-set.ts';
+export { validateArticles } from './validate-articles.ts';

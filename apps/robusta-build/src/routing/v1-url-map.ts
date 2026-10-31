@@ -1,5 +1,5 @@
-import { buildUrl, type UrlScheme } from './url-scheme/index.js';
-import type { ArticleIndexEntry } from '../content/article-index.js';
+import { buildUrl, type UrlScheme } from './url-scheme/index.ts';
+import type { ArticleIndexEntry } from '../content/article-index.ts';
 
 /**
  * The mapping from the v1 address space onto the v2 one.

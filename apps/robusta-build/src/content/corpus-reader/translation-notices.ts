@@ -1,5 +1,5 @@
-import type { TranslationNotice } from './contract.js';
-import type { IndexedArticle } from './read-file-entry.js';
+import type { TranslationNotice } from './contract.ts';
+import type { IndexedArticle } from './read-file-entry.ts';
 
 /** The notices of the published articles, grouped by translation identifier, in the order of their identifiers and paths. */
 export function translationNotices(

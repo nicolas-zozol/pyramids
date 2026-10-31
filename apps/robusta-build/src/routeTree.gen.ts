@@ -8,15 +8,15 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root.js'
-import { Route as R404RouteImport } from './routes/404.js'
-import { Route as LocaleIndexRouteImport } from './routes/$locale/index.js'
-import { Route as LocaleArticlesIndexRouteImport } from './routes/$locale/articles/index.js'
-import { Route as LocaleArticlesSlugRouteImport } from './routes/$locale/articles/$slug.js'
-import { Route as LocaleArticlesPNRouteImport } from './routes/$locale/articles/p/$n.js'
-import { Route as LocaleArticlesCCategoryIndexRouteImport } from './routes/$locale/articles/c/$category/index.js'
-import { Route as LocaleArticlesCCategorySlugRouteImport } from './routes/$locale/articles/c/$category/$slug.js'
-import { Route as LocaleArticlesCCategoryPNRouteImport } from './routes/$locale/articles/c/$category/p/$n.js'
+import { Route as rootRouteImport } from './routes/__root.tsx'
+import { Route as R404RouteImport } from './routes/404.tsx'
+import { Route as LocaleIndexRouteImport } from './routes/$locale/index.tsx'
+import { Route as LocaleArticlesIndexRouteImport } from './routes/$locale/articles/index.tsx'
+import { Route as LocaleArticlesSlugRouteImport } from './routes/$locale/articles/$slug.tsx'
+import { Route as LocaleArticlesPNRouteImport } from './routes/$locale/articles/p/$n.tsx'
+import { Route as LocaleArticlesCCategoryIndexRouteImport } from './routes/$locale/articles/c/$category/index.tsx'
+import { Route as LocaleArticlesCCategorySlugRouteImport } from './routes/$locale/articles/c/$category/$slug.tsx'
+import { Route as LocaleArticlesCCategoryPNRouteImport } from './routes/$locale/articles/c/$category/p/$n.tsx'
 
 const R404Route = R404RouteImport.update({
   id: '/404',

@@ -1,6 +1,6 @@
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
-import { SkArrowRight } from '../primitives/SkArrowRight.js';
-import { SkCallout } from '../primitives/SkCallout.js';
+import { SkArrowRight } from '../primitives/SkArrowRight.tsx';
+import { SkCallout } from '../primitives/SkCallout.tsx';
 
 export interface FlowStep {
   /** Step number badge. */

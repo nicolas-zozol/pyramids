@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { SkArrowRight } from '../primitives/SkArrowRight.js';
-import { SkButton } from '../primitives/SkButton.js';
-import type { SkLinkComponent } from '../primitives/SkLink.js';
+import { SkArrowRight } from '../primitives/SkArrowRight.tsx';
+import { SkButton } from '../primitives/SkButton.tsx';
+import type { SkLinkComponent } from '../primitives/SkLink.tsx';
 
 export interface HeroProps {
   /** Small overline label above the headline. */

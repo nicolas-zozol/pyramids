@@ -1,4 +1,4 @@
-import type { TranslationNotice } from './contract.js';
+import type { TranslationNotice } from './contract.ts';
 
 /** One line naming the translation, its original and the value to copy into the declaration. */
 export function describeTranslationNotice(notice: TranslationNotice): string {

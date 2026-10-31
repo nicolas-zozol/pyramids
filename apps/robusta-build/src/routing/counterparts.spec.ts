@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { ArticleIndexEntry } from '../content/article-index.js';
-import { counterpartsOf } from './counterparts.js';
-import { urlScheme } from './scheme.js';
+import type { ArticleIndexEntry } from '../content/article-index.ts';
+import { counterpartsOf } from './counterparts.ts';
+import { urlScheme } from './scheme.ts';
 import {
   buildUrl,
   landingPages,
   parseUrl,
   urlSet,
   type PageUrl,
-} from './url-scheme/index.js';
+} from './url-scheme/index.ts';
 
 function entry(
   fields: Pick<ArticleIndexEntry, 'locale' | 'slug'> &

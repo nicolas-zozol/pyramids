@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { RoutePlaceholder } from './RoutePlaceholder.js';
+import { RoutePlaceholder } from './RoutePlaceholder.tsx';
 
 describe('RoutePlaceholder', () => {
   it('heads the page with the title it is given, then shows its address', () => {

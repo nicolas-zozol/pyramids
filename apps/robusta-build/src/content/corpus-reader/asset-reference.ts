@@ -1,5 +1,5 @@
 import { posix } from 'node:path';
-import type { ArticleEntry, CorpusSpec } from './contract.js';
+import type { ArticleEntry, CorpusSpec } from './contract.ts';
 
 /**
  * The one resolution rule, shared by what the site publishes and what a page

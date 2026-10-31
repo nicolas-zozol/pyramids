@@ -2,11 +2,11 @@ import { mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, relative, sep } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { ArticleEntry, CorpusSpec } from './contract.js';
-import { resolveAssetUrl } from './asset-reference.js';
-import { copyCorpusAssets } from './copy-corpus-assets.js';
-import { readCorpus } from './read-corpus.js';
-import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
+import type { ArticleEntry, CorpusSpec } from './contract.ts';
+import { resolveAssetUrl } from './asset-reference.ts';
+import { copyCorpusAssets } from './copy-corpus-assets.ts';
+import { readCorpus } from './read-corpus.ts';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.ts';
 
 const ASSETS = {
   publishDir: '',

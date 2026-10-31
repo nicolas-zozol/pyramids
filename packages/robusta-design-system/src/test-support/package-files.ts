@@ -2,6 +2,7 @@
  * Test support — reads the files the package ships, from the package root.
  */
 import { readdirSync, readFileSync } from 'node:fs';
+import { sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // Compiled to `.test-build/test-support/`, two levels below the package root.
@@ -20,6 +21,19 @@ export function shippedStylesheets(): Record<string, string> {
       name,
       packageFile(name).replace(/\/\*[\s\S]*?\*\//g, ''),
     ]),
+  );
+}
+
+/** Every `.ts` and `.tsx` of `src/`, specs and test support included, keyed by path from `src/`. */
+export function moduleSources(): Record<string, string> {
+  const paths = readdirSync(PACKAGE_ROOT + 'src', {
+    recursive: true,
+    encoding: 'utf8',
+  })
+    .filter((path) => /\.tsx?$/.test(path))
+    .map((path) => path.split(sep).join('/'));
+  return Object.fromEntries(
+    paths.map((path) => [path, packageFile(`src/${path}`)]),
   );
 }
 

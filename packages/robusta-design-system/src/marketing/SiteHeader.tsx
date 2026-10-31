@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
-import { BrandLogo } from '../primitives/BrandLogo.js';
-import { SkButton } from '../primitives/SkButton.js';
-import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
+import { BrandLogo } from '../primitives/BrandLogo.tsx';
+import { SkButton } from '../primitives/SkButton.tsx';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.tsx';
 
 export interface NavLink {
   label: string;

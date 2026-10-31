@@ -72,12 +72,12 @@ describe('escapingImports', () => {
     const files = [
       {
         path: 'routing/url-scheme/build-url.ts',
-        text: "import { urlScheme } from '../scheme.js';",
+        text: "import { urlScheme } from '../scheme.ts';",
       },
     ];
 
     expect(escapingImports(files, directory)).toEqual([
-      'routing/url-scheme/build-url.ts → ../scheme.js',
+      'routing/url-scheme/build-url.ts → ../scheme.ts',
     ]);
   });
 
@@ -86,9 +86,9 @@ describe('escapingImports', () => {
       {
         path: 'routing/url-scheme/index.ts',
         text: [
-          "import { a } from '@/content/corpus.js';",
-          "export * from '../content-urls.js';",
-          "const lazy = () => import('../../page-data/types.js');",
+          "import { a } from '@/content/corpus.ts';",
+          "export * from '../content-urls.ts';",
+          "const lazy = () => import('../../page-data/types.ts');",
         ].join('\n'),
       },
     ];
@@ -101,8 +101,8 @@ describe('escapingImports', () => {
       {
         path: 'routing/url-scheme/url-set.ts',
         text: [
-          "import { buildUrl } from './build-url.js';",
-          "import { x } from './nested/x.js';",
+          "import { buildUrl } from './build-url.ts';",
+          "import { x } from './nested/x.ts';",
           "import { join } from 'node:path';",
           "import slugify from 'slugify';",
         ].join('\n'),
@@ -114,14 +114,14 @@ describe('escapingImports', () => {
 
   it('lets a spec reach the test support, and only a spec', () => {
     const fixture =
-      "import { article } from '../../test-support/corpus-fixture.js';";
+      "import { article } from '../../test-support/corpus-fixture.ts';";
     const files = [
       { path: 'routing/url-scheme/a.spec.ts', text: fixture },
       { path: 'routing/url-scheme/a.ts', text: fixture },
     ];
 
     expect(escapingImports(files, directory)).toEqual([
-      'routing/url-scheme/a.ts → ../../test-support/corpus-fixture.js',
+      'routing/url-scheme/a.ts → ../../test-support/corpus-fixture.ts',
     ]);
   });
 
@@ -129,7 +129,7 @@ describe('escapingImports', () => {
     const files = [
       {
         path: 'routing/url-scheme/a.ts',
-        text: "import { b } from '../url-scheme-old/b.js';",
+        text: "import { b } from '../url-scheme-old/b.ts';",
       },
     ];
 

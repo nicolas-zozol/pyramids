@@ -1,13 +1,13 @@
-import { buildUrl, urlSet } from './url-scheme/index.js';
+import { buildUrl, urlSet } from './url-scheme/index.ts';
 import { describe, expect, it } from 'vitest';
-import { getArticleIndex } from '../content/article-index.js';
-import { urlScheme } from './scheme.js';
+import { getArticleIndex } from '../content/article-index.ts';
+import { urlScheme } from './scheme.ts';
 import {
   V1_ARTICLE_SLUGS,
   V1_LOCALES,
   v1UrlMap,
   type V1MappingRow,
-} from './v1-url-map.js';
+} from './v1-url-map.ts';
 
 /**
  * The v1 address space and the outcome of each address, extracted once from the

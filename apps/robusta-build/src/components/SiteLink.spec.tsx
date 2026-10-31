@@ -3,8 +3,8 @@ import {
   type SkLinkComponent,
 } from '@robusta/pyramids-design-system';
 import { describe, expect, it } from 'vitest';
-import { renderInRouter } from '../test-support/render-in-router.js';
-import { SiteLink } from './SiteLink.js';
+import { renderInRouter } from '../test-support/render-in-router.tsx';
+import { SiteLink } from './SiteLink.tsx';
 
 describe('SiteLink', () => {
   it('renders the built URL as the anchor’s address, untouched', async () => {

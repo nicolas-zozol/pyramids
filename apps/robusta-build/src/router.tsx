@@ -10,9 +10,9 @@
  * Requirements: R-MULTILINGUAL-25, R-MULTILINGUAL-28, R-MULTILINGUAL-42, R-MULTILINGUAL-45, R-MULTILINGUAL-62
  */
 import { createRouter } from '@tanstack/react-router';
-import { NavigationFailure } from './components/NavigationFailure.js';
-import { NotFoundPage } from './components/NotFoundPage.js';
-import { routeTree } from './routeTree.gen.js';
+import { NavigationFailure } from './components/NavigationFailure.tsx';
+import { NotFoundPage } from './components/NotFoundPage.tsx';
+import { routeTree } from './routeTree.gen.ts';
 
 /** The router over the generated route tree, with the site's not-found and failure states. */
 export function getRouter() {

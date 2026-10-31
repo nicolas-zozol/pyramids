@@ -7,10 +7,10 @@ import {
   hostElements,
   renderStatic,
   type HostElement,
-} from '../test-support/render-static.js';
-import { CTA } from './CTA.js';
-import { Hero } from './Hero.js';
-import { SiteHeader } from './SiteHeader.js';
+} from '../test-support/render-static.ts';
+import { CTA } from './CTA.tsx';
+import { Hero } from './Hero.tsx';
+import { SiteHeader } from './SiteHeader.tsx';
 
 const INTERACTIVE = new Set(['a', 'button', 'input', 'select', 'textarea']);
 

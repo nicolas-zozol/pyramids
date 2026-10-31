@@ -8,16 +8,16 @@
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-46, R-MULTILINGUAL-65
  */
-export { Hero, type HeroProps } from './Hero.js';
-export { SiteHeader, type SiteHeaderProps, type NavLink } from './SiteHeader.js';
+export { Hero, type HeroProps } from './Hero.tsx';
+export { SiteHeader, type SiteHeaderProps, type NavLink } from './SiteHeader.tsx';
 export {
   SiteFooter,
   type SiteFooterProps,
   type FooterColumn,
   type FooterLink,
-} from './SiteFooter.js';
-export { ServicesGrid, type ServicesGridProps, type ServiceItem } from './ServicesGrid.js';
-export { FlowDiagram, type FlowDiagramProps, type FlowStep } from './FlowDiagram.js';
-export { PrinciplesList, type PrinciplesListProps, type Principle } from './PrinciplesList.js';
-export { NotesPreview, type NotesPreviewProps, type NotePost } from './NotesPreview.js';
-export { CTA, type CTAProps } from './CTA.js';
+} from './SiteFooter.tsx';
+export { ServicesGrid, type ServicesGridProps, type ServiceItem } from './ServicesGrid.tsx';
+export { FlowDiagram, type FlowDiagramProps, type FlowStep } from './FlowDiagram.tsx';
+export { PrinciplesList, type PrinciplesListProps, type Principle } from './PrinciplesList.tsx';
+export { NotesPreview, type NotesPreviewProps, type NotePost } from './NotesPreview.tsx';
+export { CTA, type CTAProps } from './CTA.tsx';

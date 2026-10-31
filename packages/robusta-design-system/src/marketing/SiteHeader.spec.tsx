@@ -5,8 +5,8 @@ import {
   attribute,
   byClass,
   renderStatic,
-} from '../test-support/render-static.js';
-import { SiteHeader } from './SiteHeader.js';
+} from '../test-support/render-static.ts';
+import { SiteHeader } from './SiteHeader.tsx';
 
 function brandOf(node: ReactNode) {
   const [brand] = byClass(renderStatic(node), 'sk-site-header__brand');

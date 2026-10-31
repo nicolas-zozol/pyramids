@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import type { ArticleIndexEntry } from '../content/article-index.js';
-import { wordmarkSrc } from '../design-system/assets.js';
-import { pageCounterparts } from '../page-data/page-counterparts.js';
-import { counterpartsOf } from '../routing/counterparts.js';
-import { LOCALES, urlScheme } from '../routing/scheme.js';
+import type { ArticleIndexEntry } from '../content/article-index.ts';
+import { wordmarkSrc } from '../design-system/assets.ts';
+import { pageCounterparts } from '../page-data/page-counterparts.ts';
+import { counterpartsOf } from '../routing/counterparts.ts';
+import { LOCALES, urlScheme } from '../routing/scheme.ts';
 import {
   buildUrl,
   landingPages,
   parseUrl,
   urlSet,
   type PageUrl,
-} from '../routing/url-scheme/index.js';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
-import { anchorsTo, hrefs, htmlText } from '../test-support/markup.js';
-import { renderInRouter } from '../test-support/render-in-router.js';
-import { Footer, Header } from './index.js';
+} from '../routing/url-scheme/index.ts';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { anchorsTo, hrefs, htmlText } from '../test-support/markup.ts';
+import { renderInRouter } from '../test-support/render-in-router.tsx';
+import { Footer, Header } from './index.ts';
 
 const { contact } = getSeoPyramidsConfig();
 const A_FRENCH_ARTICLE = '/fr/articles/c/blockchain/ledger-contre-metamask';

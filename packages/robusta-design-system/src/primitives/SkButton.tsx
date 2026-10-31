@@ -3,7 +3,7 @@ import type {
   ButtonHTMLAttributes,
   ReactNode,
 } from 'react';
-import { PlainLink, type SkLinkComponent } from './SkLink.js';
+import { PlainLink, type SkLinkComponent } from './SkLink.tsx';
 
 type SkButtonBase = {
   /** Visual variant — maps to `.sk-btn--primary` / `.sk-btn--ghost` */

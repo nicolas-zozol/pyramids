@@ -3,8 +3,8 @@ import {
   ROLL_PAGE_DISCRIMINANT,
   TAG_DISCRIMINANT,
   isReservedSegment,
-} from './discriminants.js';
-import { knownLocales, type PageUrl, type UrlScheme } from './scheme.js';
+} from './discriminants.ts';
+import { knownLocales, type PageUrl, type UrlScheme } from './scheme.ts';
 
 /**
  * Reads `/{locale}` and `/{locale}/{contentRoot}…` and nothing else: a path

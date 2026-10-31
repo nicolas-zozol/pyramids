@@ -1,10 +1,10 @@
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
-import type { ArticleEntry, CorpusSpec } from './contract.js';
-import { readArticleBody } from './read-article-body.js';
-import { readCorpus } from './read-corpus.js';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.ts';
+import type { ArticleEntry, CorpusSpec } from './contract.ts';
+import { readArticleBody } from './read-article-body.ts';
+import { readCorpus } from './read-corpus.ts';
 
 function spec(root: string, rest: Partial<CorpusSpec> = {}): CorpusSpec {
   return { root, localeFrom: 'frontmatter', ...rest };

@@ -11,22 +11,22 @@ import {
 } from '@robusta/pyramids-design-system';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { Footer, Header } from '../chrome/index.js';
-import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.js';
-import { notesFeed } from '../page-data/notes-feed.js';
-import { pageCounterparts } from '../page-data/page-counterparts.js';
-import { contentUrls } from '../routing/content-urls.js';
-import { LOCALES, urlScheme, type Locale } from '../routing/scheme.js';
-import { buildUrl, landingPages } from '../routing/url-scheme/index.js';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
+import { Footer, Header } from '../chrome/index.ts';
+import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
+import { notesFeed } from '../page-data/notes-feed.ts';
+import { pageCounterparts } from '../page-data/page-counterparts.ts';
+import { contentUrls } from '../routing/content-urls.ts';
+import { LOCALES, urlScheme, type Locale } from '../routing/scheme.ts';
+import { buildUrl, landingPages } from '../routing/url-scheme/index.ts';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
 import {
   anchorsTo,
   hrefs,
   htmlText,
   readableTexts,
-} from '../test-support/markup.js';
-import { renderInRouter } from '../test-support/render-in-router.js';
-import { LandingPage } from './index.js';
+} from '../test-support/markup.ts';
+import { renderInRouter } from '../test-support/render-in-router.tsx';
+import { LandingPage } from './index.ts';
 
 const { contact } = getSeoPyramidsConfig();
 const MAILTO = `mailto:${contact.email}`;

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { reloadOnce, type ReloadMemory } from './NavigationFailure.js';
+import { reloadOnce, type ReloadMemory } from './NavigationFailure.tsx';
 
 function memory(): ReloadMemory & { keys: Set<string> } {
   const keys = new Set<string>();

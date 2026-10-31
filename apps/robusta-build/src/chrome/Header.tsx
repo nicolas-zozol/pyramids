@@ -1,9 +1,9 @@
 import { SiteHeader, type NavLink } from '@robusta/pyramids-design-system';
-import { SiteLink } from '../components/SiteLink.js';
-import { wordmarkSrc } from '../design-system/assets.js';
-import { LOCALES, urlScheme } from '../routing/scheme.js';
-import { buildUrl, type PageUrl } from '../routing/url-scheme/index.js';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
+import { SiteLink } from '../components/SiteLink.tsx';
+import { wordmarkSrc } from '../design-system/assets.ts';
+import { LOCALES, urlScheme } from '../routing/scheme.ts';
+import { buildUrl, type PageUrl } from '../routing/url-scheme/index.ts';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
 
 interface HeaderProps {
   /** The page's Locale, whose page copy the header reads. */

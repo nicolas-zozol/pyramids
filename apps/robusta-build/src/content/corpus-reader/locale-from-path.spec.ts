@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
-import { readCorpus } from './read-corpus.js';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.ts';
+import { readCorpus } from './read-corpus.ts';
 
 /**
  * AC-CONTENTSOURCE-21 and R-CONTENTSOURCE-24: a tree that carries its locale in

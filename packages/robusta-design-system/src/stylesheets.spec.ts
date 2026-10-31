@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { shippedStylesheets } from './test-support/package-files.js';
+import { shippedStylesheets } from './test-support/package-files.ts';
 
 const stylesheets = shippedStylesheets();
 const foundations = stylesheets['colors_and_type.css'];

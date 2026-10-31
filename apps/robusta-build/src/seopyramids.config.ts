@@ -5,13 +5,13 @@
  * Requirements: R-MULTILINGUAL-41, R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-44, R-MULTILINGUAL-48, R-MULTILINGUAL-49
  */
 import type { FlowStep, Principle } from '@robusta/pyramids-design-system';
-import { wordmarkSrc } from './design-system/assets.js';
+import { wordmarkSrc } from './design-system/assets.ts';
 import {
   LOCALES,
   ROLL_SIZE,
   urlScheme,
   type Locale,
-} from './routing/scheme.js';
+} from './routing/scheme.ts';
 
 const url = 'https://www.robusta.build';
 

@@ -1,18 +1,18 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import type { ReactElement } from 'react';
-import type { SkLinkComponent, SkLinkProps } from '../index.js';
+import type { SkLinkComponent, SkLinkProps } from '../index.ts';
 import {
   byTag,
   renderStatic,
   type StaticNode,
-} from '../test-support/render-static.js';
-import { CTA } from './CTA.js';
-import { Hero } from './Hero.js';
-import { NotesPreview } from './NotesPreview.js';
-import { ServicesGrid } from './ServicesGrid.js';
-import { SiteFooter } from './SiteFooter.js';
-import { SiteHeader } from './SiteHeader.js';
+} from '../test-support/render-static.ts';
+import { CTA } from './CTA.tsx';
+import { Hero } from './Hero.tsx';
+import { NotesPreview } from './NotesPreview.tsx';
+import { ServicesGrid } from './ServicesGrid.tsx';
+import { SiteFooter } from './SiteFooter.tsx';
+import { SiteHeader } from './SiteHeader.tsx';
 
 const PROBE = 'data-probe';
 

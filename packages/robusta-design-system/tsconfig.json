@@ -10,7 +10,8 @@
     "declaration": true,
     "declarationMap": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "rewriteRelativeImportExtensions": true
   },
   "include": ["src"],
   "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/test-support"]

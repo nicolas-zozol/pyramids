@@ -5,10 +5,10 @@ import {
   PrinciplesList,
   type NotePost,
 } from '@robusta/pyramids-design-system';
-import { SiteLink } from '../components/SiteLink.js';
-import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.js';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
-import { NotesSection } from './NotesSection.js';
+import { SiteLink } from '../components/SiteLink.tsx';
+import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { NotesSection } from './NotesSection.tsx';
 
 export interface LandingPageProps {
   /** The page's Locale, whose page copy and blog home the page reads. */

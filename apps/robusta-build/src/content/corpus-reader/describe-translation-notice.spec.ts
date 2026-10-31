@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { TranslationNotice } from './contract.js';
-import { describeTranslationNotice } from './describe-translation-notice.js';
+import type { TranslationNotice } from './contract.ts';
+import { describeTranslationNotice } from './describe-translation-notice.ts';
 
 const STALE: TranslationNotice = {
   code: 'stale-translation',

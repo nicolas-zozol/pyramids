@@ -1,6 +1,6 @@
-import type { ArticleIndexEntry } from '../content/article-index.js';
-import { LOCALES, urlScheme } from './scheme.js';
-import { buildUrl, type PageUrl } from './url-scheme/index.js';
+import type { ArticleIndexEntry } from '../content/article-index.ts';
+import { LOCALES, urlScheme } from './scheme.ts';
+import { buildUrl, type PageUrl } from './url-scheme/index.ts';
 
 /** For each other Locale, the same page there, in the order of the scheme; nothing for a Locale that has none. */
 export function counterpartsOf(

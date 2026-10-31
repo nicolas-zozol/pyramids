@@ -6,5 +6,5 @@
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-42, R-MULTILINGUAL-63
  */
-export { Footer } from './Footer.js';
-export { Header } from './Header.js';
+export { Footer } from './Footer.tsx';
+export { Header } from './Header.tsx';

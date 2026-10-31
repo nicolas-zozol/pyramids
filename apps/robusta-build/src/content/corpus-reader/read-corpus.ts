@@ -5,14 +5,14 @@ import type {
   CorpusSpec,
   CorpusViolation,
   TranslationNotice,
-} from './contract.js';
-import { markdownFiles } from './markdown-files.js';
+} from './contract.ts';
+import { markdownFiles } from './markdown-files.ts';
 import {
   readFileEntry,
   type FileRead,
   type IndexedArticle,
-} from './read-file-entry.js';
-import { translationNotices } from './translation-notices.js';
+} from './read-file-entry.ts';
+import { translationNotices } from './translation-notices.ts';
 
 /**
  * One traversal per corpus root per process (R-CONTENTSOURCE-03). The map holds

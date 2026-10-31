@@ -9,7 +9,8 @@
     "rootDir": "src",
     "declaration": false,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "rewriteRelativeImportExtensions": true
   },
   "include": [
     "src/routing/scheme.ts",

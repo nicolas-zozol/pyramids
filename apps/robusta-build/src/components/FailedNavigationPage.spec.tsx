@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { FailedNavigationPage } from './FailedNavigationPage.js';
+import { FailedNavigationPage } from './FailedNavigationPage.tsx';
 
 describe('FailedNavigationPage', () => {
   it('says the page could not load, in English whatever the Locale of the page', () => {

@@ -1,6 +1,6 @@
 import type { NotePost } from '@robusta/pyramids-design-system';
-import type { ArticleIndexEntry } from '../content/article-index.js';
-import type { PageUrl } from '../routing/url-scheme/index.js';
+import type { ArticleIndexEntry } from '../content/article-index.ts';
+import type { PageUrl } from '../routing/url-scheme/index.ts';
 
 export interface ArticleKey {
   locale: string;

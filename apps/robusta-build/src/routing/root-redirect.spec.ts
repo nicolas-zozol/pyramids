@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { urlScheme } from './scheme.js';
-import { buildUrl } from './url-scheme/index.js';
+import { urlScheme } from './scheme.ts';
+import { buildUrl } from './url-scheme/index.ts';
 
 type TomlValue = string | number | boolean;
 

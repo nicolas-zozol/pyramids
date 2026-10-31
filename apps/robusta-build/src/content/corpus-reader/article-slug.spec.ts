@@ -3,7 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
-import { articleSlug } from './article-slug.js';
+import { articleSlug } from './article-slug.ts';
 
 /**
  * R-CONTENTSOURCE-45 and AC-CONTENTSOURCE-45. `articleSlug` is frozen, and the

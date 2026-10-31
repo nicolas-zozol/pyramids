@@ -1,9 +1,9 @@
 import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import matter from 'gray-matter';
-import { assetReferences, corpusAssetPath } from './asset-reference.js';
-import type { ArticleEntry, CorpusSpec } from './contract.js';
-import { readCorpus } from './read-corpus.js';
+import { assetReferences, corpusAssetPath } from './asset-reference.ts';
+import type { ArticleEntry, CorpusSpec } from './contract.ts';
+import { readCorpus } from './read-corpus.ts';
 
 /**
  * Mirrors into `assets.publishDir` the files the published articles reference,

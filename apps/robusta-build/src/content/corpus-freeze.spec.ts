@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative, resolve, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { corpus } from './corpus.js';
+import { corpus } from './corpus.ts';
 
 /**
  * The freeze between the two corpora, and the proof the conversion lost nothing.

@@ -1,6 +1,6 @@
-import { buildUrl, type PageUrl } from '../routing/url-scheme/index.js';
-import type { ArticleIndexEntry } from '../content/article-index.js';
-import { urlScheme } from '../routing/scheme.js';
+import { buildUrl, type PageUrl } from '../routing/url-scheme/index.ts';
+import type { ArticleIndexEntry } from '../content/article-index.ts';
+import { urlScheme } from '../routing/scheme.ts';
 
 /** The page of an article, in its own locale and category. */
 export function articlePageUrl(article: ArticleIndexEntry): PageUrl {

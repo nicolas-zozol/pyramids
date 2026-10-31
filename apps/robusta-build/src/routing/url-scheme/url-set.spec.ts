@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildUrl } from './build-url.js';
-import { landingPages, urlSet } from './url-set.js';
-import type { AddressableArticle, UrlScheme } from './scheme.js';
+import { buildUrl } from './build-url.ts';
+import { landingPages, urlSet } from './url-set.ts';
+import type { AddressableArticle, UrlScheme } from './scheme.ts';
 
 const scheme: UrlScheme = {
   contentRoot: 'articles',

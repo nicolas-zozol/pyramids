@@ -1,5 +1,5 @@
-import { urlScheme } from '../routing/scheme.js';
-import { buildUrl } from '../routing/url-scheme/index.js';
+import { urlScheme } from '../routing/scheme.ts';
+import { buildUrl } from '../routing/url-scheme/index.ts';
 
 const DEFAULT_LANDING = buildUrl(urlScheme, {
   kind: 'landing',

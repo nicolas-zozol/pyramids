@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { article, writeCorpus } from '../../test-support/corpus-fixture.js';
-import type { CorpusSpec } from './contract.js';
-import { readArticleBody } from './read-article-body.js';
-import { readCorpus } from './read-corpus.js';
+import { article, writeCorpus } from '../../test-support/corpus-fixture.ts';
+import type { CorpusSpec } from './contract.ts';
+import { readArticleBody } from './read-article-body.ts';
+import { readCorpus } from './read-corpus.ts';
 
 function spec(root: string): CorpusSpec {
   return { root, localeFrom: 'frontmatter' };

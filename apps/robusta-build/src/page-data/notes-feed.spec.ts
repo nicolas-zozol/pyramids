@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { notesFeed } from './notes-feed.js';
+import { notesFeed } from './notes-feed.ts';
 
 /**
  * The notes section's posts, selected from the site's own corpus: the index is

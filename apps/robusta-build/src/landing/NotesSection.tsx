@@ -1,8 +1,8 @@
 import { NotesPreview, type NotePost } from '@robusta/pyramids-design-system';
-import { SiteLink } from '../components/SiteLink.js';
-import { urlScheme } from '../routing/scheme.js';
-import { buildUrl } from '../routing/url-scheme/index.js';
-import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
+import { SiteLink } from '../components/SiteLink.tsx';
+import { urlScheme } from '../routing/scheme.ts';
+import { buildUrl } from '../routing/url-scheme/index.ts';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.ts';
 
 export interface NotesSectionProps {
   /** The page's Locale: its page copy, its Category labels and its blog home. */

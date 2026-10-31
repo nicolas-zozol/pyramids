@@ -21,12 +21,12 @@ export type {
   LocaleSource,
   OriginalDeclaration,
   TranslationNotice,
-} from './contract.js';
+} from './contract.ts';
 
-export { articleSlug } from './article-slug.js';
-export { resolveAssetUrl } from './asset-reference.js';
-export { copyCorpusAssets } from './copy-corpus-assets.js';
-export { describeTranslationNotice } from './describe-translation-notice.js';
-export { describeViolation } from './describe-violation.js';
-export { readArticleBody } from './read-article-body.js';
-export { readCorpus } from './read-corpus.js';
+export { articleSlug } from './article-slug.ts';
+export { resolveAssetUrl } from './asset-reference.ts';
+export { copyCorpusAssets } from './copy-corpus-assets.ts';
+export { describeTranslationNotice } from './describe-translation-notice.ts';
+export { describeViolation } from './describe-violation.ts';
+export { readArticleBody } from './read-article-body.ts';
+export { readCorpus } from './read-corpus.ts';

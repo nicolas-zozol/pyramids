@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findArticle } from './article-lookup.js';
+import { findArticle } from './article-lookup.ts';
 
 /**
  * The lookup the four article routes converge on, held against the site's

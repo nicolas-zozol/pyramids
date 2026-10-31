@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { articlePage } from './article-page.js';
+import { articlePage } from './article-page.ts';
 
 const YIELD_EN = 'the-source-of-yield-farming-profits';
 const YIELD_FR =

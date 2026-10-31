@@ -13,13 +13,13 @@ import {
   readArticleBody,
   readCorpus,
   type CorpusSpec,
-} from './corpus-reader/index.js';
-import { buildUrl, urlSet } from '../routing/url-scheme/index.js';
+} from './corpus-reader/index.ts';
+import { buildUrl, urlSet } from '../routing/url-scheme/index.ts';
 import { afterAll, describe, expect, it } from 'vitest';
-import { urlScheme } from '../routing/scheme.js';
-import { v1UrlMap } from '../routing/v1-url-map.js';
-import { getArticleIndex, getTranslationNotices } from './article-index.js';
-import { corpus } from './corpus.js';
+import { urlScheme } from '../routing/scheme.ts';
+import { v1UrlMap } from '../routing/v1-url-map.ts';
+import { getArticleIndex, getTranslationNotices } from './article-index.ts';
+import { corpus } from './corpus.ts';
 
 /**
  * The site's corpus, read through the site's own declaration.

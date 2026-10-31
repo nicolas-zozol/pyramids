@@ -13,9 +13,9 @@ import {
   article,
   writeCorpus,
   writeNeighbourhood,
-} from '../../test-support/corpus-fixture.js';
-import type { CorpusSpec } from './contract.js';
-import { readCorpus } from './read-corpus.js';
+} from '../../test-support/corpus-fixture.ts';
+import type { CorpusSpec } from './contract.ts';
+import { readCorpus } from './read-corpus.ts';
 
 /**
  * The two defects the v1 measurement found, turned into tests.

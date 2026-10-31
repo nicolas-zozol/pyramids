@@ -8,8 +8,8 @@ import {
   renderStatic,
   textNodes,
   type StaticNode,
-} from '../test-support/render-static.js';
-import { Hero } from './Hero.js';
+} from '../test-support/render-static.ts';
+import { Hero } from './Hero.tsx';
 
 const MASCOT = '/assets/crystal-tux.svg';
 

@@ -7,11 +7,11 @@ import {
   useMatches,
 } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
-import { Footer, Header } from '@/chrome/index.js';
-import { getCounterparts } from '@/page-data/index.js';
-import { urlScheme } from '@/routing/scheme.js';
-import { parseUrl } from '@/routing/url-scheme/index.js';
-import { getPageCopy } from '@/seopyramids.config.js';
+import { Footer, Header } from '@/chrome/index.ts';
+import { getCounterparts } from '@/page-data/index.ts';
+import { urlScheme } from '@/routing/scheme.ts';
+import { parseUrl } from '@/routing/url-scheme/index.ts';
+import { getPageCopy } from '@/seopyramids.config.ts';
 import fontsCss from '@/styles/fonts.css?url';
 import globalsCss from '@/styles/globals.css?url';
 

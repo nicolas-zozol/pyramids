@@ -1,20 +1,20 @@
 import { access, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import matter from 'gray-matter';
-import { articleSlug } from './article-slug.js';
+import { articleSlug } from './article-slug.ts';
 import {
   assetReferences,
   corpusAssetPath,
   isExternalReference,
-} from './asset-reference.js';
+} from './asset-reference.ts';
 import type {
   ArticleEntry,
   CorpusSpec,
   CorpusViolation,
   LocaleSource,
   OriginalDeclaration,
-} from './contract.js';
-import { fingerprint } from './fingerprint.js';
+} from './contract.ts';
+import { fingerprint } from './fingerprint.ts';
 
 const FINGERPRINT = /^[0-9a-f]{12}$/;
 

@@ -1,4 +1,4 @@
-import { getArticleIndex, type ArticleIndexEntry } from './article-index.js';
+import { getArticleIndex, type ArticleIndexEntry } from './article-index.ts';
 
 /**
  * How a route turns its params into the article it renders. The lookup reads

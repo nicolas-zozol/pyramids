@@ -13,11 +13,11 @@
  */
 import { createServerFn } from '@tanstack/react-start';
 import { staticFunctionMiddleware } from '@tanstack/start-static-server-functions';
-import { articlePage } from './article-page.js';
-import { notesFeed } from './notes-feed.js';
-import { pageCounterparts } from './page-counterparts.js';
-import type { PageUrl } from '../routing/url-scheme/index.js';
-import type { ArticleKey, NotesFeedRequest, PageData } from './types.js';
+import { articlePage } from './article-page.ts';
+import { notesFeed } from './notes-feed.ts';
+import { pageCounterparts } from './page-counterparts.ts';
+import type { PageUrl } from '../routing/url-scheme/index.ts';
+import type { ArticleKey, NotesFeedRequest, PageData } from './types.ts';
 
 export type {
   ArticleKey,
@@ -25,7 +25,7 @@ export type {
   ArticleVersion,
   NotesFeedRequest,
   PageData,
-} from './types.js';
+} from './types.ts';
 
 /** One article page, written to a data file per key at prerender. */
 export const getArticlePage: PageData['getArticlePage'] = createServerFn({

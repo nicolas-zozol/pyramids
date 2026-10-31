@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
-import { SkArrowRight } from '../primitives/SkArrowRight.js';
-import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
-import { SkTag, type SkTagTone } from '../primitives/SkTag.js';
+import { SkArrowRight } from '../primitives/SkArrowRight.tsx';
+import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.tsx';
+import { SkTag, type SkTagTone } from '../primitives/SkTag.tsx';
 
 export interface NotePost {
   title: string;

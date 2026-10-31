@@ -1,8 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { urlScheme } from '../routing/scheme.js';
-import { buildUrl } from '../routing/url-scheme/index.js';
-import { NotFoundPage } from './NotFoundPage.js';
+import { urlScheme } from '../routing/scheme.ts';
+import { buildUrl } from '../routing/url-scheme/index.ts';
+import { NotFoundPage } from './NotFoundPage.tsx';
 
 describe('NotFoundPage', () => {
   it('says the address holds no page, in constant English words', () => {
