@@ -1,47 +1,53 @@
 import {
   CTA,
+  FlowDiagram,
   Hero,
   PrinciplesList,
   type NotePost,
 } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.js';
 import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.js';
-import { getSeoPyramidsConfig } from '../seopyramids.config.js';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
 import { NotesSection } from './NotesSection.js';
 
 export interface LandingPageProps {
-  /** The default Locale's notes feed, newest first; empty: no notes section. */
+  /** The page's Locale, whose page copy and blog home the page reads. */
+  locale: string;
+  /** The notes feed of that Locale, newest first; empty: no notes section. */
   posts: NotePost[];
 }
 
-/** The landing page: Hero, PrinciplesList, the notes section and CTA, every text from the page copy. */
-export function LandingPage({ posts }: LandingPageProps) {
-  const { contact, pageCopy } = getSeoPyramidsConfig();
-  const { hero, principles, cta } = pageCopy.landing;
+/** The landing page of a Locale: Hero, the two diagrams, PrinciplesList, the notes section and CTA, every text from its page copy. */
+export function LandingPage({ locale, posts }: LandingPageProps) {
+  const { contact } = getSeoPyramidsConfig();
+  const { tagline, landing } = getPageCopy(locale);
+  const { hero, openSource, complete, principles, cta } = landing;
   const mailto = `mailto:${contact.email}`;
 
   return (
     <main>
       <Hero
-        eyebrow={pageCopy.tagline}
+        eyebrow={tagline}
         title={hero.title}
         subtitle={hero.subtitle}
         primaryCtaLabel={hero.emailLabel}
         primaryCtaHref={mailto}
         secondaryCtaLabel={hero.linkedInLabel}
         secondaryCtaHref={contact.linkedIn}
-        footnote={hero.note}
+        footnote=""
         mascotSrc={heroMascotSrc}
         mascotAlt={hero.mascotAlt}
         annotation={hero.annotation}
         linkComponent={SiteLink}
       />
+      <FlowDiagram id="open-source" {...openSource} />
+      <FlowDiagram id="complete" {...complete} />
       <PrinciplesList
         eyebrow={principles.eyebrow}
         title={principles.title}
         principles={principles.principles}
       />
-      <NotesSection posts={posts} />
+      <NotesSection locale={locale} posts={posts} />
       <CTA
         title={cta.title}
         subtitle={cta.subtitle}

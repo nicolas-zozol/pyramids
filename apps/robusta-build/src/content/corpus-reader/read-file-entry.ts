@@ -12,7 +12,11 @@ import type {
   CorpusSpec,
   CorpusViolation,
   LocaleSource,
+  OriginalDeclaration,
 } from './contract.js';
+import { fingerprint } from './fingerprint.js';
+
+const FINGERPRINT = /^[0-9a-f]{12}$/;
 
 /**
  * One markdown file against the schema. Validation runs on every file the
@@ -23,8 +27,14 @@ export interface FileRead {
   path: string;
   published: boolean;
   /** Absent when a required field is missing: there is no article to index. */
-  entry?: ArticleEntry;
+  article?: IndexedArticle;
   violations: CorpusViolation[];
+}
+
+/** An entry of the index, with the fingerprint its translations are held against. */
+export interface IndexedArticle {
+  entry: ArticleEntry;
+  fingerprint: string;
 }
 
 export async function readFileEntry(
@@ -72,6 +82,13 @@ export async function readFileEntry(
   const excerpt = required(text(parsed.excerpt), 'excerpt', path, violations);
   const author = required(text(declared.author), 'author', path, violations);
   const date = readDate(declared.date, path, violations);
+  const translationId = text(declared.translationId);
+  const original = readOriginal(
+    declared.original,
+    { locale, translationId },
+    path,
+    violations,
+  );
 
   if (
     title === undefined ||
@@ -94,10 +111,97 @@ export async function readFileEntry(
     tags: readTags(declared.tags),
     excerpt,
     ...optional('image', declared.image),
-    ...optional('translationId', declared.translationId),
+    ...optional('translationId', translationId),
+    ...(original === undefined ? {} : { original }),
   };
 
-  return { path, published, entry, violations };
+  return {
+    path,
+    published,
+    article: {
+      entry,
+      fingerprint: fingerprint({ title, excerpt, body: parsed.content }),
+    },
+    violations,
+  };
+}
+
+/**
+ * The declaration of a translation's original, or nothing when the article
+ * declares none and is its own original. A malformed declaration is a
+ * violation and declares nothing.
+ */
+function readOriginal(
+  value: unknown,
+  article: { locale?: string; translationId?: string },
+  path: string,
+  violations: CorpusViolation[],
+): OriginalDeclaration | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  const declared = isMapping(value) ? value : {};
+  const locale = text(declared.locale);
+  const declaredFingerprint = declared.fingerprint;
+  const problems = [
+    ...declarationProblems(value, locale, article),
+    ...fingerprintProblems(declaredFingerprint),
+  ];
+
+  if (
+    problems.length === 0 &&
+    locale !== undefined &&
+    typeof declaredFingerprint === 'string'
+  ) {
+    return { locale, fingerprint: declaredFingerprint };
+  }
+
+  violations.push({
+    code: 'malformed-original',
+    path,
+    detail: problems.join('; '),
+  });
+  return undefined;
+}
+
+function declarationProblems(
+  value: unknown,
+  locale: string | undefined,
+  article: { locale?: string; translationId?: string },
+): string[] {
+  return [
+    ...(isMapping(value)
+      ? []
+      : [
+          `it declares original as '${String(value)}', not as a locale and a fingerprint`,
+        ]),
+    ...(article.translationId === undefined
+      ? ['it declares no translationId to find its original by']
+      : []),
+    ...(locale === undefined ? ['it declares no locale for its original'] : []),
+    ...(locale !== undefined && locale === article.locale
+      ? [`the locale of its original, '${locale}', is its own`]
+      : []),
+  ];
+}
+
+function fingerprintProblems(value: unknown): string[] {
+  if (value === undefined || value === null) {
+    return ['it declares no fingerprint of its original'];
+  }
+  if (typeof value !== 'string') {
+    return [
+      `YAML reads its fingerprint ${String(value)} as a ${typeof value}: write it quoted`,
+    ];
+  }
+  return FINGERPRINT.test(value)
+    ? []
+    : [`its fingerprint '${value}' is not 12 lowercase hexadecimal characters`];
+}
+
+function isMapping(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /**

@@ -5,6 +5,7 @@ import {
   resolveAssetUrl,
   type ArticleBody,
   type ArticleEntry,
+  type TranslationNotice,
 } from './corpus-reader/index.js';
 import { corpus } from './corpus.js';
 
@@ -42,6 +43,13 @@ export async function getArticleIndex(): Promise<readonly ArticleIndexEntry[]> {
   }
 
   return articles;
+}
+
+/** The corpus read's translation notices, which fail nothing: `check:translations` prints them. */
+export async function getTranslationNotices(): Promise<
+  readonly TranslationNotice[]
+> {
+  return (await readCorpus(corpus)).translationNotices;
 }
 
 /** Where an article page's copy comes from, and from nowhere else (BR-PYRAMID-8). */

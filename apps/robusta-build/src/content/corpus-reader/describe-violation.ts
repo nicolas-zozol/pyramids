@@ -21,5 +21,7 @@ export function describeViolation(violation: CorpusViolation): string {
       return `${violation.path}: the translation identifier '${violation.translationId}' is carried by another published article of locale '${violation.locale}'`;
     case 'unresolved-asset':
       return `${violation.path}: the image reference '${violation.reference}' resolves to no file of the corpus, so the article would show a broken image`;
+    case 'malformed-original':
+      return `${violation.path}: the declaration of its original is malformed — ${violation.detail}`;
   }
 }

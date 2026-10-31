@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { urlScheme } from '../routing/scheme.js';
 import { notesFeed } from './notes-feed.js';
 
 /**
@@ -23,21 +22,25 @@ describe('notesFeed', () => {
 
     expect(yieldFarming).toEqual({
       title: 'Provenance des rendements du Yield Farming dans la blockchain',
-      href: '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+      href: '/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
       tag: 'blockchain',
       date: '30 nov.',
     });
   });
 
-  it('feeds the home page, four places wide, the four newest French articles at their unmarked URLs', async () => {
-    const home = await notesFeed({ locale: urlScheme.defaultLocale, limit: 4 });
+  it('feeds the French landing page, four places wide, the four newest French articles under /fr', async () => {
+    const landing = await notesFeed({ locale: 'fr', limit: 4 });
 
-    expect(home.map((post) => post.href)).toEqual([
-      '/articles/c/blockchain/ledger-contre-metamask',
-      '/articles/c/blockchain/les-bons-outils-pour-coder-en-solidity',
-      '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
-      '/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
+    expect(landing.map((post) => post.href)).toEqual([
+      '/fr/articles/c/blockchain/ledger-contre-metamask',
+      '/fr/articles/c/blockchain/les-bons-outils-pour-coder-en-solidity',
+      '/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+      '/fr/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
     ]);
+  });
+
+  it('feeds the Spanish landing page nothing while no Spanish article is published', async () => {
+    expect(await notesFeed({ locale: 'es', limit: 4 })).toEqual([]);
   });
 
   it('writes a note’s date as the feed’s Locale writes it, from the calendar date', async () => {

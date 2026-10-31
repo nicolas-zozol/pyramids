@@ -9,6 +9,9 @@ published: true
 author: Nicolas Zozol
 featured: true
 translationId: yield-farming
+original:
+  locale: "fr"
+  fingerprint: "96d4eef9a099"
 ---
 
 The Blockchain is not just a Ponzi scheme. This article explains where the money that fuels DeFi actually comes from.

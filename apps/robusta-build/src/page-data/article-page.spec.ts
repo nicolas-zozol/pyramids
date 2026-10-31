@@ -31,8 +31,8 @@ describe('articlePage', () => {
     const english = await articlePage({ locale: 'en', slug: YIELD_EN });
     const french = await articlePage({ locale: 'fr', slug: YIELD_FR });
 
-    expect(english.categoryUrl).toBe('/l/en/articles/c/blockchain');
-    expect(french.categoryUrl).toBe('/articles/c/blockchain');
+    expect(english.categoryUrl).toBe('/en/articles/c/blockchain');
+    expect(french.categoryUrl).toBe('/fr/articles/c/blockchain');
   });
 
   it('writes the date as the article’s locale writes it, at build', async () => {
@@ -43,28 +43,37 @@ describe('articlePage', () => {
     expect(french.writtenDate).toBe('30 novembre 2021');
   });
 
-  it('links the other locale with the language naming itself, both ways', async () => {
+  it('lists the other published version of a translated article, both ways', async () => {
     const english = await articlePage({ locale: 'en', slug: YIELD_EN });
     const french = await articlePage({ locale: 'fr', slug: YIELD_FR });
 
-    expect(english.translation).toEqual({
-      url: `/articles/c/blockchain/${YIELD_FR}`,
-      locale: 'fr',
-      label: 'français',
-    });
-    expect(french.translation).toEqual({
-      url: `/l/en/articles/c/blockchain/${YIELD_EN}`,
-      locale: 'en',
-      label: 'English',
-    });
+    expect(english.versions).toEqual([
+      { locale: 'fr', url: `/fr/articles/c/blockchain/${YIELD_FR}` },
+    ]);
+    expect(french.versions).toEqual([
+      { locale: 'en', url: `/en/articles/c/blockchain/${YIELD_EN}` },
+    ]);
   });
 
-  it('carries no translation key for an article with no published pair', async () => {
+  it('ties leaving-gmail and quitter-gmail to each other', async () => {
+    const english = await articlePage({ locale: 'en', slug: 'leaving-gmail' });
+    const french = await articlePage({ locale: 'fr', slug: 'quitter-gmail' });
+
+    expect(english.versions).toEqual([
+      { locale: 'fr', url: '/fr/articles/c/privacy/quitter-gmail' },
+    ]);
+    expect(french.versions).toEqual([
+      { locale: 'en', url: '/en/articles/c/privacy/leaving-gmail' },
+    ]);
+  });
+
+  it('lists no version for an article with no published pair', async () => {
     const page = await articlePage({
       locale: 'fr',
       slug: 'quel-langage-pour-progresser-dans-sa-carriere',
     });
 
+    expect(page.versions).toEqual([]);
     expect(page).not.toHaveProperty('translation');
   });
 

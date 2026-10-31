@@ -7,20 +7,30 @@
  * Requirements: R-TANSTACK-47, R-TANSTACK-48
  * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
  * Requirements: R-DEFAULTLOCALE-43
+ * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Requirements: R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-64
  */
 import { SkTag } from '@robusta/pyramids-design-system';
+import { Fragment } from 'react';
 import { SiteLink } from '../components/SiteLink.js';
 import type { ArticlePage } from '../page-data/index.js';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
 import { ArticleProse } from './ArticleProse.js';
 
 interface ArticleViewProps {
   page: ArticlePage;
 }
 
-/** One article page, rendered from its payload: every URL and every date arrives computed. */
+/** One article page, rendered from its payload and the page copy of the article's Locale: every URL and every date arrives computed. */
 export function ArticleView({ page }: ArticleViewProps) {
-  const { article, html, coverUrl, categoryUrl, translation, writtenDate } =
-    page;
+  const { article, html, coverUrl, categoryUrl, versions, writtenDate } = page;
+  const { navLabel, categoryPrefix, versionsPrefix } = getPageCopy(
+    article.locale,
+  ).article;
+  const categoryLabel =
+    article.category === undefined
+      ? undefined
+      : getCategoryLabel(article.locale, article.category);
 
   return (
     <main
@@ -84,26 +94,30 @@ export function ArticleView({ page }: ArticleViewProps) {
         <ArticleProse html={html} />
 
         <nav
-          aria-label="Pour continuer la lecture"
-          lang="fr"
+          aria-label={navLabel}
           style={{ marginTop: 'var(--sp-7)', color: 'var(--fg-3)' }}
         >
           {categoryUrl !== undefined && (
             <p>
-              {'Classé dans '}
-              <SiteLink href={categoryUrl}>{article.category}</SiteLink>
+              {categoryPrefix}
+              <SiteLink href={categoryUrl}>{categoryLabel}</SiteLink>
             </p>
           )}
-          {translation !== undefined && (
+          {versions.length > 0 && (
             <p>
-              {'Autre langue : '}
-              <SiteLink
-                href={translation.url}
-                hrefLang={translation.locale}
-                lang={translation.locale}
-              >
-                {translation.label}
-              </SiteLink>
+              {versionsPrefix}
+              {versions.map((version, index) => (
+                <Fragment key={version.locale}>
+                  {index > 0 && ', '}
+                  <SiteLink
+                    href={version.url}
+                    hrefLang={version.locale}
+                    lang={version.locale}
+                  >
+                    {getPageCopy(version.locale).localeName}
+                  </SiteLink>
+                </Fragment>
+              ))}
             </p>
           )}
         </nav>

@@ -492,3 +492,420 @@ describe('readCorpus — a corpus longer than one roll page', () => {
     expect(articles[29].date).toBe('2026-01-01');
   });
 });
+
+/**
+ * Scenario: `en.md`, "Leaving Gmail", is the English original; `fr.md`,
+ * "Quitter Gmail", its French translation under the same translation
+ * identifier. The translator declares the original's fingerprint, the value
+ * the reader hands out in a notice, and the original then changes or not.
+ */
+describe('readCorpus — originals and translation notices', () => {
+  const PLACEHOLDER = '000000000000';
+  const ENGLISH_FRONT = `title: 'Leaving Gmail'\nlocale: 'en'\ndate: '2019-05-24'\ncategory: privacy\ntags: ['web', 'tech']\nimage: ./images/gmail.png\nauthor: 'Nina'\ntranslationId: leaving-gmail\npublished: true`;
+  const ENGLISH_EXCERPT = 'Gmail was a revolution in 2004.';
+  const ENGLISH_BODY = 'Why leave it? Because it reads your mail.';
+  const FRENCH_FRONT = `title: 'Quitter Gmail'\nlocale: 'fr'\ndate: '2019-05-24'\ncategory: privacy\nauthor: 'Nina'\ntranslationId: leaving-gmail\npublished: true`;
+  const FRENCH_EXCERPT = 'Gmail était une révolution en 2004.';
+  const FRENCH_BODY = 'Pourquoi le quitter ? Parce qu’il lit votre courrier.';
+
+  interface Version {
+    front?: string;
+    excerpt?: string;
+    body?: string;
+  }
+
+  const english = (version: Version = {}): string =>
+    article(version.front ?? ENGLISH_FRONT, {
+      excerpt: version.excerpt ?? ENGLISH_EXCERPT,
+      body: version.body ?? ENGLISH_BODY,
+    });
+
+  const french = (declaration: string, version: Version = {}): string =>
+    article(`${version.front ?? FRENCH_FRONT}\n${declaration}`, {
+      excerpt: version.excerpt ?? FRENCH_EXCERPT,
+      body: version.body ?? FRENCH_BODY,
+    });
+
+  const declaring = (locale: string, fingerprint: string): string =>
+    `original:\n  locale: ${locale}\n  fingerprint: '${fingerprint}'`;
+
+  const readOf = async (files: Record<string, string>) =>
+    readCorpus(spec(await writeCorpus(files)));
+
+  const noticesOf = async (files: Record<string, string>) =>
+    (await readOf(files)).translationNotices;
+
+  /** The value a stale-translation notice hands out for this original. */
+  async function fingerprintOf(original: string): Promise<string> {
+    const notices = await noticesOf({
+      'en.md': original,
+      'fr.md': french(declaring('en', PLACEHOLDER)),
+    });
+    const stale = notices.find((notice) => notice.code === 'stale-translation');
+    if (stale?.code !== 'stale-translation') {
+      throw new Error('no stale-translation notice to read a fingerprint from');
+    }
+    return stale.fingerprint;
+  }
+
+  describe('the declaration', () => {
+    it('reads the original a translation declares into its entry, and none into the original, its own original', async () => {
+      const { articles, violations } = await readOf({
+        'en.md': english(),
+        'fr.md': french(declaring('en', '9c1e4a7b2d30')),
+      });
+
+      expect(violations).toEqual([]);
+      expect(
+        articles.find((entry) => entry.path === 'fr.md')?.original,
+      ).toEqual({
+        locale: 'en',
+        fingerprint: '9c1e4a7b2d30',
+      });
+      expect(
+        articles.find((entry) => entry.path === 'en.md')?.original,
+      ).toBeUndefined();
+    });
+
+    it('raises no notice for a translation declared up to date with its original', async () => {
+      const declared = await fingerprintOf(english());
+
+      const read = await readOf({
+        'en.md': english(),
+        'fr.md': french(declaring('en', declared)),
+      });
+
+      expect(declared).toMatch(/^[0-9a-f]{12}$/);
+      expect(read.translationNotices).toEqual([]);
+      expect(read.violations).toEqual([]);
+    });
+
+    it('raises no notice on a corpus holding no translation', async () => {
+      expect(await noticesOf({ 'en.md': english() })).toEqual([]);
+    });
+  });
+
+  describe('a stale translation', () => {
+    const CHANGES: readonly [string, Version][] = [
+      [
+        'title',
+        { front: ENGLISH_FRONT.replace("'Leaving Gmail'", "'Leaving Google'") },
+      ],
+      ['excerpt', { excerpt: 'Gmail was a revolution, once.' }],
+      ['body', { body: 'Why leave it? Because it reads every mail.' }],
+    ];
+
+    for (const [field, change] of CHANGES) {
+      it(`is flagged when the ${field} of its original changes, naming both files and the fingerprint to copy`, async () => {
+        const declared = await fingerprintOf(english());
+        const changed = english(change);
+
+        const notices = await noticesOf({
+          'en.md': changed,
+          'fr.md': french(declaring('en', declared)),
+        });
+
+        expect(notices).toEqual([
+          {
+            code: 'stale-translation',
+            path: 'fr.md',
+            originalPath: 'en.md',
+            fingerprint: await fingerprintOf(changed),
+          },
+        ]);
+        expect(await fingerprintOf(changed)).not.toBe(declared);
+      });
+    }
+
+    it('stays published, and fails nothing', async () => {
+      const read = await readOf({
+        'en.md': english({ body: 'A body rewritten since.' }),
+        'fr.md': french(declaring('en', await fingerprintOf(english()))),
+      });
+
+      expect(read.translationNotices).toHaveLength(1);
+      expect(read.violations).toEqual([]);
+      expect(read.articles.map((entry) => entry.path).sort()).toEqual([
+        'en.md',
+        'fr.md',
+      ]);
+    });
+
+    it('is up to date again once redeclared with the fingerprint the notice gave', async () => {
+      const changed = english({ body: 'A body rewritten since.' });
+      const [notice] = await noticesOf({
+        'en.md': changed,
+        'fr.md': french(declaring('en', await fingerprintOf(english()))),
+      });
+      if (notice?.code !== 'stale-translation') {
+        throw new Error('expected a stale-translation notice');
+      }
+
+      const notices = await noticesOf({
+        'en.md': changed,
+        'fr.md': french(declaring('en', notice.fingerprint)),
+      });
+
+      expect(notices).toEqual([]);
+    });
+
+    it('is not flagged when only the tags, the date, the category or the cover of the original change', async () => {
+      const declared = await fingerprintOf(english());
+      const front = ENGLISH_FRONT.replace("['web', 'tech']", "['privacy']")
+        .replace("'2019-05-24'", "'2020-01-01'")
+        .replace('category: privacy', 'category: web')
+        .replace('./images/gmail.png', './images/inbox.png');
+
+      const notices = await noticesOf({
+        'en.md': english({ front }),
+        'fr.md': french(declaring('en', declared)),
+      });
+
+      expect(notices).toEqual([]);
+    });
+
+    it('is not flagged when the original is reflowed without changing a word', async () => {
+      const declared = await fingerprintOf(english());
+      const reflowed = english({
+        front: ENGLISH_FRONT.replace("'Leaving Gmail'", "'Leaving   Gmail'"),
+        excerpt: 'Gmail was a\nrevolution   in 2004.',
+        body: 'Why leave it?\n\nBecause it reads\nyour mail.\n\n\n',
+      });
+
+      const notices = await noticesOf({
+        'en.md': reflowed,
+        'fr.md': french(declaring('en', declared)),
+      });
+
+      expect(notices).toEqual([]);
+    });
+
+    it('is not flagged when its translator corrects the translation itself', async () => {
+      const declared = await fingerprintOf(english());
+
+      const notices = await noticesOf({
+        'en.md': english(),
+        'fr.md': french(declaring('en', declared), {
+          front: FRENCH_FRONT.replace(
+            "'Quitter Gmail'",
+            "'Quitter Gmail, enfin'",
+          ),
+          body: 'Pourquoi le quitter ? Parce qu’il lit tout votre courrier.',
+        }),
+      });
+
+      expect(notices).toEqual([]);
+    });
+
+    it('is not flagged on a translation left unpublished', async () => {
+      const notices = await noticesOf({
+        'en.md': english(),
+        'fr.md': french(declaring('en', PLACEHOLDER), {
+          front: FRENCH_FRONT.replace('published: true', 'published: false'),
+        }),
+      });
+
+      expect(notices).toEqual([]);
+    });
+  });
+
+  describe('an untracked pair', () => {
+    it('is flagged when two versions share a translation identifier and neither declares its original, giving each fingerprint', async () => {
+      const read = await readOf({ 'en.md': english(), 'fr.md': french('') });
+
+      expect(read.translationNotices).toEqual([
+        {
+          code: 'untracked-pair',
+          translationId: 'leaving-gmail',
+          versions: [
+            {
+              path: 'en.md',
+              locale: 'en',
+              fingerprint: await fingerprintOf(english()),
+            },
+            {
+              path: 'fr.md',
+              locale: 'fr',
+              fingerprint: expect.stringMatching(/^[0-9a-f]{12}$/),
+            },
+          ],
+        },
+      ]);
+      expect(read.violations).toEqual([]);
+      expect(read.articles).toHaveLength(2);
+    });
+
+    it('names the versions declaring no original when a third version joins a tracked pair', async () => {
+      const spanish = article(
+        `title: 'Dejar Gmail'\nlocale: 'es'\ndate: '2019-05-24'\nauthor: 'Nina'\ntranslationId: leaving-gmail\npublished: true`,
+      );
+
+      const notices = await noticesOf({
+        'en.md': english(),
+        'es.md': spanish,
+        'fr.md': french(declaring('en', await fingerprintOf(english()))),
+      });
+
+      expect(notices).toEqual([
+        {
+          code: 'untracked-pair',
+          translationId: 'leaving-gmail',
+          versions: [
+            { path: 'en.md', locale: 'en', fingerprint: expect.any(String) },
+            { path: 'es.md', locale: 'es', fingerprint: expect.any(String) },
+          ],
+        },
+      ]);
+    });
+
+    it('is not flagged for an article alone under its translation identifier', async () => {
+      expect(await noticesOf({ 'fr.md': french('') })).toEqual([]);
+    });
+
+    it('counts the published versions only', async () => {
+      const notices = await noticesOf({
+        'en.md': english({
+          front: ENGLISH_FRONT.replace('published: true', 'published: false'),
+        }),
+        'fr.md': french(''),
+      });
+
+      expect(notices).toEqual([]);
+    });
+  });
+
+  describe('a missing original', () => {
+    const MISSING = {
+      code: 'missing-original',
+      path: 'fr.md',
+      translationId: 'leaving-gmail',
+      locale: 'en',
+    };
+
+    it('is flagged when the original is not published, and the translation is still served', async () => {
+      const read = await readOf({
+        'en.md': english({
+          front: ENGLISH_FRONT.replace('published: true', 'published: false'),
+        }),
+        'fr.md': french(declaring('en', PLACEHOLDER)),
+      });
+
+      expect(read.translationNotices).toEqual([MISSING]);
+      expect(read.violations).toEqual([]);
+      expect(read.articles.map((entry) => entry.path)).toEqual(['fr.md']);
+    });
+
+    it('is flagged when the original has left the corpus', async () => {
+      const read = await readOf({
+        'fr.md': french(declaring('en', PLACEHOLDER)),
+      });
+
+      expect(read.translationNotices).toEqual([MISSING]);
+      expect(read.articles.map((entry) => entry.path)).toEqual(['fr.md']);
+    });
+
+    it('is flagged when the declared Locale holds no version of the translation identifier', async () => {
+      const notices = await noticesOf({
+        'en.md': english(),
+        'fr.md': french(declaring('es', PLACEHOLDER)),
+      });
+
+      expect(notices).toEqual([{ ...MISSING, locale: 'es' }]);
+    });
+  });
+
+  describe('a malformed declaration', () => {
+    const FINGERPRINT = '9c1e4a7b2d30';
+    const MALFORMED: readonly [string, string, string, string][] = [
+      // [case, frontmatter of fr.md, declaration, what the detail names]
+      [
+        'declares no translation identifier',
+        FRENCH_FRONT.replace('translationId: leaving-gmail\n', ''),
+        declaring('en', FINGERPRINT),
+        'translationId',
+      ],
+      [
+        'declares no Locale for its original',
+        FRENCH_FRONT,
+        `original:\n  fingerprint: '${FINGERPRINT}'`,
+        'locale',
+      ],
+      [
+        'declares no fingerprint',
+        FRENCH_FRONT,
+        'original:\n  locale: en',
+        'fingerprint',
+      ],
+      [
+        'declares a fingerprint in upper case',
+        FRENCH_FRONT,
+        declaring('en', '9C1E4A7B2D30'),
+        '9C1E4A7B2D30',
+      ],
+      [
+        'declares a fingerprint too short',
+        FRENCH_FRONT,
+        declaring('en', '9c1e4a'),
+        '9c1e4a',
+      ],
+      [
+        'declares a fingerprint YAML reads as a number',
+        FRENCH_FRONT,
+        'original:\n  locale: en\n  fingerprint: 123456789012',
+        'quoted',
+      ],
+      [
+        'declares its own Locale as the Locale of its original',
+        FRENCH_FRONT,
+        declaring('fr', FINGERPRINT),
+        "'fr'",
+      ],
+      [
+        'declares its original as a plain value',
+        FRENCH_FRONT,
+        'original: en',
+        'locale',
+      ],
+    ];
+
+    for (const [name, front, declaration, named] of MALFORMED) {
+      it(`is a violation when a translation ${name}`, async () => {
+        const { violations } = await readOf({
+          'en.md': english(),
+          'fr.md': french(declaration, { front }),
+        });
+
+        expect(violations).toEqual([
+          {
+            code: 'malformed-original',
+            path: 'fr.md',
+            detail: expect.stringContaining(named),
+          },
+        ]);
+      });
+    }
+
+    it('is a violation on an unpublished translation too', async () => {
+      const { violations } = await readOf({
+        'fr.md': french(declaring('fr', FINGERPRINT), {
+          front: FRENCH_FRONT.replace('published: true', 'published: false'),
+        }),
+      });
+
+      expect(violations.map((violation) => violation.code)).toEqual([
+        'malformed-original',
+      ]);
+    });
+  });
+
+  it('hands out notices the caller cannot mutate', async () => {
+    const { translationNotices } = await readOf({
+      'en.md': english(),
+      'fr.md': french(''),
+    });
+
+    expect(() =>
+      (translationNotices as unknown[]).push(translationNotices[0]),
+    ).toThrow();
+  });
+});

@@ -1,24 +1,44 @@
-import { SiteHeader } from '@robusta/pyramids-design-system';
+import { SiteHeader, type NavLink } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.js';
 import { wordmarkSrc } from '../design-system/assets.js';
-import { urlScheme } from '../routing/scheme.js';
-import { getSeoPyramidsConfig } from '../seopyramids.config.js';
+import { LOCALES, urlScheme } from '../routing/scheme.js';
+import { buildUrl, type PageUrl } from '../routing/url-scheme/index.js';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
 
-const NO_NAVIGATION: never[] = [];
+interface HeaderProps {
+  /** The page's Locale, whose page copy the header reads. */
+  locale: string;
+  /** The same page in the other Locales that have it. */
+  counterparts: PageUrl[];
+}
 
-/** SiteHeader from the Site configuration: wordmark to /, contact, no nav, read in the default Locale. */
-export function Header() {
-  const { contact, pageCopy } = getSeoPyramidsConfig();
+/** SiteHeader in the page copy of `locale`: wordmark to the landing of `locale`, one link per other Locale to its counterpart or else its landing, contact. */
+export function Header({ locale, counterparts }: HeaderProps) {
+  const { contact } = getSeoPyramidsConfig();
+  const { header } = getPageCopy(locale);
 
   return (
-    <div lang={urlScheme.defaultLocale}>
-      <SiteHeader
-        wordmarkSrc={wordmarkSrc}
-        links={NO_NAVIGATION}
-        ctaLabel={pageCopy.header.contactLabel}
-        ctaHref={`mailto:${contact.email}`}
-        linkComponent={SiteLink}
-      />
-    </div>
+    <SiteHeader
+      wordmarkSrc={wordmarkSrc}
+      homeHref={buildUrl(urlScheme, { kind: 'landing', locale })}
+      links={localeLinks(locale, counterparts)}
+      ctaLabel={header.contactLabel}
+      ctaHref={`mailto:${contact.email}`}
+      linkComponent={SiteLink}
+    />
   );
+}
+
+function localeLinks(locale: string, counterparts: PageUrl[]): NavLink[] {
+  return LOCALES.filter((other) => other !== locale).map((other) => {
+    const counterpart = counterparts.find((page) => page.locale === other) ?? {
+      kind: 'landing',
+      locale: other,
+    };
+    return {
+      label: getPageCopy(other).localeName,
+      href: buildUrl(urlScheme, counterpart),
+      locale: other,
+    };
+  });
 }

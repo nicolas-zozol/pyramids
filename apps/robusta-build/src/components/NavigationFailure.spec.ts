@@ -20,18 +20,18 @@ function memory(): ReloadMemory & { keys: Set<string> } {
 describe('reloadOnce', () => {
   it('loads the target address in full on the first failure there', () => {
     const load = vi.fn();
-    const outcome = reloadOnce('/articles/c/web/a-slug', memory(), load);
+    const outcome = reloadOnce('/en/articles/c/web/a-slug', memory(), load);
 
     expect(outcome).toBe('reloading');
-    expect(load).toHaveBeenCalledWith('/articles/c/web/a-slug');
+    expect(load).toHaveBeenCalledWith('/en/articles/c/web/a-slug');
   });
 
   it('gives up on a second failure at the same address in the same tab', () => {
     const load = vi.fn();
     const tab = memory();
 
-    reloadOnce('/articles/c/web/a-slug', tab, load);
-    const second = reloadOnce('/articles/c/web/a-slug', tab, load);
+    reloadOnce('/en/articles/c/web/a-slug', tab, load);
+    const second = reloadOnce('/en/articles/c/web/a-slug', tab, load);
 
     expect(second).toBe('failed');
     expect(load).toHaveBeenCalledTimes(1);
@@ -41,8 +41,8 @@ describe('reloadOnce', () => {
     const load = vi.fn();
     const tab = memory();
 
-    reloadOnce('/articles/c/web/a-slug', tab, load);
-    const other = reloadOnce('/l/fr/articles/c/blockchain', tab, load);
+    reloadOnce('/en/articles/c/web/a-slug', tab, load);
+    const other = reloadOnce('/fr/articles/c/blockchain', tab, load);
 
     expect(other).toBe('reloading');
     expect(load).toHaveBeenCalledTimes(2);
@@ -59,7 +59,7 @@ describe('reloadOnce', () => {
       },
     };
 
-    expect(reloadOnce('/articles', forgetful, load)).toBe('failed');
+    expect(reloadOnce('/en/articles', forgetful, load)).toBe('failed');
     expect(load).not.toHaveBeenCalled();
   });
 });

@@ -9,234 +9,136 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root.js'
-import { Route as IndexRouteImport } from './routes/index.js'
 import { Route as R404RouteImport } from './routes/404.js'
-import { Route as ArticlesIndexRouteImport } from './routes/articles/index.js'
-import { Route as ArticlesSlugRouteImport } from './routes/articles/$slug.js'
-import { Route as ArticlesPNRouteImport } from './routes/articles/p/$n.js'
-import { Route as LLocaleIndexRouteImport } from './routes/l/$locale/index.js'
-import { Route as ArticlesCCategoryIndexRouteImport } from './routes/articles/c/$category/index.js'
-import { Route as ArticlesCCategorySlugRouteImport } from './routes/articles/c/$category/$slug.js'
-import { Route as LLocaleArticlesIndexRouteImport } from './routes/l/$locale/articles/index.js'
-import { Route as LLocaleArticlesSlugRouteImport } from './routes/l/$locale/articles/$slug.js'
-import { Route as ArticlesCCategoryPNRouteImport } from './routes/articles/c/$category/p/$n.js'
-import { Route as LLocaleArticlesPNRouteImport } from './routes/l/$locale/articles/p/$n.js'
-import { Route as LLocaleArticlesCCategoryIndexRouteImport } from './routes/l/$locale/articles/c/$category/index.js'
-import { Route as LLocaleArticlesCCategorySlugRouteImport } from './routes/l/$locale/articles/c/$category/$slug.js'
-import { Route as LLocaleArticlesCCategoryPNRouteImport } from './routes/l/$locale/articles/c/$category/p/$n.js'
+import { Route as LocaleIndexRouteImport } from './routes/$locale/index.js'
+import { Route as LocaleArticlesIndexRouteImport } from './routes/$locale/articles/index.js'
+import { Route as LocaleArticlesSlugRouteImport } from './routes/$locale/articles/$slug.js'
+import { Route as LocaleArticlesPNRouteImport } from './routes/$locale/articles/p/$n.js'
+import { Route as LocaleArticlesCCategoryIndexRouteImport } from './routes/$locale/articles/c/$category/index.js'
+import { Route as LocaleArticlesCCategorySlugRouteImport } from './routes/$locale/articles/c/$category/$slug.js'
+import { Route as LocaleArticlesCCategoryPNRouteImport } from './routes/$locale/articles/c/$category/p/$n.js'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const R404Route = R404RouteImport.update({
   id: '/404',
   path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
-  id: '/articles/',
-  path: '/articles/',
+const LocaleIndexRoute = LocaleIndexRouteImport.update({
+  id: '/$locale/',
+  path: '/$locale/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
-  id: '/articles/$slug',
-  path: '/articles/$slug',
+const LocaleArticlesIndexRoute = LocaleArticlesIndexRouteImport.update({
+  id: '/$locale/articles/',
+  path: '/$locale/articles/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArticlesPNRoute = ArticlesPNRouteImport.update({
-  id: '/articles/p/$n',
-  path: '/articles/p/$n',
+const LocaleArticlesSlugRoute = LocaleArticlesSlugRouteImport.update({
+  id: '/$locale/articles/$slug',
+  path: '/$locale/articles/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LLocaleIndexRoute = LLocaleIndexRouteImport.update({
-  id: '/l/$locale/',
-  path: '/l/$locale/',
+const LocaleArticlesPNRoute = LocaleArticlesPNRouteImport.update({
+  id: '/$locale/articles/p/$n',
+  path: '/$locale/articles/p/$n',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArticlesCCategoryIndexRoute = ArticlesCCategoryIndexRouteImport.update({
-  id: '/articles/c/$category/',
-  path: '/articles/c/$category/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArticlesCCategorySlugRoute = ArticlesCCategorySlugRouteImport.update({
-  id: '/articles/c/$category/$slug',
-  path: '/articles/c/$category/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LLocaleArticlesIndexRoute = LLocaleArticlesIndexRouteImport.update({
-  id: '/l/$locale/articles/',
-  path: '/l/$locale/articles/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LLocaleArticlesSlugRoute = LLocaleArticlesSlugRouteImport.update({
-  id: '/l/$locale/articles/$slug',
-  path: '/l/$locale/articles/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArticlesCCategoryPNRoute = ArticlesCCategoryPNRouteImport.update({
-  id: '/articles/c/$category/p/$n',
-  path: '/articles/c/$category/p/$n',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LLocaleArticlesPNRoute = LLocaleArticlesPNRouteImport.update({
-  id: '/l/$locale/articles/p/$n',
-  path: '/l/$locale/articles/p/$n',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LLocaleArticlesCCategoryIndexRoute =
-  LLocaleArticlesCCategoryIndexRouteImport.update({
-    id: '/l/$locale/articles/c/$category/',
-    path: '/l/$locale/articles/c/$category/',
+const LocaleArticlesCCategoryIndexRoute =
+  LocaleArticlesCCategoryIndexRouteImport.update({
+    id: '/$locale/articles/c/$category/',
+    path: '/$locale/articles/c/$category/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LLocaleArticlesCCategorySlugRoute =
-  LLocaleArticlesCCategorySlugRouteImport.update({
-    id: '/l/$locale/articles/c/$category/$slug',
-    path: '/l/$locale/articles/c/$category/$slug',
+const LocaleArticlesCCategorySlugRoute =
+  LocaleArticlesCCategorySlugRouteImport.update({
+    id: '/$locale/articles/c/$category/$slug',
+    path: '/$locale/articles/c/$category/$slug',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LLocaleArticlesCCategoryPNRoute =
-  LLocaleArticlesCCategoryPNRouteImport.update({
-    id: '/l/$locale/articles/c/$category/p/$n',
-    path: '/l/$locale/articles/c/$category/p/$n',
+const LocaleArticlesCCategoryPNRoute =
+  LocaleArticlesCCategoryPNRouteImport.update({
+    id: '/$locale/articles/c/$category/p/$n',
+    path: '/$locale/articles/c/$category/p/$n',
     getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/404': typeof R404Route
-  '/articles/$slug': typeof ArticlesSlugRoute
-  '/articles/': typeof ArticlesIndexRoute
-  '/articles/p/$n': typeof ArticlesPNRoute
-  '/l/$locale/': typeof LLocaleIndexRoute
-  '/articles/c/$category/$slug': typeof ArticlesCCategorySlugRoute
-  '/l/$locale/articles/$slug': typeof LLocaleArticlesSlugRoute
-  '/articles/c/$category/': typeof ArticlesCCategoryIndexRoute
-  '/l/$locale/articles/': typeof LLocaleArticlesIndexRoute
-  '/articles/c/$category/p/$n': typeof ArticlesCCategoryPNRoute
-  '/l/$locale/articles/p/$n': typeof LLocaleArticlesPNRoute
-  '/l/$locale/articles/c/$category/$slug': typeof LLocaleArticlesCCategorySlugRoute
-  '/l/$locale/articles/c/$category/': typeof LLocaleArticlesCCategoryIndexRoute
-  '/l/$locale/articles/c/$category/p/$n': typeof LLocaleArticlesCCategoryPNRoute
+  '/$locale/': typeof LocaleIndexRoute
+  '/$locale/articles/$slug': typeof LocaleArticlesSlugRoute
+  '/$locale/articles/': typeof LocaleArticlesIndexRoute
+  '/$locale/articles/p/$n': typeof LocaleArticlesPNRoute
+  '/$locale/articles/c/$category/$slug': typeof LocaleArticlesCCategorySlugRoute
+  '/$locale/articles/c/$category/': typeof LocaleArticlesCCategoryIndexRoute
+  '/$locale/articles/c/$category/p/$n': typeof LocaleArticlesCCategoryPNRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/404': typeof R404Route
-  '/articles/$slug': typeof ArticlesSlugRoute
-  '/articles': typeof ArticlesIndexRoute
-  '/articles/p/$n': typeof ArticlesPNRoute
-  '/l/$locale': typeof LLocaleIndexRoute
-  '/articles/c/$category/$slug': typeof ArticlesCCategorySlugRoute
-  '/l/$locale/articles/$slug': typeof LLocaleArticlesSlugRoute
-  '/articles/c/$category': typeof ArticlesCCategoryIndexRoute
-  '/l/$locale/articles': typeof LLocaleArticlesIndexRoute
-  '/articles/c/$category/p/$n': typeof ArticlesCCategoryPNRoute
-  '/l/$locale/articles/p/$n': typeof LLocaleArticlesPNRoute
-  '/l/$locale/articles/c/$category/$slug': typeof LLocaleArticlesCCategorySlugRoute
-  '/l/$locale/articles/c/$category': typeof LLocaleArticlesCCategoryIndexRoute
-  '/l/$locale/articles/c/$category/p/$n': typeof LLocaleArticlesCCategoryPNRoute
+  '/$locale': typeof LocaleIndexRoute
+  '/$locale/articles/$slug': typeof LocaleArticlesSlugRoute
+  '/$locale/articles': typeof LocaleArticlesIndexRoute
+  '/$locale/articles/p/$n': typeof LocaleArticlesPNRoute
+  '/$locale/articles/c/$category/$slug': typeof LocaleArticlesCCategorySlugRoute
+  '/$locale/articles/c/$category': typeof LocaleArticlesCCategoryIndexRoute
+  '/$locale/articles/c/$category/p/$n': typeof LocaleArticlesCCategoryPNRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/404': typeof R404Route
-  '/articles/$slug': typeof ArticlesSlugRoute
-  '/articles/': typeof ArticlesIndexRoute
-  '/articles/p/$n': typeof ArticlesPNRoute
-  '/l/$locale/': typeof LLocaleIndexRoute
-  '/articles/c/$category/$slug': typeof ArticlesCCategorySlugRoute
-  '/l/$locale/articles/$slug': typeof LLocaleArticlesSlugRoute
-  '/articles/c/$category/': typeof ArticlesCCategoryIndexRoute
-  '/l/$locale/articles/': typeof LLocaleArticlesIndexRoute
-  '/articles/c/$category/p/$n': typeof ArticlesCCategoryPNRoute
-  '/l/$locale/articles/p/$n': typeof LLocaleArticlesPNRoute
-  '/l/$locale/articles/c/$category/$slug': typeof LLocaleArticlesCCategorySlugRoute
-  '/l/$locale/articles/c/$category/': typeof LLocaleArticlesCCategoryIndexRoute
-  '/l/$locale/articles/c/$category/p/$n': typeof LLocaleArticlesCCategoryPNRoute
+  '/$locale/': typeof LocaleIndexRoute
+  '/$locale/articles/$slug': typeof LocaleArticlesSlugRoute
+  '/$locale/articles/': typeof LocaleArticlesIndexRoute
+  '/$locale/articles/p/$n': typeof LocaleArticlesPNRoute
+  '/$locale/articles/c/$category/$slug': typeof LocaleArticlesCCategorySlugRoute
+  '/$locale/articles/c/$category/': typeof LocaleArticlesCCategoryIndexRoute
+  '/$locale/articles/c/$category/p/$n': typeof LocaleArticlesCCategoryPNRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/404'
-    | '/articles/$slug'
-    | '/articles/'
-    | '/articles/p/$n'
-    | '/l/$locale/'
-    | '/articles/c/$category/$slug'
-    | '/l/$locale/articles/$slug'
-    | '/articles/c/$category/'
-    | '/l/$locale/articles/'
-    | '/articles/c/$category/p/$n'
-    | '/l/$locale/articles/p/$n'
-    | '/l/$locale/articles/c/$category/$slug'
-    | '/l/$locale/articles/c/$category/'
-    | '/l/$locale/articles/c/$category/p/$n'
+    | '/$locale/'
+    | '/$locale/articles/$slug'
+    | '/$locale/articles/'
+    | '/$locale/articles/p/$n'
+    | '/$locale/articles/c/$category/$slug'
+    | '/$locale/articles/c/$category/'
+    | '/$locale/articles/c/$category/p/$n'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/404'
-    | '/articles/$slug'
-    | '/articles'
-    | '/articles/p/$n'
-    | '/l/$locale'
-    | '/articles/c/$category/$slug'
-    | '/l/$locale/articles/$slug'
-    | '/articles/c/$category'
-    | '/l/$locale/articles'
-    | '/articles/c/$category/p/$n'
-    | '/l/$locale/articles/p/$n'
-    | '/l/$locale/articles/c/$category/$slug'
-    | '/l/$locale/articles/c/$category'
-    | '/l/$locale/articles/c/$category/p/$n'
+    | '/$locale'
+    | '/$locale/articles/$slug'
+    | '/$locale/articles'
+    | '/$locale/articles/p/$n'
+    | '/$locale/articles/c/$category/$slug'
+    | '/$locale/articles/c/$category'
+    | '/$locale/articles/c/$category/p/$n'
   id:
     | '__root__'
-    | '/'
     | '/404'
-    | '/articles/$slug'
-    | '/articles/'
-    | '/articles/p/$n'
-    | '/l/$locale/'
-    | '/articles/c/$category/$slug'
-    | '/l/$locale/articles/$slug'
-    | '/articles/c/$category/'
-    | '/l/$locale/articles/'
-    | '/articles/c/$category/p/$n'
-    | '/l/$locale/articles/p/$n'
-    | '/l/$locale/articles/c/$category/$slug'
-    | '/l/$locale/articles/c/$category/'
-    | '/l/$locale/articles/c/$category/p/$n'
+    | '/$locale/'
+    | '/$locale/articles/$slug'
+    | '/$locale/articles/'
+    | '/$locale/articles/p/$n'
+    | '/$locale/articles/c/$category/$slug'
+    | '/$locale/articles/c/$category/'
+    | '/$locale/articles/c/$category/p/$n'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   R404Route: typeof R404Route
-  ArticlesSlugRoute: typeof ArticlesSlugRoute
-  ArticlesIndexRoute: typeof ArticlesIndexRoute
-  ArticlesPNRoute: typeof ArticlesPNRoute
-  LLocaleIndexRoute: typeof LLocaleIndexRoute
-  ArticlesCCategorySlugRoute: typeof ArticlesCCategorySlugRoute
-  LLocaleArticlesSlugRoute: typeof LLocaleArticlesSlugRoute
-  ArticlesCCategoryIndexRoute: typeof ArticlesCCategoryIndexRoute
-  LLocaleArticlesIndexRoute: typeof LLocaleArticlesIndexRoute
-  ArticlesCCategoryPNRoute: typeof ArticlesCCategoryPNRoute
-  LLocaleArticlesPNRoute: typeof LLocaleArticlesPNRoute
-  LLocaleArticlesCCategorySlugRoute: typeof LLocaleArticlesCCategorySlugRoute
-  LLocaleArticlesCCategoryIndexRoute: typeof LLocaleArticlesCCategoryIndexRoute
-  LLocaleArticlesCCategoryPNRoute: typeof LLocaleArticlesCCategoryPNRoute
+  LocaleIndexRoute: typeof LocaleIndexRoute
+  LocaleArticlesSlugRoute: typeof LocaleArticlesSlugRoute
+  LocaleArticlesIndexRoute: typeof LocaleArticlesIndexRoute
+  LocaleArticlesPNRoute: typeof LocaleArticlesPNRoute
+  LocaleArticlesCCategorySlugRoute: typeof LocaleArticlesCCategorySlugRoute
+  LocaleArticlesCCategoryIndexRoute: typeof LocaleArticlesCCategoryIndexRoute
+  LocaleArticlesCCategoryPNRoute: typeof LocaleArticlesCCategoryPNRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/404': {
       id: '/404'
       path: '/404'
@@ -244,116 +146,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/articles/': {
-      id: '/articles/'
-      path: '/articles'
-      fullPath: '/articles/'
-      preLoaderRoute: typeof ArticlesIndexRouteImport
+    '/$locale/': {
+      id: '/$locale/'
+      path: '/$locale'
+      fullPath: '/$locale/'
+      preLoaderRoute: typeof LocaleIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/articles/$slug': {
-      id: '/articles/$slug'
-      path: '/articles/$slug'
-      fullPath: '/articles/$slug'
-      preLoaderRoute: typeof ArticlesSlugRouteImport
+    '/$locale/articles/': {
+      id: '/$locale/articles/'
+      path: '/$locale/articles'
+      fullPath: '/$locale/articles/'
+      preLoaderRoute: typeof LocaleArticlesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/articles/p/$n': {
-      id: '/articles/p/$n'
-      path: '/articles/p/$n'
-      fullPath: '/articles/p/$n'
-      preLoaderRoute: typeof ArticlesPNRouteImport
+    '/$locale/articles/$slug': {
+      id: '/$locale/articles/$slug'
+      path: '/$locale/articles/$slug'
+      fullPath: '/$locale/articles/$slug'
+      preLoaderRoute: typeof LocaleArticlesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/l/$locale/': {
-      id: '/l/$locale/'
-      path: '/l/$locale'
-      fullPath: '/l/$locale/'
-      preLoaderRoute: typeof LLocaleIndexRouteImport
+    '/$locale/articles/p/$n': {
+      id: '/$locale/articles/p/$n'
+      path: '/$locale/articles/p/$n'
+      fullPath: '/$locale/articles/p/$n'
+      preLoaderRoute: typeof LocaleArticlesPNRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/articles/c/$category/': {
-      id: '/articles/c/$category/'
-      path: '/articles/c/$category'
-      fullPath: '/articles/c/$category/'
-      preLoaderRoute: typeof ArticlesCCategoryIndexRouteImport
+    '/$locale/articles/c/$category/': {
+      id: '/$locale/articles/c/$category/'
+      path: '/$locale/articles/c/$category'
+      fullPath: '/$locale/articles/c/$category/'
+      preLoaderRoute: typeof LocaleArticlesCCategoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/articles/c/$category/$slug': {
-      id: '/articles/c/$category/$slug'
-      path: '/articles/c/$category/$slug'
-      fullPath: '/articles/c/$category/$slug'
-      preLoaderRoute: typeof ArticlesCCategorySlugRouteImport
+    '/$locale/articles/c/$category/$slug': {
+      id: '/$locale/articles/c/$category/$slug'
+      path: '/$locale/articles/c/$category/$slug'
+      fullPath: '/$locale/articles/c/$category/$slug'
+      preLoaderRoute: typeof LocaleArticlesCCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/l/$locale/articles/': {
-      id: '/l/$locale/articles/'
-      path: '/l/$locale/articles'
-      fullPath: '/l/$locale/articles/'
-      preLoaderRoute: typeof LLocaleArticlesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/l/$locale/articles/$slug': {
-      id: '/l/$locale/articles/$slug'
-      path: '/l/$locale/articles/$slug'
-      fullPath: '/l/$locale/articles/$slug'
-      preLoaderRoute: typeof LLocaleArticlesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/articles/c/$category/p/$n': {
-      id: '/articles/c/$category/p/$n'
-      path: '/articles/c/$category/p/$n'
-      fullPath: '/articles/c/$category/p/$n'
-      preLoaderRoute: typeof ArticlesCCategoryPNRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/l/$locale/articles/p/$n': {
-      id: '/l/$locale/articles/p/$n'
-      path: '/l/$locale/articles/p/$n'
-      fullPath: '/l/$locale/articles/p/$n'
-      preLoaderRoute: typeof LLocaleArticlesPNRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/l/$locale/articles/c/$category/': {
-      id: '/l/$locale/articles/c/$category/'
-      path: '/l/$locale/articles/c/$category'
-      fullPath: '/l/$locale/articles/c/$category/'
-      preLoaderRoute: typeof LLocaleArticlesCCategoryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/l/$locale/articles/c/$category/$slug': {
-      id: '/l/$locale/articles/c/$category/$slug'
-      path: '/l/$locale/articles/c/$category/$slug'
-      fullPath: '/l/$locale/articles/c/$category/$slug'
-      preLoaderRoute: typeof LLocaleArticlesCCategorySlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/l/$locale/articles/c/$category/p/$n': {
-      id: '/l/$locale/articles/c/$category/p/$n'
-      path: '/l/$locale/articles/c/$category/p/$n'
-      fullPath: '/l/$locale/articles/c/$category/p/$n'
-      preLoaderRoute: typeof LLocaleArticlesCCategoryPNRouteImport
+    '/$locale/articles/c/$category/p/$n': {
+      id: '/$locale/articles/c/$category/p/$n'
+      path: '/$locale/articles/c/$category/p/$n'
+      fullPath: '/$locale/articles/c/$category/p/$n'
+      preLoaderRoute: typeof LocaleArticlesCCategoryPNRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   R404Route: R404Route,
-  ArticlesSlugRoute: ArticlesSlugRoute,
-  ArticlesIndexRoute: ArticlesIndexRoute,
-  ArticlesPNRoute: ArticlesPNRoute,
-  LLocaleIndexRoute: LLocaleIndexRoute,
-  ArticlesCCategorySlugRoute: ArticlesCCategorySlugRoute,
-  LLocaleArticlesSlugRoute: LLocaleArticlesSlugRoute,
-  ArticlesCCategoryIndexRoute: ArticlesCCategoryIndexRoute,
-  LLocaleArticlesIndexRoute: LLocaleArticlesIndexRoute,
-  ArticlesCCategoryPNRoute: ArticlesCCategoryPNRoute,
-  LLocaleArticlesPNRoute: LLocaleArticlesPNRoute,
-  LLocaleArticlesCCategorySlugRoute: LLocaleArticlesCCategorySlugRoute,
-  LLocaleArticlesCCategoryIndexRoute: LLocaleArticlesCCategoryIndexRoute,
-  LLocaleArticlesCCategoryPNRoute: LLocaleArticlesCCategoryPNRoute,
+  LocaleIndexRoute: LocaleIndexRoute,
+  LocaleArticlesSlugRoute: LocaleArticlesSlugRoute,
+  LocaleArticlesIndexRoute: LocaleArticlesIndexRoute,
+  LocaleArticlesPNRoute: LocaleArticlesPNRoute,
+  LocaleArticlesCCategorySlugRoute: LocaleArticlesCCategorySlugRoute,
+  LocaleArticlesCCategoryIndexRoute: LocaleArticlesCCategoryIndexRoute,
+  LocaleArticlesCCategoryPNRoute: LocaleArticlesCCategoryPNRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -4,7 +4,8 @@ import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.js';
 import { notesFeed } from '../page-data/notes-feed.js';
-import { urlScheme } from '../routing/scheme.js';
+import { pageCounterparts } from '../page-data/page-counterparts.js';
+import { LOCALES } from '../routing/scheme.js';
 import { getSeoPyramidsConfig } from '../seopyramids.config.js';
 import { classNames, hrefs } from '../test-support/markup.js';
 import { renderInRouter } from '../test-support/render-in-router.js';
@@ -19,14 +20,24 @@ const STYLESHEETS = [
 let page: string;
 
 beforeAll(async () => {
-  const posts = await notesFeed({ locale: urlScheme.defaultLocale, limit: 4 });
-  page = await renderInRouter(
-    <>
-      <Header />
-      <LandingPage posts={posts} />
-      <Footer />
-    </>,
+  const pages = await Promise.all(
+    LOCALES.map(async (locale) =>
+      renderInRouter(
+        <>
+          <Header
+            locale={locale}
+            counterparts={await pageCounterparts({ kind: 'landing', locale })}
+          />
+          <LandingPage
+            locale={locale}
+            posts={await notesFeed({ locale, limit: 4 })}
+          />
+          <Footer locale={locale} />
+        </>,
+      ),
+    ),
   );
+  page = pages.join('\n');
 });
 
 describe('the layout of the landing page and the chrome', () => {
@@ -56,7 +67,7 @@ describe('the layout of the landing page and the chrome', () => {
 });
 
 describe('the site', () => {
-  it('leads to no resume, from its page copy or from the rendered /', () => {
+  it('leads to no resume, from its page copy or from the three rendered landing pages', () => {
     const copy = JSON.stringify(getSeoPyramidsConfig());
 
     for (const text of [copy, page]) {

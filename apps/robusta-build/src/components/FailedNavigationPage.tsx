@@ -1,16 +1,24 @@
+import { urlScheme } from '../routing/scheme.js';
+import { buildUrl } from '../routing/url-scheme/index.js';
+
+const DEFAULT_LANDING = buildUrl(urlScheme, {
+  kind: 'landing',
+  locale: urlScheme.defaultLocale,
+});
+
 interface FailedNavigationPageProps {
   /** The address whose navigation failed. */
   href: string;
 }
 
-/** The error state of a navigation that failed twice: retry the address, or go back home. */
+/** The error state of a navigation that failed twice, in constant English like the 404: retry the address, or go back home. */
 export function FailedNavigationPage({ href }: FailedNavigationPageProps) {
   return (
-    <main style={{ padding: 'var(--sp-8) var(--sp-6)' }}>
-      <h1>cette page n’a pas pu se charger</h1>
+    <main lang="en" style={{ padding: 'var(--sp-8) var(--sp-6)' }}>
+      <h1>this page could not load</h1>
       <p>
-        <a href={href}>réessayer cette adresse</a> ou{' '}
-        <a href="/">revenir à l’accueil</a>.
+        <a href={href}>retry this address</a> or{' '}
+        <a href={DEFAULT_LANDING}>back to the home page</a>.
       </p>
     </main>
   );

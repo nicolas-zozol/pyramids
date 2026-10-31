@@ -1,3 +1,9 @@
+/**
+ * Package routing — the site's URL scheme instance and its Locales, and the derivations the build and the pages read from them.
+ *
+ * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-24, R-MULTILINGUAL-26, R-MULTILINGUAL-61
+ */
 import type { UrlScheme } from './url-scheme/index.js';
 
 /**
@@ -7,11 +13,18 @@ import type { UrlScheme } from './url-scheme/index.js';
  */
 export const ROLL_SIZE = 12;
 
+/** The site's three Locales, the default one first. */
+export const LOCALES = ['en', 'fr', 'es'] as const;
+
+export type Locale = (typeof LOCALES)[number];
+
+const [defaultLocale, ...otherLocales] = LOCALES;
+
 /**
  * The site's one scheme instance, so no route composes a `UrlScheme` of its own.
  *
  * It is a leaf module on purpose. `seopyramids.config.ts` reads these four
- * values into `blogConfig`, and the two Locales into its root, rather than the
+ * values into `blogConfig`, and the Locales into its root, rather than the
  * other way round, because the site
  * configuration resolves the design system's wordmark through a bundler-only
  * PNG import, and the plain-Node build scripts have to reach the scheme
@@ -20,7 +33,7 @@ export const ROLL_SIZE = 12;
  */
 export const urlScheme: UrlScheme = {
   contentRoot: 'articles',
-  defaultLocale: 'fr',
-  otherLocales: ['en'],
+  defaultLocale,
+  otherLocales,
   rollSize: ROLL_SIZE,
 };

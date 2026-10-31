@@ -1,16 +1,15 @@
 import type { NotePost } from '@robusta/pyramids-design-system';
 import type { ArticleIndexEntry } from '../content/article-index.js';
+import type { PageUrl } from '../routing/url-scheme/index.js';
 
 export interface ArticleKey {
   locale: string;
   slug: string;
 }
 
-export interface TranslationLink {
-  url: string;
+export interface ArticleVersion {
   locale: string;
-  /** The language naming itself, computed at build. */
-  label: string;
+  url: string;
 }
 
 export interface ArticlePage {
@@ -21,8 +20,8 @@ export interface ArticlePage {
   coverUrl?: string;
   /** Absent when the article claims no category. */
   categoryUrl?: string;
-  /** Absent when no published pair exists. */
-  translation?: TranslationLink;
+  /** Every other published version of the article, in the order of the scheme's Locales. */
+  versions: ArticleVersion[];
   /** The date as the article's locale writes it, computed at build. */
   writtenDate: string;
 }
@@ -38,4 +37,6 @@ export interface PageData {
   getArticlePage(call: { data: ArticleKey }): Promise<ArticlePage>;
   /** The newest published articles of one locale, newest first. */
   getNotesFeed(call: { data: NotesFeedRequest }): Promise<NotePost[]>;
+  /** The same page in each other Locale that has it, among the landing pages and the content URLs. */
+  getCounterparts(call: { data: PageUrl }): Promise<PageUrl[]>;
 }

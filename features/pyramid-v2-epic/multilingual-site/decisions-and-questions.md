@@ -110,3 +110,48 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - `apps/robusta`, `apps/dakar`, `services` et les autres modules ne référencent aucun des deux workspaces (git grep vide).
 - Index git : `git mv` a indexé les renommages ; le reste n'est pas indexé. Rien n'est commité.
 - Aucune OQ pertinente.
+
+## 2026-10-30 — boss multilingual-site, implémentation de la suite, rloq
+
+- Branche : `epic/robusta-v2`, conforme, working tree propre au départ (HEAD `05cb2c5`).
+- Requête : implémenter les cinq groupes restants du design APPROVED, test-first, sans commit, sans `## Progress` ni passage en IMPLEMENTED, sans land.
+- Découpage : un tddman par groupe, l'un après l'autre (même branche, mêmes tests). Ordre : schéma préfixé, page copy, contreparties, original et traduction obsolète ; la v1 map est vérifiée en dernier.
+- R-MULTILINGUAL-101 suit le schéma : `v1-url-map.spec.ts` affirme les destinations calculées par `buildUrl`, et `build` régénère le JSON par `emit:v1-map`. Les attentes de la spec changent donc avec le premier groupe ; le contrôle des 82 lignes (ordre, issues, en-tête) se fait en fin de parcours.
+- R-MULTILINGUAL-04 se clôt avec `counterparts.ts`, au troisième groupe.
+
+### Groupe 1 : schéma préfixé et redirection (tddman)
+
+- Résultat : R-21 à R-28 faits, R-45 (flux de notes par Locale) livré au passage, R-101 suivi. Site 350 tests, design system 75, lint, `tsc --noEmit` et `build:robusta` verts ; 34 pages HTML : `en.html`, `fr.html`, `es.html`, `404.html`, 14 sous `en/`, 16 sous `fr/`, rien sous `es/`, aucun `index.html`.
+- Wordmark encore vers `/` jusqu'au groupe 3 (`homeHref`, R-63, R-65) : `lgtm (boss)`. État transitoire d'un working tree non commité, la spec des `href` l'admet derrière un TODO que le groupe 3 retire.
+- Ligne `/` de la v1 map : son `why` disait « the v2 landing serves the same URL », faux depuis la règle 301. Reformulé par boss en « the v2 site redirects it to the landing page of its default Locale » : texte d'une destination `none`, que R-101 laisse changer ; issue et compte inchangés. `lgtm (boss)`.
+- Page 404 et `FailedNavigationPage` : lien de retour vers `/en` (`buildUrl` de la landing par défaut) plutôt que `/`, pour éviter le saut 301 et marcher sous `vite dev`. Conforme à R-28.
+
+### Groupe 2 : page copy par Locale (tddman)
+
+- Résultat : R-41 à R-49 faits, R-50 ouvert jusqu'au wordmark du groupe 3. Site 383 tests, design system 80, lint, `tsc --noEmit`, `build:deps`, `build:robusta`, `build:robusta-v1` verts. `/en`, `/fr`, `/es` : `lang` à la Locale, `id="open-source"` et `id="complete"`, aucun `approach`, notes sur `en` et `fr`, aucune sur `es`.
+- Page copy : textes rédigés par boss dans le scratchpad (`page-copy.md`), recopiés tels quels par tddman. Faits seulement : le workflow de §Code Routine, ses agents, « vingt ans de logiciel » ; ni prix, ni promesse, ni lien vers le plugin. Espagnol au tutoiement.
+- Gap, R-43 : le design dit que `getCategoryLabel` fait échouer la build par `failOnError`. Faux : l'erreur levée sous une frontière Suspense est journalisée, et la page s'écrit en 200 avec un repli de rendu client vide (`<!--$!-->`). tddman ajoute à `check-route-table` un échec sur toute page qui porte ce repli ; le journal du prérendu nomme la Category et la Locale. Comportement conforme à AC-7, seul le mécanisme diffère. `lgtm (boss)` ; la phrase du design est à corriger au land.
+- `FailedNavigationPage` restait en français sur toutes les Locales, et `PageCopy` n'a aucun champ pour lui. Tranché par boss : anglais constant, `lang="en"`, comme la 404 (R-28) ; page d'erreur rare, facile à défaire. `lgtm (boss)`.
+- Typographie française : espace insécable (U+00A0) avant les deux-points de la page copy `fr`, comme l'ancien préfixe de fin d'article. Les autres Locales n'en ont pas. `lgtm (boss)`.
+
+### Groupe 3 : contreparties et sélecteur de Locale (tddman)
+
+- Résultat : R-61 à R-65 faits ; R-04, R-27 et R-50 clos. Site 409 tests, design system 87, lint, `tsc --noEmit`, `build:deps`, `build:robusta`, `build:robusta-v1` verts ; 33 pages, 53 fichiers de données (17 articles, 3 flux de notes, 33 contreparties).
+- Bug corrigé au passage : la route racine restait montée entre deux navigations client, son loader ne se relançait pas, et `<html lang>` comme l'en-tête gardaient la Locale de la première page. `shouldReload: true` et `staleReloadMode: 'blocking'` sur la route racine ; une spec navigue de `/en` à `/fr/articles/c/theory`.
+- Séparateur entre plusieurs versions d'un article : « , ». Aucun article n'a trois versions aujourd'hui. `lgtm (boss)`.
+- Gap de rédaction : la contrainte technique dit que `counterparts.ts` ne s'atteint que depuis le handler de `getCounterparts`, alors que R-64 le fait aussi atteindre par `getArticlePage`, côté serveur. À reformuler au land : « ne s'atteint que depuis les handlers de `page-data`, jamais depuis du code client ». `lgtm (boss)`.
+
+### Groupe 4 : original et traduction obsolète (tddman)
+
+- Résultat : R-81 à R-86 faits. Les huit traductions déclarent leur original (bloc `original:` du frontmatter seul, empreintes calculées par le code) ; `check:translations` imprime `translations: no notice` sur le corpus réel. Preuve manuelle, annulée octet pour octet : un mot changé dans `privacy/leaving-gmail.md` produit une notice `stale-translation` sur `quitter-gmail.md` avec l'empreinte à recopier.
+- `untracked-pair` à trois versions ou plus : la notice liste les versions sans déclaration, lecture littérale de « plus d'une version sans `original` ». `lgtm (boss)`.
+- Cycle (en déclare fr, fr déclare en) : aucune notice `untracked-pair`, chaque côté reste comparé à l'autre. Mauvais usage qu'une édition humaine seule produit. `lgtm (boss)`.
+
+### Vérification finale par boss
+
+- Site 455 tests (41 fichiers), design system 87, lint et `tsc --noEmit` verts ; `build:deps`, `build:robusta`, `build:robusta-v1` (42/42 pages) verts.
+- `dist/client` : `en.html`, `fr.html`, `es.html`, `404.html`, 14 pages sous `en/`, 16 sous `fr/`, rien sous `es/`, ni `index.html`, ni `articles/`, ni `l/` ; `lang` à la Locale, `404.html` en `en`. 53 fichiers de données.
+- `netlify.toml` : une règle `[[redirects]]` `/` → `/en`, 301, sans `force`.
+- v1 map contre HEAD : 82 lignes, même ordre, mêmes issues (67/5/10), en-tête `en` puis `fr`, `es` ; seuls changent les destinations et le `why` de la ligne `/`.
+- Octet nul littéral dans `read-corpus.ts`, présent depuis HEAD : git traitait le fichier comme binaire. Remplacé par l'échappement `\u0000`, même chaîne ; les 178 tests de `src/content` restent verts.
+- Aucune OQ pertinente : arrêt sur implémentation verte. Reste hors de portée locale : AC-2, à vérifier sur un branch deploy.

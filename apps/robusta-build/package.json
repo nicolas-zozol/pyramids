@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "yarn compile:seams && yarn emit:v1-map && yarn copy:assets && vite dev",
-    "build": "yarn check:source && yarn compile:seams && yarn emit:v1-map && yarn copy:assets && vite build && node scripts/check-route-table.mjs",
+    "build": "yarn check:source && yarn compile:seams && yarn check:translations && yarn emit:v1-map && yarn copy:assets && vite build && node scripts/check-route-table.mjs",
     "check:source": "node scripts/check-source.mjs",
+    "check:translations": "node scripts/check-translations.mjs",
     "compile:seams": "tsc -p tsconfig.routing.json",
     "emit:v1-map": "node scripts/emit-v1-map.mjs",
     "copy:assets": "node scripts/copy-article-images.mjs",

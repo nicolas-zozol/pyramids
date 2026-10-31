@@ -1,19 +1,32 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { urlScheme } from '../routing/scheme.js';
+import { buildUrl } from '../routing/url-scheme/index.js';
 import { NotFoundPage } from './NotFoundPage.js';
 
 describe('NotFoundPage', () => {
-  it('says the address holds no page, in the site’s own French words', () => {
+  it('says the address holds no page, in constant English words', () => {
     const html = renderToStaticMarkup(<NotFoundPage />);
 
-    expect(html).toContain('<h1>page introuvable</h1>');
-    expect(html).toContain('<p>Aucune page n’est publiée à cette adresse.</p>');
-    expect(html).not.toMatch(/This page could not be found/);
+    expect(html).toContain('<h1>page not found</h1>');
+    expect(html).toContain('<p>No page is published at this address.</p>');
+    expect(html).not.toMatch(/This page could not be found|introuvable/);
   });
 
-  it('leads back to the home page through a plain anchor, needing no router', () => {
+  it('declares its own language, English, wherever it renders', () => {
     const html = renderToStaticMarkup(<NotFoundPage />);
 
-    expect(html).toContain('<a href="/">retour à l’accueil</a>');
+    expect(html).toMatch(/^<main lang="en"/);
+  });
+
+  it('leads back to the landing page of the default Locale through a plain anchor, needing no router', () => {
+    const html = renderToStaticMarkup(<NotFoundPage />);
+    const landing = buildUrl(urlScheme, {
+      kind: 'landing',
+      locale: urlScheme.defaultLocale,
+    });
+
+    expect(landing).toBe('/en');
+    expect(html).toContain(`<a href="${landing}">back to the home page</a>`);
   });
 });

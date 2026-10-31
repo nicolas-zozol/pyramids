@@ -1,4 +1,14 @@
-import type { AddressableArticle, PageUrl, UrlScheme } from './scheme.js';
+import {
+  knownLocales,
+  type AddressableArticle,
+  type PageUrl,
+  type UrlScheme,
+} from './scheme.js';
+
+/** One landing per known locale, the default one first. */
+export function landingPages(scheme: UrlScheme): PageUrl[] {
+  return knownLocales(scheme).map((locale) => ({ kind: 'landing', locale }));
+}
 
 /**
  * The single derivation of the URL set (R-URLSCHEME-22): every route's
@@ -7,7 +17,7 @@ import type { AddressableArticle, PageUrl, UrlScheme } from './scheme.js';
  * roll size.
  *
  * It never returns a tag page — the segment is reserved and served by nothing
- * (R-URLSCHEME-31) — and never a landing page, whose copy is not this story's.
+ * (R-URLSCHEME-31) — and never a landing page: `landingPages` lists those.
  */
 export function urlSet(
   scheme: UrlScheme,

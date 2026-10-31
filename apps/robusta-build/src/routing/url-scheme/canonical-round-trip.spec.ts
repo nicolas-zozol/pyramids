@@ -9,9 +9,9 @@ import type { PageUrl, UrlScheme } from './scheme.js';
  *   a path p is canonical exactly when buildUrl(scheme, parseUrl(scheme, p)) === p
  *
  * Every redirect family falls out of it rather than being written by hand — the
- * explicit page one, the marked default locale, the trailing slash and the
- * uppercase variant are each a path the parser reads and the builder does not
- * emit, so each is a redirect source whose target is the built value.
+ * explicit page one, the trailing slash and the uppercase variant are each a
+ * path the parser reads and the builder does not emit, so each is a redirect
+ * source whose target is the built value.
  *
  * The inputs are generated rather than listed: a seeded generator crosses three
  * schemes with every page kind, every locale, several page numbers and a few
@@ -43,7 +43,7 @@ function randomSegment(next: () => number): string {
   // A generated segment may collide with a discriminant; the scheme forbids
   // that value as a slug, so the generator does not produce it either.
   const segment = parts.join('-');
-  return segment.length === 1 && 'lcpt'.includes(segment) ? `${segment}x` : segment;
+  return segment.length === 1 && 'cpt'.includes(segment) ? `${segment}x` : segment;
 }
 
 const schemes: UrlScheme[] = [
@@ -86,26 +86,20 @@ function generatePages(scheme: UrlScheme, seed: number): PageUrl[] {
   return pages;
 }
 
-/** The landing is buildable and not parseable: the parser claims the content section only. */
-function isParseable(page: PageUrl): boolean {
-  return page.kind !== 'landing';
-}
-
 describe('canonicality is the fixed point of buildUrl and parseUrl', () => {
   for (const scheme of schemes) {
     const pages = generatePages(scheme, 20260731);
-    const parseable = pages.filter(isParseable);
 
-    it(`round-trips every generated page of the ${scheme.contentRoot} scheme`, () => {
-      expect(parseable.length).toBeGreaterThan(100);
-      for (const page of parseable) {
+    it(`round-trips every generated page of the ${scheme.contentRoot} scheme, landings included`, () => {
+      expect(pages.length).toBeGreaterThan(100);
+      for (const page of pages) {
         const url = buildUrl(scheme, page);
         expect(parseUrl(scheme, url), url).toEqual(page);
       }
     });
 
     it(`holds buildUrl(parseUrl(p)) === p on every URL it emits, for ${scheme.contentRoot}`, () => {
-      for (const page of parseable) {
+      for (const page of pages) {
         const url = buildUrl(scheme, page);
         const parsed = parseUrl(scheme, url);
         expect(parsed, url).toBeDefined();
@@ -121,9 +115,9 @@ describe('canonicality is the fixed point of buildUrl and parseUrl', () => {
 });
 
 /**
- * The four non-canonical families. Each mutation produces a path the parser
+ * The three non-canonical families. Each mutation produces a path the parser
  * reads and the builder never emits, so each is a redirect source whose target
- * is the canonical form — R-URLSCHEME-8, 9 and 10.
+ * is the canonical form — R-URLSCHEME-8 and 10.
  */
 type Mutation = {
   name: string;
@@ -140,25 +134,20 @@ const mutations: Mutation[] = [
     mutate: (_scheme, _page, canonical) => `${canonical}/p/1`,
   },
   {
-    name: 'the marked default locale',
-    applies: (scheme, page) => page.kind !== 'landing' && page.locale === scheme.defaultLocale,
-    mutate: (scheme, _page, canonical) => `/l/${scheme.defaultLocale}${canonical}`,
-  },
-  {
     name: 'the trailing slash',
-    applies: (_scheme, page) => page.kind !== 'landing',
+    applies: () => true,
     mutate: (_scheme, _page, canonical) => `${canonical}/`,
   },
   {
     name: 'the uppercase variant',
-    applies: (_scheme, page) => page.kind !== 'landing',
+    applies: () => true,
     mutate: (_scheme, _page, canonical) => canonical.toUpperCase(),
   },
 ];
 
 describe('the non-canonical families fall out of the fixed point', () => {
   for (const scheme of schemes) {
-    const pages = generatePages(scheme, 424242).filter(isParseable);
+    const pages = generatePages(scheme, 424242);
 
     for (const mutation of mutations) {
       it(`${mutation.name} is non-canonical and redirects to the built value, for ${scheme.contentRoot}`, () => {

@@ -1,53 +1,84 @@
 /**
- * The built route table and the URL set the corpus derives are the same set,
- * and every article page left its data file beside the notes feed's
- * (AC-URLSCHEME-42). Run after `vite build`, on what the prerender wrote under
- * `dist/client`.
+ * The built route table and the pages the scheme derives are the same set: the
+ * landing page of every Locale and every content URL, nothing at the bare site
+ * root, which the redirect rule owns, and every data file the prerender owes,
+ * the counterparts of every page carrying a page URL included.
+ * No page was written around a render that threw. Run after `vite build`, on
+ * what the prerender wrote under `dist/client`.
  *
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-24, R-TANSTACK-25, R-TANSTACK-26
+ * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Requirements: R-MULTILINGUAL-26, R-MULTILINGUAL-27, R-MULTILINGUAL-43
  */
 import { existsSync } from 'node:fs';
-import { readdir } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const OUTSIDE_THE_CONTENT_SECTION = new Set(['index.html', '404.html']);
+const ROOT_INDEX = 'index.html';
+const NOT_FOUND = '404.html';
 const DATA_FILES = '__tsr/staticServerFnCache';
+// React's marker of a Suspense boundary whose server render threw: the prerender
+// logs the error, answers 200 and leaves that content to the browser.
+const CLIENT_RENDERED_BOUNDARY = '<!--$!-->';
 
-/** `articles/c/web.html` read back as `/articles/c/web`. */
+/** `en/articles/c/web.html` read back as `/en/articles/c/web`. */
 export function urlOfHtmlFile(file) {
   return `/${file.replace(/\.html$/, '')}`;
 }
 
-/** The comparison of the written pages and data files with the derivation. */
+/** The data files the prerender owes, per source: each article page, each landing page's notes feed, the counterparts of each page carrying a page URL. */
+export function expectedDataFiles({ landings, content }) {
+  return {
+    articles: content.filter((page) => page.kind === 'article').length,
+    notesFeeds: landings.length,
+    counterparts: landings.length + content.length,
+  };
+}
+
+/** The comparison of the written pages and data files with the derivation; `expectedDataFiles` counts each source of data files. */
 export function routeTableReport({
   htmlFiles,
-  derivedUrls,
-  articleCount,
+  landingUrls,
+  contentUrls,
+  expectedDataFiles,
   dataFileCount,
 }) {
+  const rootIndexWritten = htmlFiles.includes(ROOT_INDEX);
   const built = new Set(
     htmlFiles
-      .filter((file) => !OUTSIDE_THE_CONTENT_SECTION.has(file))
+      .filter((file) => file !== ROOT_INDEX && file !== NOT_FOUND)
       .map(urlOfHtmlFile),
   );
-  const derived = new Set(derivedUrls);
+  const derived = new Set([...landingUrls, ...contentUrls]);
   const builtButNotDerived = [...built].filter((url) => !derived.has(url));
   const derivedButNotBuilt = [...derived].filter((url) => !built.has(url));
-  const expectedDataFiles = articleCount + 1;
+  const expected = Object.values(expectedDataFiles).reduce(
+    (sum, count) => sum + count,
+    0,
+  );
 
   return {
     ok:
+      !rootIndexWritten &&
       builtButNotDerived.length === 0 &&
       derivedButNotBuilt.length === 0 &&
-      dataFileCount === expectedDataFiles,
+      dataFileCount === expected,
     built: built.size,
+    rootIndexWritten,
     builtButNotDerived,
     derivedButNotBuilt,
-    expectedDataFiles,
+    expectedDataFiles: expected,
     actualDataFiles: dataFileCount,
   };
+}
+
+/** The URLs of the pages whose render threw at prerender, each `{ file, html }` as written under `dist/client`. */
+export function pagesRenderedWithAnError(pages) {
+  return pages
+    .filter(({ html }) => html.includes(CLIENT_RENDERED_BOUNDARY))
+    .map(({ file }) => urlOfHtmlFile(file));
 }
 
 async function filesUnder(directory, extension) {
@@ -72,7 +103,7 @@ async function main() {
   const compiled = join(app, '.routing-dist');
   const client = join(app, 'dist/client');
 
-  const { buildUrl } = await import(
+  const { buildUrl, landingPages } = await import(
     join(compiled, 'routing/url-scheme/index.js')
   );
   const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
@@ -80,16 +111,44 @@ async function main() {
     join(compiled, 'routing/content-urls.js')
   );
 
-  const pages = await contentUrls();
+  const landings = landingPages(urlScheme);
+  const content = await contentUrls();
+  const htmlFiles = await filesUnder(client, '.html');
+  const failedRenders = pagesRenderedWithAnError(
+    await Promise.all(
+      htmlFiles.map(async (file) => ({
+        file,
+        html: await readFile(join(client, file), 'utf8'),
+      })),
+    ),
+  );
+  if (failedRenders.length > 0) {
+    console.error(
+      'Pages written around a render that threw: the prerender logged each error above, "Error in renderToPipeableStream".',
+    );
+    for (const url of failedRenders) {
+      console.error(`  ${url}`);
+    }
+    process.exit(1);
+  }
+
+  const owed = expectedDataFiles({ landings, content });
   const report = routeTableReport({
-    htmlFiles: await filesUnder(client, '.html'),
-    derivedUrls: pages.map((page) => buildUrl(urlScheme, page)),
-    articleCount: pages.filter((page) => page.kind === 'article').length,
+    htmlFiles,
+    landingUrls: landings.map((page) => buildUrl(urlScheme, page)),
+    contentUrls: content.map((page) => buildUrl(urlScheme, page)),
+    expectedDataFiles: owed,
     dataFileCount: (await filesUnder(join(client, DATA_FILES), '.json')).length,
   });
+  const owedLine = `${owed.articles} article pages, ${owed.notesFeeds} notes feeds, ${owed.counterparts} counterparts`;
 
   if (!report.ok) {
-    console.error('The route table and the derived URL set disagree.');
+    console.error('The route table and the derived pages disagree.');
+    if (report.rootIndexWritten) {
+      console.error(
+        `  ${ROOT_INDEX} written at the root of dist/client: / belongs to the redirect rule of netlify.toml`,
+      );
+    }
     for (const url of report.builtButNotDerived) {
       console.error(`  built but not derived: ${url}`);
     }
@@ -98,14 +157,14 @@ async function main() {
     }
     if (report.actualDataFiles !== report.expectedDataFiles) {
       console.error(
-        `  data files: expected ${report.expectedDataFiles}, found ${report.actualDataFiles}`,
+        `  data files: expected ${report.expectedDataFiles} (${owedLine}), found ${report.actualDataFiles}`,
       );
     }
     process.exit(1);
   }
 
   console.log(
-    `route table: ${report.built} content URLs built, and the derivation contains exactly those; ${report.actualDataFiles} data files written.`,
+    `route table: ${report.built} pages built (${landings.length} landing pages, ${content.length} content URLs), and the derivation contains exactly those; ${report.actualDataFiles} data files written (${owedLine}).`,
   );
 }
 

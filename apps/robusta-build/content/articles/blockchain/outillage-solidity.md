@@ -9,6 +9,9 @@ published: true
 author: Nicolas Zozol
 featured: true
 translationId: start-coding-blockchain
+original:
+  locale: "en"
+  fingerprint: "e6fc30786bdd"
 ---
 
 Mettez en place au plus vite un environnement professionnel pour apprendre à coder sur le web3.

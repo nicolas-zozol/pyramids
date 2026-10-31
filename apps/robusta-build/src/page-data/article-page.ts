@@ -1,13 +1,10 @@
 import { buildUrl } from '../routing/url-scheme/index.js';
-import {
-  getArticleBody,
-  getAssetUrl,
-  type ArticleIndexEntry,
-} from '../content/article-index.js';
-import { findArticle, findTranslation } from '../content/article-lookup.js';
+import { getArticleBody, getAssetUrl } from '../content/article-index.js';
+import { findArticle } from '../content/article-lookup.js';
 import { urlScheme } from '../routing/scheme.js';
-import { articleUrl } from './article-url.js';
-import type { ArticleKey, ArticlePage, TranslationLink } from './types.js';
+import { articlePageUrl } from './article-url.js';
+import { pageCounterparts } from './page-counterparts.js';
+import type { ArticleKey, ArticlePage } from './types.js';
 
 /** Everything one article page renders, read from the seams at build. */
 export async function articlePage({
@@ -15,15 +12,19 @@ export async function articlePage({
   slug,
 }: ArticleKey): Promise<ArticlePage> {
   const article = await findArticle(locale, slug);
-  const [{ html }, translation] = await Promise.all([
+  const [{ html }, versions] = await Promise.all([
     getArticleBody(article),
-    findTranslation(article),
+    pageCounterparts(articlePageUrl(article)),
   ]);
 
   return {
     article,
     html,
     writtenDate: writtenDate(article.date, article.locale),
+    versions: versions.map((version) => ({
+      locale: version.locale,
+      url: buildUrl(urlScheme, version),
+    })),
     ...(article.image === undefined
       ? {}
       : { coverUrl: getAssetUrl(article, article.image) }),
@@ -37,17 +38,6 @@ export async function articlePage({
             page: 1,
           }),
         }),
-    ...(translation === undefined
-      ? {}
-      : { translation: translationLink(translation) }),
-  };
-}
-
-function translationLink(translation: ArticleIndexEntry): TranslationLink {
-  return {
-    url: articleUrl(translation),
-    locale: translation.locale,
-    label: languageName(translation.locale),
   };
 }
 
@@ -57,9 +47,4 @@ function writtenDate(date: string, locale: string): string {
     dateStyle: 'long',
     timeZone: 'UTC',
   }).format(new Date(`${date}T00:00:00Z`));
-}
-
-function languageName(locale: string): string {
-  const display = new Intl.DisplayNames([locale], { type: 'language' });
-  return display.of(locale) ?? locale;
 }

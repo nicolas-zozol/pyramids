@@ -163,7 +163,7 @@ describe('v1UrlMap over the site’s corpus', () => {
       rows.map((row) => [row.from, row.destination.kind]);
 
     const swapped = v1UrlMap(
-      { ...urlScheme, defaultLocale: 'en', otherLocales: ['fr'] },
+      { ...urlScheme, defaultLocale: 'fr', otherLocales: ['en'] },
       index,
     );
     const frenchOnly = v1UrlMap(
@@ -189,20 +189,20 @@ describe('v1UrlMap over the site’s corpus', () => {
     expect(destinations.filter((to) => !built.has(to))).toEqual([]);
   });
 
-  it('leads the French v1 listings to the unmarked pages and the unmarked ones under /l/en', async () => {
+  it('leads the French v1 listings under /fr and the unmarked ones under /en', async () => {
     const rows = await mapOfTheSite();
 
     expect(destinationOf(rows, '/learn/fr/blockchain')).toEqual({
       kind: 'permanent',
-      to: '/articles/c/blockchain',
+      to: '/fr/articles/c/blockchain',
     });
     expect(destinationOf(rows, '/learn')).toEqual({
       kind: 'permanent',
-      to: '/l/en/articles',
+      to: '/en/articles',
     });
     expect(destinationOf(rows, '/learn/tag/web')).toEqual({
       kind: 'permanent',
-      to: '/l/en/articles/c/web',
+      to: '/en/articles/c/web',
     });
   });
 
@@ -211,11 +211,11 @@ describe('v1UrlMap over the site’s corpus', () => {
 
     expect(destinationOf(rows, '/learn/fr/blockchain/solidity')).toEqual({
       kind: 'permanent',
-      to: '/articles',
+      to: '/fr/articles',
     });
     expect(destinationOf(rows, '/learn/javascript/react')).toEqual({
       kind: 'permanent',
-      to: '/l/en/articles',
+      to: '/en/articles',
     });
   });
 
@@ -239,7 +239,7 @@ describe('v1UrlMap over the site’s corpus', () => {
 
     expect(destinationOf(rows, '/learn/fr/web')).toEqual({
       kind: 'permanent',
-      to: '/articles/c/web',
+      to: '/fr/articles/c/web',
     });
   });
 
@@ -257,8 +257,8 @@ describe('v1UrlMap over the site’s corpus', () => {
     const english = listings.filter((row) => !row.from.startsWith('/learn/fr'));
 
     expect(french).toHaveLength(15);
-    expect(french.every((row) => !to(row).startsWith('/l/'))).toBe(true);
+    expect(french.every((row) => to(row).startsWith('/fr/'))).toBe(true);
     expect(english).toHaveLength(29);
-    expect(english.every((row) => to(row).startsWith('/l/en/'))).toBe(true);
+    expect(english.every((row) => to(row).startsWith('/en/'))).toBe(true);
   });
 });

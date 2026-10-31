@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ArticlePage } from '../page-data/index.js';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
+import { htmlText } from '../test-support/markup.js';
 import { renderInRouter } from '../test-support/render-in-router.js';
 import { ArticleView } from './ArticleView.js';
 
@@ -20,18 +22,15 @@ const coverless: ArticlePage = {
     excerpt: 'Un extrait.',
   },
   html: '<p>Le corps de l’article.</p>',
-  categoryUrl: '/l/fr/articles/c/web',
+  categoryUrl: '/fr/articles/c/web',
   writtenDate: '5 mars 2024',
+  versions: [],
 };
 
 const covered: ArticlePage = {
   ...coverless,
   coverUrl: '/article-images/web/images/cover.png',
-  translation: {
-    url: '/articles/c/web/a-fixture-in-english',
-    locale: 'en',
-    label: 'English',
-  },
+  versions: [{ locale: 'en', url: '/en/articles/c/web/a-fixture-in-english' }],
 };
 
 const english: ArticlePage = {
@@ -42,13 +41,24 @@ const english: ArticlePage = {
     locale: 'en',
     title: 'An article with a cover',
   },
-  categoryUrl: '/l/en/articles/c/web',
+  categoryUrl: '/en/articles/c/web',
   writtenDate: 'March 5, 2024',
-  translation: {
-    url: '/articles/c/web/a-fixture',
-    locale: 'fr',
-    label: 'français',
-  },
+  versions: [{ locale: 'fr', url: '/fr/articles/c/web/a-fixture' }],
+};
+
+/** The French version of an article written in English, French and Spanish. */
+const ofThree: ArticlePage = {
+  ...coverless,
+  versions: [
+    { locale: 'en', url: '/en/articles/c/web/a-fixture-in-english' },
+    { locale: 'es', url: '/es/articles/c/web/un-articulo' },
+  ],
+};
+
+const inPrivacy: ArticlePage = {
+  ...coverless,
+  article: { ...coverless.article, category: 'privacy' },
+  categoryUrl: '/fr/articles/c/privacy',
 };
 
 const endOfPage = (html: string): string =>
@@ -88,68 +98,114 @@ describe('ArticleView', () => {
     expect(html).toMatch(/<img [^>]*loading="eager"/);
   });
 
-  it('links the category and the other locale at the URLs the payload carries', async () => {
+  it('links the category and the other version at the URLs the payload carries', async () => {
     const html = await renderInRouter(<ArticleView page={covered} />);
 
+    expect(html).toMatch(/<a [^>]*href="\/fr\/articles\/c\/web"[^>]*>web<\/a>/);
     expect(html).toMatch(
-      /<a [^>]*href="\/l\/fr\/articles\/c\/web"[^>]*>web<\/a>/,
-    );
-    expect(html).toMatch(
-      /<a [^>]*href="\/articles\/c\/web\/a-fixture-in-english"[^>]*>English<\/a>/,
+      new RegExp(
+        `<a [^>]*href="/en/articles/c/web/a-fixture-in-english"[^>]*>${htmlText(getPageCopy('en').localeName)}</a>`,
+      ),
     );
     expect(html).toMatch(/<a [^>]*hreflang="en"/i);
   });
 
-  it('writes the category line as today’s markup, at the article’s own address', async () => {
+  it('links every other version, each named by the page copy of its Locale, under its lang and hrefLang', async () => {
+    const { versionsPrefix } = getPageCopy('fr').article;
+    const html = endOfPage(
+      await renderInRouter(<ArticleView page={ofThree} />),
+    );
+    const link = (locale: string, url: string) =>
+      `<a [^>]*href="${url}"[^>]*>${htmlText(getPageCopy(locale).localeName)}</a>`;
+
+    expect(html).toMatch(
+      new RegExp(
+        `<p>${htmlText(versionsPrefix)}${link('en', '/en/articles/c/web/a-fixture-in-english')}, ${link('es', '/es/articles/c/web/un-articulo')}</p>`,
+      ),
+    );
+    for (const locale of ['en', 'es']) {
+      expect(html).toMatch(new RegExp(`<a [^>]*hreflang="${locale}"`, 'i'));
+      expect(html).toMatch(new RegExp(`<a [^>]* lang="${locale}"`));
+    }
+  });
+
+  it('writes the category line in the article’s Locale, at the article’s own address', async () => {
+    const { categoryPrefix } = getPageCopy('fr').article;
     const html = await renderInRouter(
       <ArticleView page={covered} />,
-      '/l/fr/articles/c/web/a-fixture',
+      '/fr/articles/c/web/a-fixture',
     );
 
     expect(html).toContain(
-      '<p>Classé dans <a href="/l/fr/articles/c/web">web</a></p>',
+      `<p>${htmlText(categoryPrefix)}<a href="/fr/articles/c/web">${htmlText(getCategoryLabel('fr', 'web'))}</a></p>`,
     );
   });
 
-  it('declares its end of page in French, whatever the article’s locale', async () => {
-    const french = endOfPage(
-      await renderInRouter(<ArticleView page={covered} />),
-    );
-    const inEnglish = endOfPage(
-      await renderInRouter(<ArticleView page={english} />),
+  it('names the category by its label in the article’s Locale, never by its slug', async () => {
+    const html = endOfPage(
+      await renderInRouter(<ArticleView page={inPrivacy} />),
     );
 
-    expect(french).toMatch(/^<nav [^>]*lang="fr"/);
-    expect(french).toMatch(/^<nav [^>]*aria-label="Pour continuer la lecture"/);
-    expect(inEnglish).toMatch(/^<nav [^>]*lang="fr"/);
-    expect(inEnglish).toMatch(
-      /^<nav [^>]*aria-label="Pour continuer la lecture"/,
+    expect(getCategoryLabel('fr', 'privacy')).not.toBe('privacy');
+    expect(html).toMatch(
+      new RegExp(
+        `<a [^>]*href="/fr/articles/c/privacy"[^>]*>${htmlText(getCategoryLabel('fr', 'privacy'))}</a>`,
+      ),
     );
   });
 
-  it('keeps the article of an English page in English, only its end of page in French', async () => {
-    const html = await renderInRouter(<ArticleView page={english} />);
+  it('throws naming the Category and the Locale when that Locale has no label for the article’s Category', () => {
+    const unlabelled: ArticlePage = {
+      ...english,
+      article: { ...english.article, category: 'theory' },
+      categoryUrl: '/en/articles/c/theory',
+    };
 
-    expect(html).toMatch(/<article lang="en">/);
-    expect(endOfPage(html)).toContain('Classé dans ');
+    expect(() => ArticleView({ page: unlabelled })).toThrow(
+      /"theory"[\s\S]*"en"/,
+    );
   });
 
-  it('names the other language in its own language, after a French lead', async () => {
+  it('writes its end of page in the article’s Locale, under the language of the article', async () => {
+    for (const page of [covered, english]) {
+      const { navLabel } = getPageCopy(page.article.locale).article;
+      const html = await renderInRouter(<ArticleView page={page} />);
+      const nav = endOfPage(html);
+
+      expect(nav).toMatch(
+        new RegExp(`^<nav [^>]*aria-label="${htmlText(navLabel)}"`),
+      );
+      expect(nav).not.toMatch(/^<nav [^>]*lang=/);
+      expect(
+        html.indexOf(`<article lang="${page.article.locale}">`),
+      ).toBeLessThan(html.indexOf('<nav'));
+    }
+  });
+
+  it('leads the other language with the prefix of the article’s Locale, the language named in its own language', async () => {
+    const { categoryPrefix, versionsPrefix } = getPageCopy('en').article;
+    const french = getPageCopy('fr');
     const html = endOfPage(
       await renderInRouter(<ArticleView page={english} />),
     );
 
+    expect(html).toContain(`<p>${htmlText(categoryPrefix)}<a `);
     expect(html).toMatch(
-      /<p>Autre langue\u00a0: <a [^>]*href="\/articles\/c\/web\/a-fixture"[^>]*>français<\/a><\/p>/,
+      new RegExp(
+        `<p>${htmlText(versionsPrefix)}<a [^>]*href="/fr/articles/c/web/a-fixture"[^>]*>${htmlText(french.localeName)}</a></p>`,
+      ),
     );
     expect(html).toMatch(/<a [^>]*hreflang="fr"/i);
     expect(html).toMatch(/<a [^>]* lang="fr"/);
-    expect(html).not.toMatch(/Filed in|Also in/);
+    expect(html).not.toContain(htmlText(french.article.categoryPrefix));
+    expect(html).not.toContain(htmlText(french.article.versionsPrefix));
   });
 
-  it('renders no other-locale link when the payload carries no translation', async () => {
+  it('renders no version line when the payload carries no other version', async () => {
+    const { versionsPrefix } = getPageCopy('fr').article;
     const html = await renderInRouter(<ArticleView page={coverless} />);
 
     expect(html).not.toMatch(/hreflang/i);
+    expect(html).not.toContain(htmlText(versionsPrefix));
   });
 });

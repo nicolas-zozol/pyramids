@@ -2,20 +2,20 @@ import { buildUrl } from '@/routing/url-scheme/index.js';
 import { createFileRoute } from '@tanstack/react-router';
 import { RoutePlaceholder } from '@/components/RoutePlaceholder.js';
 import { urlScheme } from '@/routing/scheme.js';
+import { getPageCopy } from '@/seopyramids.config.js';
 
-export const Route = createFileRoute('/l/$locale/')({
-  component: LocalisedLandingPage,
+export const Route = createFileRoute('/$locale/articles/')({
+  component: BlogHomePage,
 });
 
-function LocalisedLandingPage() {
+function BlogHomePage() {
   const { locale } = Route.useParams();
-  const page = { kind: 'landing', locale } as const;
+  const page = { kind: 'blog-home', locale, page: 1 } as const;
 
   return (
     <RoutePlaceholder
-      kind="landing page"
+      title={getPageCopy(locale).listing.blogTitle}
       url={buildUrl(urlScheme, page)}
-      facts={{ locale }}
     />
   );
 }

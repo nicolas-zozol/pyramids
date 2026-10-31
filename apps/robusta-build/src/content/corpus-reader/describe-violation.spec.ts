@@ -53,6 +53,15 @@ const VIOLATIONS: readonly [CorpusViolation, string][] = [
     },
     'javascript/typescript/completes-with.md',
   ],
+  [
+    {
+      code: 'malformed-original',
+      path: 'privacy/quitter-gmail.md',
+      detail:
+        "its fingerprint 'ABC' is not 12 lowercase hexadecimal characters",
+    },
+    'privacy/quitter-gmail.md',
+  ],
 ];
 
 describe('describeViolation', () => {
@@ -105,6 +114,18 @@ describe('describeViolation', () => {
         reference: './images/stop.png',
       }),
     ).toContain("'./images/stop.png'");
+  });
+
+  it('says what is wrong with a malformed declaration of the original', () => {
+    expect(
+      describeViolation({
+        code: 'malformed-original',
+        path: 'privacy/quitter-gmail.md',
+        detail: 'it declares no translationId',
+      }),
+    ).toBe(
+      'privacy/quitter-gmail.md: the declaration of its original is malformed — it declares no translationId',
+    );
   });
 
   it('describes every violation the contract declares', () => {

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { findArticle, findTranslation } from './article-lookup.js';
+import { findArticle } from './article-lookup.js';
 
 /**
- * The two lookups the four article routes converge on, held against the site's
+ * The lookup the four article routes converge on, held against the site's
  * own corpus rather than a fixture: what a route receives is a param shape the
  * index itself produced, so the pair that matters is the real one.
  */
@@ -30,43 +30,5 @@ describe('findArticle', () => {
     await expect(findArticle('en', 'never-written')).rejects.toThrow(
       /'en'[\s\S]*'never-written'|'never-written'[\s\S]*'en'/,
     );
-  });
-});
-
-describe('findTranslation', () => {
-  it('returns the other locale of a translated article', async () => {
-    const english = await findArticle(
-      'en',
-      'the-source-of-yield-farming-profits',
-    );
-
-    const french = await findTranslation(english);
-
-    expect(french?.locale).toBe('fr');
-    expect(french?.slug).toBe(
-      'provenance-des-rendements-du-yield-farming-dans-la-blockchain',
-    );
-  });
-
-  it('pairs both ways, so either side of a pair links to the other', async () => {
-    const french = await findArticle(
-      'fr',
-      'provenance-des-rendements-du-yield-farming-dans-la-blockchain',
-    );
-
-    const english = await findTranslation(french);
-
-    expect(english?.slug).toBe('the-source-of-yield-farming-profits');
-  });
-
-  /** R-ARTICLEPAGE-43: seven of the eleven articles have no pair, and no dead link is what renders. */
-  it('returns nothing for an article declaring no translation identifier', async () => {
-    const alone = await findArticle(
-      'fr',
-      'quel-langage-pour-progresser-dans-sa-carriere',
-    );
-
-    expect(alone.translationId).toBeUndefined();
-    expect(await findTranslation(alone)).toBeUndefined();
   });
 });

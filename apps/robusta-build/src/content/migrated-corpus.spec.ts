@@ -18,7 +18,7 @@ import { buildUrl, urlSet } from '../routing/url-scheme/index.js';
 import { afterAll, describe, expect, it } from 'vitest';
 import { urlScheme } from '../routing/scheme.js';
 import { v1UrlMap } from '../routing/v1-url-map.js';
-import { getArticleIndex } from './article-index.js';
+import { getArticleIndex, getTranslationNotices } from './article-index.js';
 import { corpus } from './corpus.js';
 
 /**
@@ -54,40 +54,40 @@ const SLUGS = [
 
 /**
  * What `urlSet` derives from the seventeen articles: no roll page, neither
- * locale reaching 12. The nine French articles are unmarked, the eight English
- * ones under `/l/en`.
+ * locale reaching 12. The nine French articles are under `/fr`, the eight
+ * English ones under `/en`, and no Spanish article lights up `/es/articles`.
  */
 const URLS = [
-  '/articles',
-  '/articles/c/blockchain',
-  '/articles/c/javascript',
-  '/articles/c/privacy',
-  '/articles/c/theory',
-  '/articles/c/typescript',
-  '/articles/c/web',
-  '/articles/c/blockchain/ledger-contre-metamask',
-  '/articles/c/blockchain/les-bons-outils-pour-coder-en-solidity',
-  '/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
-  '/articles/c/javascript/bien-appliquer-classname-avec-styled-components',
-  '/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
-  '/articles/c/privacy/quitter-gmail',
-  '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
-  '/articles/c/typescript/terminer-un-observable-rxjs-avec-un-autre',
-  '/articles/c/web/domotique-facile-avec-sonoff-et-javascript',
-  '/l/en/articles',
-  '/l/en/articles/c/blockchain',
-  '/l/en/articles/c/javascript',
-  '/l/en/articles/c/privacy',
-  '/l/en/articles/c/typescript',
-  '/l/en/articles/c/web',
-  '/l/en/articles/c/blockchain/ledger-versus-metamask',
-  '/l/en/articles/c/blockchain/the-source-of-yield-farming-profits',
-  '/l/en/articles/c/blockchain/tooling-for-solidity-coders',
-  '/l/en/articles/c/javascript/applying-correctly-classname-with-styled-components',
-  '/l/en/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs',
-  '/l/en/articles/c/privacy/leaving-gmail',
-  '/l/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
-  '/l/en/articles/c/web/easy-automation-with-sonoff-and-javascript',
+  '/fr/articles',
+  '/fr/articles/c/blockchain',
+  '/fr/articles/c/javascript',
+  '/fr/articles/c/privacy',
+  '/fr/articles/c/theory',
+  '/fr/articles/c/typescript',
+  '/fr/articles/c/web',
+  '/fr/articles/c/blockchain/ledger-contre-metamask',
+  '/fr/articles/c/blockchain/les-bons-outils-pour-coder-en-solidity',
+  '/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+  '/fr/articles/c/javascript/bien-appliquer-classname-avec-styled-components',
+  '/fr/articles/c/javascript/pourquoi-jai-migre-de-gatsby-vers-nextjs',
+  '/fr/articles/c/privacy/quitter-gmail',
+  '/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+  '/fr/articles/c/typescript/terminer-un-observable-rxjs-avec-un-autre',
+  '/fr/articles/c/web/domotique-facile-avec-sonoff-et-javascript',
+  '/en/articles',
+  '/en/articles/c/blockchain',
+  '/en/articles/c/javascript',
+  '/en/articles/c/privacy',
+  '/en/articles/c/typescript',
+  '/en/articles/c/web',
+  '/en/articles/c/blockchain/ledger-versus-metamask',
+  '/en/articles/c/blockchain/the-source-of-yield-farming-profits',
+  '/en/articles/c/blockchain/tooling-for-solidity-coders',
+  '/en/articles/c/javascript/applying-correctly-classname-with-styled-components',
+  '/en/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs',
+  '/en/articles/c/privacy/leaving-gmail',
+  '/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
+  '/en/articles/c/web/easy-automation-with-sonoff-and-javascript',
 ];
 
 const MARKDOWN_IMAGE = /!\[[^\]]*\]\(\s*<?([^>\s)]+)>?/g;
@@ -224,6 +224,36 @@ describe('the migrated corpus, read through the site’s own declaration', () =>
   });
 });
 
+describe('the originals of its translations', () => {
+  it('declares the six French translations of English originals, and the two English translations of French ones', async () => {
+    const { articles } = await read();
+    const declared = Object.fromEntries(
+      articles
+        .filter((entry) => entry.original !== undefined)
+        .map((entry) => [entry.path, entry.original?.locale]),
+    );
+
+    expect(declared).toEqual({
+      'blockchain/ledger-contre-metamask.md': 'en',
+      'blockchain/outillage-solidity.md': 'en',
+      'javascript/bien-appliquer-classname-styled-components.md': 'en',
+      'javascript/typescript/terminer-observable-rxjs.md': 'en',
+      'privacy/quitter-gmail.md': 'en',
+      'web/domotique-facile-avec-sonoff.md': 'en',
+      'blockchain/yield-farming.md': 'fr',
+      'javascript/why-migration-gatsby-next.md': 'fr',
+    });
+  });
+
+  it('declares every translation up to date with its original, so the build reports no notice', async () => {
+    const { translationNotices, violations } = await read();
+
+    expect(violations).toEqual([]);
+    expect(translationNotices).toEqual([]);
+    expect(await getTranslationNotices()).toEqual([]);
+  });
+});
+
 /**
  * R-MIGRATELEARN-21 and 23. `violations` being empty already says this, and it is
  * worth asserting a second way: an unresolved reference is the one class the
@@ -329,19 +359,38 @@ describe('what the corpus lights up', () => {
     expect(built.filter((url) => url.includes('/p/'))).toEqual([]);
   });
 
-  it('serves sixteen of them unmarked, in French, and fourteen under /l/en', async () => {
+  it('serves sixteen of them under /fr and fourteen under /en, each prefixed by the Locale of its page', async () => {
     const pages = urlSet(urlScheme, await getArticleIndex());
-    const unmarked = pages.filter((page) => page.locale === 'fr');
+    const french = pages.filter((page) => page.locale === 'fr');
     const english = pages.filter((page) => page.locale === 'en');
 
-    expect(unmarked).toHaveLength(16);
+    expect(french).toHaveLength(16);
     expect(
-      unmarked.every((page) => !buildUrl(urlScheme, page).startsWith('/l/')),
+      french.every((page) => buildUrl(urlScheme, page).startsWith('/fr/')),
     ).toBe(true);
     expect(english).toHaveLength(14);
     expect(
-      english.every((page) => buildUrl(urlScheme, page).startsWith('/l/en/')),
+      english.every((page) => buildUrl(urlScheme, page).startsWith('/en/')),
     ).toBe(true);
+  });
+
+  it('lights up nothing under /es/articles while no Spanish article is published', async () => {
+    const built = urlSet(urlScheme, await getArticleIndex()).map((page) =>
+      buildUrl(urlScheme, page),
+    );
+
+    expect(built.filter((url) => url.startsWith('/es'))).toEqual([]);
+  });
+
+  it('reaches the two articles of AC-MULTILINGUAL-1 at their prefixed URLs', async () => {
+    const built = urlSet(urlScheme, await getArticleIndex()).map((page) =>
+      buildUrl(urlScheme, page),
+    );
+
+    expect(built).toContain('/en/articles/c/privacy/leaving-gmail');
+    expect(built).toContain(
+      '/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+    );
   });
 
   it('gives a category a page only in the Locales whose articles claim it', async () => {
@@ -349,10 +398,10 @@ describe('what the corpus lights up', () => {
       buildUrl(urlScheme, page),
     );
 
-    expect(built).toContain('/l/en/articles/c/web');
-    expect(built).toContain('/articles/c/web');
-    expect(built).toContain('/articles/c/theory');
-    expect(built).not.toContain('/l/en/articles/c/theory');
+    expect(built).toContain('/en/articles/c/web');
+    expect(built).toContain('/fr/articles/c/web');
+    expect(built).toContain('/fr/articles/c/theory');
+    expect(built).not.toContain('/en/articles/c/theory');
   });
 
   /**
@@ -372,13 +421,13 @@ describe('what the corpus lights up', () => {
       of('/learn/theory/s/quel-langage-pour-progresser-dans-sa-carriere'),
     ).toEqual({
       kind: 'permanent',
-      to: '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+      to: '/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
     });
     expect(
       of('/learn/fr/theory/s/quel-langage-pour-progresser-dans-sa-carriere'),
     ).toEqual({
       kind: 'permanent',
-      to: '/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
+      to: '/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
     });
   });
 
@@ -410,7 +459,7 @@ describe('what the corpus lights up', () => {
       )?.destination,
     ).toEqual({
       kind: 'permanent',
-      to: '/l/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
+      to: '/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
     });
   });
 });

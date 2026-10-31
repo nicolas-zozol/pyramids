@@ -8,6 +8,9 @@ category: privacy
 published: true
 author: Nicolas Zozol
 translationId: leaving-gmail
+original:
+  locale: "en"
+  fingerprint: "b9536b556489"
 ---
 
 Gmail était une révolution en 2004. Google est-il devenu trop gros ?

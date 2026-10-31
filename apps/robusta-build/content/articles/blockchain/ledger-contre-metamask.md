@@ -9,6 +9,9 @@ published: true
 author: Nicolas Zozol
 featured: true
 translationId: ledger-versus-metamask
+original:
+  locale: "en"
+  fingerprint: "74646f7b5ffe"
 ---
 
 Metamask a beau être l'application standard pour découvrir le vrai web3,

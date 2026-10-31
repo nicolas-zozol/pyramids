@@ -183,7 +183,7 @@ function blogRollRows(locales: readonly string[]): V1MappingRow[] {
 
 /**
  * v2 categories are flat, so a nested v1 path maps to its leaf and not to its
- * head — `javascript/typescript` reaches `/articles/c/typescript`. The page
+ * head — `javascript/typescript` reaches `/en/articles/c/typescript`. The page
  * number is dropped: the destination is the roll, whatever page of it was asked.
  */
 function categoryRows(
@@ -367,7 +367,7 @@ function portfolioRows(): V1MappingRow[] {
 function developmentLeftoverRows(): V1MappingRow[] {
   const why = 'development leftover with no editorial value';
   return [
-    { from: '/', destination: { kind: 'none', why: 'the v2 landing serves the same URL' } },
+    { from: '/', destination: { kind: 'none', why: 'the v2 site redirects it to the landing page of its default Locale' } },
     { from: '/prosemirror/:path*', destination: { kind: 'none', why } },
     { from: '/test/:path*', destination: { kind: 'none', why } },
     { from: '/_design-test', destination: { kind: 'none', why } },

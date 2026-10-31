@@ -1,6 +1,7 @@
 import {
   BrandLogo,
   CTA,
+  FlowDiagram,
   Hero,
   NotesPreview,
   PrinciplesList,
@@ -8,15 +9,16 @@ import {
   SiteHeader,
   type NotePost,
 } from '@robusta/pyramids-design-system';
-import { buildUrl } from '../routing/url-scheme/index.js';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.js';
 import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.js';
 import { notesFeed } from '../page-data/notes-feed.js';
+import { pageCounterparts } from '../page-data/page-counterparts.js';
 import { contentUrls } from '../routing/content-urls.js';
-import { urlScheme } from '../routing/scheme.js';
-import { getSeoPyramidsConfig } from '../seopyramids.config.js';
+import { LOCALES, urlScheme, type Locale } from '../routing/scheme.js';
+import { buildUrl, landingPages } from '../routing/url-scheme/index.js';
+import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.js';
 import {
   anchorsTo,
   hrefs,
@@ -26,57 +28,140 @@ import {
 import { renderInRouter } from '../test-support/render-in-router.js';
 import { LandingPage } from './index.js';
 
-const { contact, pageCopy } = getSeoPyramidsConfig();
-const { hero, cta } = pageCopy.landing;
+const { contact } = getSeoPyramidsConfig();
 const MAILTO = `mailto:${contact.email}`;
+const WITH_NOTES: Locale[] = ['en', 'fr'];
 
-/** `/` as the prerender writes it: the chrome around the landing page, on the real feed. */
-async function homePage(posts: NotePost[]): Promise<string> {
+/** A landing page as the prerender writes it: the chrome around it, on the real feed of its Locale. */
+async function landingPage(
+  locale: Locale,
+  posts?: NotePost[],
+): Promise<string> {
+  const page = { kind: 'landing', locale } as const;
   return renderInRouter(
     <>
-      <Header />
-      <LandingPage posts={posts} />
-      <Footer />
+      <Header locale={locale} counterparts={await pageCounterparts(page)} />
+      <LandingPage
+        locale={locale}
+        posts={posts ?? (await notesFeed({ locale, limit: 4 }))}
+      />
+      <Footer locale={locale} />
     </>,
+    buildUrl(urlScheme, page),
   );
 }
 
-let feed: NotePost[];
-let page: string;
+const sectionOf = (html: string, marker: string): string =>
+  new RegExp(`<section[^>]*${marker}[\\s\\S]*?</section>`).exec(html)?.[0] ??
+  '';
+
+let pages: Record<Locale, string>;
 
 beforeAll(async () => {
-  feed = await notesFeed({ locale: urlScheme.defaultLocale, limit: 4 });
-  page = await homePage(feed);
+  pages = Object.fromEntries(
+    await Promise.all(
+      LOCALES.map(async (locale) => [locale, await landingPage(locale)]),
+    ),
+  ) as Record<Locale, string>;
 });
 
 describe('LandingPage', () => {
-  it('is one <main> of Hero, PrinciplesList, the notes section and CTA, in this order', () => {
-    const main = /<main>([\s\S]*)<\/main>/.exec(page)?.[1] ?? '';
-    const order = [
-      'sk-hero',
-      'sk-principles-list',
-      'sk-notes-preview',
-      'sk-cta',
-    ].map((surface) => main.indexOf(`class="${surface}"`));
+  it('is one <main> of Hero, the two diagrams, PrinciplesList, the notes section and CTA, in this order', () => {
+    for (const locale of WITH_NOTES) {
+      const main = /<main>([\s\S]*)<\/main>/.exec(pages[locale])?.[1] ?? '';
+      const order = [
+        'class="sk-hero"',
+        'id="open-source"',
+        'id="complete"',
+        'class="sk-principles-list"',
+        'class="sk-notes-preview"',
+        'class="sk-cta"',
+      ].map((marker) => main.indexOf(marker));
 
-    expect(order.every((index) => index >= 0)).toBe(true);
-    expect([...order].sort((a, b) => a - b)).toEqual(order);
+      expect(
+        order.every((index) => index >= 0),
+        locale,
+      ).toBe(true);
+      expect(
+        [...order].sort((a, b) => a - b),
+        locale,
+      ).toEqual(order);
+    }
   });
 
-  it('keeps nothing of the shell’s demonstration', () => {
-    expect(page).not.toMatch(/placeholder|sk-callout|--font-script/);
+  it('renders no notes section on the Spanish landing page, no Spanish article being published', () => {
+    expect(pages.es).not.toContain('sk-notes-preview');
+    expect(pages.es.indexOf('id="complete"')).toBeLessThan(
+      pages.es.indexOf('class="sk-principles-list"'),
+    );
+  });
+
+  it('keeps nothing of the shell’s demonstration, its only callouts the bubbles of the diagrams', () => {
+    for (const page of Object.values(pages)) {
+      expect(page).not.toMatch(/placeholder|--font-script/);
+      expect(page.match(/class="sk-callout[ "]/g)).toHaveLength(2);
+      expect(
+        page.match(/class="sk-callout sk-flow-diagram__bubble"/g),
+      ).toHaveLength(2);
+    }
   });
 
   it('shows the notes it receives, fewer than four as they are, and no section on none', async () => {
-    const three = await homePage(feed.slice(0, 3));
-    const none = await homePage([]);
+    const feed = await notesFeed({ locale: 'en', limit: 4 });
+    const three = await landingPage('en', feed.slice(0, 3));
+    const none = await landingPage('en', []);
 
     expect(three.match(/class="sk-notes-preview__post"/g)).toHaveLength(3);
     expect(none).not.toContain('sk-notes-preview');
   });
 
   it('carries no form and no field', () => {
-    expect(page).not.toMatch(/<form|<input|<textarea|<select/);
+    for (const page of Object.values(pages))
+      expect(page).not.toMatch(/<form|<input|<textarea|<select/);
+  });
+});
+
+describe('the two diagrams of a landing page', () => {
+  it('carry the ids open-source and complete, distinct, the same in every Locale, and no approach', () => {
+    for (const page of Object.values(pages)) {
+      const ids = [...page.matchAll(/\sid="([^"]*)"/g)].map(([, id]) => id);
+
+      expect(ids.filter((id) => id === 'open-source')).toHaveLength(1);
+      expect(ids.filter((id) => id === 'complete')).toHaveLength(1);
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(page).not.toContain('id="approach"');
+    }
+  });
+
+  it('take every text from the page copy of their Locale', () => {
+    for (const locale of LOCALES) {
+      const { openSource, complete } = getPageCopy(locale).landing;
+
+      for (const [id, copy] of [
+        ['open-source', openSource],
+        ['complete', complete],
+      ] as const) {
+        const section = sectionOf(pages[locale], `id="${id}"`);
+        const texts = readableTexts(section);
+        const written = [
+          copy.eyebrow,
+          copy.title,
+          ...copy.steps.flatMap((step) => [
+            String(step.n),
+            step.label,
+            step.sub,
+          ]),
+          copy.caveat,
+        ];
+
+        expect(texts, `${locale} ${id}`).toEqual(written.map(htmlText));
+      }
+    }
+  });
+
+  it('carry no mascot', () => {
+    for (const page of Object.values(pages))
+      expect(page).not.toContain('sk-flow-diagram__mascot');
   });
 });
 
@@ -88,98 +173,128 @@ describe('the words of the landing page', () => {
     const prototype = [
       <SiteHeader key="header" />,
       <Hero key="hero" mascotSrc="x.svg" />,
+      <FlowDiagram key="flow" mascotSrc="x.svg" />,
       <PrinciplesList key="principles" />,
       <NotesPreview key="notes" />,
       <CTA key="cta" />,
       <SiteFooter key="footer" />,
     ]
       .flatMap((surface) => readableTexts(renderToStaticMarkup(surface)))
-      .filter((text) => !brand.has(text));
-    const read = new Set(readableTexts(page));
+      .filter((text) => !brand.has(text))
+      // The badges of the diagram's steps, numbers and not copy.
+      .filter((text) => !/^\d+$/.test(text));
 
     expect(prototype.length).toBeGreaterThan(20);
-    expect(prototype.filter((text) => read.has(text))).toEqual([]);
-    expect(page).not.toMatch(
-      /we build software|small team|this is crystal tux|what we publish|reading is itself/i,
-    );
+    for (const [locale, page] of Object.entries(pages)) {
+      const read = new Set(readableTexts(page));
+
+      expect(
+        prototype.filter((text) => read.has(text)),
+        locale,
+      ).toEqual([]);
+      expect(page).not.toMatch(
+        /we build software|small team|what we publish|reading is itself|five steps|engagement runs/i,
+      );
+    }
   });
 
-  it('put the tagline in the eyebrow and twenty years in the title (AC-LANDING-3)', () => {
-    expect(page).toMatch(
-      new RegExp(
-        `class="sk-hero__eyebrow"[\\s\\S]*?${htmlText(pageCopy.tagline)}`,
-      ),
-    );
-    expect(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(page)?.[1]).toMatch(/vingt ans/);
+  it('put the tagline of their Locale in the eyebrow and its hero title in the one heading', () => {
+    for (const locale of LOCALES) {
+      const { tagline, landing } = getPageCopy(locale);
+
+      expect(pages[locale]).toMatch(
+        new RegExp(`class="sk-hero__eyebrow"[\\s\\S]*?${htmlText(tagline)}`),
+      );
+      expect(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(pages[locale])?.[1]).toBe(
+        htmlText(landing.hero.title),
+      );
+    }
   });
 
-  it('name Renault, the BCG, the startups, Toulouse, the area served and meetings in person (AC-LANDING-3)', () => {
-    const text = readableTexts(page).join(' ');
-
-    for (const word of [
-      'Renault',
-      'BCG',
-      'startups',
-      'Toulouse',
-      'Haute-Garonne',
-      'sur place',
-    ])
-      expect(text).toContain(word);
+  it('carry no hero footnote and no copy for the SMEs of Toulouse (R-MULTILINGUAL-44)', () => {
+    for (const page of Object.values(pages)) {
+      expect(page).not.toContain('sk-hero__footnote');
+      expect(readableTexts(page).join(' ')).not.toMatch(
+        /PME|Haute-Garonne|sur place|Renault|BCG/,
+      );
+    }
   });
 
-  it('name neither EVM, Toptal, Oracle, remote, a revenue threshold nor a dated availability (AC-LANDING-3)', () => {
-    const pitch = page.replace(
-      /class="sk-notes-preview"[\s\S]*?<\/section>/,
-      '',
-    );
-    const text = readableTexts(pitch).join(' ');
+  it('name neither EVM, Toptal, Oracle, remote, a price, a revenue threshold nor a dated availability (AC-LANDING-3)', () => {
+    for (const page of Object.values(pages)) {
+      const pitch = page.replace(
+        /class="sk-notes-preview"[\s\S]*?<\/section>/,
+        '',
+      );
+      const text = readableTexts(pitch).join(' ');
 
-    expect(text).not.toMatch(
-      /EVM|Toptal|Oracle|remote|chiffre d|€|\bq[1-4]\b|slots?|créneau|20[0-9]{2}/i,
-    );
+      expect(text).not.toMatch(
+        /EVM|Toptal|Oracle|remote|chiffre d|[€$£]|\bq[1-4]\b|slots?|créneau|20[0-9]{2}/i,
+      );
+    }
   });
 });
 
 describe('the calls to contact of the landing page', () => {
-  it('are, in the hero, the email address then the LinkedIn profile', () => {
-    const heroSection =
-      /class="sk-hero"[\s\S]*?<\/section>/.exec(page)?.[0] ?? '';
+  it('are, in the hero, the email address then the LinkedIn profile, labelled in its Locale', () => {
+    for (const locale of LOCALES) {
+      const { hero } = getPageCopy(locale).landing;
+      const heroSection = sectionOf(pages[locale], 'class="sk-hero"');
 
-    expect(hrefs(heroSection)).toEqual([MAILTO, contact.linkedIn]);
-    expect(heroSection).toContain(`>${htmlText(hero.emailLabel)}<`);
-    expect(heroSection).toContain(`>${htmlText(hero.linkedInLabel)}<`);
+      expect(hrefs(heroSection)).toEqual([MAILTO, contact.linkedIn]);
+      expect(heroSection).toContain(`>${htmlText(hero.emailLabel)}<`);
+      expect(heroSection).toContain(`>${htmlText(hero.linkedInLabel)}<`);
+    }
   });
 
   it('is, in the closing block, the address itself leading to an email', () => {
-    const closing = /class="sk-cta"[\s\S]*?<\/section>/.exec(page)?.[0] ?? '';
+    for (const locale of LOCALES) {
+      const { cta } = getPageCopy(locale).landing;
+      const closing = sectionOf(pages[locale], 'class="sk-cta"');
 
-    expect(hrefs(closing)).toEqual([MAILTO]);
-    expect(closing).toContain(`>${htmlText(contact.email)}<`);
-    expect(closing).toContain(`>${htmlText(cta.title)}<`);
+      expect(hrefs(closing)).toEqual([MAILTO]);
+      expect(closing).toContain(`>${htmlText(contact.email)}<`);
+      expect(closing).toContain(`>${htmlText(cta.title)}<`);
+    }
   });
 
-  it('show the two mascots from the design system, the hero’s with its French alt text', () => {
-    expect(page).toContain(
-      `src="${htmlText(heroMascotSrc)}" alt="${htmlText(hero.mascotAlt)}"`,
-    );
-    expect(page).toContain(`src="${htmlText(ctaMascotSrc)}"`);
+  it('show the two mascots from the design system, the hero’s with the alt text of its Locale', () => {
+    for (const locale of LOCALES) {
+      const { hero } = getPageCopy(locale).landing;
+
+      expect(pages[locale]).toContain(
+        `src="${htmlText(heroMascotSrc)}" alt="${htmlText(hero.mascotAlt)}"`,
+      );
+      expect(pages[locale]).toContain(`src="${htmlText(ctaMascotSrc)}"`);
+    }
   });
 });
 
-describe('every link of /', () => {
-  it('leads to a page the site publishes, an email to Nicolas or his LinkedIn profile', async () => {
-    const published = new Set([
-      '/',
-      ...(await contentUrls()).map((url) => buildUrl(urlScheme, url)),
-    ]);
+describe('every link of the three landing pages', () => {
+  it('leads to the contact email, the LinkedIn profile or a path buildUrl produces, header and footer included', async () => {
+    const built = new Set(
+      [...landingPages(urlScheme), ...(await contentUrls())].map((url) =>
+        buildUrl(urlScheme, url),
+      ),
+    );
 
-    for (const href of hrefs(page))
-      expect([MAILTO, contact.linkedIn, ...published]).toContain(href);
+    for (const [locale, page] of Object.entries(pages)) {
+      expect(hrefs(page).length, locale).toBeGreaterThan(0);
+      for (const href of hrefs(page))
+        expect([MAILTO, contact.linkedIn, ...built], locale).toContain(href);
+    }
   });
 
-  it('includes "all articles" pointing at /articles and the notes at their pages', () => {
-    expect(anchorsTo(page, '/articles')).toHaveLength(1);
-    for (const post of feed)
-      expect(anchorsTo(page, post.href ?? '')).toHaveLength(1);
+  it('includes "all articles" pointing at the blog home of its Locale and the notes at their pages', async () => {
+    for (const locale of WITH_NOTES) {
+      const feed = await notesFeed({ locale, limit: 4 });
+      const others = WITH_NOTES.filter((other) => other !== locale);
+
+      expect(anchorsTo(pages[locale], `/${locale}/articles`)).toHaveLength(1);
+      for (const other of others)
+        expect(anchorsTo(pages[locale], `/${other}/articles`)).toHaveLength(0);
+      for (const post of feed)
+        expect(anchorsTo(pages[locale], post.href ?? '')).toHaveLength(1);
+    }
   });
 });

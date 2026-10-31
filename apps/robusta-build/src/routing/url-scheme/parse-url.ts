@@ -1,6 +1,5 @@
 import {
   CATEGORY_DISCRIMINANT,
-  LOCALE_DISCRIMINANT,
   ROLL_PAGE_DISCRIMINANT,
   TAG_DISCRIMINANT,
   isReservedSegment,
@@ -8,33 +7,31 @@ import {
 import { knownLocales, type PageUrl, type UrlScheme } from './scheme.js';
 
 /**
- * Reads the content section and nothing else: `/`, `/pricing` and any future
- * marketing page return undefined, so the parser never claims a URL the scheme
- * does not own.
+ * Reads `/{locale}` and `/{locale}/{contentRoot}…` and nothing else: a path
+ * whose first segment is no known locale — `/`, `/articles`, `/404` — returns
+ * undefined, so the parser never claims a URL the scheme does not own.
  *
  * It is deliberately tolerant where `buildUrl` is strict — a trailing slash,
- * an uppercase segment, an explicit page one and a marked default locale are
- * all read — which is what makes canonicality the fixed point of the pair
- * instead of four hand-written redirect families.
+ * an uppercase segment and an explicit page one are all read — which is what
+ * makes canonicality the fixed point of the pair instead of hand-written
+ * redirect families.
  */
 export function parseUrl(scheme: UrlScheme, path: string): PageUrl | undefined {
   if (!path.startsWith('/')) {
     return undefined;
   }
 
-  const segments = path
+  const [locale, ...segments] = path
     .toLowerCase()
     .split('/')
     .filter((segment) => segment !== '');
 
-  let locale = scheme.defaultLocale;
-  if (segments[0] === LOCALE_DISCRIMINANT) {
-    const candidate = segments[1];
-    if (candidate === undefined || !knownLocales(scheme).includes(candidate)) {
-      return undefined;
-    }
-    locale = candidate;
-    segments.splice(0, 2);
+  if (locale === undefined || !knownLocales(scheme).includes(locale)) {
+    return undefined;
+  }
+
+  if (segments.length === 0) {
+    return { kind: 'landing', locale };
   }
 
   if (segments.shift() !== scheme.contentRoot.toLowerCase()) {

@@ -57,6 +57,15 @@ export interface ArticleEntry {
   /** As declared in the frontmatter, unresolved. */
   image?: string;
   translationId?: string;
+  /** Declared by a translation only: an article without it is its own original. */
+  original?: OriginalDeclaration;
+}
+
+export interface OriginalDeclaration {
+  /** The Locale of the original. */
+  locale: string;
+  /** The original's fingerprint when the translation was declared up to date. */
+  fingerprint: string;
 }
 
 export interface ArticleBody {
@@ -79,12 +88,39 @@ export type CorpusViolation =
       translationId: string;
       locale: string;
     }
-  | { code: 'unresolved-asset'; path: string; reference: string };
+  | { code: 'unresolved-asset'; path: string; reference: string }
+  | { code: 'malformed-original'; path: string; detail: string };
+
+/** What the build reports about a translation and never fails on. */
+export type TranslationNotice =
+  | {
+      code: 'stale-translation';
+      path: string;
+      originalPath: string;
+      /** The original's fingerprint now: the value to copy into the declaration. */
+      fingerprint: string;
+    }
+  | {
+      code: 'untracked-pair';
+      translationId: string;
+      versions: readonly {
+        path: string;
+        locale: string;
+        fingerprint: string;
+      }[];
+    }
+  | {
+      code: 'missing-original';
+      path: string;
+      translationId: string;
+      locale: string;
+    };
 
 export interface CorpusRead {
   /** Published, valid, newest first. */
   articles: readonly ArticleEntry[];
   violations: readonly CorpusViolation[];
+  translationNotices: readonly TranslationNotice[];
   /** Paths of the files read and left out for want of `published: true`. */
   unpublished: readonly string[];
 }

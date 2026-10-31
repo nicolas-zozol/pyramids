@@ -6,16 +6,16 @@
 **Status:** APPROVED (2026-10-26 — validated by Nicolas)
 **Sources:** [story](multilingual-site.story.md), [brainstorm](multilingual-site.brainstorm.md), [epic](../pyramid-v2.epic.md), [default-locale-fr](../default-locale-fr/default-locale-fr.design.md), [robusta-landing-page](../robusta-landing-page/robusta-landing-page.design.md)
 
-## Progress — APPROVED 9%
+## Progress — APPROVED 97%
 
 ```
- WIP  Prérequis : packages du site          ████████████████░░░░  4/5
-TODO  Schéma préfixé et redirection         ░░░░░░░░░░░░░░░░░░░░  0/8
-TODO  Page copy par Locale                  ░░░░░░░░░░░░░░░░░░░░  0/10
-TODO  Contreparties et sélecteur de Locale  ░░░░░░░░░░░░░░░░░░░░  0/5
-TODO  Original et traduction obsolète       ░░░░░░░░░░░░░░░░░░░░  0/6
-TODO  v1 map                                ░░░░░░░░░░░░░░░░░░░░  0/1
-TODO  Acceptance Criteria                   ░░░░░░░░░░░░░░░░░░░░  0/7
+      Prérequis : packages du site          ████████████████████  5/5
+      Schéma préfixé et redirection         ████████████████████  8/8
+      Page copy par Locale                  ████████████████████  10/10
+      Contreparties et sélecteur de Locale  ████████████████████  5/5
+      Original et traduction obsolète       ████████████████████  6/6
+      v1 map                                ████████████████████  1/1
+ WIP  Acceptance Criteria                   █████████████████░░░  6/7
 ```
 
 ## Goal

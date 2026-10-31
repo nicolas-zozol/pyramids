@@ -21,7 +21,7 @@ describe('validateArticles', () => {
   });
 
   // AC-URLSCHEME-04 / R-URLSCHEME-11.
-  it.each(['l', 'c', 'p', 't'])(
+  it.each(['c', 'p', 't'])(
     'refuses %s as a slug and as a category',
     (reserved) => {
       expect(validateArticles(scheme, [{ slug: reserved, locale: 'en' }])).toEqual([
@@ -32,6 +32,13 @@ describe('validateArticles', () => {
       ).toEqual([{ code: 'reserved-segment', segment: reserved, slug: 'ok' }]);
     },
   );
+
+  it('accepts l as a slug and as a category, the locale discriminant being gone', () => {
+    expect(validateArticles(scheme, [{ slug: 'l', locale: 'en' }])).toEqual([]);
+    expect(
+      validateArticles(scheme, [{ slug: 'ok', locale: 'en', category: 'l' }]),
+    ).toEqual([]);
+  });
 
   // AC-URLSCHEME-05 / R-URLSCHEME-12.
   it('refuses two articles of the same locale sharing a slug', () => {

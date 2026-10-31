@@ -9,17 +9,17 @@ import { SiteLink } from './SiteLink.js';
 describe('SiteLink', () => {
   it('renders the built URL as the anchor’s address, untouched', async () => {
     const html = await renderInRouter(
-      <SiteLink href="/l/fr/articles/c/blockchain">blockchain</SiteLink>,
+      <SiteLink href="/fr/articles/c/blockchain">blockchain</SiteLink>,
     );
 
     expect(html).toMatch(
-      /<a [^>]*href="\/l\/fr\/articles\/c\/blockchain"[^>]*>blockchain<\/a>/,
+      /<a [^>]*href="\/fr\/articles\/c\/blockchain"[^>]*>blockchain<\/a>/,
     );
   });
 
   it('carries the language of the page it targets', async () => {
     const html = await renderInRouter(
-      <SiteLink href="/articles/c/web/a-slug" hrefLang="en" lang="en">
+      <SiteLink href="/en/articles/c/web/a-slug" hrefLang="en" lang="en">
         English
       </SiteLink>,
     );
@@ -31,13 +31,13 @@ describe('SiteLink', () => {
   it('serves as the design system’s link component, passing on the class a surface gives it', async () => {
     const linkComponent: SkLinkComponent = SiteLink;
     const html = await renderInRouter(
-      <SkButton href="/articles" linkComponent={linkComponent}>
+      <SkButton href="/en/articles" linkComponent={linkComponent}>
         articles
       </SkButton>,
     );
 
     expect(html).toMatch(
-      /<a [^>]*class="sk-btn"[^>]*href="\/articles"|<a [^>]*href="\/articles"[^>]*class="sk-btn"/,
+      /<a [^>]*class="sk-btn"[^>]*href="\/en\/articles"|<a [^>]*href="\/en\/articles"[^>]*class="sk-btn"/,
     );
   });
 
@@ -57,10 +57,10 @@ describe('SiteLink', () => {
 
   it('marks the current page for assistive technology, adding no class of its own', async () => {
     const html = await renderInRouter(
-      <SiteLink href="/" className="sk-site-header__brand">
+      <SiteLink href="/en" className="sk-site-header__brand">
         accueil
       </SiteLink>,
-      '/',
+      '/en',
     );
 
     expect(html).toMatch(/aria-current="page"/);
@@ -69,11 +69,13 @@ describe('SiteLink', () => {
 
   it('does not mark a link to an ancestor of the current page as the current page', async () => {
     const html = await renderInRouter(
-      <SiteLink href="/articles/c/blockchain">blockchain</SiteLink>,
-      '/articles/c/blockchain/ledger-versus-metamask',
+      <SiteLink href="/en/articles/c/blockchain">blockchain</SiteLink>,
+      '/en/articles/c/blockchain/ledger-versus-metamask',
     );
 
-    expect(html).toMatch(/<a href="\/articles\/c\/blockchain">blockchain<\/a>/);
+    expect(html).toMatch(
+      /<a href="\/en\/articles\/c\/blockchain">blockchain<\/a>/,
+    );
     expect(html).not.toMatch(/aria-current|data-status|class="active"/);
   });
 });

@@ -9,6 +9,9 @@ published: true
 author: Nicolas Zozol
 featured: true
 translationId: gatsby-to-nextjs
+original:
+  locale: "fr"
+  fingerprint: "bb563ea8f31e"
 ---
 
 This site just migrated from Gatsby to NextJS. If every coder today leans toward NextJs versus Gatsby, now I don't feel this so obvious.

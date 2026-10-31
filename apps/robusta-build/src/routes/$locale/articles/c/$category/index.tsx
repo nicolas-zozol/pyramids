@@ -2,21 +2,20 @@ import { buildUrl } from '@/routing/url-scheme/index.js';
 import { createFileRoute } from '@tanstack/react-router';
 import { RoutePlaceholder } from '@/components/RoutePlaceholder.js';
 import { urlScheme } from '@/routing/scheme.js';
+import { getCategoryLabel } from '@/seopyramids.config.js';
 
-export const Route = createFileRoute('/articles/c/$category/')({
+export const Route = createFileRoute('/$locale/articles/c/$category/')({
   component: CategoryPage,
 });
 
 function CategoryPage() {
-  const { category } = Route.useParams();
-  const locale = urlScheme.defaultLocale;
+  const { locale, category } = Route.useParams();
   const page = { kind: 'category', locale, category, page: 1 } as const;
 
   return (
     <RoutePlaceholder
-      kind="category page"
+      title={getCategoryLabel(locale, category)}
       url={buildUrl(urlScheme, page)}
-      facts={{ locale, category, page: '1' }}
     />
   );
 }

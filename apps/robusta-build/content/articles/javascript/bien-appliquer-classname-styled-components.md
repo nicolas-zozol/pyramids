@@ -8,6 +8,9 @@ category: javascript
 published: true
 author: Nicolas Zozol
 translationId: styled-components
+original:
+  locale: "en"
+  fingerprint: "00b0458c3a60"
 ---
 
 Styled Components est une technologie qui fait passer le CSS à l'échelle. C'est très bien, mais il y a quelques

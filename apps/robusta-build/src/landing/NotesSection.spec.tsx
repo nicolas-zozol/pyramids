@@ -1,74 +1,95 @@
 import type { NotePost } from '@robusta/pyramids-design-system';
 import { describe, expect, it } from 'vitest';
-import { getSeoPyramidsConfig } from '../seopyramids.config.js';
+import { getCategoryLabel, getPageCopy } from '../seopyramids.config.js';
 import { anchorsTo, htmlText } from '../test-support/markup.js';
 import { renderInRouter } from '../test-support/render-in-router.js';
 import { NotesSection } from './NotesSection.js';
 
-const { notes } = getSeoPyramidsConfig().pageCopy.landing;
-const { categoryLabels } = getSeoPyramidsConfig().pageCopy;
+const theory: NotePost = {
+  title: 'Quel second langage apprendre ?',
+  href: '/fr/articles/c/theory/quel-second-langage',
+  tag: 'theory',
+  date: '13 déc.',
+};
 
-const posts: NotePost[] = [
-  {
-    title: 'Quel second langage apprendre ?',
-    href: '/articles/c/theory/quel-second-langage',
-    tag: 'theory',
-    date: '13 déc.',
-  },
-  {
-    title: 'Une note sans libellé',
-    href: '/articles/c/inconnue/une-note',
-    tag: 'inconnue',
-    date: '2 févr.',
-  },
-];
+const untagged: NotePost = {
+  title: 'Une note sans Category',
+  href: '/fr/articles/une-note',
+  date: '2 févr.',
+};
+
+const posts = [theory, untagged];
 
 describe('NotesSection', () => {
   it('renders nothing on an empty feed, no empty section and no sample note', () => {
-    expect(NotesSection({ posts: [] })).toBeNull();
+    expect(NotesSection({ locale: 'es', posts: [] })).toBeNull();
   });
 
   it('renders the posts it receives, three of them as three notes', async () => {
-    const three = [posts[0], posts[0], posts[1]];
-    const html = await renderInRouter(<NotesSection posts={three} />);
+    const html = await renderInRouter(
+      <NotesSection locale="fr" posts={[theory, theory, untagged]} />,
+    );
 
     expect(html.match(/class="sk-notes-preview__post"/g)).toHaveLength(3);
   });
 
-  it('reads its eyebrow, title and "all articles" label in the page copy', async () => {
-    const html = await renderInRouter(<NotesSection posts={posts} />);
+  it('reads its eyebrow, title and "all articles" label in the page copy of its Locale', async () => {
+    for (const locale of ['en', 'fr']) {
+      const { notes } = getPageCopy(locale).landing;
+      const html = await renderInRouter(
+        <NotesSection locale={locale} posts={[untagged]} />,
+      );
 
-    expect(html).toContain(`>${htmlText(notes.eyebrow)}<`);
-    expect(html).toContain(`>${htmlText(notes.title)}<`);
-    expect(html).toContain(`>${htmlText(notes.allLinkLabel)}<`);
-    expect(anchorsTo(html, '/articles')).toHaveLength(1);
+      expect(html).toContain(`>${htmlText(notes.eyebrow)}<`);
+      expect(html).toContain(`>${htmlText(notes.title)}<`);
+      expect(html).toContain(`>${htmlText(notes.allLinkLabel)}<`);
+    }
   });
 
-  it('points "all articles" at the blog home of the locale it is given', async () => {
-    const html = await renderInRouter(
-      <NotesSection posts={posts} locale="en" />,
+  it('points "all articles" at the blog home of its Locale', async () => {
+    const french = await renderInRouter(
+      <NotesSection locale="fr" posts={posts} />,
+    );
+    const english = await renderInRouter(
+      <NotesSection locale="en" posts={[untagged]} />,
     );
 
-    expect(anchorsTo(html, '/l/en/articles')).toHaveLength(1);
+    expect(anchorsTo(french, '/fr/articles')).toHaveLength(1);
+    expect(anchorsTo(english, '/en/articles')).toHaveLength(1);
   });
 
-  it('tags a note with its Category’s French label, never the slug, and drops an unlabelled tag', async () => {
-    const html = await renderInRouter(<NotesSection posts={posts} />);
+  it('tags a note with the label of its Category in its Locale, never the slug', async () => {
+    const html = await renderInRouter(
+      <NotesSection locale="fr" posts={posts} />,
+    );
 
-    expect(categoryLabels.theory).toBeTruthy();
-    expect(html).toContain(`>${htmlText(categoryLabels.theory)}<`);
+    expect(html).toContain(`>${htmlText(getCategoryLabel('fr', 'theory'))}<`);
     expect(html).not.toMatch(/>theory</);
-    expect(html).not.toMatch(/>inconnue</);
     expect(html.match(/class="sk-tag/g)).toHaveLength(1);
+  });
+
+  it('throws naming the Category and the Locale when that Locale has no label for a note’s Category', () => {
+    expect(() => NotesSection({ locale: 'en', posts: [theory] })).toThrow(
+      /"theory"[\s\S]*"en"/,
+    );
+  });
+
+  it('throws naming a Locale the site does not declare', () => {
+    expect(() => NotesSection({ locale: 'de', posts: [untagged] })).toThrow(
+      /"de"/,
+    );
   });
 
   it('renders its notes as router links carrying their href', async () => {
     const html = await renderInRouter(
-      <NotesSection posts={posts} />,
-      '/articles/c/theory/quel-second-langage',
+      <NotesSection locale="fr" posts={posts} />,
+      '/fr/articles/c/theory/quel-second-langage',
     );
 
-    const [current] = anchorsTo(html, '/articles/c/theory/quel-second-langage');
+    const [current] = anchorsTo(
+      html,
+      '/fr/articles/c/theory/quel-second-langage',
+    );
     expect(current).toContain('aria-current="page"');
   });
 });

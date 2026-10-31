@@ -3,22 +3,23 @@ import { describe, expect, it } from 'vitest';
 import { FailedNavigationPage } from './FailedNavigationPage.js';
 
 describe('FailedNavigationPage', () => {
-  it('says the page could not load, in French', () => {
+  it('says the page could not load, in English whatever the Locale of the page', () => {
     const html = renderToStaticMarkup(
-      <FailedNavigationPage href="/l/en/articles/c/web" />,
+      <FailedNavigationPage href="/fr/articles/c/web" />,
     );
 
-    expect(html).toContain('<h1>cette page n’a pas pu se charger</h1>');
+    expect(html).toContain('<main lang="en"');
+    expect(html).toContain('<h1>this page could not load</h1>');
   });
 
-  it('offers to retry the address that failed, or to go back home', () => {
+  it('offers to retry the address that failed, or to go back to the default landing page', () => {
     const html = renderToStaticMarkup(
-      <FailedNavigationPage href="/l/en/articles/c/web" />,
+      <FailedNavigationPage href="/fr/articles/c/web" />,
     );
 
     expect(html).toContain(
-      '<a href="/l/en/articles/c/web">réessayer cette adresse</a>',
+      '<a href="/fr/articles/c/web">retry this address</a>',
     );
-    expect(html).toContain('<a href="/">revenir à l’accueil</a>');
+    expect(html).toContain('<a href="/en">back to the home page</a>');
   });
 });

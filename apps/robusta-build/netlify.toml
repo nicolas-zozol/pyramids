@@ -2,8 +2,10 @@
 # The base directory is unset, so install and build run at the repository root:
 # every path below is relative to it, and the root .nvmrc picks Node 22.
 #
-# Netlify publishes the prerendered client output and nothing else: no function,
-# no redirect rule, no header rule, no plugin.
+# Netlify publishes the prerendered client output, with no function, no header
+# rule and no plugin. One redirect rule: the bare site root leads permanently to
+# the landing page of the default Locale. Without `force` it applies only while
+# no file occupies `/`, so the build writes no index.html at the root.
 
 [build]
   command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta"
@@ -15,3 +17,8 @@
 [build.environment]
   # Netlify's default, --ignore-optional, is an unknown option to yarn 4.
   YARN_FLAGS = "--immutable"
+
+[[redirects]]
+  from = "/"
+  to = "/en"
+  status = 301

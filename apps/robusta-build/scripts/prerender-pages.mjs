@@ -1,11 +1,14 @@
 /**
- * The page list the prerender walks: `/`, `/404`, then every URL the corpus
- * derives, built with the scheme's single builder. It reads the seams compiled
+ * The page list the prerender walks: the landing page of every Locale, `/404`,
+ * then every URL the corpus derives, built with the scheme's single builder,
+ * and nothing at `/`, which the host redirects. It reads the seams compiled
  * under `.routing-dist`, and refuses a route tree that does not follow the
  * configured content root.
  *
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-21, R-TANSTACK-23, R-TANSTACK-26
+ * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Requirements: R-MULTILINGUAL-25
  */
 import { existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -14,6 +17,8 @@ import { fileURLToPath } from 'node:url';
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const compiled = join(app, '.routing-dist');
 
+const LOCALE_SEGMENT = '$locale';
+const LANDING_ROUTE = `${LOCALE_SEGMENT}/index.tsx`;
 const CONTENT_SHAPES = [
   'index.tsx',
   'p/$n.tsx',
@@ -23,9 +28,9 @@ const CONTENT_SHAPES = [
   'c/$category/$slug.tsx',
 ];
 
-/** `/`, `/404`, then every URL contentUrls derives (R-URLSCHEME-30 checked first). */
+/** The landing pages, `/404`, then every URL contentUrls derives (the route files checked first). */
 export async function prerenderPages() {
-  const { buildUrl } = await import(
+  const { buildUrl, landingPages } = await import(
     join(compiled, 'routing/url-scheme/index.js')
   );
   const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
@@ -35,20 +40,27 @@ export async function prerenderPages() {
 
   assertRouteFilesFollow(join(app, 'src/routes'), urlScheme.contentRoot);
 
-  const urls = (await contentUrls()).map((page) => buildUrl(urlScheme, page));
-  return pageList(urls);
+  const landings = landingPages(urlScheme).map((page) =>
+    buildUrl(urlScheme, page),
+  );
+  const content = (await contentUrls()).map((page) =>
+    buildUrl(urlScheme, page),
+  );
+  return pageList(landings, content);
 }
 
-/** The landing page and the not-found page, then the content URLs in order. */
-export function pageList(contentUrls) {
-  return ['/', '/404', ...contentUrls].map((path) => ({ path }));
+/** The landing pages, the not-found page, then the content URLs, in order. */
+export function pageList(landingUrls, contentUrls) {
+  return [...landingUrls, '/404', ...contentUrls].map((path) => ({ path }));
 }
 
-/** The route files the content root expects under `routesDirectory` and does not find. */
+/** The seven route files — the landing and the six content shapes under `$locale` — missing from `routesDirectory`. */
 export function missingRouteFiles(routesDirectory, contentRoot) {
   const expected = [
-    ...CONTENT_SHAPES.map((shape) => `${contentRoot}/${shape}`),
-    ...CONTENT_SHAPES.map((shape) => `l/$locale/${contentRoot}/${shape}`),
+    LANDING_ROUTE,
+    ...CONTENT_SHAPES.map(
+      (shape) => `${LOCALE_SEGMENT}/${contentRoot}/${shape}`,
+    ),
   ];
   return expected.filter((file) => !existsSync(join(routesDirectory, file)));
 }
