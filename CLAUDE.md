@@ -1,184 +1,103 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Repères pour Claude Code dans ce dépôt.
 
-## Repository
+## Dépôt
 
-`@robusta/pyramids` — a yarn-workspaces monorepo that powers multiple SEO content sites from a shared component/library base. `apps/robusta` and `apps/dakar` are Next.js App Router sites with React Server Components and ISR, deployed on Vercel; `apps/robusta-build`, the v2 site, is TanStack Start on Netlify. TypeScript is the default everywhere. Some packages (telemetry, services) target Node + Express.
+`@robusta/pyramids` est un monorepo yarn qui construit plusieurs sites de contenu SEO sur une base commune. Le travail nouveau va dans `apps/robusta-build`.
 
-The three workspace roots are:
+Documents de référence :
 
-- `apps/*` — deployable sites and standalone front/server demos
-- `packages/*` — shared libraries consumed by the apps (built to `dist/`)
-- `services/*` — backend services (Express collector + docker-compose observability stack)
+- `README.md` : vue d'ensemble et démarrage
+- `root.archi.md` : architecture ; chaque app et module a son `<nom>.archi.md`
+- `ubiquitous-language.md` : le vocabulaire à employer
+- `business-rules.md` : les règles métier (BR-)
+- `ROADMAP.md` et `features/` : ce qui reste à faire, et les documents Compound
 
-## Apps
+## Apps et modules
 
-- `@robusta/robusta-build` — `apps/robusta-build`. robusta.build version 2, served at robusta.build by Netlify, and where new work goes. TanStack Start on Vite 8: every page prerendered at build, then hydrated, no code run on a request. Tailwind 4 with shadcn, its own design system, no DaisyUI. It carries the v2 route table and seventeen articles, the eleven migrated from v1 and six French translations, under `content/articles`, with their images published under `/article-images`: 32 prerendered pages. `/` is the landing page, composed of design-system surfaces fed by the page copy of `src/seopyramids.config.ts`; each article renders as an article page; the nine listing routes are placeholders. A header and a footer, from `src/chrome`, wrap every page. See its own README and `robusta-build.archi.md`.
-- `@robusta/build` — `apps/robusta`. robusta.build version 1: blog under `/learn`, portfolio, prosemirror. Being retired — do not add to it, and do not refactor it.
-- `@robusta/dakar` — `apps/dakar`. dakar.surf, the surf guide. Uses MapLibre, has a `[locale]` segment and spot pages. Live, and out of the v2 scope.
-- intel-demo — `apps/intel-demo`. Vite front + server demo for the scribe-intel SDK. Not a workspace: it carries no `package.json`.
+- `apps/robusta-build` (`@robusta/robusta-build`) : robusta.build v2. TanStack Start sur Vite 8, chaque page prérendue au build, servie par Netlify, `noindex`. Trois Locales, `en` par défaut, `fr` et `es`, chacune sous son préfixe. Contenu, routing, commandes et déploiement : son `README.md` et `robusta-build.archi.md`.
+- `apps/robusta` (`@robusta/build`) : robusta.build v1, Next.js sur Vercel. En retrait : n'y rien ajouter, ne pas le refactorer. Son README décrit le routing v1.
+- `apps/dakar` (`@robusta/dakar`) : dakar.surf, Next.js sur Vercel. Hors du périmètre v2.
+- `apps/robusta-design` n'est pas un workspace : le brief et la maquette v0 de la refonte.
+- `packages/robusta-design-system` (`@robusta/pyramids-design-system`) : le design system de robusta.build v2.
+- `packages/helpers`, `themes`, `layouts`, `links`, `ctas` : la base des sites v1 et dakar, sur DaisyUI.
 
-Each site has a `src/seopyramids.config.ts` that defines `domain`, `siteName`, `defaultLocale`, `otherLocales`, blog roll size, etc. — that's the per-site source of truth.
+Chaque site déclare sa configuration dans `src/seopyramids.config.ts`.
 
-`apps/robusta` documents the v1 routing scheme (locale, `page`, `s` discriminants for ISR) in its own README. Preserve that structure when editing v1; the v2 scheme is its own — discriminants `l`, `c`, `p`, `t` under a site-named content root — and is documented in the Routing section of `apps/robusta-build/README.md`.
+## Vocabulaire des composants
 
-## Component Vocabulary
+- workspace : l'ensemble du code et de la documentation du projet
+- app : du code qui s'exécute, dont aucune autre app ne dépend ; elle a son propre manifeste de build (`package.json`). Ici dans `./apps`
+- module : il a son propre manifeste de build, et des apps ou d'autres modules en dépendent. Ici dans `./packages`
+- package : un dossier à l'intérieur d'une app ou d'un module, autour d'une responsabilité. À ne pas confondre avec le dossier `./packages` de yarn
 
-A component is made with other components, so we need more precise vocabulary
+## Commandes
 
-- workspace: where the code and documentation of the whoe project lives
-- app : code that can run, and no other app depends on an app. An app has its own build manifest (`package.json`, `pom.xml`); There are apps in `./apps`, `./infra` and `./scripts`
-- module — A module has its own build manifest, apps or other modules depend on it. Here modules are in `./packages/` ``
-- package — a directory inside an app or a module, around one responsibility. It's important to differentiate from the yarn stadard module directory improperly called `./packages`
-- 
-
-## Services
-
-- `services/scribe-intel-collector` — Express + OTel + Prometheus exporter (vite-node for dev)
-- `services/scribe-intel-backend` — docker-compose stack (Loki, Tempo, Prometheus) with the corresponding configs
-
-## Commands
-
-Run from the repo root unless noted.
-
-### Install / clean
-
-Node 22 (`.nvmrc`), 22.12 or later for TanStack Start, and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml` — the yarn on your PATH delegates to it. Corepack is not needed, and a corepack cache inside the repository breaks the install: see Yarn on a build agent in `apps/robusta-build/README.md`. `packageManager: "yarn@4.17.1"` is what a corepack shim or an editor reads; `yarnPath` decides which binary runs. `.yarnrc.yml` also sets `nodeLinker: node-modules`, the layout `tsc`, `next build`, Vite and vitest expect and Netlify requires; unknown CLI options are errors under yarn 4, not warnings.
+Depuis la racine. Node 22.12 ou plus (`.nvmrc`) et yarn 4.17.1, dont le binaire est commité (`yarnPath` dans `.yarnrc.yml`). Corepack est inutile, et un cache corepack dans le dépôt casse l'install : voir « Yarn on a build agent » dans `apps/robusta-build/README.md`.
 
 ```bash
-yarn install         # install everything
-yarn clean           # rm -rf packages/*/dist and root node_modules
-yarn clean:install   # clean then reinstall
+yarn install
+yarn build:deps        # helpers → themes → design-system → layouts → links → ctas
+yarn build:robusta     # v2
+yarn build:robusta-v1
+yarn build:dakar
+yarn dev:robusta       # ou dev:robusta-v1, dev:dakar
+yarn lint              # eslint sur packages/**/src
+yarn workspace @robusta/robusta-build run lint
+yarn workspace @robusta/robusta-build run test           # vitest
+yarn workspace @robusta/pyramids-design-system run test  # node --test
 ```
 
-### Build packages (required before/during app builds)
-
-```bash
-yarn build:deps      # builds helpers → themes → design-system → layouts → links → ctas in order
-yarn build:robusta     # build:deps then `vite build` for apps/robusta-build (v2)
-yarn build:robusta-v1  # build:deps then `next build` for apps/robusta (v1)
-yarn build:dakar     # build:deps then `next build` for apps/dakar
-```
-
-### Dev servers
-
-```bash
-yarn dev:robusta      # apps/robusta-build with Vite
-yarn dev:robusta-v1   # apps/robusta with Next.js + Turbopack
-yarn dev:dakar       # apps/dakar with Next.js + Turbopack
-yarn dev:dev         # concurrent: links + layouts + ctas + helpers watchers, plus dev:robusta-v1
-```
-
-When editing shared package code while a dev server is running, keep the watcher up — without it, the app keeps consuming the old `dist/`. Individual watchers: `yarn w:helpers`, `w:themes`, `w:design-system`, `w:layouts`, `w:ctas`, `w:links`, `w:deps`.
-
-### Lint / format
-
-```bash
-yarn lint            # eslint over packages/**/src/**/*.{ts,tsx}
-```
-
-Each site also has its own `lint`, `next lint` on the two Next.js apps and eslint over `src` on `apps/robusta-build`. Lint is **not gated by any build** (`eslint.ignoreDuringBuilds: true` in both `next.config.ts`) — run it explicitly.
-
-Prettier config lives in `prettier.config.js` (single quotes, semi, trailing comma all, printWidth 80, tailwindcss plugin, proseWrap always).
-
-### Tests
-
-Two workspaces declare a `test` script, and that script is the whole command:
-
-```bash
-yarn workspace @robusta/pyramids-design-system run test   # 75 tests — the design system, on node --test
-yarn workspace @robusta/robusta-build run test      # 330 tests — the v2 site: URL scheme, corpus reader, corpus, page data, build scripts
-```
-
-Vitest is also installed in `apps/robusta`, `packages/scribe-intel` and `packages/helpers`, which declare no script; invoke it from the workspace itself:
-
-```bash
-yarn workspace @robusta/build exec vitest run            # apps/robusta
-yarn workspace @robusta/scribe-intel exec vitest run     # packages/scribe-intel
-```
-
-The specs of `apps/robusta-build/src/content/corpus-reader` build a corpus on disk per test; a spec that reads the site's real corpus lives in `src/content`, outside `corpus-reader`.
-
-There is no root-level `yarn test`.
-
+- Un site consomme le `dist/` des modules : quand on modifie un module pendant que le site tourne, garder son watcher (`yarn w:<module>`, ou `yarn dev:dev` pour v1).
+- Aucun build ne lance eslint : le lint est une étape à part.
+- Pas de `yarn test` à la racine. Vitest est aussi installé, sans script, dans `apps/robusta` et `packages/helpers` : `yarn workspace <nom> exec vitest run`.
+- Prettier : `prettier.config.js`.
 
 ### Netlify CLI
 
-netlify-cli is not a dependency of the repository and `netlify` is not on the PATH: run it as `npx netlify-cli <command>`. npx keeps it in `~/.npm/_npx`; the login token lives in `~/Library/Preferences/netlify/config.json`. A deploy from the CLI is a draft deploy: never pass `--prod`.
+netlify-cli n'est pas une dépendance du dépôt et `netlify` n'est pas dans le PATH : `npx netlify-cli <commande>`. npx le garde dans `~/.npm/_npx` ; le jeton de login est dans `~/Library/Preferences/netlify/config.json`. Un déploiement depuis le CLI est un draft deploy : jamais `--prod`.
 
+## Conventions
 
+### Imports TypeScript
 
-## Conventions enforced in this repo
-
-These come from `.cursor/rules/*.mdc` and apply to all generated code.
-
-### TS imports — extension rule (critical)
-
-In TypeScript files, **local imports must end with `.js`** even though the source is `.ts` / `.tsx`:
+Un import local finit par `.js`, même si la source est `.ts` ou `.tsx` :
 
 ```ts
-import dotenv from 'dotenv';                       // package — no extension
-import { getOpenAiKey } from '../api/get-key.js';  // local — `.js` even though it's get-key.ts
+import dotenv from 'dotenv';                       // dépendance : pas d'extension
+import { getOpenAiKey } from '../api/get-key.js';  // local : .js
 ```
 
-`apps/dakar/next.config.ts` enables this via `experimental.extensionAlias`. If you touch a file with a non-`.js` local import, **flag it but do not silently rewrite it** — that's the project policy.
+Un import local sans `.js` rencontré en passant se signale, il ne se corrige pas en silence.
 
-### React / Next.js
+### React et TypeScript
 
-- Functional components only; never `React.FC`. Define `interface FooProps` and a plain function.
-- Favor named exports; file name = component name in PascalCase (`Header.tsx`).
-- Use directories in lowercase-with-dashes.
-- On `apps/robusta` and `apps/dakar`, prefer RSC + ISR over client components. `apps/robusta-build` has no server component: its build fails on a `'use client'` or `'use server'` under `src`. Limit client-side state.
-- Use Effector when a single user action would require coordinating >3 related `useState` hooks or sharing state across siblings without prop-drilling dispatch.
-- Do **not** refactor existing component code for style/lint — that explodes diff size. Only modify what's required for the task.
+- Composants fonctionnels, jamais `React.FC` : une `interface FooProps` et une fonction.
+- Exports nommés ; le fichier porte le nom du composant en PascalCase ; dossiers en minuscules avec tirets.
+- `apps/robusta-build` n'a aucun composant serveur : `check:source` fait échouer son build sur un `'use client'` ou `'use server'` sous `src`. Sur v1 et dakar, préférer RSC et ISR aux composants client.
+- Pas de `any` : `unknown` ou un type précis. Une interface plutôt qu'un `type` pour un objet.
+- Ne pas refactorer du code existant pour le style ou le lint : seulement ce que la tâche demande.
 
-### Styling
+### Styles
 
-Which rule applies depends on the site.
+- `apps/robusta-build` : couleurs, typographie, espacements et rayons viennent du design system et de nulle part ailleurs (BR-PYRAMID-6). `src/styles/globals.css` ne contient que des alias vers ses tokens. Composants shadcn sur Tailwind 4, sans DaisyUI ni `pyramids-layouts`, `pyramids-links` ou `pyramids-ctas`.
+- v1 et dakar : tokens sémantiques DaisyUI (`primary`, `secondary`, `accent`, `neutral`, `base-100/200/300`), jamais de couleur Tailwind brute ; un `bg-*` va avec son `text-*-content`. Un composant non trivial expose `extraClasses?: string`, fusionné par `twCss(...)` de `pyramids-helpers`.
 
-`apps/robusta-build`, the v2 site, does not use DaisyUI. Its colours, type, spacing and radii come from `@robusta/pyramids-design-system` and from nowhere else — BR-PYRAMID-6 in `business-rules.md`. The site may add a name, never a value: `src/styles/globals.css` aliases the names a third-party token layer expects onto design-system tokens, and every entry there is an alias. Components come from shadcn on Tailwind 4. Do not reach for `pyramids-layouts`, `pyramids-links` or `pyramids-ctas` from this site — they render DaisyUI classes and the shadcn decision deprecates them.
+### Images
 
-The rest of this section governs `apps/robusta` and `apps/dakar`, which are on DaisyUI and stay there.
+- `apps/robusta-build` : une couverture d'article est un `<img>` simple qui remplit sa boîte 16:9, sans optimiseur. Le corps d'un article est du markdown rendu par `remark-html`, qui assainit le HTML, injecté par `dangerouslySetInnerHTML` avec un CSS Module. Détail : `features/pyramid-v2-epic/article-page/article-page.design.md`.
+- v1 et dakar : `next/image` avec un `alt` descriptif. `sizes` seulement sur une image `fill` ou responsive. Une image importée porte déjà `width`, `height` et `blurDataURL` : ne pas les réécrire. Les sources restent en PNG ou JPEG, le WebP vient de l'optimiseur.
+- Une image propre à un composant vit à côté de lui ; `public/` ne contient que de vrais assets publics.
 
-Stick to DaisyUI semantic tokens. Avoid `bg-red-500` / `text-blue-700`-style raw Tailwind colors:
+## Documents Compound
 
-- `primary` — main action / UI position (Robusta primary is `#921514`)
-- `secondary` — brand color (Robusta `#00F4CF`, "violet" in the rules even though hex is teal — follow the hex)
-- `accent` — CTAs (`#02284c`)
-- `neutral` — cancel / close
-- `base-100/200/300` — white / light grey / grey
+Tous les fichiers Compound sont en français : stories, brainstorms, designs, epics, bulks, fix, `decisions-and-questions.md`, `ROADMAP.md`, `business-rules.md`, les définitions de `ubiquitous-language.md` et les `*.archi.md`.
 
-Always pair a `bg-*` with the matching `text-*-content`. Use `gaps`, not margins, for spacing inside lists/collections.
-
-For a non-trivial component, expose `extraClasses?: string` and merge with `twCss(...)` from `pyramids-helpers`.
-
-### Responsive — `mob` breakpoint
-
-Tailwind config adds a `mob` breakpoint (= `max: md`, the inverse of `sm`). Prefer `mob:hidden`, `mob:flex-col`, etc. Use `sm` and `lg`; ignore `md`/`xl`/`2xl` unless already present (don't strip them).
-
-
-### Other
-
-- MongoDB: never put methods on Mongoose models — keep them as data, use separate Domain Objects.
-- Use `nuqs` for URL search-param state.
-- On `apps/robusta` and `apps/dakar`, use `next/image` with a descriptive `alt` for every image a component of the site renders. Which image the rest of the rule governs differs:
-  - `sizes` is required when the image is `fill` or otherwise responsive: without it Next assumes `100vw` and the browser fetches a full-viewport-width file whatever the slot's real size. On an image of known dimensions it selects nothing — the generated `srcset` is a fixed 1x/2x pair — so don't add one there.
-  - An imported image (`import cover from './cover.png'`, or `await import()`) carries `width`, `height` and `blurDataURL` on the module itself: never restate them by hand. A `src` computed as a string at build time has no dimensions to read, which is the case `fill` plus `sizes` answers.
-  - WebP comes from the optimizer, whose default `formats` is `['image/webp']`, not from the source file. Sources stay PNG or JPEG; converting them ahead of time buys nothing.
-- On `apps/robusta-build`, an article cover is a plain `<img>` filling its 16:9 box, served from the asset root with no image optimizer. An article body is markdown rendered by `remark-html`, which sanitizes by default, so it carries no utility class; it reaches the DOM through `dangerouslySetInnerHTML` with a CSS Module. Detail in `features/pyramid-v2-epic/article-page/article-page.design.md`.
-- Component-local images live next to the component; only put genuine public assets in `public/`.
-- Avoid `any` — use `unknown` or precise types. Prefer interfaces over `type` for object shapes.
-- TypeScript path alias resolution in tests: the v2 site's vitest config sets Vite's `resolve.tsconfigPaths`.
-
-## Compound documents
-
-Every Compound file of this repository is written in French: stories, brainstorms, design docs, epics, bulks, fix documents, `decisions-and-questions.md`, `ROADMAP.md`, `business-rules.md`, the definitions of `ubiquitous-language.md` and every `*.archi.md`. Decided on 2026-10-06.
-
-What stays in English: code and code comments, identifiers, file paths, requirement and AC keys, the terms of `ubiquitous-language.md` themselves, and quotes kept as spoken. A Compound file written in English before that date is translated when an agent rewrites it, not in a sweep.
+Restent en anglais : le code et ses commentaires, les identifiants, les chemins, les clés R- et AC, les termes de `ubiquitous-language.md` et les citations. Un fichier Compound écrit en anglais avant le 2026-10-06 se traduit quand un agent le réécrit.
 
 ## Git
 
-- Default branch: `main`. Active development on `dev`.
-- Commit style: prefixed `feat(scope):`, `fix(scope):`, `chore(scope):` (see recent log: `feat(design):`, `feat(home):`, `fix(spots):`).
-- NEVER COMMIT nor PUSH if I don't say it
+- Branche par défaut : `main`. Le travail se fait sur `epic/<epic>` ou `feat/<story>`.
+- Messages : `type(scope): description` (`feat`, `fix`, `refactor`, `docs`, `chore`, `test`).
+- Ne jamais commiter ni pousser sans demande explicite.
