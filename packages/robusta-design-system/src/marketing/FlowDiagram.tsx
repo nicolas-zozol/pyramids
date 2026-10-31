@@ -11,6 +11,8 @@ export interface FlowStep {
 }
 
 export interface FlowDiagramProps {
+  /** The section's id, `approach` when absent; two diagrams on one page need two. */
+  id?: string;
   eyebrow?: string;
   /**
    * Section title. Pass a `ReactNode` to inline highlight spans (e.g.
@@ -54,6 +56,7 @@ const DEFAULT_CAVEAT = (
  * arrow at the end of a wrapped line pointing at nothing.
  */
 export function FlowDiagram({
+  id = 'approach',
   eyebrow = '// how an engagement runs',
   title = DEFAULT_TITLE,
   steps = DEFAULT_STEPS,
@@ -65,7 +68,7 @@ export function FlowDiagram({
   const merged = ['sk-flow-diagram', className].filter(Boolean).join(' ');
 
   return (
-    <section id="approach" className={merged} style={style}>
+    <section id={id} className={merged} style={style}>
       <div className="sk-flow-diagram__head">
         <div className="sk-flow-diagram__eyebrow">{eyebrow}</div>
         <h2 className="sk-flow-diagram__title">{title}</h2>

@@ -6,11 +6,15 @@ import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.js';
 export interface NavLink {
   label: string;
   href: string;
+  /** The language of the page the link leads to, written as its `lang` and `hrefLang`. */
+  locale?: string;
 }
 
 export interface SiteHeaderProps {
   /** Path/URL string for the wordmark PNG used by the embedded `<BrandLogo>`. */
   wordmarkSrc?: string;
+  /** The wordmark's target, `/` when absent. */
+  homeHref?: string;
   /** Nav links rendered between the logo and the CTA. */
   links?: NavLink[];
   /** Right-aligned CTA button label. Set to empty string to hide the button. */
@@ -40,6 +44,7 @@ const DEFAULT_LINKS: NavLink[] = [
  */
 export function SiteHeader({
   wordmarkSrc,
+  homeHref = '/',
   links = DEFAULT_LINKS,
   ctaLabel = 'book a call',
   ctaHref = '#book',
@@ -51,12 +56,17 @@ export function SiteHeader({
 
   return (
     <header className={merged} style={style}>
-      <Link href="/" className="sk-site-header__brand">
+      <Link href={homeHref} className="sk-site-header__brand">
         <BrandLogo size="compact" wordmarkSrc={wordmarkSrc} />
       </Link>
       <nav className="sk-site-header__nav">
         {links.map((l) => (
-          <Link key={l.href} href={l.href} className="sk-site-header__link">
+          <Link
+            key={l.href}
+            href={l.href}
+            className="sk-site-header__link"
+            {...languageOf(l)}
+          >
             {l.label}
           </Link>
         ))}
@@ -68,4 +78,8 @@ export function SiteHeader({
       </nav>
     </header>
   );
+}
+
+function languageOf({ locale }: NavLink) {
+  return locale === undefined ? {} : { lang: locale, hrefLang: locale };
 }
