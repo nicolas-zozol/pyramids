@@ -15,16 +15,16 @@ Depuis multilingual-site (LANDED le 2026-10-31, `fb4803b`), chaque page porte le
 
 La Locale par défaut se sert donc sans préfixe : `/` est la landing page `en`, le contenu anglais vit sous `/articles/…`, `fr` et `es` gardent `/fr` et `/es`. La règle est au registre : BR-PYRAMID-14, un site sert les pages de sa Locale par défaut sans marqueur de Locale dans leur URL. Aucune page n'est générée sous `/en` : `/en`, `/en/` et les adresses sous `/en/` reçoivent une redirection permanente (301) de l'hébergeur vers la même page sans préfixe. Prix accepté : changer un jour de Locale par défaut déplacera des URL. Écarté : un rewrite 200 de `/` vers `/en`, qui crée une copie, ou sort la landing anglaise de son préfixe alors que ses articles y restent. Le site est encore `noindex` : aucun moteur ne garde d'adresse `/en…`.
 
-Le glossaire décrit déjà ce schéma : `Locale` laisse la Locale par défaut sans marqueur, `Canonical URL` fait rediriger une Locale par défaut marquée. BR-PYRAMID-1 tient sans discriminant de Locale, une Locale ne pouvant valoir ni le content root ni l'asset root. La story ne rouvre pas multilingual-site ; hreflang et x-default restent à seo-excellence.
+Le glossaire décrit déjà ce schéma : `Locale` laisse la Locale par défaut sans marqueur, `Canonical URL` fait rediriger une Locale par défaut marquée. BR-PYRAMID-1 tient sans discriminant de Locale, une Locale ne pouvant valoir ni le content root ni l'asset root. Un seul jeu de routes sert toutes les Locales, la Locale par défaut lue par l'absence de préfixe ; la forme du segment revient au design. Une adresse `/en…` se lit comme la page anglaise sans préfixe, sa forme canonique, ce qui fixe la cible des 301. Les jumeaux `.html` que l'hébergeur sert en 200 pour toute page restent hors périmètre : le README les accepte déjà (§One URL per page), et le canonical link qui les traite revient à seo-excellence. La story ne rouvre pas multilingual-site ; hreflang et x-default restent à seo-excellence.
 
 ## Acceptance Criteria
 
-- AC-ROOTLOCALE-1 : Given le site publié sur un deploy Netlify, When un visiteur ou un crawler ouvre `/`, Then il reçoit en 200, sans aucune redirection, la landing page anglaise, `lang="en"`, avec sa page copy RB Compound ; `/` est la seule adresse de cette page, et `/fr` et `/es` restent les landing pages française et espagnole.
-- AC-ROOTLOCALE-2 : Given le corpus publié, When le site est construit, Then le contenu anglais est servi sans préfixe et le français sous `/fr` : `/articles/c/privacy/leaving-gmail` et `/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain` répondent 200, le site compte toujours 30 URL de contenu, 14 sous `/articles/…` et 16 sous `/fr/articles/…`, et aucune page n'est publiée sous `/en` : chaque page anglaise n'existe qu'à une adresse.
+- AC-ROOTLOCALE-1 : Given le site publié sur un deploy Netlify, When un visiteur ou un crawler ouvre `/`, Then il reçoit en 200, sans aucune redirection, la landing page anglaise, `lang="en"`, avec sa page copy RB Compound ; `/` est la seule adresse que le site construit pour cette page, le jumeau `.html` de l'hébergeur mis à part, et `/fr` et `/es` restent les landing pages française et espagnole.
+- AC-ROOTLOCALE-2 : Given le corpus publié, When le site est construit, Then le contenu anglais est servi sans préfixe et le français sous `/fr` : `/articles/c/privacy/leaving-gmail` et `/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain` répondent 200, le site compte toujours 30 URL de contenu, 14 sous `/articles/…` et 16 sous `/fr/articles/…`, et aucune page n'est publiée sous `/en` : chaque page anglaise n'existe qu'à une adresse construite par le site, jumeau `.html` de l'hébergeur mis à part.
 - AC-ROOTLOCALE-3 : Given une ancienne adresse anglaise préfixée, When un visiteur ouvre `/en`, `/en/` ou `/en/articles/c/blockchain`, Then il reçoit une redirection permanente vers la même page sans préfixe, `/` ou `/articles/c/blockchain`, servie par l'hébergeur.
-- AC-ROOTLOCALE-4 : Given une page du site, When un visiteur suit ses liens, Then chaque lien vers une page anglaise mène à sa forme sans préfixe : le wordmark d'une page anglaise et le lien « tous les articles » de `/` mènent à `/` et `/articles`, le lien anglais de l'en-tête de `/fr/articles/c/blockchain` à `/articles/c/blockchain` et celui de `/es` à `/`, `quitter-gmail` lie `leaving-gmail` sous `/articles/…`, et la page 404 comme l'état d'échec de navigation renvoient vers `/`.
-- AC-ROOTLOCALE-5 : Given la v1 map régénérée dans le même changement, When on la compare à celle d'aujourd'hui, Then elle liste les mêmes 82 adresses v1 dans le même ordre avec la même issue (67 permanentes, 5 Gone, 10 sans destination), et seules les destinations anglaises changent : `/learn` mène à `/articles`, `/learn/fr/blockchain` toujours à `/fr/articles/c/blockchain`.
-- AC-ROOTLOCALE-6 : Given les cas limites, When le site est construit puis servi, Then `theory`, revendiquée par `fr` seule, n'a de page que sous `/fr`, `/articles/c/theory` répond 404 et le lien anglais de `/fr/articles/c/theory` mène à `/` ; `/es/articles` répond 404 tant qu'aucun article espagnol n'est publié ; `/fr/` et `/es/` reçoivent toujours la redirection permanente de l'hébergeur vers la forme sans barre finale, et `/` n'en reçoit aucune ; une adresse sous `/l/` ou une Locale que le site ne déclare pas, comme `/de`, reçoit la page 404 anglaise ; sous `vite dev`, `/` sert aussi la landing page anglaise.
+- AC-ROOTLOCALE-4 : Given une page du site, When un visiteur suit ses liens, Then chaque lien vers une page anglaise mène à sa forme sans préfixe : le wordmark d'une page anglaise et le lien « tous les articles » de `/` mènent à `/` et `/articles`, le lien anglais de l'en-tête de `/fr/articles/c/blockchain` à `/articles/c/blockchain` et celui de `/es` à `/`, `quitter-gmail` lie `leaving-gmail` sous `/articles/…` ; dans l'autre sens, `/` lie `/fr` et `/es`, et `leaving-gmail` lie `/fr/articles/c/privacy/quitter-gmail`, que la page soit prérendue ou atteinte par une navigation client depuis `/fr` ; enfin la page 404 comme l'état d'échec de navigation renvoient vers `/`.
+- AC-ROOTLOCALE-5 : Given la v1 map régénérée dans le même changement, When on la compare à celle d'aujourd'hui, Then elle liste les mêmes 82 adresses v1 dans le même ordre avec la même issue (67 permanentes, 5 Gone, 10 sans destination), et seules changent les destinations anglaises, `/learn` menant à `/articles` et `/learn/fr/blockchain` toujours à `/fr/articles/c/blockchain`, et la raison de la ligne `/`, qui reste sans destination et dit que le site v2 sert sa landing page anglaise à cette même adresse.
+- AC-ROOTLOCALE-6 : Given les cas limites, When le site est construit puis servi, Then `theory`, revendiquée par `fr` seule, n'a de page que sous `/fr`, `/articles/c/theory` répond 404, `/en/articles/c/theory` y mène par la 301 de l'hébergeur puis reçoit la page 404 anglaise, et le lien anglais de `/fr/articles/c/theory` mène à `/` ; `/es/articles` répond 404 tant qu'aucun article espagnol n'est publié ; `/fr/` et `/es/` reçoivent toujours la redirection permanente de l'hébergeur vers la forme sans barre finale, et `/` n'en reçoit aucune ; une adresse sous `/l/` ou une Locale que le site ne déclare pas, comme `/de`, reçoit la page 404 anglaise ; sous `vite dev`, `/` sert aussi la landing page anglaise, et `/en` comme `/en/articles` reçoivent la page 404 anglaise, la 301 n'existant que chez l'hébergeur.
 
 ## Boundaries
 
@@ -44,9 +44,9 @@ Client code : navigateurs et crawlers.
 
 - `GET /` — 200, la landing page `en`, sa canonical URL · avant : 301 vers `/en`, règle de `netlify.toml`
 - `GET /articles…` — 200, les 14 URL de contenu `en` · avant : 404, servies sous `/en/articles…`
-- `GET /en` et `GET /en/…` — 301 de l'hébergeur vers la même page sans préfixe · avant : 200
+- `GET /en` et `GET /en/…` — 301 de l'hébergeur vers la même page sans préfixe ; une page absente en anglais finit en 404 · avant : 200
 - `GET /fr`, `/es`, `/fr/articles…`, et `/{fr|es}/` en 301 de l'hébergeur — inchangés
-- `GET /l/…`, `/es/articles…` et toute adresse inconnue — 404, la page 404 anglaise, retour vers `/` · avant : retour vers `/en`
+- `GET /l/…`, `/de`, `/es/articles…` et toute adresse inconnue — 404, la page 404 anglaise, retour vers `/` · avant : retour vers `/en`
 
 ### library API of package `url-scheme` in package `routing` — modified
 
@@ -56,7 +56,8 @@ type UrlScheme, PageUrl // unchanged
 /** no prefix for the default Locale: `/`, `/articles…` */
 function buildUrl(scheme: UrlScheme, page: PageUrl): string;
 
-/** reads an unprefixed path as a page of the default Locale */
+/** an unprefixed path is a page of the default Locale; a path marked with
+ *  the default Locale reads as that same page, its canonical form unmarked */
 function parseUrl(scheme: UrlScheme, path: string): PageUrl | undefined;
 ```
 
