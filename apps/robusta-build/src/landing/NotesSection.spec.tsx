@@ -55,7 +55,7 @@ describe('NotesSection', () => {
     );
 
     expect(anchorsTo(french, '/fr/articles')).toHaveLength(1);
-    expect(anchorsTo(english, '/en/articles')).toHaveLength(1);
+    expect(anchorsTo(english, '/articles')).toHaveLength(1);
   });
 
   it('tags a note with the label of its Category in its Locale, never the slug', async () => {

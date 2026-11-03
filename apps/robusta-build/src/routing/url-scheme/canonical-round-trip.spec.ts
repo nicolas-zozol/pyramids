@@ -115,9 +115,9 @@ describe('canonicality is the fixed point of buildUrl and parseUrl', () => {
 });
 
 /**
- * The three non-canonical families. Each mutation produces a path the parser
+ * The four non-canonical families. Each mutation produces a path the parser
  * reads and the builder never emits, so each is a redirect source whose target
- * is the canonical form — R-URLSCHEME-8 and 10.
+ * is the canonical form — R-URLSCHEME-8 and 10, R-ROOTLOCALE-02.
  */
 type Mutation = {
   name: string;
@@ -140,8 +140,15 @@ const mutations: Mutation[] = [
   },
   {
     name: 'the uppercase variant',
-    applies: () => true,
+    applies: (scheme, page) =>
+      !(page.kind === 'landing' && page.locale === scheme.defaultLocale),
     mutate: (_scheme, _page, canonical) => canonical.toUpperCase(),
+  },
+  {
+    name: 'the marked default Locale',
+    applies: (scheme, page) => page.locale === scheme.defaultLocale,
+    mutate: (scheme, _page, canonical) =>
+      `/${scheme.defaultLocale}${canonical === '/' ? '' : canonical}`,
   },
 ];
 

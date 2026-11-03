@@ -35,30 +35,40 @@ beforeAll(async () => {
   toml = await readFile(new URL('../../netlify.toml', import.meta.url), 'utf8');
 });
 
-describe('the redirect rule of netlify.toml', () => {
-  it('is one rule, from the bare site root', () => {
+// R-ROOTLOCALE-41, R-ROOTLOCALE-42: the host leads a page marked with the
+// default Locale to the same page unmarked.
+describe('the redirect rules of netlify.toml', () => {
+  const marker = `/${urlScheme.defaultLocale}`;
+
+  it('are exactly two rules, from the marked default Locale and from everything under it', () => {
     const rules = redirectRules(toml);
 
-    expect(rules).toHaveLength(1);
-    expect(rules[0].from).toBe('/');
+    expect(rules.map((rule) => rule.from)).toEqual([marker, `${marker}/*`]);
   });
 
-  it('leads to the landing page of the default Locale, as buildUrl writes it', () => {
-    const [rule] = redirectRules(toml);
+  it('lead the marker alone to the landing page of the default Locale, as buildUrl writes it', () => {
+    const [landing] = redirectRules(toml);
 
-    expect(rule.to).toBe(
+    expect(landing.to).toBe(
       buildUrl(urlScheme, { kind: 'landing', locale: urlScheme.defaultLocale }),
     );
   });
 
-  it('is permanent and not forced, so it applies only while no file occupies /', () => {
-    const [rule] = redirectRules(toml);
+  it('lead everything under the marker to the same path unmarked', () => {
+    const [, underMarker] = redirectRules(toml);
 
-    expect(rule.status).toBe(301);
-    expect(rule.force ?? false).toBe(false);
+    expect(underMarker.to).toBe('/:splat');
   });
 
-  it('is no longer denied by the header of the file', () => {
-    expect(toml).not.toMatch(/no redirect rule/i);
+  it('are permanent and not forced', () => {
+    for (const rule of redirectRules(toml)) {
+      expect(rule.status).toBe(301);
+      expect(rule.force ?? false).toBe(false);
+    }
+  });
+
+  it('leave the bare site root to the file that occupies it', () => {
+    expect(redirectRules(toml).map((rule) => rule.from)).not.toContain('/');
+    expect(toml).not.toMatch(/build writes no index\.html/i);
   });
 });

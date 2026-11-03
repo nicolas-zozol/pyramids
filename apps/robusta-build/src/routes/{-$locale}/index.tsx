@@ -5,7 +5,7 @@ import { getPageCopy } from '@/seopyramids.config.ts';
 
 const NOTES_LIMIT = 4;
 
-export const Route = createFileRoute('/$locale/')({
+export const Route = createFileRoute('/{-$locale}/')({
   head: ({ params }) => {
     const { title, description } = getPageCopy(params.locale).landing.head;
     return { meta: [{ title }, { name: 'description', content: description }] };

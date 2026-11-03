@@ -1,7 +1,10 @@
 /**
  * Package url-scheme — the v2 URL scheme as pure string functions: the
- * discriminants, the canonical builder, the parser, the URL set.
+ * discriminants, the canonical builder, the parser, the Locale of a route
+ * segment, the URL set.
  *
+ * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Requirements: R-ROOTLOCALE-01, R-ROOTLOCALE-02, R-ROOTLOCALE-03
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-01, R-MULTILINGUAL-02, R-MULTILINGUAL-05, R-MULTILINGUAL-21, R-MULTILINGUAL-22, R-MULTILINGUAL-23
  * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
@@ -23,6 +26,7 @@ export type {
 } from './scheme.ts';
 
 export { buildUrl } from './build-url.ts';
+export { localeOfSegment } from './locale-of-segment.ts';
 export { parseUrl } from './parse-url.ts';
 export { landingPages, urlSet } from './url-set.ts';
 export { validateArticles } from './validate-articles.ts';

@@ -50,6 +50,9 @@ async function headerAt(path: string): Promise<string> {
   );
 }
 
+const landingOf = (locale: string) =>
+  buildUrl(urlScheme, { kind: 'landing', locale });
+
 const hrefsOfLocaleLinks = async (path: string) =>
   localeLinks(await headerAt(path)).map((link) => link.href);
 
@@ -65,7 +68,7 @@ describe('Header', () => {
 
       expect(html).toMatch(/<header class="sk-site-header"/);
       expect(wordmark).toContain('class="sk-site-header__brand"');
-      expect(anchorsTo(html, '/')).toEqual([]);
+      expect(anchorsTo(html, landing)).toHaveLength(1);
       expect(html).toContain(`src="${wordmarkSrc}"`);
     }
   });
@@ -79,15 +82,15 @@ describe('Header', () => {
 
       expect(localeLinks(html)).toEqual(
         others.map((other) => ({
-          href: `/${other}`,
+          href: landingOf(other),
           lang: other,
           hrefLang: other,
           label: htmlText(getPageCopy(other).localeName),
         })),
       );
       expect(hrefs(html)).toEqual([
-        `/${locale}`,
-        ...others.map((other) => `/${other}`),
+        landingOf(locale),
+        ...others.map(landingOf),
         `mailto:${contact.email}`,
       ]);
       expect(html).toContain(
@@ -98,22 +101,31 @@ describe('Header', () => {
 
   it('leads from leaving-gmail to quitter-gmail, and from quitter-gmail to leaving-gmail, the Spanish link to /es', async () => {
     expect(
-      await hrefsOfLocaleLinks('/en/articles/c/privacy/leaving-gmail'),
+      await hrefsOfLocaleLinks('/articles/c/privacy/leaving-gmail'),
     ).toEqual(['/fr/articles/c/privacy/quitter-gmail', '/es']);
     expect(
       await hrefsOfLocaleLinks('/fr/articles/c/privacy/quitter-gmail'),
-    ).toEqual(['/en/articles/c/privacy/leaving-gmail', '/es']);
+    ).toEqual(['/articles/c/privacy/leaving-gmail', '/es']);
   });
 
   it('leads from theory, claimed by French articles only, to the English landing page', async () => {
     expect(await hrefsOfLocaleLinks('/fr/articles/c/theory')).toEqual([
-      '/en',
+      '/',
       '/es',
     ]);
   });
 
   it('leads each other Locale of a landing page to its landing page', async () => {
-    expect(await hrefsOfLocaleLinks('/en')).toEqual(['/fr', '/es']);
+    expect(await hrefsOfLocaleLinks('/')).toEqual(['/fr', '/es']);
+  });
+
+  // AC-ROOTLOCALE-4: every link to an English page is its unprefixed form.
+  it('leads to the English pages unprefixed, from a French Category and from the Spanish landing page', async () => {
+    expect(await hrefsOfLocaleLinks('/fr/articles/c/blockchain')).toEqual([
+      '/articles/c/blockchain',
+      '/es',
+    ]);
+    expect(await hrefsOfLocaleLinks('/es')).toEqual(['/', '/fr']);
   });
 
   it('leads from a page of the French blog roll beyond the first to the first page of the English one', async () => {
@@ -132,7 +144,7 @@ describe('Header', () => {
     );
 
     expect(localeLinks(html).map((link) => link.href)).toEqual([
-      '/en/articles',
+      '/articles',
       '/es',
     ]);
   });
@@ -163,7 +175,14 @@ describe('Header', () => {
       expect(localeLinks(html).map((link) => link.href)).toEqual(
         trio
           .filter((other) => other.locale !== version.locale)
-          .map((other) => `/${other.locale}/articles/c/privacy/${other.slug}`),
+          .map((other) =>
+            buildUrl(urlScheme, {
+              kind: 'article',
+              locale: other.locale,
+              category: 'privacy',
+              slug: other.slug,
+            }),
+          ),
       );
     }
   });
@@ -179,7 +198,7 @@ describe('Header', () => {
     ).toEqual([]);
     const html = await renderInRouter(<Header locale="fr" counterparts={[]} />);
 
-    expect(localeLinks(html).map((link) => link.href)).toEqual(['/en', '/es']);
+    expect(localeLinks(html).map((link) => link.href)).toEqual(['/', '/es']);
   });
 
   it('declares no language of its own, only its links to the other Locales carrying theirs', async () => {

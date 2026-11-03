@@ -53,9 +53,9 @@ const THIRTEEN_FRENCH = Array.from({ length: 13 }, (_, i) =>
 
 describe('counterpartsOf a landing page', () => {
   it('is the landing page of each other Locale, in the order of the scheme', () => {
-    expect(counterpartsAt('/fr', [])).toEqual(['/en', '/es']);
-    expect(counterpartsAt('/en', [])).toEqual(['/fr', '/es']);
-    expect(counterpartsAt('/es', [])).toEqual(['/en', '/fr']);
+    expect(counterpartsAt('/fr', [])).toEqual(['/', '/es']);
+    expect(counterpartsAt('/', [])).toEqual(['/fr', '/es']);
+    expect(counterpartsAt('/es', [])).toEqual(['/', '/fr']);
   });
 });
 
@@ -63,22 +63,20 @@ describe('counterpartsOf a page of the blog roll', () => {
   const articles = [...THIRTEEN_FRENCH, english('one-article')];
 
   it('is the first page of the roll in each other Locale that has it', () => {
-    expect(counterpartsAt('/fr/articles', articles)).toEqual(['/en/articles']);
+    expect(counterpartsAt('/fr/articles', articles)).toEqual(['/articles']);
   });
 
   it('leads a page beyond the first to the first page of the same roll', () => {
     expect(siteOf(articles).map((page) => buildUrl(urlScheme, page))).toContain(
       '/fr/articles/p/2',
     );
-    expect(counterpartsAt('/fr/articles/p/2', articles)).toEqual([
-      '/en/articles',
-    ]);
+    expect(counterpartsAt('/fr/articles/p/2', articles)).toEqual(['/articles']);
   });
 
   it('is nothing in a Locale whose roll the URLs do not contain, the landing fallback belonging to the header', () => {
-    expect(counterpartsAt('/en/articles', articles)).toEqual(['/fr/articles']);
+    expect(counterpartsAt('/articles', articles)).toEqual(['/fr/articles']);
     expect(
-      counterpartsAt('/en/articles', articles, landingPages(urlScheme)),
+      counterpartsAt('/articles', articles, landingPages(urlScheme)),
     ).toEqual([]);
   });
 });
@@ -94,9 +92,9 @@ describe('counterpartsOf a Category page', () => {
     const articles = [theory, english('which-second-language', 'theory')];
 
     expect(counterpartsAt('/fr/articles/c/theory', articles)).toEqual([
-      '/en/articles/c/theory',
+      '/articles/c/theory',
     ]);
-    expect(counterpartsAt('/en/articles/c/theory', articles)).toEqual([
+    expect(counterpartsAt('/articles/c/theory', articles)).toEqual([
       '/fr/articles/c/theory',
     ]);
   });
@@ -105,7 +103,7 @@ describe('counterpartsOf a Category page', () => {
     const articles = [...THIRTEEN_FRENCH, english('one-article')];
 
     expect(counterpartsAt('/fr/articles/c/web/p/2', articles)).toEqual([
-      '/en/articles/c/web',
+      '/articles/c/web',
     ]);
   });
 });
@@ -143,20 +141,18 @@ describe('counterpartsOf an article', () => {
   ];
 
   it('is every other published version of the same translation identifier, in the order of the scheme', () => {
-    expect(
-      counterpartsAt('/en/articles/c/privacy/leaving-gmail', trio),
-    ).toEqual([
+    expect(counterpartsAt('/articles/c/privacy/leaving-gmail', trio)).toEqual([
       '/fr/articles/c/privacy/quitter-gmail',
       '/es/articles/dejar-gmail',
     ]);
     expect(
       counterpartsAt('/fr/articles/c/privacy/quitter-gmail', trio),
     ).toEqual([
-      '/en/articles/c/privacy/leaving-gmail',
+      '/articles/c/privacy/leaving-gmail',
       '/es/articles/dejar-gmail',
     ]);
     expect(counterpartsAt('/es/articles/dejar-gmail', trio)).toEqual([
-      '/en/articles/c/privacy/leaving-gmail',
+      '/articles/c/privacy/leaving-gmail',
       '/fr/articles/c/privacy/quitter-gmail',
     ]);
   });

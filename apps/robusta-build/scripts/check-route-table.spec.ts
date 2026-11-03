@@ -8,29 +8,34 @@ import {
 
 describe('urlOfHtmlFile', () => {
   it('reads a prerendered file back as the canonical path it was written for', () => {
-    expect(urlOfHtmlFile('en/articles/c/web.html')).toBe('/en/articles/c/web');
+    expect(urlOfHtmlFile('articles/c/web.html')).toBe('/articles/c/web');
+    expect(urlOfHtmlFile('fr/articles.html')).toBe('/fr/articles');
     expect(urlOfHtmlFile('fr.html')).toBe('/fr');
+  });
+
+  it('reads the index.html at the root as the page at /', () => {
+    expect(urlOfHtmlFile('index.html')).toBe('/');
   });
 });
 
 describe('routeTableReport', () => {
-  const landingUrls = ['/en', '/fr'];
+  const landingUrls = ['/', '/fr'];
   const contentUrls = [
-    '/en/articles',
-    '/en/articles/c/web',
-    '/en/articles/c/web/an-article',
-    '/en/articles/c/web/another-article',
+    '/articles',
+    '/articles/c/web',
+    '/articles/c/web/an-article',
+    '/articles/c/web/another-article',
   ];
 
   const agreeing = {
     htmlFiles: [
       '404.html',
-      'en.html',
+      'index.html',
       'fr.html',
-      'en/articles.html',
-      'en/articles/c/web.html',
-      'en/articles/c/web/an-article.html',
-      'en/articles/c/web/another-article.html',
+      'articles.html',
+      'articles/c/web.html',
+      'articles/c/web/an-article.html',
+      'articles/c/web/another-article.html',
     ],
     landingUrls,
     contentUrls,
@@ -42,7 +47,6 @@ describe('routeTableReport', () => {
     expect(routeTableReport(agreeing)).toEqual({
       ok: true,
       built: 6,
-      rootIndexWritten: false,
       builtButNotDerived: [],
       derivedButNotBuilt: [],
       expectedDataFiles: 4,
@@ -56,15 +60,25 @@ describe('routeTableReport', () => {
     expect(report.builtButNotDerived).not.toContain('/404');
   });
 
-  it('fails when a page was written at the bare site root, which belongs to the redirect rule', () => {
+  it('names / derived but not built when no index.html was written', () => {
     const report = routeTableReport({
       ...agreeing,
-      htmlFiles: ['index.html', ...agreeing.htmlFiles],
+      htmlFiles: agreeing.htmlFiles.filter((file) => file !== 'index.html'),
     });
 
     expect(report.ok).toBe(false);
-    expect(report.rootIndexWritten).toBe(true);
-    expect(report.builtButNotDerived).toEqual([]);
+    expect(report.derivedButNotBuilt).toEqual(['/']);
+    expect(report).not.toHaveProperty('rootIndexWritten');
+  });
+
+  it('names a page written under the marked default Locale as built but not derived', () => {
+    const report = routeTableReport({
+      ...agreeing,
+      htmlFiles: [...agreeing.htmlFiles, 'en.html', 'en/articles.html'],
+    });
+
+    expect(report.ok).toBe(false);
+    expect(report.builtButNotDerived).toEqual(['/en', '/en/articles']);
   });
 
   it('names a landing page derived but not written', () => {
@@ -82,19 +96,19 @@ describe('routeTableReport', () => {
       ...agreeing,
       htmlFiles: [
         '404.html',
-        'en.html',
+        'index.html',
         'fr.html',
-        'en/articles.html',
-        'en/articles/c/web.html',
-        'en/articles/c/web/an-article.html',
-        'en/articles/p/1.html',
+        'articles.html',
+        'articles/c/web.html',
+        'articles/c/web/an-article.html',
+        'articles/p/1.html',
       ],
     });
 
     expect(report.ok).toBe(false);
-    expect(report.builtButNotDerived).toEqual(['/en/articles/p/1']);
+    expect(report.builtButNotDerived).toEqual(['/articles/p/1']);
     expect(report.derivedButNotBuilt).toEqual([
-      '/en/articles/c/web/another-article',
+      '/articles/c/web/another-article',
     ]);
   });
 
@@ -149,13 +163,13 @@ describe('pagesRenderedWithAnError', () => {
     html: '<header></header><!--$--><main><h1>vie privée</h1></main><!--/$--><footer></footer>',
   };
   const failed = {
-    file: 'en/articles/c/privacy.html',
+    file: 'articles/c/privacy.html',
     html: '<header></header><!--$!--><template></template><!--/$--><footer></footer>',
   };
 
   it('names the page whose render threw at prerender, its content left to the browser', () => {
     expect(pagesRenderedWithAnError([rendered, failed])).toEqual([
-      '/en/articles/c/privacy',
+      '/articles/c/privacy',
     ]);
   });
 

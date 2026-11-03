@@ -9,6 +9,8 @@
  * Requirements: R-MIGRATELEARN-61
  * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
+ * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Requirements: R-ROOTLOCALE-04, R-ROOTLOCALE-42, R-ROOTLOCALE-81
  */
 import type { UrlScheme } from './url-scheme/index.ts';
 

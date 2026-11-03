@@ -26,7 +26,7 @@ describe('NotFoundPage', () => {
       locale: urlScheme.defaultLocale,
     });
 
-    expect(landing).toBe('/en');
+    expect(landing).toBe('/');
     expect(html).toContain(`<a href="${landing}">back to the home page</a>`);
   });
 });

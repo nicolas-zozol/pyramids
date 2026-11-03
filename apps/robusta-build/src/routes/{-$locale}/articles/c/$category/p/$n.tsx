@@ -4,7 +4,7 @@ import { RoutePlaceholder } from '@/components/RoutePlaceholder.tsx';
 import { urlScheme } from '@/routing/scheme.ts';
 import { getCategoryLabel } from '@/seopyramids.config.ts';
 
-export const Route = createFileRoute('/$locale/articles/c/$category/p/$n')({
+export const Route = createFileRoute('/{-$locale}/articles/c/$category/p/$n')({
   component: CategoryRollPage,
 });
 

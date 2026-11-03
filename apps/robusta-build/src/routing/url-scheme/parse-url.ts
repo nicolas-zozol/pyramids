@@ -7,38 +7,50 @@ import {
 import { knownLocales, type PageUrl, type UrlScheme } from './scheme.ts';
 
 /**
- * Reads `/{locale}` and `/{locale}/{contentRoot}…` and nothing else: a path
- * whose first segment is no known locale — `/`, `/articles`, `/404` — returns
- * undefined, so the parser never claims a URL the scheme does not own.
+ * Reads an unprefixed path as a page of the default locale, `/{other}…` as a
+ * page of that locale, and `/{default}…` as the same page as its unprefixed
+ * form, its canonical one; after a locale only its landing and its content
+ * section are read. Anything else — `/404`, `/l/…`, `/de`,
+ * `/{default}/{other}` — returns undefined, so the parser never claims a URL
+ * the scheme does not own.
  *
  * It is deliberately tolerant where `buildUrl` is strict — a trailing slash,
- * an uppercase segment and an explicit page one are all read — which is what
- * makes canonicality the fixed point of the pair instead of hand-written
- * redirect families.
+ * an uppercase segment, an explicit page one and the marked default locale are
+ * all read — which is what makes canonicality the fixed point of the pair
+ * instead of hand-written redirect families.
  */
 export function parseUrl(scheme: UrlScheme, path: string): PageUrl | undefined {
   if (!path.startsWith('/')) {
     return undefined;
   }
 
-  const [locale, ...segments] = path
+  const segments = path
     .toLowerCase()
     .split('/')
     .filter((segment) => segment !== '');
+  const [first, ...rest] = segments;
 
-  if (locale === undefined || !knownLocales(scheme).includes(locale)) {
-    return undefined;
+  if (first !== undefined && knownLocales(scheme).includes(first)) {
+    return readPageOfLocale(scheme, rest, first);
   }
+  return readPageOfLocale(scheme, segments, scheme.defaultLocale);
+}
 
+function readPageOfLocale(
+  scheme: UrlScheme,
+  segments: string[],
+  locale: string,
+): PageUrl | undefined {
   if (segments.length === 0) {
     return { kind: 'landing', locale };
   }
 
-  if (segments.shift() !== scheme.contentRoot.toLowerCase()) {
+  const [head, ...rest] = segments;
+  if (head !== scheme.contentRoot.toLowerCase()) {
     return undefined;
   }
 
-  return readContentSection(segments, locale);
+  return readContentSection(rest, locale);
 }
 
 function readContentSection(rest: string[], locale: string): PageUrl | undefined {

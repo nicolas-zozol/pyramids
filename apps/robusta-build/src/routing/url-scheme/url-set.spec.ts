@@ -26,24 +26,24 @@ describe('urlSet', () => {
   // AC-URLSCHEME-21.
   it('produces the blog home and its roll pages and no other roll URL', () => {
     const produced = urls(roll(30, 'en'));
-    const rollUrls = produced.filter((url) => /^\/en\/articles(\/p\/\d+)?$/.test(url));
-    expect(rollUrls).toEqual(['/en/articles', '/en/articles/p/2', '/en/articles/p/3']);
+    const rollUrls = produced.filter((url) => /^\/articles(\/p\/\d+)?$/.test(url));
+    expect(rollUrls).toEqual(['/articles', '/articles/p/2', '/articles/p/3']);
   });
 
   it('produces no roll page on a corpus that fits one page', () => {
     const produced = urls(roll(11, 'en'));
     expect(produced.filter((url) => url.includes('/p/'))).toEqual([]);
-    expect(produced).toContain('/en/articles');
+    expect(produced).toContain('/articles');
   });
 
   it('produces the blog home of the default locale even on an empty corpus', () => {
-    expect(urls([])).toEqual(['/en/articles']);
+    expect(urls([])).toEqual(['/articles']);
   });
 
   // AC-URLSCHEME-24: a non-default locale is served under its prefix and nowhere else.
   it('paginates each locale on its own article count', () => {
     const produced = urls([...roll(30, 'en'), ...roll(14, 'fr')]);
-    expect(produced).toContain('/en/articles/p/3');
+    expect(produced).toContain('/articles/p/3');
     expect(produced).toContain('/fr/articles');
     expect(produced).toContain('/fr/articles/p/2');
     expect(produced).not.toContain('/fr/articles/p/3');
@@ -59,12 +59,12 @@ describe('urlSet', () => {
       ...roll(3, 'en', 'javascript'),
       ...roll(1, 'en', 'privacy'),
     ]);
-    const categoryUrls = produced.filter((url) => /^\/en\/articles\/c\/[^/]+$/.test(url));
+    const categoryUrls = produced.filter((url) => /^\/articles\/c\/[^/]+$/.test(url));
     expect(categoryUrls.sort()).toEqual([
-      '/en/articles/c/javascript',
-      '/en/articles/c/privacy',
+      '/articles/c/javascript',
+      '/articles/c/privacy',
     ]);
-    expect(produced).not.toContain('/en/articles/c/solidity');
+    expect(produced).not.toContain('/articles/c/solidity');
   });
 
   it('paginates a category roll on the count of that category alone', () => {
@@ -72,18 +72,18 @@ describe('urlSet', () => {
       ...roll(25, 'en', 'javascript'),
       ...roll(1, 'en', 'typescript'),
     ]);
-    expect(produced).toContain('/en/articles/c/javascript/p/2');
-    expect(produced).toContain('/en/articles/c/javascript/p/3');
-    expect(produced).not.toContain('/en/articles/c/javascript/p/4');
-    expect(produced).toContain('/en/articles/c/typescript');
-    expect(produced).not.toContain('/en/articles/c/typescript/p/2');
+    expect(produced).toContain('/articles/c/javascript/p/2');
+    expect(produced).toContain('/articles/c/javascript/p/3');
+    expect(produced).not.toContain('/articles/c/javascript/p/4');
+    expect(produced).toContain('/articles/c/typescript');
+    expect(produced).not.toContain('/articles/c/typescript/p/2');
   });
 
   it('keeps a category of one locale out of another locale', () => {
     const produced = urls([...roll(2, 'en', 'web'), ...roll(2, 'fr', 'theory')]);
-    expect(produced).toContain('/en/articles/c/web');
+    expect(produced).toContain('/articles/c/web');
     expect(produced).toContain('/fr/articles/c/theory');
-    expect(produced).not.toContain('/en/articles/c/theory');
+    expect(produced).not.toContain('/articles/c/theory');
     expect(produced).not.toContain('/fr/articles/c/web');
   });
 
@@ -94,8 +94,8 @@ describe('urlSet', () => {
       { slug: 'leaving-gmail', locale: 'en' },
       { slug: 'yield-farming-fr', locale: 'fr', category: 'blockchain' },
     ]);
-    expect(produced).toContain('/en/articles/c/javascript/styled-components');
-    expect(produced).toContain('/en/articles/leaving-gmail');
+    expect(produced).toContain('/articles/c/javascript/styled-components');
+    expect(produced).toContain('/articles/leaving-gmail');
     expect(produced).toContain('/fr/articles/c/blockchain/yield-farming-fr');
   });
 
@@ -114,10 +114,10 @@ describe('urlSet', () => {
   it('is the only place a page count is computed from the roll size', () => {
     const atThree: UrlScheme = { ...scheme, rollSize: 3 };
     const produced = urls(roll(7, 'en'), atThree);
-    expect(produced.filter((url) => /^\/en\/articles(\/p\/\d+)?$/.test(url))).toEqual([
-      '/en/articles',
-      '/en/articles/p/2',
-      '/en/articles/p/3',
+    expect(produced.filter((url) => /^\/articles(\/p\/\d+)?$/.test(url))).toEqual([
+      '/articles',
+      '/articles/p/2',
+      '/articles/p/3',
     ]);
   });
 
@@ -147,7 +147,7 @@ describe('landingPages', () => {
       buildUrl(threeLocales, page),
     );
 
-    expect(landings).toEqual(['/en', '/fr', '/es']);
+    expect(landings).toEqual(['/', '/fr', '/es']);
     expect(produced).not.toContain('/es/articles');
   });
 

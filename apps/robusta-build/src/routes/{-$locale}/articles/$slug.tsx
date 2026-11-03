@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ArticleView } from '@/article/ArticleView.tsx';
 import { getArticlePage } from '@/page-data/index.ts';
 
-export const Route = createFileRoute('/$locale/articles/$slug')({
+export const Route = createFileRoute('/{-$locale}/articles/$slug')({
   loader: ({ params }) =>
     getArticlePage({ data: { locale: params.locale, slug: params.slug } }),
   component: ArticlePage,

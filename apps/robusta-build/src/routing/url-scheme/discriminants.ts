@@ -1,7 +1,8 @@
 /**
  * The three discriminants of the v2 URL scheme. They belong to the shared base
  * and carry no site's editorial word: the content root is the site's, and it is
- * never written here. A Locale needs none: it is always the first segment.
+ * never written here. A Locale needs none: it is the first segment, absent for
+ * the default Locale.
  */
 export const CATEGORY_DISCRIMINANT = 'c';
 export const ROLL_PAGE_DISCRIMINANT = 'p';

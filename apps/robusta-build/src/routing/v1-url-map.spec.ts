@@ -189,7 +189,7 @@ describe('v1UrlMap over the site’s corpus', () => {
     expect(destinations.filter((to) => !built.has(to))).toEqual([]);
   });
 
-  it('leads the French v1 listings under /fr and the unmarked ones under /en', async () => {
+  it('leads the French v1 listings under /fr and the unmarked ones unprefixed', async () => {
     const rows = await mapOfTheSite();
 
     expect(destinationOf(rows, '/learn/fr/blockchain')).toEqual({
@@ -198,11 +198,18 @@ describe('v1UrlMap over the site’s corpus', () => {
     });
     expect(destinationOf(rows, '/learn')).toEqual({
       kind: 'permanent',
-      to: '/en/articles',
+      to: '/articles',
     });
     expect(destinationOf(rows, '/learn/tag/web')).toEqual({
       kind: 'permanent',
-      to: '/en/articles/c/web',
+      to: '/articles/c/web',
+    });
+  });
+
+  it('leaves the v1 site root without destination, the v2 site serving its English landing page there', async () => {
+    expect(destinationOf(await mapOfTheSite(), '/')).toEqual({
+      kind: 'none',
+      why: 'the v2 site serves its English landing page at this same address',
     });
   });
 
@@ -215,7 +222,7 @@ describe('v1UrlMap over the site’s corpus', () => {
     });
     expect(destinationOf(rows, '/learn/javascript/react')).toEqual({
       kind: 'permanent',
-      to: '/en/articles',
+      to: '/articles',
     });
   });
 
@@ -259,6 +266,6 @@ describe('v1UrlMap over the site’s corpus', () => {
     expect(french).toHaveLength(15);
     expect(french.every((row) => to(row).startsWith('/fr/'))).toBe(true);
     expect(english).toHaveLength(29);
-    expect(english.every((row) => to(row).startsWith('/en/'))).toBe(true);
+    expect(english.every((row) => to(row).startsWith('/articles'))).toBe(true);
   });
 });

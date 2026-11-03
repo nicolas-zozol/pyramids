@@ -290,9 +290,12 @@ describe('every link of the three landing pages', () => {
       const feed = await notesFeed({ locale, limit: 4 });
       const others = WITH_NOTES.filter((other) => other !== locale);
 
-      expect(anchorsTo(pages[locale], `/${locale}/articles`)).toHaveLength(1);
+      const blogHome = (of: string) =>
+        buildUrl(urlScheme, { kind: 'blog-home', locale: of, page: 1 });
+
+      expect(anchorsTo(pages[locale], blogHome(locale))).toHaveLength(1);
       for (const other of others)
-        expect(anchorsTo(pages[locale], `/${other}/articles`)).toHaveLength(0);
+        expect(anchorsTo(pages[locale], blogHome(other))).toHaveLength(0);
       for (const post of feed)
         expect(anchorsTo(pages[locale], post.href ?? '')).toHaveLength(1);
     }

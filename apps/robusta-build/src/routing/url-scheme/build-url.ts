@@ -6,16 +6,17 @@ import {
 import type { PageUrl, UrlScheme } from './scheme.ts';
 
 /**
- * Emits the canonical form and nothing else: every URL starts with `/{locale}`,
- * the default locale included, the landing is `/{locale}` and page one is the
- * roll's own URL, so a non-canonical form is not representable in the output
- * and cannot reach a link, a sitemap or a redirect target.
+ * Emits the canonical form and nothing else: the default locale carries no
+ * marker (BR-PYRAMID-14), its landing is `/` and its content `/{contentRoot}…`;
+ * another locale is `/{locale}` and `/{locale}/{contentRoot}…`; page one is the
+ * roll's own URL. A non-canonical form is not representable in the output and
+ * cannot reach a link, a sitemap or a redirect target.
  */
 export function buildUrl(scheme: UrlScheme, page: PageUrl): string {
-  const prefix = `/${page.locale}`;
+  const prefix = page.locale === scheme.defaultLocale ? '' : `/${page.locale}`;
 
   if (page.kind === 'landing') {
-    return prefix;
+    return prefix === '' ? '/' : prefix;
   }
 
   const root = `${prefix}/${scheme.contentRoot}`;

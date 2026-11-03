@@ -4,7 +4,7 @@ import { RoutePlaceholder } from '@/components/RoutePlaceholder.tsx';
 import { urlScheme } from '@/routing/scheme.ts';
 import { getCategoryLabel } from '@/seopyramids.config.ts';
 
-export const Route = createFileRoute('/$locale/articles/c/$category/')({
+export const Route = createFileRoute('/{-$locale}/articles/c/$category/')({
   component: CategoryPage,
 });
 

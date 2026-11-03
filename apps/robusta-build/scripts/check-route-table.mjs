@@ -1,8 +1,8 @@
 /**
  * The built route table and the pages the scheme derives are the same set: the
- * landing page of every Locale and every content URL, nothing at the bare site
- * root, which the redirect rule owns, and every data file the prerender owes,
- * the counterparts of every page carrying a page URL included.
+ * landing page of every Locale, `/` read from `index.html`, and every content
+ * URL, and every data file the prerender owes, the counterparts of every page
+ * carrying a page URL included.
  * No page was written around a render that threw. Run after `vite build`, on
  * what the prerender wrote under `dist/client`.
  *
@@ -10,22 +10,23 @@
  * Requirements: R-TANSTACK-24, R-TANSTACK-25, R-TANSTACK-26
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-26, R-MULTILINGUAL-27, R-MULTILINGUAL-43
+ * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Requirements: R-ROOTLOCALE-25
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const ROOT_INDEX = 'index.html';
 const NOT_FOUND = '404.html';
 const DATA_FILES = '__tsr/staticServerFnCache';
 // React's marker of a Suspense boundary whose server render threw: the prerender
 // logs the error, answers 200 and leaves that content to the browser.
 const CLIENT_RENDERED_BOUNDARY = '<!--$!-->';
 
-/** `en/articles/c/web.html` read back as `/en/articles/c/web`. */
+/** `fr/articles/c/web.html` read back as `/fr/articles/c/web`, `index.html` as `/`. */
 export function urlOfHtmlFile(file) {
-  return `/${file.replace(/\.html$/, '')}`;
+  return file === 'index.html' ? '/' : `/${file.replace(/\.html$/, '')}`;
 }
 
 /** The data files the prerender owes, per source: each article page, each landing page's notes feed, the counterparts of each page carrying a page URL. */
@@ -45,11 +46,8 @@ export function routeTableReport({
   expectedDataFiles,
   dataFileCount,
 }) {
-  const rootIndexWritten = htmlFiles.includes(ROOT_INDEX);
   const built = new Set(
-    htmlFiles
-      .filter((file) => file !== ROOT_INDEX && file !== NOT_FOUND)
-      .map(urlOfHtmlFile),
+    htmlFiles.filter((file) => file !== NOT_FOUND).map(urlOfHtmlFile),
   );
   const derived = new Set([...landingUrls, ...contentUrls]);
   const builtButNotDerived = [...built].filter((url) => !derived.has(url));
@@ -61,12 +59,10 @@ export function routeTableReport({
 
   return {
     ok:
-      !rootIndexWritten &&
       builtButNotDerived.length === 0 &&
       derivedButNotBuilt.length === 0 &&
       dataFileCount === expected,
     built: built.size,
-    rootIndexWritten,
     builtButNotDerived,
     derivedButNotBuilt,
     expectedDataFiles: expected,
@@ -144,11 +140,6 @@ async function main() {
 
   if (!report.ok) {
     console.error('The route table and the derived pages disagree.');
-    if (report.rootIndexWritten) {
-      console.error(
-        `  ${ROOT_INDEX} written at the root of dist/client: / belongs to the redirect rule of netlify.toml`,
-      );
-    }
     for (const url of report.builtButNotDerived) {
       console.error(`  built but not derived: ${url}`);
     }

@@ -20,6 +20,6 @@ describe('FailedNavigationPage', () => {
     expect(html).toContain(
       '<a href="/fr/articles/c/web">retry this address</a>',
     );
-    expect(html).toContain('<a href="/en">back to the home page</a>');
+    expect(html).toContain('<a href="/">back to the home page</a>');
   });
 });

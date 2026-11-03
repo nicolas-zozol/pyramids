@@ -14,20 +14,20 @@ async function counterpartsAt(path: string): Promise<string[]> {
 /** The counterparts `getCounterparts` writes to a data file per page, on the site's own corpus. */
 describe('pageCounterparts', () => {
   it('ties leaving-gmail and quitter-gmail to each other, and to no Spanish page', async () => {
-    expect(
-      await counterpartsAt('/en/articles/c/privacy/leaving-gmail'),
-    ).toEqual(['/fr/articles/c/privacy/quitter-gmail']);
+    expect(await counterpartsAt('/articles/c/privacy/leaving-gmail')).toEqual([
+      '/fr/articles/c/privacy/quitter-gmail',
+    ]);
     expect(
       await counterpartsAt('/fr/articles/c/privacy/quitter-gmail'),
-    ).toEqual(['/en/articles/c/privacy/leaving-gmail']);
+    ).toEqual(['/articles/c/privacy/leaving-gmail']);
   });
 
   it('gives a landing page the landing page of each other Locale', async () => {
-    expect(await counterpartsAt('/fr')).toEqual(['/en', '/es']);
+    expect(await counterpartsAt('/fr')).toEqual(['/', '/es']);
   });
 
   it('gives the French blog home the English one, Spanish having none', async () => {
-    expect(await counterpartsAt('/fr/articles')).toEqual(['/en/articles']);
+    expect(await counterpartsAt('/fr/articles')).toEqual(['/articles']);
   });
 
   it('gives theory, claimed by French articles only, no counterpart', async () => {
@@ -36,7 +36,7 @@ describe('pageCounterparts', () => {
 
   it('gives a Category both Locales claim the other one', async () => {
     expect(await counterpartsAt('/fr/articles/c/privacy')).toEqual([
-      '/en/articles/c/privacy',
+      '/articles/c/privacy',
     ]);
   });
 

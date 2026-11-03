@@ -10,8 +10,9 @@ const scheme: UrlScheme = {
 };
 
 describe('buildUrl', () => {
-  it('emits the landing of the default locale under its own prefix, never the bare site root', () => {
-    expect(buildUrl(scheme, { kind: 'landing', locale: 'en' })).toBe('/en');
+  // R-ROOTLOCALE-01, BR-PYRAMID-14: the default Locale carries no marker.
+  it('emits the landing of the default locale at the bare site root', () => {
+    expect(buildUrl(scheme, { kind: 'landing', locale: 'en' })).toBe('/');
   });
 
   it('emits the landing of another locale under its prefix, with no trailing slash', () => {
@@ -21,23 +22,39 @@ describe('buildUrl', () => {
   // R-URLSCHEME-8: page one is the roll's own URL, never /p/1.
   it('emits the bare roll URL for page one of the blog home', () => {
     expect(buildUrl(scheme, { kind: 'blog-home', locale: 'en', page: 1 })).toBe(
-      '/en/articles',
+      '/articles',
     );
   });
 
   it('emits the roll-page discriminant from page two', () => {
     expect(buildUrl(scheme, { kind: 'blog-home', locale: 'en', page: 3 })).toBe(
-      '/en/articles/p/3',
+      '/articles/p/3',
     );
   });
 
-  it('prefixes every locale the same way, the default one included', () => {
+  it('prefixes another locale and leaves the default one unmarked', () => {
     expect(buildUrl(scheme, { kind: 'blog-home', locale: 'fr', page: 2 })).toBe(
       '/fr/articles/p/2',
     );
     expect(buildUrl(scheme, { kind: 'blog-home', locale: 'en', page: 2 })).toBe(
-      '/en/articles/p/2',
+      '/articles/p/2',
     );
+  });
+
+  it('never emits the default locale as a first segment, nor a trailing slash but on the site root', () => {
+    const pages = [
+      { kind: 'landing', locale: 'en' },
+      { kind: 'blog-home', locale: 'en', page: 1 },
+      { kind: 'category', locale: 'en', category: 'web', page: 3 },
+      { kind: 'article', locale: 'en', slug: 'leaving-gmail' },
+      { kind: 'landing', locale: 'fr' },
+      { kind: 'article', locale: 'fr', category: 'web', slug: 'quitter-gmail' },
+    ] as const;
+    for (const page of pages) {
+      const url = buildUrl(scheme, page);
+      expect(url).not.toMatch(/^\/en(\/|$)/);
+      expect(url === '/' || !url.endsWith('/'), url).toBe(true);
+    }
   });
 
   it('emits no locale discriminant', () => {
@@ -54,7 +71,7 @@ describe('buildUrl', () => {
         category: 'javascript',
         page: 1,
       }),
-    ).toBe('/en/articles/c/javascript');
+    ).toBe('/articles/c/javascript');
   });
 
   it('paginates a category roll from page two', () => {
@@ -77,21 +94,21 @@ describe('buildUrl', () => {
         category: 'javascript',
         slug: 'styled-components',
       }),
-    ).toBe('/en/articles/c/javascript/styled-components');
+    ).toBe('/articles/c/javascript/styled-components');
   });
 
   // AC-URLSCHEME-03: the content root never appears twice.
   it('addresses an article carrying no category directly under the content root', () => {
     expect(
       buildUrl(scheme, { kind: 'article', locale: 'en', slug: 'leaving-gmail' }),
-    ).toBe('/en/articles/leaving-gmail');
+    ).toBe('/articles/leaving-gmail');
   });
 
   // AC-URLSCHEME-45 / R-URLSCHEME-31: the shape is known, nothing is built from it.
   it('knows the shape of a tag URL', () => {
     expect(
       buildUrl(scheme, { kind: 'tag', locale: 'en', tag: 'rxjs', page: 1 }),
-    ).toBe('/en/articles/t/rxjs');
+    ).toBe('/articles/t/rxjs');
     expect(
       buildUrl(scheme, { kind: 'tag', locale: 'fr', tag: 'rxjs', page: 2 }),
     ).toBe('/fr/articles/t/rxjs/p/2');
@@ -106,7 +123,7 @@ describe('buildUrl', () => {
   it('respects a content root other than the robusta one', () => {
     const spots: UrlScheme = { ...scheme, contentRoot: 'spots' };
     expect(buildUrl(spots, { kind: 'blog-home', locale: 'en', page: 2 })).toBe(
-      '/en/spots/p/2',
+      '/spots/p/2',
     );
   });
 });

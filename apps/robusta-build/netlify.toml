@@ -3,9 +3,11 @@
 # every path below is relative to it, and the root .nvmrc picks Node 22.
 #
 # Netlify publishes the prerendered client output, with no function, no header
-# rule and no plugin. One redirect rule: the bare site root leads permanently to
-# the landing page of the default Locale. Without `force` it applies only while
-# no file occupies `/`, so the build writes no index.html at the root.
+# rule and no plugin. The default Locale is served unprefixed, `/` being its
+# landing page, an index.html like any other page. Two redirect rules lead a page
+# marked with the default Locale permanently to the same page unmarked: `/en` to
+# `/`, `/en/{rest}` to `/{rest}`. Without `force`, and no file existing under
+# `en`, they always apply; a target the site does not build answers 404.
 
 [build]
   command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta"
@@ -19,6 +21,11 @@
   YARN_FLAGS = "--immutable"
 
 [[redirects]]
-  from = "/"
-  to = "/en"
+  from = "/en"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/en/*"
+  to = "/:splat"
   status = 301

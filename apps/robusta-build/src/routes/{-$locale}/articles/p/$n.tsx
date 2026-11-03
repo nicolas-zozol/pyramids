@@ -4,13 +4,13 @@ import { RoutePlaceholder } from '@/components/RoutePlaceholder.tsx';
 import { urlScheme } from '@/routing/scheme.ts';
 import { getPageCopy } from '@/seopyramids.config.ts';
 
-export const Route = createFileRoute('/$locale/articles/')({
-  component: BlogHomePage,
+export const Route = createFileRoute('/{-$locale}/articles/p/$n')({
+  component: BlogRollPage,
 });
 
-function BlogHomePage() {
-  const { locale } = Route.useParams();
-  const page = { kind: 'blog-home', locale, page: 1 } as const;
+function BlogRollPage() {
+  const { locale, n } = Route.useParams();
+  const page = { kind: 'blog-home', locale, page: Number(n) } as const;
 
   return (
     <RoutePlaceholder

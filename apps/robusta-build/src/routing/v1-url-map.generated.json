@@ -17,7 +17,7 @@
       "from": "/learn",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
@@ -45,14 +45,14 @@
       "from": "/learn/blockchain",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain"
+        "to": "/articles/c/blockchain"
       }
     },
     {
       "from": "/learn/blockchain/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain"
+        "to": "/articles/c/blockchain"
       },
       "note": "the page number is dropped"
     },
@@ -60,7 +60,7 @@
       "from": "/learn/blockchain/ethers-js",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       },
       "note": "flattened to its leaf 'ethers-js'"
     },
@@ -68,7 +68,7 @@
       "from": "/learn/blockchain/ethers-js/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       },
       "note": "the page number is dropped"
     },
@@ -76,7 +76,7 @@
       "from": "/learn/blockchain/solidity",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       },
       "note": "flattened to its leaf 'solidity'"
     },
@@ -84,7 +84,7 @@
       "from": "/learn/blockchain/solidity/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       },
       "note": "the page number is dropped"
     },
@@ -92,14 +92,14 @@
       "from": "/learn/web",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/web"
+        "to": "/articles/c/web"
       }
     },
     {
       "from": "/learn/web/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/web"
+        "to": "/articles/c/web"
       },
       "note": "the page number is dropped"
     },
@@ -107,14 +107,14 @@
       "from": "/learn/javascript",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/javascript"
+        "to": "/articles/c/javascript"
       }
     },
     {
       "from": "/learn/javascript/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/javascript"
+        "to": "/articles/c/javascript"
       },
       "note": "the page number is dropped"
     },
@@ -122,7 +122,7 @@
       "from": "/learn/javascript/typescript",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/typescript"
+        "to": "/articles/c/typescript"
       },
       "note": "flattened to its leaf 'typescript'"
     },
@@ -130,7 +130,7 @@
       "from": "/learn/javascript/typescript/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/typescript"
+        "to": "/articles/c/typescript"
       },
       "note": "the page number is dropped"
     },
@@ -138,7 +138,7 @@
       "from": "/learn/javascript/react",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       },
       "note": "flattened to its leaf 'react'"
     },
@@ -146,7 +146,7 @@
       "from": "/learn/javascript/react/page/:n",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       },
       "note": "the page number is dropped"
     },
@@ -263,14 +263,14 @@
       "from": "/learn/blockchain/s/ledger-versus-metamask",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain/ledger-versus-metamask"
+        "to": "/articles/c/blockchain/ledger-versus-metamask"
       }
     },
     {
       "from": "/learn/blockchain/s/tooling-for-solidity-coders",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain/tooling-for-solidity-coders"
+        "to": "/articles/c/blockchain/tooling-for-solidity-coders"
       }
     },
     {
@@ -292,7 +292,7 @@
       "from": "/learn/blockchain/s/the-source-of-yield-farming-profits",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain/the-source-of-yield-farming-profits"
+        "to": "/articles/c/blockchain/the-source-of-yield-farming-profits"
       }
     },
     {
@@ -314,21 +314,21 @@
       "from": "/learn/javascript/s/why-i-made-the-migration-from-gatsby-toward-nextjs",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs"
+        "to": "/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs"
       }
     },
     {
       "from": "/learn/javascript/typescript/s/completing-a-rxjs-observable-with-another",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/typescript/completing-a-rxjs-observable-with-another"
+        "to": "/articles/c/typescript/completing-a-rxjs-observable-with-another"
       }
     },
     {
       "from": "/learn/web/s/easy-automation-with-sonoff-and-javascript",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/web/easy-automation-with-sonoff-and-javascript"
+        "to": "/articles/c/web/easy-automation-with-sonoff-and-javascript"
       }
     },
     {
@@ -350,112 +350,112 @@
       "from": "/learn/javascript/s/applying-correctly-classname-with-styled-components",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/javascript/applying-correctly-classname-with-styled-components"
+        "to": "/articles/c/javascript/applying-correctly-classname-with-styled-components"
       }
     },
     {
       "from": "/learn/privacy/s/leaving-gmail",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/privacy/leaving-gmail"
+        "to": "/articles/c/privacy/leaving-gmail"
       }
     },
     {
       "from": "/learn/tag/web",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/web"
+        "to": "/articles/c/web"
       }
     },
     {
       "from": "/learn/tag/tech",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/iot",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/language",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/state-of-the-art",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/blockchain",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain"
+        "to": "/articles/c/blockchain"
       }
     },
     {
       "from": "/learn/tag/security",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/DeFi",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/solidity",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/javascript",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/javascript"
+        "to": "/articles/c/javascript"
       }
     },
     {
       "from": "/learn/tag/front",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/react",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/rxjs",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
       "from": "/learn/tag/back",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles"
+        "to": "/articles"
       }
     },
     {
@@ -469,14 +469,14 @@
       "from": "/learn/blockchain/s/ledger-versus-metamask.md",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain/ledger-versus-metamask"
+        "to": "/articles/c/blockchain/ledger-versus-metamask"
       }
     },
     {
       "from": "/learn/blockchain/s/start-coding-blockchain.md",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/blockchain/tooling-for-solidity-coders"
+        "to": "/articles/c/blockchain/tooling-for-solidity-coders"
       }
     },
     {
@@ -490,21 +490,21 @@
       "from": "/learn/javascript/s/completes-with.md",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/typescript/completing-a-rxjs-observable-with-another"
+        "to": "/articles/c/typescript/completing-a-rxjs-observable-with-another"
       }
     },
     {
       "from": "/learn/javascript/s/styled-components.md",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/javascript/applying-correctly-classname-with-styled-components"
+        "to": "/articles/c/javascript/applying-correctly-classname-with-styled-components"
       }
     },
     {
       "from": "/learn/privacy/leaving-gmail.md",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/privacy/leaving-gmail"
+        "to": "/articles/c/privacy/leaving-gmail"
       }
     },
     {
@@ -518,7 +518,7 @@
       "from": "/learn/web/easy-automation-with-sonoff.md",
       "destination": {
         "kind": "permanent",
-        "to": "/en/articles/c/web/easy-automation-with-sonoff-and-javascript"
+        "to": "/articles/c/web/easy-automation-with-sonoff-and-javascript"
       }
     },
     {
@@ -582,7 +582,7 @@
       "from": "/",
       "destination": {
         "kind": "none",
-        "why": "the v2 site redirects it to the landing page of its default Locale"
+        "why": "the v2 site serves its English landing page at this same address"
       }
     },
     {

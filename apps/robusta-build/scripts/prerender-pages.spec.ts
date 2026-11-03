@@ -39,57 +39,73 @@ async function routesDirectoryWith(files: string[]): Promise<string> {
   return directory;
 }
 
-const sevenRouteFiles = (root: string) => [
-  '$locale/index.tsx',
-  ...CONTENT_SHAPES.map((shape) => `$locale/${root}/${shape}`),
+const LAYOUT_ROUTE = '{-$locale}/route.tsx';
+const LANDING_ROUTE = '{-$locale}/index.tsx';
+
+const routeFiles = (root: string) => [
+  LAYOUT_ROUTE,
+  LANDING_ROUTE,
+  ...CONTENT_SHAPES.map((shape) => `{-$locale}/${root}/${shape}`),
 ];
 
 describe('pageList', () => {
-  it('lists the landing pages, then the not-found page, then the content URLs, and nothing at /', () => {
+  it('lists the landing pages, `/` first, then the not-found page, then the content URLs', () => {
     expect(
-      pageList(['/en', '/fr', '/es'], ['/en/articles', '/en/articles/c/web']),
+      pageList(['/', '/fr', '/es'], ['/articles', '/articles/c/web']),
     ).toEqual([
-      { path: '/en' },
+      { path: '/' },
       { path: '/fr' },
       { path: '/es' },
       { path: '/404' },
-      { path: '/en/articles' },
-      { path: '/en/articles/c/web' },
+      { path: '/articles' },
+      { path: '/articles/c/web' },
     ]);
-  });
-
-  it('never lists the bare site root, which the host redirects', () => {
-    const paths = pageList(['/en'], ['/en/articles']).map(({ path }) => path);
-
-    expect(paths).not.toContain('/');
   });
 });
 
 describe('missingRouteFiles', () => {
-  it('finds nothing missing when the landing and the six content shapes sit under $locale', async () => {
-    const routes = await routesDirectoryWith(sevenRouteFiles('articles'));
+  it('finds nothing missing when the layout, the landing and the six content shapes sit under {-$locale}', async () => {
+    const routes = await routesDirectoryWith(routeFiles('articles'));
 
     expect(missingRouteFiles(routes, 'articles')).toEqual([]);
   });
 
   it('names every route file the content root expects and the tree lacks', async () => {
-    const routes = await routesDirectoryWith(sevenRouteFiles('articles'));
+    const routes = await routesDirectoryWith(routeFiles('articles'));
 
     expect(missingRouteFiles(routes, 'notes')).toEqual(
-      sevenRouteFiles('notes').filter((file) => file !== '$locale/index.tsx'),
+      routeFiles('notes').filter(
+        (file) => file !== LAYOUT_ROUTE && file !== LANDING_ROUTE,
+      ),
     );
   });
 
   it('names the landing route when it is missing', async () => {
     const routes = await routesDirectoryWith(
-      sevenRouteFiles('articles').filter(
-        (file) => file !== '$locale/index.tsx',
+      routeFiles('articles').filter((file) => file !== LANDING_ROUTE),
+    );
+
+    expect(missingRouteFiles(routes, 'articles')).toEqual([LANDING_ROUTE]);
+  });
+
+  it('names the layout route that resolves the Locale segment when it is missing', async () => {
+    const routes = await routesDirectoryWith(
+      routeFiles('articles').filter((file) => file !== LAYOUT_ROUTE),
+    );
+
+    expect(missingRouteFiles(routes, 'articles')).toEqual([LAYOUT_ROUTE]);
+  });
+
+  it('names the route files of the former $locale directory as missing', async () => {
+    const routes = await routesDirectoryWith(
+      routeFiles('articles').map((file) =>
+        file.replace('{-$locale}', '$locale'),
       ),
     );
 
-    expect(missingRouteFiles(routes, 'articles')).toEqual([
-      '$locale/index.tsx',
-    ]);
+    expect(missingRouteFiles(routes, 'articles')).toEqual(
+      routeFiles('articles'),
+    );
   });
 
   it('holds the site’s own route tree against its own content root', () => {
@@ -100,16 +116,16 @@ describe('missingRouteFiles', () => {
 describe('assertRouteFilesFollow', () => {
   it('throws naming the content root and the missing route files', async () => {
     const routes = await routesDirectoryWith(
-      sevenRouteFiles('articles').filter((file) => !file.endsWith('$slug.tsx')),
+      routeFiles('articles').filter((file) => !file.endsWith('$slug.tsx')),
     );
 
     expect(() => assertRouteFilesFollow(routes, 'articles')).toThrow(
-      /'articles' has no route file at: \$locale\/articles\/\$slug\.tsx, \$locale\/articles\/c\/\$category\/\$slug\.tsx \(under /,
+      /'articles' has no route file at: \{-\$locale\}\/articles\/\$slug\.tsx, \{-\$locale\}\/articles\/c\/\$category\/\$slug\.tsx \(under /,
     );
   });
 
   it('passes silently when the tree follows the content root', async () => {
-    const routes = await routesDirectoryWith(sevenRouteFiles('articles'));
+    const routes = await routesDirectoryWith(routeFiles('articles'));
 
     expect(() => assertRouteFilesFollow(routes, 'articles')).not.toThrow();
   });

@@ -23,6 +23,8 @@ import type { ArticleIndexEntry } from '../content/article-index.ts';
  * Requirements: R-MIGRATELEARN-61
  * Design: features/pyramid-v2-epic/default-locale-fr/default-locale-fr.design.md
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
+ * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Requirements: R-ROOTLOCALE-81
  */
 
 export type V1Destination =
@@ -183,7 +185,7 @@ function blogRollRows(locales: readonly string[]): V1MappingRow[] {
 
 /**
  * v2 categories are flat, so a nested v1 path maps to its leaf and not to its
- * head — `javascript/typescript` reaches `/en/articles/c/typescript`. The page
+ * head — `javascript/typescript` reaches `/articles/c/typescript`. The page
  * number is dropped: the destination is the roll, whatever page of it was asked.
  */
 function categoryRows(
@@ -367,7 +369,7 @@ function portfolioRows(): V1MappingRow[] {
 function developmentLeftoverRows(): V1MappingRow[] {
   const why = 'development leftover with no editorial value';
   return [
-    { from: '/', destination: { kind: 'none', why: 'the v2 site redirects it to the landing page of its default Locale' } },
+    { from: '/', destination: { kind: 'none', why: 'the v2 site serves its English landing page at this same address' } },
     { from: '/prosemirror/:path*', destination: { kind: 'none', why } },
     { from: '/test/:path*', destination: { kind: 'none', why } },
     { from: '/_design-test', destination: { kind: 'none', why } },

@@ -31,7 +31,7 @@ describe('articlePage', () => {
     const english = await articlePage({ locale: 'en', slug: YIELD_EN });
     const french = await articlePage({ locale: 'fr', slug: YIELD_FR });
 
-    expect(english.categoryUrl).toBe('/en/articles/c/blockchain');
+    expect(english.categoryUrl).toBe('/articles/c/blockchain');
     expect(french.categoryUrl).toBe('/fr/articles/c/blockchain');
   });
 
@@ -51,7 +51,7 @@ describe('articlePage', () => {
       { locale: 'fr', url: `/fr/articles/c/blockchain/${YIELD_FR}` },
     ]);
     expect(french.versions).toEqual([
-      { locale: 'en', url: `/en/articles/c/blockchain/${YIELD_EN}` },
+      { locale: 'en', url: `/articles/c/blockchain/${YIELD_EN}` },
     ]);
   });
 
@@ -63,7 +63,7 @@ describe('articlePage', () => {
       { locale: 'fr', url: '/fr/articles/c/privacy/quitter-gmail' },
     ]);
     expect(french.versions).toEqual([
-      { locale: 'en', url: '/en/articles/c/privacy/leaving-gmail' },
+      { locale: 'en', url: '/articles/c/privacy/leaving-gmail' },
     ]);
   });
 

@@ -55,7 +55,7 @@ const SLUGS = [
 /**
  * What `urlSet` derives from the seventeen articles: no roll page, neither
  * locale reaching 12. The nine French articles are under `/fr`, the eight
- * English ones under `/en`, and no Spanish article lights up `/es/articles`.
+ * English ones unprefixed, and no Spanish article lights up `/es/articles`.
  */
 const URLS = [
   '/fr/articles',
@@ -74,20 +74,20 @@ const URLS = [
   '/fr/articles/c/theory/quel-langage-pour-progresser-dans-sa-carriere',
   '/fr/articles/c/typescript/terminer-un-observable-rxjs-avec-un-autre',
   '/fr/articles/c/web/domotique-facile-avec-sonoff-et-javascript',
-  '/en/articles',
-  '/en/articles/c/blockchain',
-  '/en/articles/c/javascript',
-  '/en/articles/c/privacy',
-  '/en/articles/c/typescript',
-  '/en/articles/c/web',
-  '/en/articles/c/blockchain/ledger-versus-metamask',
-  '/en/articles/c/blockchain/the-source-of-yield-farming-profits',
-  '/en/articles/c/blockchain/tooling-for-solidity-coders',
-  '/en/articles/c/javascript/applying-correctly-classname-with-styled-components',
-  '/en/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs',
-  '/en/articles/c/privacy/leaving-gmail',
-  '/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
-  '/en/articles/c/web/easy-automation-with-sonoff-and-javascript',
+  '/articles',
+  '/articles/c/blockchain',
+  '/articles/c/javascript',
+  '/articles/c/privacy',
+  '/articles/c/typescript',
+  '/articles/c/web',
+  '/articles/c/blockchain/ledger-versus-metamask',
+  '/articles/c/blockchain/the-source-of-yield-farming-profits',
+  '/articles/c/blockchain/tooling-for-solidity-coders',
+  '/articles/c/javascript/applying-correctly-classname-with-styled-components',
+  '/articles/c/javascript/why-i-made-the-migration-from-gatsby-toward-nextjs',
+  '/articles/c/privacy/leaving-gmail',
+  '/articles/c/typescript/completing-a-rxjs-observable-with-another',
+  '/articles/c/web/easy-automation-with-sonoff-and-javascript',
 ];
 
 const MARKDOWN_IMAGE = /!\[[^\]]*\]\(\s*<?([^>\s)]+)>?/g;
@@ -359,7 +359,7 @@ describe('what the corpus lights up', () => {
     expect(built.filter((url) => url.includes('/p/'))).toEqual([]);
   });
 
-  it('serves sixteen of them under /fr and fourteen under /en, each prefixed by the Locale of its page', async () => {
+  it('serves sixteen of them under /fr and fourteen unprefixed under /articles, none under /en', async () => {
     const pages = urlSet(urlScheme, await getArticleIndex());
     const french = pages.filter((page) => page.locale === 'fr');
     const english = pages.filter((page) => page.locale === 'en');
@@ -370,7 +370,9 @@ describe('what the corpus lights up', () => {
     ).toBe(true);
     expect(english).toHaveLength(14);
     expect(
-      english.every((page) => buildUrl(urlScheme, page).startsWith('/en/')),
+      english.every((page) =>
+        buildUrl(urlScheme, page).startsWith('/articles'),
+      ),
     ).toBe(true);
   });
 
@@ -380,14 +382,15 @@ describe('what the corpus lights up', () => {
     );
 
     expect(built.filter((url) => url.startsWith('/es'))).toEqual([]);
+    expect(built.filter((url) => /^\/en(\/|$)/.test(url))).toEqual([]);
   });
 
-  it('reaches the two articles of AC-MULTILINGUAL-1 at their prefixed URLs', async () => {
+  it('reaches the two articles of AC-ROOTLOCALE-2, the English one unprefixed', async () => {
     const built = urlSet(urlScheme, await getArticleIndex()).map((page) =>
       buildUrl(urlScheme, page),
     );
 
-    expect(built).toContain('/en/articles/c/privacy/leaving-gmail');
+    expect(built).toContain('/articles/c/privacy/leaving-gmail');
     expect(built).toContain(
       '/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
     );
@@ -398,10 +401,10 @@ describe('what the corpus lights up', () => {
       buildUrl(urlScheme, page),
     );
 
-    expect(built).toContain('/en/articles/c/web');
+    expect(built).toContain('/articles/c/web');
     expect(built).toContain('/fr/articles/c/web');
     expect(built).toContain('/fr/articles/c/theory');
-    expect(built).not.toContain('/en/articles/c/theory');
+    expect(built).not.toContain('/articles/c/theory');
   });
 
   /**
@@ -459,7 +462,7 @@ describe('what the corpus lights up', () => {
       )?.destination,
     ).toEqual({
       kind: 'permanent',
-      to: '/en/articles/c/typescript/completing-a-rxjs-observable-with-another',
+      to: '/articles/c/typescript/completing-a-rxjs-observable-with-another',
     });
   });
 });
