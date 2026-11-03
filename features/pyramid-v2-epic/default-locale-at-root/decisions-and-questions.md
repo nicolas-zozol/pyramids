@@ -34,3 +34,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - D3a — atw Gap-ROOTLOCALE-3 — default-locale-at-root.brainstorm.md — retained: la Proposition, le jumeau `.html` que Netlify sert en 200 reste hors des AC, la story le précise dans AC-ROOTLOCALE-1 et 2, le canonical link reste à seo-excellence. Set aside: supprimer le jumeau (réglage d'hébergeur pour tout le site, hors schéma, contraire au README §One URL per page). Confidence: high.
 - OQ-ROOTLOCALE-4 (`parseUrl` lit `/en…` comme la page sans préfixe) et OQ-ROOTLOCALE-5 (un seul jeu de routes) : `decide`, signées `lgtm (bsman)`, aucune contradiction avec un AC. Laissées telles quelles.
 - Suite : `storyman update avec brainstorm` plie E1 à E4 et les trois entrées.
+
+## D4 : design, approbation
+
+- Phase : design (`default-locale-at-root.design.md`)
+- Tri : designman n'écrit aucune entrée ; aucune Resolution remplie dans la story, le brainstorm ou le design. Le `designman update` de fold est sans objet : non lancé.
+- Contrôle : AC-ROOTLOCALE-1 à 6 cités mot pour mot, `## Boundaries` rempli.
+- Décisions de designman acceptées sans entrée : `src/routes/$locale/` devient `{-$locale}/` avec une route de layout qui résout le segment (`en` explicite ou Locale inconnue → 404, `vite dev` compris) ; `localeOfSegment` ajoutée à `url-scheme` ; la garde `index.html` de `check-route-table` devient un cas ordinaire ; `netlify.toml` : `/en` → `/` et `/en/*` → `/:splat` en 301 sans `force`, spec renommée `marked-locale-redirect.spec.ts` ; R-ROOTLOCALE-04, spec qui refuse une Locale valant le content root ou l'asset root.
+- Choix : DRAFT → APPROVED, `validated by boss atw`.
