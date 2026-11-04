@@ -249,12 +249,12 @@ Aucune boundary franchie ni créée : la story ne modifie que `ubiquitous-langua
 - Gap-GLOSSARY-4: `Workspace`, hors de la story, définit un module comme « une bibliothèque partagée » et un workspace comme un package yarn, contre les nouveaux `Module` et « package » : réécrire `Workspace` et `Green set`, ou les laisser contredire ?
 - Proposition : ajouter `Workspace` et `Green set` aux entrées modifiées. `Workspace` reprend CLAUDE.md, l'ensemble du code et de la documentation du projet ; `Green set` devient l'ensemble nommé des apps et des modules qui doivent se construire depuis un clean checkout, la build chain plus chaque site que le dépôt prétend livrer. Le « service » disparaît, aucun n'existe.
 - Rationale : la story prend `Module` dans CLAUDE.md ; garder `Workspace` met deux définitions de module dans le glossaire, que le skill boundaries fait gagner sur lui-même.
-- Resolution:
+- Resolution: lgtm (Nicolas, 2026-11-04)
 
 - Gap-GLOSSARY-5: `Build chain` dit qu'un site ne lit d'un module que son build output, alors que robusta.build lit les CSS et assets du design system tels qu'écrits : corriger l'entrée, ou faire construire ces fichiers ?
 - Proposition : l'entrée dit qu'un site ne lit d'un module que ce que son manifeste exporte, construit ou non ; le design system ne change pas.
 - Rationale : les CSS et les SVG n'ont rien à compiler ; la règle utile est qu'un site ne passe jamais par les fichiers internes d'un module.
-- Resolution:
+- Resolution: lgtm (Nicolas, 2026-11-04)
 
 ---
 
