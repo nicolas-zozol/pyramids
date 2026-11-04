@@ -7,6 +7,8 @@
  * Requirements: R-MULTILINGUAL-42, R-MULTILINGUAL-63
  * Design: features/pyramid-v2-epic/drop-section-default-copy/drop-section-default-copy.design.md
  * Requirements: R-SECTIONCOPY-42
+ * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
+ * Requirements: R-BLOGROLLS-62, R-BLOGROLLS-63
  */
 export { Footer } from './Footer.tsx';
 export { Header } from './Header.tsx';

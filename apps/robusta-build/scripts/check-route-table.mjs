@@ -2,7 +2,8 @@
  * The built route table and the pages the scheme derives are the same set: the
  * landing page of every Locale, `/` read from `index.html`, and every content
  * URL, and every data file the prerender owes, the counterparts of every page
- * carrying a page URL included.
+ * carrying a page URL, each listing page and the footer's rolls of each Locale
+ * included.
  * No page was written around a render that threw. Run after `vite build`, on
  * what the prerender wrote under `dist/client`.
  *
@@ -12,6 +13,8 @@
  * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-27, R-MULTILINGUAL-43
  * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-25
+ * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
+ * Requirements: R-BLOGROLLS-81
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
@@ -29,12 +32,16 @@ export function urlOfHtmlFile(file) {
   return file === 'index.html' ? '/' : `/${file.replace(/\.html$/, '')}`;
 }
 
-/** The data files the prerender owes, per source: each article page, each landing page's notes feed, the counterparts of each page carrying a page URL. */
+/** The data files the prerender owes, per source: each article page, each landing page's notes feed, the counterparts of each page carrying a page URL, each listing page, and the footer's rolls of each Locale. */
 export function expectedDataFiles({ landings, content }) {
   return {
     articles: content.filter((page) => page.kind === 'article').length,
     notesFeeds: landings.length,
     counterparts: landings.length + content.length,
+    rollPages: content.filter(
+      (page) => page.kind === 'blog-home' || page.kind === 'category',
+    ).length,
+    localeRolls: landings.length,
   };
 }
 
@@ -136,7 +143,7 @@ async function main() {
     expectedDataFiles: owed,
     dataFileCount: (await filesUnder(join(client, DATA_FILES), '.json')).length,
   });
-  const owedLine = `${owed.articles} article pages, ${owed.notesFeeds} notes feeds, ${owed.counterparts} counterparts`;
+  const owedLine = `${owed.articles} article pages, ${owed.notesFeeds} notes feeds, ${owed.counterparts} counterparts, ${owed.rollPages} roll pages, ${owed.localeRolls} locale rolls`;
 
   if (!report.ok) {
     console.error('The route table and the derived pages disagree.');

@@ -155,6 +155,26 @@ describe('expectedDataFiles', () => {
   it('owes one counterparts file per landing page and per content URL, the not-found page carrying no page URL', () => {
     expect(expectedDataFiles({ landings, content }).counterparts).toBe(7);
   });
+
+  it('owes one roll page file per listing page of the URL set, and one footer rolls file per landing page', () => {
+    expect(expectedDataFiles({ landings, content })).toEqual({
+      articles: 2,
+      notesFeeds: 3,
+      counterparts: 7,
+      rollPages: 2,
+      localeRolls: 3,
+    });
+  });
+
+  it('owes a roll page file for each page of a roll beyond the first', () => {
+    const paged = [
+      ...content,
+      { kind: 'blog-home', locale: 'en', page: 2 },
+      { kind: 'category', locale: 'en', category: 'web', page: 2 },
+    ];
+
+    expect(expectedDataFiles({ landings, content: paged }).rollPages).toBe(4);
+  });
 });
 
 describe('pagesRenderedWithAnError', () => {

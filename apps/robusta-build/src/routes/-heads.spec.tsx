@@ -1,15 +1,25 @@
 import { createMemoryHistory, createRouter } from '@tanstack/react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { localeRolls } from '../page-data/locale-rolls.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
+import { rollPage } from '../page-data/roll-page.ts';
 import { LOCALES } from '../routing/scheme.ts';
-import type { PageUrl } from '../routing/url-scheme/index.ts';
+import type { PageUrl, RollUrl } from '../routing/url-scheme/index.ts';
+import { listingHead } from '../listing/index.ts';
 import { getPageCopy } from '../seopyramids.config.ts';
 import { Route as LandingRoute } from './{-$locale}/index.tsx';
+import { Route as BlogHomeRoute } from './{-$locale}/articles/index.tsx';
+import { Route as BlogRollRoute } from './{-$locale}/articles/p/$n.tsx';
+import { Route as CategoryRoute } from './{-$locale}/articles/c/$category/index.tsx';
+import { Route as CategoryRollRoute } from './{-$locale}/articles/c/$category/p/$n.tsx';
 import { Route as RootRoute } from './__root.tsx';
 import { routeTree } from '../routeTree.gen.ts';
 
 const getCounterparts = vi.hoisted(() =>
   vi.fn<(call: { data: PageUrl }) => Promise<PageUrl[]>>(),
+);
+const getRollPage = vi.hoisted(() =>
+  vi.fn<(call: { data: RollUrl }) => Promise<unknown>>(),
 );
 
 /** The server function needs the Start runtime; its handler's own function answers in its place. */
@@ -17,12 +27,18 @@ vi.mock('../page-data/index.ts', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../page-data/index.ts')>()),
   getCounterparts,
   getNotesFeed: async () => [],
+  getRollPage,
+  getLocaleRolls: ({ data }: { data: { locale: string } }) => localeRolls(data),
 }));
 
 beforeEach(() => {
   getCounterparts.mockReset();
   getCounterparts.mockImplementation(({ data }) => pageCounterparts(data));
+  getRollPage.mockReset();
+  getRollPage.mockImplementation(({ data }) => rollPage(data));
 });
+
+const rollsOf = (locale: string) => localeRolls({ locale });
 
 interface Meta {
   title?: string;
@@ -68,6 +84,7 @@ describe('the root route', () => {
         { kind: 'landing', locale: 'fr' },
         { kind: 'landing', locale: 'es' },
       ],
+      rolls: await rollsOf('en'),
     });
     expect(await loadedAt('/articles/c/web')).toMatchObject({ locale: 'en' });
   });
@@ -83,6 +100,7 @@ describe('the root route', () => {
           slug: 'quitter-gmail',
         },
       ],
+      rolls: await rollsOf('en'),
     });
     expect(getCounterparts).toHaveBeenCalledWith({
       data: {
@@ -95,7 +113,19 @@ describe('the root route', () => {
     expect(await loadedAt('/fr/articles/c/theory')).toEqual({
       locale: 'fr',
       counterparts: [],
+      rolls: await rollsOf('fr'),
     });
+  });
+
+  // R-BLOGROLLS-61: the footer's rolls, of the page's Locale.
+  it('loads the rolls of the page’s Locale for the footer, none for Spanish', async () => {
+    expect((await loadedAt('/fr')) as object).toMatchObject({
+      rolls: await rollsOf('fr'),
+    });
+    expect(await loadedAt('/es')).toMatchObject({ rolls: [] });
+    expect(
+      ((await loadedAt('/articles/p/2')) as { rolls: unknown[] }).rolls,
+    ).toHaveLength(6);
   });
 
   it('falls back to the default Locale and asks for no counterpart where the address names no page, the 404 page included', async () => {
@@ -103,6 +133,7 @@ describe('the root route', () => {
       expect(await loadedAt(pathname)).toEqual({
         locale: 'en',
         counterparts: [],
+        rolls: await rollsOf('en'),
       });
     expect(getCounterparts).not.toHaveBeenCalled();
   });
@@ -124,6 +155,7 @@ describe('the root route', () => {
     expect(router.state.matches[0].loaderData).toEqual({
       locale: 'fr',
       counterparts: [],
+      rolls: await rollsOf('fr'),
     });
   });
 
@@ -139,6 +171,7 @@ describe('the root route', () => {
         { kind: 'landing', locale: 'fr' },
         { kind: 'landing', locale: 'es' },
       ],
+      rolls: await rollsOf('en'),
     });
   });
 
@@ -252,5 +285,66 @@ describe('the landing route', () => {
       expect(
         await headOf(LandingRoute.options.head, { params: { locale } }),
       ).toEqual(getPageCopy(locale).landing.head);
+  });
+});
+
+const LISTING_ROUTES = [
+  {
+    route: BlogHomeRoute,
+    params: { locale: 'fr' },
+    url: { kind: 'blog-home', locale: 'fr', page: 1 },
+  },
+  {
+    route: BlogRollRoute,
+    params: { locale: 'en', n: '2' },
+    url: { kind: 'blog-home', locale: 'en', page: 2 },
+  },
+  {
+    route: CategoryRoute,
+    params: { locale: 'fr', category: 'theory' },
+    url: { kind: 'category', locale: 'fr', category: 'theory', page: 1 },
+  },
+  {
+    route: CategoryRollRoute,
+    params: { locale: 'en', category: 'web', n: '3' },
+    url: { kind: 'category', locale: 'en', category: 'web', page: 3 },
+  },
+] as const;
+
+describe('the four listing routes', () => {
+  it('take their head from listingHead, on the roll page their params name', async () => {
+    for (const { route, params, url } of LISTING_ROUTES) {
+      const { meta } = listingHead(url);
+
+      expect(await headOf(route.options.head, { params })).toEqual({
+        title: meta[0].title,
+        description: meta[1].content,
+      });
+    }
+  });
+
+  it('load the roll page their params name through getRollPage', async () => {
+    getRollPage.mockImplementation(async () => ({ locale: 'en', posts: [] }));
+
+    for (const { route, params, url } of LISTING_ROUTES) {
+      const loader = route.options.loader as unknown as (
+        context: never,
+      ) => unknown;
+      await loader({ params } as never);
+
+      expect(getRollPage).toHaveBeenLastCalledWith({ data: url });
+    }
+  });
+
+  it('render the roll of the French blog home reached by a client navigation, its posts and no placeholder', async () => {
+    const router = clientRouterAt('/fr');
+    await router.load();
+    await router.navigate({ href: '/fr/articles' });
+    const match = router.state.matches.at(-1);
+
+    expect(match?.routeId).toBe('/{-$locale}/articles/');
+    expect(
+      (match?.loaderData as unknown as { posts: unknown[] }).posts,
+    ).toHaveLength(9);
   });
 });

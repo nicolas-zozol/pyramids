@@ -1,21 +1,23 @@
-import { buildUrl } from '@/routing/url-scheme/index.ts';
 import { createFileRoute } from '@tanstack/react-router';
-import { RoutePlaceholder } from '@/components/RoutePlaceholder.tsx';
-import { urlScheme } from '@/routing/scheme.ts';
-import { getPageCopy } from '@/seopyramids.config.ts';
+import { ListingPage, listingHead } from '@/listing/index.ts';
+import { getRollPage } from '@/page-data/index.ts';
+import type { RollUrl } from '@/routing/url-scheme/index.ts';
 
 export const Route = createFileRoute('/{-$locale}/articles/p/$n')({
+  head: ({ params }) => listingHead(rollAt(params)),
+  loader: ({ params }) => getRollPage({ data: rollAt(params) }),
   component: BlogRollPage,
 });
 
-function BlogRollPage() {
-  const { locale, n } = Route.useParams();
-  const page = { kind: 'blog-home', locale, page: Number(n) } as const;
+/** The roll page the params name. */
+function rollAt(params: { locale: string; n: string }): RollUrl {
+  return {
+    kind: 'blog-home',
+    locale: params.locale,
+    page: Number(params.n),
+  };
+}
 
-  return (
-    <RoutePlaceholder
-      title={getPageCopy(locale).listing.blogTitle}
-      url={buildUrl(urlScheme, page)}
-    />
-  );
+function BlogRollPage() {
+  return <ListingPage page={Route.useLoaderData()} />;
 }

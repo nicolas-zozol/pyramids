@@ -121,6 +121,33 @@ describe('the page copy of the Site configuration', () => {
     }
   });
 
+  it('gives each Locale a listing head model per kind of listing page, the Category one carrying {category}, the page suffix {page}', () => {
+    for (const locale of LOCALES) {
+      const { head } = getPageCopy(locale).listing;
+
+      expect(head.category.title, locale).toContain('{category}');
+      expect(head.category.description, locale).toContain('{category}');
+      expect(head.pageSuffix, locale).toContain('{page}');
+      for (const text of [head.blogHome.title, head.blogHome.description])
+        expect(text, locale).not.toMatch(/\{(category|page)\}/);
+    }
+  });
+
+  it('writes the listing head models of each Locale apart from those of every other Locale and from its other heads', () => {
+    const models = LOCALES.flatMap((locale) => {
+      const { head, listing } = getPageCopy(locale);
+      return [
+        listing.head.blogHome.title,
+        listing.head.blogHome.description,
+        listing.head.category.title,
+        listing.head.category.description,
+      ].filter((model) => model !== head.title && model !== head.description);
+    });
+
+    expect(models).toHaveLength(LOCALES.length * 4);
+    expect(new Set(models).size).toBe(models.length);
+  });
+
   it('labels exactly the Categories the published articles of each Locale claim', async () => {
     const articles = await getArticleIndex();
 

@@ -1,21 +1,28 @@
-import { buildUrl } from '@/routing/url-scheme/index.ts';
 import { createFileRoute } from '@tanstack/react-router';
-import { RoutePlaceholder } from '@/components/RoutePlaceholder.tsx';
-import { urlScheme } from '@/routing/scheme.ts';
-import { getCategoryLabel } from '@/seopyramids.config.ts';
+import { ListingPage, listingHead } from '@/listing/index.ts';
+import { getRollPage } from '@/page-data/index.ts';
+import type { RollUrl } from '@/routing/url-scheme/index.ts';
 
 export const Route = createFileRoute('/{-$locale}/articles/c/$category/p/$n')({
+  head: ({ params }) => listingHead(rollAt(params)),
+  loader: ({ params }) => getRollPage({ data: rollAt(params) }),
   component: CategoryRollPage,
 });
 
-function CategoryRollPage() {
-  const { locale, category, n } = Route.useParams();
-  const page = { kind: 'category', locale, category, page: Number(n) } as const;
+/** The roll page the params name. */
+function rollAt(params: {
+  locale: string;
+  category: string;
+  n: string;
+}): RollUrl {
+  return {
+    kind: 'category',
+    locale: params.locale,
+    category: params.category,
+    page: Number(params.n),
+  };
+}
 
-  return (
-    <RoutePlaceholder
-      title={getCategoryLabel(locale, category)}
-      url={buildUrl(urlScheme, page)}
-    />
-  );
+function CategoryRollPage() {
+  return <ListingPage page={Route.useLoaderData()} />;
 }

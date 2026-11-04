@@ -1,5 +1,5 @@
 /**
- * Package page-data — the only path from a route to the content source: three
+ * Package page-data — the only path from a route to the content source: five
  * server functions that run at prerender and reach a hydrated page as files.
  *
  * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
@@ -10,12 +10,17 @@
  * Requirements: R-LANDING-86
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-62, R-MULTILINGUAL-64
+ * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
+ * Requirements: R-BLOGROLLS-02, R-BLOGROLLS-03, R-BLOGROLLS-04, R-BLOGROLLS-05, R-BLOGROLLS-06
  */
 import { createServerFn } from '@tanstack/react-start';
 import { staticFunctionMiddleware } from '@tanstack/start-static-server-functions';
 import { articlePage } from './article-page.ts';
 import { notesFeed } from './notes-feed.ts';
+import { localeRolls } from './locale-rolls.ts';
 import { pageCounterparts } from './page-counterparts.ts';
+import { rollPage } from './roll-page.ts';
+import { localeRequest, rollUrl } from './validators.ts';
 import type { PageUrl } from '../routing/url-scheme/index.ts';
 import type { ArticleKey, NotesFeedRequest, PageData } from './types.ts';
 
@@ -23,8 +28,10 @@ export type {
   ArticleKey,
   ArticlePage,
   ArticleVersion,
+  LocaleRequest,
   NotesFeedRequest,
   PageData,
+  RollPage,
 } from './types.ts';
 
 /** One article page, written to a data file per key at prerender. */
@@ -50,6 +57,22 @@ export const getCounterparts: PageData['getCounterparts'] = createServerFn({
   .validator(pageUrl)
   .middleware([staticFunctionMiddleware])
   .handler(({ data }) => pageCounterparts(data));
+
+/** One page of a roll, written to a data file per page at prerender. */
+export const getRollPage: PageData['getRollPage'] = createServerFn({
+  method: 'GET',
+})
+  .validator(rollUrl)
+  .middleware([staticFunctionMiddleware])
+  .handler(({ data }) => rollPage(data));
+
+/** The first page of each roll of a Locale, written to a data file per Locale at prerender. */
+export const getLocaleRolls: PageData['getLocaleRolls'] = createServerFn({
+  method: 'GET',
+})
+  .validator(localeRequest)
+  .middleware([staticFunctionMiddleware])
+  .handler(({ data }) => localeRolls(data));
 
 function articleKey(input: ArticleKey): ArticleKey {
   if (typeof input?.locale !== 'string' || typeof input?.slug !== 'string') {

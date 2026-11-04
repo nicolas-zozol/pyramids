@@ -3,6 +3,8 @@
  *
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-41, R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-44, R-MULTILINGUAL-48, R-MULTILINGUAL-49
+ * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
+ * Requirements: R-BLOGROLLS-41, R-BLOGROLLS-42
  */
 import type { FlowStep, Principle } from '@robusta/pyramids-design-system';
 import { wordmarkSrc } from './design-system/assets.ts';
@@ -54,15 +56,29 @@ export interface PageCopy {
   tagline: string;
   header: { contactLabel: string };
   footer: { copyright: string };
-  /** The title and the description of every page of the Locale but its landing page. */
+  /** The title and the description of every page of the Locale but its landing page and its listing pages. */
   head: { title: string; description: string };
   /** The end of an article page. */
   article: { navLabel: string; categoryPrefix: string; versionsPrefix: string };
-  /** The heading of the blog roll placeholders. */
-  listing: { blogTitle: string };
+  /** The listing pages: the blog home and the Category rolls. */
+  listing: ListingCopy;
   landing: LandingCopy;
   /** Category slug to its label, for the Categories the Locale's published articles claim. */
   categoryLabels: Record<string, string>;
+}
+
+export interface ListingCopy {
+  /** The h1 of every page of the blog home's roll. */
+  blogTitle: string;
+  /** `{category}` stands for the Category label, `{page}` for the page number. */
+  head: {
+    blogHome: { title: string; description: string };
+    category: { title: string; description: string };
+    /** Appended to the title and to the description from page 2 on. */
+    pageSuffix: string;
+  };
+  pagination: { navLabel: string; newerLabel: string; olderLabel: string };
+  footer: { title: string; blogHomeLabel: string };
 }
 
 export interface LandingCopy {
@@ -127,7 +143,28 @@ const en: PageCopy = {
     categoryPrefix: 'Filed under ',
     versionsPrefix: 'Also in: ',
   },
-  listing: { blogTitle: 'articles' },
+  listing: {
+    blogTitle: 'articles',
+    head: {
+      blogHome: {
+        title: 'Articles by Nicolas Zozol, Robusta Build',
+        description:
+          'Every article by Nicolas Zozol on software, newest first: the web, JavaScript, TypeScript, blockchain and privacy.',
+      },
+      category: {
+        title: '{category}: articles by Nicolas Zozol',
+        description:
+          'The articles by Nicolas Zozol filed under {category}, newest first.',
+      },
+      pageSuffix: ' (page {page})',
+    },
+    pagination: {
+      navLabel: 'Pages of articles',
+      newerLabel: 'newer articles',
+      olderLabel: 'older articles',
+    },
+    footer: { title: 'articles', blogHomeLabel: 'all articles' },
+  },
   landing: {
     head: {
       title: 'RB Compound: build software with AI agents, documents first',
@@ -228,7 +265,28 @@ const fr: PageCopy = {
     categoryPrefix: 'Classé dans ',
     versionsPrefix: 'Autres langues : ',
   },
-  listing: { blogTitle: 'articles' },
+  listing: {
+    blogTitle: 'articles',
+    head: {
+      blogHome: {
+        title: 'Articles de Nicolas Zozol, Robusta Build',
+        description:
+          'Tous les articles de Nicolas Zozol sur le logiciel, du plus récent au plus ancien : le web, JavaScript, TypeScript, la blockchain et la vie privée.',
+      },
+      category: {
+        title: '{category} : articles de Nicolas Zozol',
+        description:
+          'Les articles de Nicolas Zozol classés dans {category}, du plus récent au plus ancien.',
+      },
+      pageSuffix: ' (page {page})',
+    },
+    pagination: {
+      navLabel: 'Pages des articles',
+      newerLabel: 'articles plus récents',
+      olderLabel: 'articles plus anciens',
+    },
+    footer: { title: 'articles', blogHomeLabel: 'tous les articles' },
+  },
   landing: {
     head: {
       title:
@@ -331,7 +389,28 @@ const es: PageCopy = {
     categoryPrefix: 'Archivado en ',
     versionsPrefix: 'Otros idiomas: ',
   },
-  listing: { blogTitle: 'artículos' },
+  listing: {
+    blogTitle: 'artículos',
+    head: {
+      blogHome: {
+        title: 'Artículos de Nicolas Zozol, Robusta Build',
+        description:
+          'Todos los artículos de Nicolas Zozol sobre software, del más reciente al más antiguo: la web, JavaScript, TypeScript, blockchain y privacidad.',
+      },
+      category: {
+        title: '{category}: artículos de Nicolas Zozol',
+        description:
+          'Los artículos de Nicolas Zozol archivados en {category}, del más reciente al más antiguo.',
+      },
+      pageSuffix: ' (página {page})',
+    },
+    pagination: {
+      navLabel: 'Páginas de artículos',
+      newerLabel: 'artículos más recientes',
+      olderLabel: 'artículos más antiguos',
+    },
+    footer: { title: 'artículos', blogHomeLabel: 'todos los artículos' },
+  },
   landing: {
     head: {
       title:

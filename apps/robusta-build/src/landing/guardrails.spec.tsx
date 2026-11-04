@@ -1,21 +1,18 @@
 import { readdir, readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.ts';
+import { localeRolls } from '../page-data/locale-rolls.ts';
 import { notesFeed } from '../page-data/notes-feed.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
 import { LOCALES } from '../routing/scheme.ts';
 import { getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { designSystemClassNames } from '../test-support/design-system-css.ts';
 import { classNames, hrefs } from '../test-support/markup.ts';
 import { renderInRouter } from '../test-support/render-in-router.tsx';
 import { LandingPage } from './index.ts';
 
 const SOURCES = ['src/landing', 'src/chrome'];
-const STYLESHEETS = [
-  '@robusta/pyramids-design-system/sketch.css',
-  '@robusta/pyramids-design-system/colors_and_type.css',
-];
 
 let page: string;
 
@@ -32,7 +29,7 @@ beforeAll(async () => {
             locale={locale}
             posts={await notesFeed({ locale, limit: 4 })}
           />
-          <Footer locale={locale} />
+          <Footer locale={locale} rolls={await localeRolls({ locale })} />
         </>,
       ),
     ),
@@ -42,15 +39,7 @@ beforeAll(async () => {
 
 describe('the layout of the landing page and the chrome', () => {
   it('uses class names of the design system and no other', async () => {
-    const require = createRequire(import.meta.url);
-    const css = (
-      await Promise.all(
-        STYLESHEETS.map((sheet) => readFile(require.resolve(sheet), 'utf8')),
-      )
-    ).join('\n');
-    const designSystemClasses = new Set(
-      [...css.matchAll(/\.([a-zA-Z][\w-]*)/g)].map(([, name]) => name),
-    );
+    const designSystemClasses = await designSystemClassNames();
 
     expect(
       classNames(page).filter((name) => !designSystemClasses.has(name)),

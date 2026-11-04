@@ -2,6 +2,7 @@ import type { NotePost } from '@robusta/pyramids-design-system';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.ts';
 import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
+import { localeRolls } from '../page-data/locale-rolls.ts';
 import { notesFeed } from '../page-data/notes-feed.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
 import { contentUrls } from '../routing/content-urls.ts';
@@ -35,7 +36,7 @@ async function landingPage(
         locale={locale}
         posts={posts ?? (await notesFeed({ locale, limit: 4 }))}
       />
-      <Footer locale={locale} />
+      <Footer locale={locale} rolls={await localeRolls({ locale })} />
     </>,
     buildUrl(urlScheme, page),
   );
@@ -296,7 +297,9 @@ describe('every link of the three landing pages', () => {
       const blogHome = (of: string) =>
         buildUrl(urlScheme, { kind: 'blog-home', locale: of, page: 1 });
 
-      expect(anchorsTo(pages[locale], blogHome(locale))).toHaveLength(1);
+      const notes = sectionOf(pages[locale], 'class="sk-notes-preview"');
+
+      expect(anchorsTo(notes, blogHome(locale))).toHaveLength(1);
       for (const other of others)
         expect(anchorsTo(pages[locale], blogHome(other))).toHaveLength(0);
       for (const post of feed)

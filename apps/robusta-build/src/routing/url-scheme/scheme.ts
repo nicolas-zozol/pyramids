@@ -13,6 +13,12 @@ export type PageUrl =
   | { kind: 'tag'; locale: string; tag: string; page: number }
   | { kind: 'article'; locale: string; category?: string; slug: string };
 
+/** A page of a roll: a blog home or a Category page. */
+export type RollUrl = Extract<
+  PageUrl,
+  { kind: 'blog-home' } | { kind: 'category' }
+>;
+
 /** BR-PYRAMID-9 stated in the type: one category at most, never a list. */
 export interface AddressableArticle {
   slug: string;

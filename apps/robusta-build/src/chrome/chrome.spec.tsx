@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ArticleIndexEntry } from '../content/article-index.ts';
 import { wordmarkSrc } from '../design-system/assets.ts';
+import { localeRolls } from '../page-data/locale-rolls.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
 import { counterpartsOf } from '../routing/counterparts.ts';
 import { LOCALES, urlScheme } from '../routing/scheme.ts';
@@ -10,8 +11,13 @@ import {
   parseUrl,
   urlSet,
   type PageUrl,
+  type RollUrl,
 } from '../routing/url-scheme/index.ts';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import {
+  getCategoryLabel,
+  getPageCopy,
+  getSeoPyramidsConfig,
+} from '../seopyramids.config.ts';
 import { anchorsTo, hrefs, htmlText } from '../test-support/markup.ts';
 import { renderInRouter } from '../test-support/render-in-router.tsx';
 import { Footer, Header } from './index.ts';
@@ -238,11 +244,33 @@ function fixture(
   };
 }
 
+/** The column of the footer: its title, then each item's label and href, in document order. */
+function footerColumns(html: string): { title: string; items: string[][] }[] {
+  return [
+    ...html.matchAll(
+      /<div class="sk-site-footer__col"><div class="sk-site-footer__col-title">([^<]*)<\/div><ul[^>]*>([\s\S]*?)<\/ul><\/div>/g,
+    ),
+  ].map(([, title, list]) => ({
+    title,
+    items: [
+      ...list.matchAll(/<a\b[^>]*\shref="([^"]*)"[^>]*>([^<]*)<\/a>/g),
+    ].map(([, href, label]) => [label, href]),
+  }));
+}
+
+const rollsOf = (urls: string[]): RollUrl[] =>
+  urls.map((url) => {
+    const page = parseUrl(urlScheme, url);
+    if (page?.kind !== 'blog-home' && page?.kind !== 'category')
+      throw new Error(`${url} is no roll page`);
+    return page;
+  });
+
 describe('Footer', () => {
-  it('is the design system’s site footer with the tagline and the copyright of its Locale, and no column', async () => {
+  it('is the design system’s site footer with the tagline and the copyright of its Locale, and no column without a roll', async () => {
     for (const locale of LOCALES) {
       const { tagline, footer } = getPageCopy(locale);
-      const html = await renderInRouter(<Footer locale={locale} />);
+      const html = await renderInRouter(<Footer locale={locale} rolls={[]} />);
 
       expect(html).toMatch(/<footer class="sk-site-footer"/);
       expect(html).toContain(`>${htmlText(tagline)}<`);
@@ -251,8 +279,68 @@ describe('Footer', () => {
     }
   });
 
+  it('renders one column, titled in the page copy, the blog home then each Category under its label', async () => {
+    const { listing } = getPageCopy('en');
+    const html = await renderInRouter(
+      <Footer
+        locale="en"
+        rolls={rollsOf(['/articles', '/articles/c/privacy', '/articles/c/web'])}
+      />,
+    );
+
+    expect(footerColumns(html)).toEqual([
+      {
+        title: htmlText(listing.footer.title),
+        items: [
+          [htmlText(listing.footer.blogHomeLabel), '/articles'],
+          ['privacy', '/articles/c/privacy'],
+          ['web', '/articles/c/web'],
+        ],
+      },
+    ]);
+  });
+
+  it('ranks the Categories by label in the collation of its Locale, vie privée after typescript in French', async () => {
+    const html = await renderInRouter(
+      <Footer locale="fr" rolls={await localeRolls({ locale: 'fr' })} />,
+    );
+    const [column] = footerColumns(html);
+
+    expect(column.items.map(([, href]) => href)).toEqual([
+      '/fr/articles',
+      '/fr/articles/c/blockchain',
+      '/fr/articles/c/javascript',
+      '/fr/articles/c/theory',
+      '/fr/articles/c/typescript',
+      '/fr/articles/c/privacy',
+      '/fr/articles/c/web',
+    ]);
+    expect(column.items.map(([label]) => label).slice(1)).toEqual([
+      'blockchain',
+      'javascript',
+      'théorie',
+      'typescript',
+      'vie privée',
+      'web',
+    ]);
+  });
+
+  it('links theory from the French footer only, and gives the Spanish one no column', async () => {
+    const english = await renderInRouter(
+      <Footer locale="en" rolls={await localeRolls({ locale: 'en' })} />,
+    );
+    const spanish = await renderInRouter(
+      <Footer locale="es" rolls={await localeRolls({ locale: 'es' })} />,
+    );
+
+    expect(footerColumns(english)).toHaveLength(1);
+    expect(hrefs(english).some((href) => href.includes('theory'))).toBe(false);
+    expect(english).not.toContain(htmlText(getCategoryLabel('fr', 'theory')));
+    expect(spanish).not.toContain('sk-site-footer__col');
+  });
+
   it('shows no version line', async () => {
-    const html = await renderInRouter(<Footer locale="en" />);
+    const html = await renderInRouter(<Footer locale="en" rolls={[]} />);
     const bottom =
       /class="sk-site-footer__bottom">([\s\S]*?)<\/div><\/footer>/.exec(
         html,
@@ -264,13 +352,25 @@ describe('Footer', () => {
   });
 
   it('declares no language of its own, the document’s <html lang> carrying the page’s Locale', async () => {
-    const html = await renderInRouter(<Footer locale="fr" />, A_FRENCH_ARTICLE);
+    const html = await renderInRouter(
+      <Footer locale="fr" rolls={await localeRolls({ locale: 'fr' })} />,
+      A_FRENCH_ARTICLE,
+    );
 
     expect(html).toMatch(/<footer class="sk-site-footer"/);
     expect(html).not.toMatch(/\slang="/);
   });
 
   it('throws naming a Locale the site does not declare', () => {
-    expect(() => Footer({ locale: 'de' })).toThrow(/"de"/);
+    expect(() => Footer({ locale: 'de', rolls: [] })).toThrow(/"de"/);
+  });
+
+  it('throws naming the Category and the Locale when the Locale has no label for a roll’s Category', () => {
+    expect(() =>
+      Footer({
+        locale: 'es',
+        rolls: rollsOf(['/es/articles', '/es/articles/c/web']),
+      }),
+    ).toThrow(/"web"[\s\S]*"es"/);
   });
 });

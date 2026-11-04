@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 import { Footer, Header } from '@/chrome/index.ts';
-import { getCounterparts } from '@/page-data/index.ts';
+import { getCounterparts, getLocaleRolls } from '@/page-data/index.ts';
 import { urlScheme } from '@/routing/scheme.ts';
 import { parseUrl } from '@/routing/url-scheme/index.ts';
 import { getPageCopy } from '@/seopyramids.config.ts';
@@ -28,11 +28,12 @@ export const Route = createRootRoute({
     staleReloadMode: 'blocking',
     handler: async ({ location }) => {
       const page = parseUrl(urlScheme, location.pathname);
-      return {
-        locale: page?.locale ?? urlScheme.defaultLocale,
-        counterparts:
-          page === undefined ? [] : await getCounterparts({ data: page }),
-      };
+      const locale = page?.locale ?? urlScheme.defaultLocale;
+      const [counterparts, rolls] = await Promise.all([
+        page === undefined ? [] : getCounterparts({ data: page }),
+        getLocaleRolls({ data: { locale } }),
+      ]);
+      return { locale, counterparts, rolls };
     },
   },
   head: ({ loaderData }) => {
@@ -54,7 +55,7 @@ export const Route = createRootRoute({
 });
 
 function RootDocument({ children }: { children: ReactNode }) {
-  const { locale, counterparts } = Route.useLoaderData();
+  const { locale, counterparts, rolls } = Route.useLoaderData();
   const isNotFoundDocument = useMatches({
     select: (matches) => matches.some((match) => match.routeId === '/404'),
   });
@@ -67,7 +68,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <body>
         <Header locale={locale} counterparts={counterparts} />
         {children}
-        <Footer locale={locale} />
+        <Footer locale={locale} rolls={rolls} />
         {isNotFoundDocument ? null : <Scripts />}
       </body>
     </html>
