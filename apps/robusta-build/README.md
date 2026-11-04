@@ -95,7 +95,7 @@ No tag route ships, so `/articles/t/rxjs` answers 404 like a slug that does not 
 
 ### One URL per page
 
-The site builds the canonical form of each page and nothing else. `netlify.toml` holds two redirect rules, 301 without `force`, from a page marked with the default Locale to the same page unmarked: `/en` to `/`, `/en/{rest}` to `/{rest}`. No file exists under `en`, so they always apply, and a target the site does not build then answers 404. The other forms get what Netlify answers for a static deploy:
+The site builds the canonical form of each page and nothing else. Beside the host rule of Deployment, `netlify.toml` holds two redirect rules, 301 without `force`, from a page marked with the default Locale to the same page unmarked: `/en` to `/`, `/en/{rest}` to `/{rest}`. No file exists under `en`, so they always apply, and a target the site does not build then answers 404. The other forms get what Netlify answers for a static deploy:
 
 - An explicit page one, `/articles/p/1` or `/articles/c/{category}/p/1`, an address under `/l/{locale}`, and a Locale the site does not declare: not built, 404 with the not-found page.
 - A trailing slash, `/fr/` included: 301 to the canonical form. `/` is a file and gets none.
@@ -128,7 +128,7 @@ No declared URL names `/en…`, a trailing slash other than `/`, or a `.html` fi
 
 `isIndexable` decides: a landing page and an article page are indexable, a roll page when it lists an article, a tag page never. A page that is not indexable declares its title and description only, and `404.html` declares nothing over the root head: neither gets a canonical, an hreflang, a preview, structured data or a sitemap entry.
 
-Every document carries `noindex, nofollow` while `INDEXING_OPEN`, in `src/seo/indexing.ts`, is `false`. It is the only switch, and flipping it belongs to the go-live item of `ROADMAP.md`. Until then, an indexable page is the one that carries a canonical link.
+`INDEXING_OPEN`, in `src/seo/indexing.ts`, is the only switch: true when the build carries `NETLIFY=true` and `CONTEXT=production`, which Netlify sets on its production build alone. The `define` of `vite.config.ts` writes both values into every bundle as literals, so the prerendered HTML and the head recomputed in the browser carry the same `robots`. On that build an indexable page declares `index, follow`; on any other, every document carries `noindex, nofollow`. An indexable page is the one that carries a canonical link.
 
 The breadcrumb is `Breadcrumb`, from `src/components`, a `nav` named by `breadcrumb.navLabel`. On an article page, above the cover: the blog home, its Category when it claims one, then the article as text. On a Category roll, above the `h1`: the blog home, then the Category, as text on page 1 and linked to page 1 from page 2. The blog home has none. The trail shown and the trail declared are the same value.
 
@@ -149,7 +149,7 @@ An article page ends on its Related articles, `findRelated(article, 3)`: publish
 - a page without exactly one `<h1>`
 - a `robots` other than `robotsOf` applied to the presence of a canonical link
 
-It prints `seo: 34 pages checked, 33 indexable and all in the sitemap; indexing closed`.
+It prints `seo: 34 pages checked, 33 indexable and all in the sitemap; indexing closed`, `indexing open` on the production build.
 
 ## Styling
 
@@ -207,7 +207,7 @@ Netlify project `robusta-build`, in a team on the Free plan, linked to the repos
 
 - the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
 - the publish directory, `apps/robusta-build/dist/client`: the prerendered output and nothing else. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
-- the two redirect rules from `/en…` to the unprefixed page, see One URL per page
+- the redirect rules: first, forced, `https://robusta-build.netlify.app/*` to `https://www.robusta.build/:splat` in 301; then the two rules from `/en…` to the unprefixed page, see One URL per page. `www`, branch deploys and deploy previews answer under their own host and are not redirected.
 - the ignore rule: `git diff --quiet` between the cached and the current commit over the site, the design system and the root build files. Exit 0 skips the build.
 - `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 
@@ -218,6 +218,8 @@ The dashboard holds the rest:
 - production branch `main`, branch deploys for `epic/robusta-v2`, the epic's working branch
 - Pretty URLs on: the answers listed under One URL per page depend on it, and with it off a trailing slash would answer 200.
 - no environment variable, in particular no `NODE_VERSION`, no `COREPACK_*` and no `YARN_VERSION`
+
+Only the production build opens its indexable pages, see SEO: a branch deploy, a deploy preview, a local build and a CLI build stay `noindex`. A draft deploy is `npx netlify-cli deploy`, without `--prod`: the CLI builds locally with `CONTEXT=production` but without `NETLIFY`, so the draft stays closed. Do not use `netlify deploy --remote`: it builds on Netlify, with an undocumented `CONTEXT`.
 
 A production deploy costs 15 of the team's 300 monthly credits, a branch deploy none, and a spent balance pauses every site of the team: work goes to the epic branch, and `main` receives merges.
 

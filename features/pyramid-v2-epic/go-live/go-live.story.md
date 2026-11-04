@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-04
 **Feature :** go-live
 **Infix :** GOLIVE
-**Status :** ACTIVE
+**Status :** SUBMITTED (2026-11-04, commit 6182d17)
 
 ## Story
 
@@ -11,17 +11,21 @@
 
 ## Contexte & objectif
 
-Le domaine sert déjà la v2 depuis la bascule DNS du 2026-10-06 (tanstack-start-migration), production sur la branche `main` de Netlify, mais la route racine déclare `robots: noindex, nofollow` sur chaque page. seo-excellence fait déclarer à chaque page son indexabilité, écrit le sitemap et `robots.txt`, et garde tout fermé jusqu'à go-live. go-live est l'ouverture : la racine garde `noindex` par défaut, chaque page que seo-excellence déclare indexable s'ouvre, et rien d'autre. C'est la décision de l'epic du 2026-10-06, OQ-LANDING-12 et OQ-SEOEXCELLENCE-19 répondues `lgtm`.
+Avant go-live, la racine déclarait `noindex, nofollow` sur chaque page et `INDEXING_OPEN` valait `false`. Désormais, sur la seule build de production faite par Netlify (`NETLIFY=true` et `CONTEXT=production`), chaque page que seo-excellence déclare indexable s'ouvre ; toute autre page, et toute autre build, garde `noindex`. `robusta-build.netlify.app` renvoie en 301 vers `https://www.robusta.build`. Rien n'est indexé avant que Nicolas merge `epic/robusta-v2` sur `main`.
 
-Une page ne s'ouvre que si deux conditions sont réunies : seo-excellence la déclare indexable, et la build est celle de la production. Netlify n'ajoute `X-Robots-Tag: noindex` qu'aux deploy previews et aux anciens déploiements de branche : le dernier déploiement de `epic/robusta-v2` est public et sans cet en-tête, il s'ouvrirait dès le commit de go-live. La build se sait production par deux variables de Netlify, réunies : `NETLIFY=true`, posée par ses seuls serveurs de build et en lecture seule, et `CONTEXT=production`. Une build du CLI Netlify (`netlify deploy`, `netlify build`) porte `CONTEXT=production` mais pas `NETLIFY` : elle reste fermée, comme une build locale, qui ne porte aucune des deux. La condition est fixée au build, et le head recalculé dans le navigateur dit la même chose que le HTML prérendu.
+## Livré
 
-La production sert aussi `robusta-build.netlify.app`, en 200 : go-live le renvoie en 301 vers la même page sous `https://www.robusta.build`, pour qu'aucune copie ouverte ne vive sous un second hôte. L'apex `robusta.build` renvoie déjà vers `www`.
+### Requirements
 
-L'ordre compte : ouvert avant seo-excellence, le site serait indexé avec des pages sans titre propre ni sitemap. Le travail reste sur `epic/robusta-v2` ; rien n'est indexé avant que Nicolas merge sur `main`. Une production ouverte attire les crawlers, d'où l'offre Netlify Personal avec recharge automatique décidée le même jour, le plafond de l'offre Free mettant les sites de l'équipe en pause.
+- R-GOLIVE-01 : `INDEXING_OPEN` vaut `process.env.NETLIFY === 'true' && process.env.CONTEXT === 'production'`, écrit une fois dans `src/seo` à la place du littéral `false`. `robotsOf`, `pageHead`, `isIndexable` et la route racine restent ceux de seo-excellence.
+- R-GOLIVE-02 : `vite.config.ts` déclare dans `define` les valeurs de build de `process.env.NETLIFY` et `process.env.CONTEXT`, si bien que le HTML prérendu et le head recalculé dans le navigateur portent le même `robots`.
+- R-GOLIVE-03 : sur la build de production, `check-seo.mjs` lit `INDEXING_OPEN` vrai dans `.routing-dist`, exige `index, follow` sur chaque page qui porte une canonical URL et `noindex, nofollow` sur toute autre, et écrit `indexing open`.
+- R-GOLIVE-04 : `robots.txt` et le sitemap ne dépendent pas de `INDEXING_OPEN` : hors production, `robots.txt` ne bloque rien et le crawler lit le `noindex` de chaque page.
+- R-GOLIVE-05 : go-live n'écrit aucune liste de pages : l'ouverture suit `isIndexable` à chaque build, et un déploiement d'avant go-live, construit avec `INDEXING_OPEN` à `false`, sert `noindex` partout.
+- R-GOLIVE-21 : `netlify.toml` ouvre ses redirections sur la règle forcée de `https://robusta-build.netlify.app/*` vers `https://www.robusta.build/:splat` en 301.
+- R-GOLIVE-22 : aucune autre règle ne change, aucune ne vise `www.robusta.build`, et l'apex reste au dashboard.
 
-Hors périmètre : ce que chaque page déclare, le sitemap, `robots.txt`, les canonical URLs et l'audit de la build (seo-excellence) ; les adresses v1, qui répondent 404 (restore-v1-urls) ; le DNS, déjà basculé ; la protection par mot de passe des déploiements hors production.
-
-## Acceptance Criteria
+### Acceptance Criteria
 
 - AC-GOLIVE-1 : Given la build de production de robusta.build, When un crawler lit une page que seo-excellence déclare indexable, qu'il exécute les scripts ou y arrive par une navigation dans le site, Then la page se déclare indexable et ses liens peuvent être suivis.
 - AC-GOLIVE-2 : Given la build de production, When un crawler lit une page que seo-excellence ne déclare pas indexable (la 404, qu'une adresse v1 sert aussi, une page sans contenu propre, une page ajoutée sans rien déclarer), Then elle garde le `noindex` de la racine.
@@ -48,26 +52,35 @@ Hors périmètre : ce que chaque page déclare, le sitemap, `robots.txt`, les ca
 
 Client code : la build Netlify, une build du CLI Netlify et une build locale.
 
-- `yarn build:robusta` · modifié — lit `NETLIFY` et `CONTEXT` ; seuls `NETLIFY=true` et `CONTEXT=production` ensemble ouvrent les pages indexables, toute autre combinaison, une build du CLI Netlify comprise, garde tout fermé. Codes de sortie inchangés.
+- `yarn build:robusta` · modifié — lit `NETLIFY` et `CONTEXT` ; seuls `NETLIFY=true` et `CONTEXT=production` ensemble ouvrent les pages indexables, toute autre combinaison, une build du CLI Netlify comprise, garde tout fermé. `check-seo.mjs` écrit `indexing open` ou `indexing closed`. Codes de sortie inchangés.
 
 ### HTTP API of app `@robusta/robusta-build` — modified
 
 Client code : crawlers.
 
-- `GET` sur une page indexable, build de production · modifié — 200, son head la déclare indexable · était `noindex, nofollow`, la directive de la racine. Toute autre page, et toute page d'une build hors production, garde cette directive.
+- `GET` sur une page indexable, build de production · modifié — 200, son head la déclare `index, follow` · était `noindex, nofollow`, la directive de la racine. Toute autre page, et toute page d'une build hors production, garde cette directive.
 - `GET https://robusta-build.netlify.app/{path}` · modifié — 301 vers `https://www.robusta.build/{path}`, règle forcée limitée à cet hôte · était 200.
 
 `/sitemap.xml` et `/robots.txt` sont livrés par seo-excellence ; go-live n'y change rien.
 
+## Décisions
+
+- 2026-10-06 — La racine garde `noindex` par défaut et seules les pages que seo-excellence déclare indexables s'ouvrent. Pourquoi : OQ-LANDING-12 et OQ-SEOEXCELLENCE-19, `lgtm` ; une 404 ou une page vide ne s'ouvre jamais.
+- 2026-11-04 — La build ne s'ouvre que si `NETLIFY=true` et `CONTEXT=production` sont réunis. Pourquoi : Netlify ne pose pas `X-Robots-Tag: noindex` sur le dernier déploiement d'une branche, et une build du CLI porte `CONTEXT=production` sans `NETLIFY` (Gap-GOLIVE-4).
+- 2026-11-04 — La valeur est figée au build par le `define` de Vite, calculée par `scripts/netlify-build-define.mjs`. Pourquoi : TanStack Router recalcule le head dans le navigateur, qui doit dire la même chose que le HTML prérendu.
+- 2026-11-04 — `robusta-build.netlify.app` répond 301 forcé vers `https://www.robusta.build`, règle limitée à cet hôte. Pourquoi : aucune copie ouverte ne vit sous un second hôte ; les déploiements de branche, les deploy previews et `www` ne sont pas redirigés (OQ-GOLIVE-2).
+- 2026-11-04 — Le draft deploy se fait par `npx netlify-cli deploy` sans `--prod`, fermé par construction ; `netlify deploy --remote` est exclu. Pourquoi : la documentation Netlify ne dit pas le `CONTEXT` d'un draft distant.
+- 2026-11-04 — Vérifié au submit : build locale fermée, build `NETLIFY=true CONTEXT=production` à 33 pages `index, follow` égales au sitemap, 404 en `noindex`, draft deploy `https://dev--robusta-build.netlify.app` en `noindex, nofollow`. Restent à `storyman done`, après le merge sur `main` : AC-GOLIVE-4 dans la console webmaster et AC-GOLIVE-7 en direct.
+
 ## Documentation updates
 
-- change la section Netlify de `apps/robusta-build/README.md` — why: elle dit l'équipe en offre Free à 300 crédits, et ne dit ni que seule la build de production s'ouvre, ni que `robusta-build.netlify.app` renvoie vers `www`. Elle nomme la commande de draft deploy, `npx netlify-cli deploy` sans `--prod`, fermée par construction, et exclut `netlify deploy --remote`, dont le `CONTEXT` n'est pas documenté.
-- change le paragraphe `noindex` de la section « Where the truth of this site lives » de `apps/robusta-build/README.md` — why: il dit `noindex, nofollow` sur chaque document et renvoie la levée à l'item go-live ; à go-live, seules les pages non indexables, et toute build hors production, le gardent.
-- change la ligne robusta.build de `README.md` et celle de `apps/robusta-build` dans `CLAUDE.md` — why: toutes deux disent `noindex` sur chaque page.
-- change la ligne go-live de `.claude/skills/geo-article/SKILL.md` — why: elle dit chaque page v2 `noindex` et aucun article citable.
+- changed the SEO and Deployment sections of `apps/robusta-build/README.md`: production-only opening, the `define`, `indexing open`, the forced 301 of `robusta-build.netlify.app`, the draft deploy command and the exclusion of `netlify deploy --remote`.
+- changed the `noindex` paragraph of « Where the truth of this site lives » in `apps/robusta-build/README.md`.
+- changed the robusta.build line of `README.md` and the `apps/robusta-build` line of `CLAUDE.md`.
+- changed the go-live line of `.claude/skills/geo-article/SKILL.md`.
+- change the Netlify plan in the Deployment section of `apps/robusta-build/README.md` — why: il dit encore l'offre Free à 300 crédits ; à écrire une fois Dep 2 faite.
 
 ## Dependencies
 
-- Dep 1: seo-excellence, B2 — la déclaration d'indexabilité de chaque page, le sitemap, `robots.txt` et l'audit de la build ; go-live n'ouvre que ce qu'elle déclare. Story ACTIVE.
-- Dep 2: l'équipe Netlify passe en offre Personal avec recharge automatique avant le merge sur `main` (décision du 2026-10-06) — action de Nicolas hors dépôt ; le README la dit encore en Free.
-- Levées : tanstack-start-migration (DNS vers Netlify le 2026-10-06), robusta-landing-page (`79b4eb0`), blog-rolls (`bc568f7`, plus aucune page de listing en placeholder).
+- Dep 1: seo-excellence, B2 — levée, soumise le 2026-11-04 avec `93f6770`.
+- Dep 2: l'équipe Netlify passe en offre Personal avec recharge automatique avant le merge sur `main` (décision du 2026-10-06) — action de Nicolas hors dépôt.

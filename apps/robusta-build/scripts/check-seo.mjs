@@ -6,6 +6,8 @@
  *
  * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-141, R-SEOEXCELLENCE-142, R-SEOEXCELLENCE-143
+ * Design: features/pyramid-v2-epic/go-live/go-live.design.md
+ * Requirements: R-GOLIVE-03
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';

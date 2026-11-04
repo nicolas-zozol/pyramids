@@ -3,7 +3,7 @@
 **Last update:** 2026-11-04
 **Feature:** go-live
 **Infix:** GOLIVE
-**Status:** APPROVED (2026-11-04 — validated by boss atw)
+**Status:** IMPLEMENTED (2026-11-04, commit 6182d17)
 **Sources:** [story](go-live.story.md), [brainstorm](go-live.brainstorm.md), [epic](../pyramid-v2.epic.md), [seo-excellence](../seo-excellence/seo-excellence.design.md)
 
 ## Goal

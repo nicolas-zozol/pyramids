@@ -2,7 +2,7 @@
 
 A yarn-workspaces monorepo that builds several SEO content sites from one shared base, a set of small React modules. `apps/robusta` and `apps/dakar` are Next.js App Router sites on Vercel; the v2 robusta site, `apps/robusta-build`, is TanStack Start, prerendered at build and served as files by Netlify. Each site carries its content and a design system, which several sites may share (BR-PYRAMID-3); what a single site uses lives in that site (BR-PYRAMID-12).
 
-Live sites: robusta.build (`apps/robusta-build`, `noindex` on every page) and dakar.surf (`apps/dakar`).
+Live sites: robusta.build (`apps/robusta-build`, indexable pages open on the Netlify production build only) and dakar.surf (`apps/dakar`).
 
 The v2 epic, `features/pyramid-v2-epic/pyramid-v2.epic.md`, rebuilds the robusta site on a simplified URL scheme and a design system.
 

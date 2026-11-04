@@ -144,3 +144,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Décisions de tddman, sans effet sur la direction : JSON-LD par `head().scripts` (le typage de `head().meta` refuse `script:ld+json`), `shareType` pour `og:type`, `robotsOf(indexable, open)`, prop `url` de `ListingPage`. Repliées dans le design par `designman update` avant submit.
 - tddman a lancé un `git stash` puis l'a dépilé aussitôt : `ROADMAP.md` et l'epic sont revenus inchangés.
 - submit : design IMPLEMENTED, story SUBMITTED, README (section SEO), `google-business-profile.md`, trois archi et l en-tête de `router.tsx` ; epicman update (Fait, item B2 webmaster-console, listing-copy-review élargi). `ROADMAP.md` et l epic restent non commités. Écarts relevés par archiman check, non corrigés : voir le rapport.
+
+## D17 : go-live implémentée
+
+- tddman : commit `6182d17`. Contrôle boss : tests de robusta-build 677/677, lint vert, build locale fermée (`indexing closed`, aucune page `index, follow`). tddman a prouvé la build `NETLIFY=true CONTEXT=production` : 33 pages `index, follow`, égales au sitemap, la 404 en `noindex`, même valeur dans le bundle client.
+- Draft deploy CLI, alias `dev`, sans `--prod` : `https://dev--robusta-build.netlify.app`, build « indexing closed » ; curl de boss sur `leaving-gmail` : 200, `noindex, nofollow` (AC-GOLIVE-3).
+- Décisions de tddman, sans effet sur la direction : la valeur du `define` vient d'un helper `scripts/netlify-build-define.mjs`, testable ; `marked-locale-redirect.spec.ts` ne compte plus que les règles de chemin.
+- Restent après le merge sur `main`, à `storyman done` : AC-GOLIVE-4 (console webmaster) et AC-GOLIVE-7 vérifié en direct (301 de `robusta-build.netlify.app`).
+- submit : design IMPLEMENTED, story SUBMITTED, deux README, `CLAUDE.md`, skill geo-article, archi de robusta-build et en-tête de `check-seo.mjs` ; epicman update (go-live en Fait, retiré de B2). `ROADMAP.md` et l epic restent non commités. B2 ne garde que webmaster-console, action de Nicolas hors dépôt.
