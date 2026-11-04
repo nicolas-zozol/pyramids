@@ -7,9 +7,9 @@
  * what the prerender wrote under `dist/client`.
  *
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
- * Requirements: R-TANSTACK-24, R-TANSTACK-25, R-TANSTACK-26
+ * Requirements: R-TANSTACK-26
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
- * Requirements: R-MULTILINGUAL-26, R-MULTILINGUAL-27, R-MULTILINGUAL-43
+ * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-27, R-MULTILINGUAL-43
  * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-25
  */

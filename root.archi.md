@@ -1,6 +1,6 @@
 # Architecture: root (@robusta/pyramids)
 
-**Last updated:** 2026-10-31
+**Last updated:** 2026-11-03
 **Kind:** project
 
 ## Children
@@ -23,7 +23,7 @@ The project is in a v2 restart (see `features/pyramid-v2-epic/pyramid-v2.epic.md
 
 ## Apps, modules, packages
 
-- apps/robusta-build (`@robusta/robusta-build`) — robusta.build version 2, served at robusta.build by the Netlify project `robusta-build`, in three Locales, `en` by default, `fr` and `es`, every page under the prefix of its Locale (BR-ROBUSTA-1). TanStack Start on Vite 8: `vite build` prerenders the landing page of each Locale, a 404 page and every URL the v2 scheme derives from the corpus into `dist/client`, nothing at `/`, and Netlify publishes that directory as files, with no function and one redirect rule, `/` to `/en` in 301. A prerendered page hydrates and navigates client-side, on data files three static server functions write at build. Tailwind 4 with a token bridge, three self-hosted faces from Fontsource, `noindex` on every page. `/en`, `/fr` and `/es` are the landing pages, design-system surfaces fed by the page copy of their Locale in the site configuration; the seventeen articles, eleven migrated from v1 and six French translations, render as article pages; the listing routes are placeholders. A header and a footer, from the site's `chrome` package, wrap every page; the header links to the same page in each other Locale, or to that Locale's landing page. The v2 URL scheme and the corpus reader are packages of the site, `url-scheme` and `corpus-reader`, and its one workspace dependency is the design system.
+- apps/robusta-build (`@robusta/robusta-build`) — robusta.build version 2, served at robusta.build by the Netlify project `robusta-build`, in three Locales, `en` by default, `fr` and `es` (BR-ROBUSTA-1): an `en` page carries no Locale prefix, a `fr` or `es` page sits under the prefix of its Locale (BR-PYRAMID-14). TanStack Start on Vite 8: `vite build` prerenders the landing page of each Locale, the `en` one at `/`, a 404 page and every URL the v2 scheme derives from the corpus into `dist/client`, and Netlify publishes that directory as files, with no function and two redirect rules in 301, `/en` to `/` and `/en/*` to the same path unprefixed. A prerendered page hydrates and navigates client-side, on data files three static server functions write at build. Tailwind 4 with a token bridge, three self-hosted faces from Fontsource, `noindex` on every page. `/`, `/fr` and `/es` are the landing pages, design-system surfaces fed by the page copy of their Locale in the site configuration; the seventeen articles, eleven migrated from v1 and six French translations, render as article pages; the listing routes are placeholders. A header and a footer, from the site's `chrome` package, wrap every page; the header links to the same page in each other Locale, or to that Locale's landing page. The v2 URL scheme and the corpus reader are packages of the site, `url-scheme` and `corpus-reader`, and its one workspace dependency is the design system.
 - apps/robusta (`@robusta/build`) — robusta.build version 1, a Next.js site on Vercel: blog under `/learn`, portfolio, prosemirror editor. Its README owns the v1 routing scheme, which the v2 site does not inherit. Declared a thrash by the epic. Its markdown content under `content/blog` was copied onto the v2 site on 2026-08-01 and the tree is frozen since; `retire-robusta-v1` deletes it rather than merging it back.
 - apps/dakar (`@robusta/dakar`) — dakar.surf, the surf guide. Next.js on Vercel with a `[locale]` segment, spots pages and MapLibre maps, on `pyramids-layouts`, `pyramids-links` and `pyramids-ctas`. Out of v2 scope.
 - apps/intel-demo — Vite front + Express server demo of the scribe-intel SDK. Not deployed as a content site.
@@ -84,7 +84,7 @@ Modules build to `dist/`, and apps consume the built artefacts, never the TS sou
         └──→ v2: apps/robusta-build
              TanStack Start prerender in vite build, then hydration
              data files from the static server functions
-             v2: Locale prefix, then discriminants c, p, t  ──→ Netlify
+             v2: Locale prefix except en, then c, p, t     ──→ Netlify
 ```
 
 Each site holds its per-site truth in `src/seopyramids.config.ts`: domain, site name and title, mission, logo, default and other locales, and the blog configuration (roll size, mandatory keywords, author, category resolver). On the v2 site, the page copy of each Locale and the contact replace the site title and the mission.
@@ -104,7 +104,7 @@ Each site holds its per-site truth in `src/seopyramids.config.ts`: domain, site 
 
 Apps resolve packages through their compiled `dist/`. A package change is invisible to a running app until it is rebuilt, so `yarn dev:dev` runs the watchers alongside the v1 dev server.
 
-The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` (BR-PYRAMID-5). `apps/dakar` produces 23/23 static pages and `apps/robusta` 42/42. `apps/robusta-build` writes 34 HTML files — the 3 landing pages, the 30 content URLs the seventeen articles derive and `404.html`, none at the root — and 53 data files: one per article, one notes feed per landing page and one counterparts file per landing page and content URL. A second `yarn install` leaves `yarn.lock` byte-identical.
+The green set — what must build from a clean checkout, in this order: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` (BR-PYRAMID-5). `apps/dakar` produces 23/23 static pages and `apps/robusta` 42/42. `apps/robusta-build` writes 34 HTML files — the 3 landing pages, the `en` one as `index.html` at the root, the 30 content URLs the seventeen articles derive and `404.html` — and 53 data files: one per article, one notes feed per landing page and one counterparts file per landing page and content URL. A second `yarn install` leaves `yarn.lock` byte-identical.
 
 Inside the set but install-only, never built by it: `packages/scribe-intel`, `services/scribe-intel-collector`. Outside it entirely, and outside yarn's view: `apps/robusta-design`, `apps/intel-demo` and `services/scribe-intel-backend` carry no `package.json` at their root, so despite the `apps/*` glob they are not workspaces — nothing installs or builds them.
 

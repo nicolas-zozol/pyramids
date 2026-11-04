@@ -1,6 +1,6 @@
 # @robusta/robusta-build
 
-The version 2 site of robusta.build, on TanStack Start and Vite 8. Every page is prerendered to HTML at build, then hydrated, and the browser navigates between pages client-side. Netlify serves the build output as files and runs no code on a request. `/en`, `/fr` and `/es` are the landing pages of the three Locales, each published article an article page, and every other content route renders a placeholder.
+The version 2 site of robusta.build, on TanStack Start and Vite 8. Every page is prerendered to HTML at build, then hydrated, and the browser navigates between pages client-side. Netlify serves the build output as files and runs no code on a request. `/`, `/fr` and `/es` are the landing pages of `en`, `fr` and `es`, each published article an article page, and every other content route renders a placeholder.
 
 The version 1 site lives in `apps/robusta`, whose README documents the v1 route scheme. The v2 scheme is the Routing section below.
 
@@ -56,7 +56,7 @@ Where a mistake surfaces: `check:translations`, in `build`, and `emit:v1-map`, i
 
 ## Routing
 
-The shapes, with `articles` as the content root this site names and `{locale}` one of `en`, `fr` and `es`:
+The shapes, with `articles` as the content root this site names and `{locale}` one of `fr` and `es`. The default Locale, `en`, carries no prefix (BR-PYRAMID-14): its landing page is `/` and its content `/articles…`.
 
 - `/{locale}` — the landing page of the Locale.
 - `/{locale}/articles` — the blog roll, page one.
@@ -66,15 +66,15 @@ The shapes, with `articles` as the content root this site names and `{locale}` o
 - `/{locale}/articles/{slug}` — an article claiming none.
 - `/{locale}/articles/t/{tag}` — reserved, and built by nothing.
 
-Every Locale carries its prefix, the default one, `en`, included, and no URL ends with a slash. A Locale other than `en` gets a blog roll only when it publishes an article, and a category has a page only in the Locales whose articles claim it: `/es/articles` is not built, and `theory` has a page under `/fr` alone.
+No URL but `/` ends with a slash. A Locale other than `en` gets a blog roll only when it publishes an article, and a category has a page only in the Locales whose articles claim it: `/es/articles` is not built, and `theory` has a page under `/fr` alone.
 
 Who owns what: the discriminants `c`, `p` and `t` and the shapes built from them live in `src/routing/url-scheme`, which holds no value of this site. `articles` and the three Locales, `en` first as the default, are written once in `src/routing/scheme.ts` and read from there by `src/seopyramids.config.ts`. The roll size is a constant of 12, not a per-site knob: `ROLL_SIZE`, in the same file. `src/routing/url-scheme` and `src/content/corpus-reader` import nothing outside their own directory, which `src/self-contained-packages.spec.ts` checks.
 
 ### The route table
 
-The routes live under `src/routes`, in TanStack Router's file convention, and the generator writes `src/routeTree.gen.ts`, importing each route file by its `.tsx` name. Beside the root route `__root.tsx` and `/404`, seven route files sit under `$locale`: the landing page `$locale/index.tsx` and six content routes. The root route's loader reads the Locale of the address with `parseUrl`, the default Locale for an address outside the scheme, and the page's counterparts with `getCounterparts`. `<html lang>`, the header, the footer and the title and description of every page but the landing page follow that Locale, at prerender and after every client navigation.
+The routes live under `src/routes`, in TanStack Router's file convention, and the generator writes `src/routeTree.gen.ts`, importing each route file by its `.tsx` name. Beside the root route `__root.tsx` and `/404`, the layout route `{-$locale}/route.tsx` and seven route files sit under `{-$locale}`, an optional Locale segment: the landing page `{-$locale}/index.tsx` and six content routes. The layout route resolves the segment with `localeOfSegment`: absent, it is `en`; `fr` or `es`, that Locale; any other value, `en` included, matches no route. The root route's loader reads the Locale of the address with `parseUrl`, the default Locale for an address outside the scheme, and the page's counterparts with `getCounterparts`. `<html lang>`, the header, the footer and the title and description of every page but the landing page follow that Locale, at prerender and after every client navigation.
 
-What they render: the two article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`; an article page ends in its own Locale and links every other published version of the article. The four listing routes render `RoutePlaceholder`: a heading in the page's Locale, the blog title or the category label, and the page's address. `$locale/index.tsx` renders `LandingPage`, from `src/landing`: `Hero`, the `FlowDiagram` of the open source version of RB Compound, `id="open-source"`, that of the complete version, `id="complete"`, `PrinciplesList`, the notes section and `CTA`, in that order, inside a `<main>`. The notes section shows the four newest articles of the page's Locale, from `getNotesFeed`, and is absent when that Locale publishes none, as `es` does. `/404` renders `NotFoundPage`, in English whatever the address, its link back leading to `/en`.
+What they render: the two article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`; an article page ends in its own Locale and links every other published version of the article. The four listing routes render `RoutePlaceholder`: a heading in the page's Locale, the blog title or the category label, and the page's address. `{-$locale}/index.tsx` renders `LandingPage`, from `src/landing`: `Hero`, the `FlowDiagram` of the open source version of RB Compound, `id="open-source"`, that of the complete version, `id="complete"`, `PrinciplesList`, the notes section and `CTA`, in that order, inside a `<main>`. The notes section shows the four newest articles of the page's Locale, from `getNotesFeed`, and is absent when that Locale publishes none, as `es` does. `/404` renders `NotFoundPage`, in English whatever the address, its link back leading to `/`.
 
 The root document, `src/routes/__root.tsx`, renders `Header` before and `Footer` after every page, the 404 and the failed-navigation state included. Both come from `src/chrome` and read the page copy of the page's Locale. `Header` is `SiteHeader` with the wordmark to the landing page of that Locale, the contact call to action, and one link per other Locale, named in its own language and marked with its `lang` and `hreflang`: to the same page in that Locale when it exists, to its landing page otherwise, a roll page leading to page one of the same roll. `Footer` is `SiteFooter` with the tagline and the copyright, no link column.
 
@@ -84,22 +84,22 @@ The surfaces that render a link get `SiteLink`, from `src/components`, as their 
 
 A client navigation whose route chunk or data file fails to load ends, through `src/components/NavigationFailure.tsx`, in a full load of the target address; a second failure at the same address in the same tab renders the site's error state, `FailedNavigationPage`.
 
-The prerender walks one list: the landing page of each Locale, `/404`, then every URL `src/routing/content-urls.ts` derives, which is `urlSet(urlScheme, await getArticleIndex())`, built with `buildUrl` by `scripts/prerender-pages.mjs`. Link crawling and path discovery are off. Each page is written under `dist/client` as its canonical path plus `.html`, `/en` as `en.html` and `/404` as `404.html`, and nothing is written at `/`. A URL outside the list is not built and answers 404.
+The prerender walks one list: the landing page of each Locale, `/` first, `/404`, then every URL `src/routing/content-urls.ts` derives, which is `urlSet(urlScheme, await getArticleIndex())`, built with `buildUrl` by `scripts/prerender-pages.mjs`. Link crawling and path discovery are off. Each page is written under `dist/client` as its canonical path plus `.html`, `/fr` as `fr.html` and `/404` as `404.html`, and `/` as `index.html`. A URL outside the list is not built and answers 404.
 
-30 content URLs, derived from the seventeen articles: 2 blog homes, 11 category pages and 17 articles, 14 under `/en` for the 8 English articles and 16 under `/fr` for the 9 French ones. The build writes 34 HTML files, the 3 landing pages, those 30 and `404.html`, and 53 data files: one per article, one notes feed per landing page and one counterparts file per landing page and content URL. Three route files build no page: `$locale/articles/$slug.tsx`, since every article claims a category, and the two roll-page routes, since no Locale reaches a roll size of 12.
+30 content URLs, derived from the seventeen articles: 2 blog homes, 11 category pages and 17 articles, 14 under `/articles` for the 8 English articles and 16 under `/fr/articles` for the 9 French ones. The build writes 34 HTML files, the 3 landing pages, those 30 and `404.html`, and 53 data files: one per article, one notes feed per landing page and one counterparts file per landing page and content URL. Three route files build no page: `{-$locale}/articles/$slug.tsx`, since every article claims a category, and the two roll-page routes, since no Locale reaches a roll size of 12.
 
-Two build-time checks keep the route files and the configuration in line. `scripts/prerender-pages.mjs` fails the build, naming the content root and the missing files, when one of the seven route files under `$locale` does not exist. `scripts/check-route-table.mjs` runs after `vite build` and fails when a page was written around a render that threw, when `index.html` sits at the root of `dist/client`, when the written `.html` files, `404.html` excepted, differ from the landing pages plus the derivation, or when the data files differ from the count above.
+Two build-time checks keep the route files and the configuration in line. `scripts/prerender-pages.mjs` fails the build, naming the content root and the missing files, when the layout route or one of the seven route files under `{-$locale}` does not exist. `scripts/check-route-table.mjs` runs after `vite build` and fails when a page was written around a render that threw, when the written `.html` files, `404.html` excepted and `index.html` read as `/`, differ from the landing pages plus the derivation, or when the data files differ from the count above.
 
 ### `/{locale}/articles/t/{tag}` is reserved and not built
 
-No tag route ships, so `/en/articles/t/rxjs` answers 404 like a slug that does not exist. `validateArticles` keeps the address free: no slug and no category may take the value `c`, `p` or `t`, and no category may nest. A corpus breaking either rule fails the build naming the offending article.
+No tag route ships, so `/articles/t/rxjs` answers 404 like a slug that does not exist. `validateArticles` keeps the address free: no slug and no category may take the value `c`, `p` or `t`, and no category may nest. A corpus breaking either rule fails the build naming the offending article.
 
 ### One URL per page
 
-The site builds the canonical form of each page and nothing else. `netlify.toml` holds one redirect rule: `/` answers 301 to `/en`, the landing page of the default Locale. The rule has no `force` and applies only while no file occupies `/`. The other forms get what Netlify answers for a static deploy:
+The site builds the canonical form of each page and nothing else. `netlify.toml` holds two redirect rules, 301 without `force`, from a page marked with the default Locale to the same page unmarked: `/en` to `/`, `/en/{rest}` to `/{rest}`. No file exists under `en`, so they always apply, and a target the site does not build then answers 404. The other forms get what Netlify answers for a static deploy:
 
-- An explicit page one, `/en/articles/p/1` or `/en/articles/c/{category}/p/1`, an address with no Locale prefix, `/articles/…`, one under `/l/{locale}`, and a Locale the site does not declare: not built, 404 with the not-found page.
-- A trailing slash, `/en/` included: 301 to the canonical form.
+- An explicit page one, `/articles/p/1` or `/articles/c/{category}/p/1`, an address under `/l/{locale}`, and a Locale the site does not declare: not built, 404 with the not-found page.
+- A trailing slash, `/fr/` included: 301 to the canonical form. `/` is a file and gets none.
 - An uppercase letter: 301 to the lowercase form when that file exists, 404 otherwise. A file under `/article-images` answers at its exact case, `M87.jpg` included.
 - The canonical path plus `.html`: 200, the same document.
 - Any other path: `404.html`, with status 404. The not-found document loads no client script, so it stays on screen.
@@ -108,7 +108,7 @@ The site builds the canonical form of each page and nothing else. `netlify.toml`
 
 `src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 67 permanent, 5 gone, 10 none.
 
-The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr` under `/learn/fr`. Only the destinations read this site's scheme, each a page in the language of the v1 page: `/learn/fr/blockchain` leads to `/fr/articles/c/blockchain`, `/learn` to `/en/articles`, and a tag row to an English page. A French article of v1 contributes two permanent rows, its v1 path with no locale segment and the `/learn/fr` form, both leading to its address under `/fr`. An article v1 did not publish, absent from `V1_ARTICLE_SLUGS`, has no row.
+The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr` under `/learn/fr`. Only the destinations read this site's scheme, each a page in the language of the v1 page: `/learn/fr/blockchain` leads to `/fr/articles/c/blockchain`, `/learn` to `/articles`, and a tag row to an English page. A French article of v1 contributes two permanent rows, its v1 path with no locale segment and the `/learn/fr` form, both leading to its address under `/fr`. An article v1 did not publish, absent from `V1_ARTICLE_SLUGS`, has no row.
 
 Nothing serves the mapping and nothing in the build reads it. A v1 address, any `/learn` path included, answers 404 with the not-found page. Whether the old addresses come back is the restore-v1-urls item of `ROADMAP.md`.
 
@@ -149,7 +149,7 @@ yarn dev:robusta       # the site's dev
 The site's own scripts:
 
 - `build` — `check:source`, `compile:seams`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`.
-- `dev` — `compile:seams`, `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the three page-data functions run on each call and read the corpus. `netlify.toml` does not apply there: `/` answers 404, the landing pages are `/en`, `/fr` and `/es`.
+- `dev` — `compile:seams`, `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the three page-data functions run on each call and read the corpus. `netlify.toml` does not apply there: `/en` and `/en/…` answer the not-found page instead of a 301.
 - `check:source` — fails on a `'use client'` or `'use server'` directive, or on a local import, `vi.mock` paths included, that does not name its `.ts` or `.tsx` file exactly, anywhere under `src`, the generated route tree included. Each offence names the file, the line and, when the file exists, the expected specifier. An asset or a `.mjs` keeps its extension.
 - `compile:seams` — `tsc -p tsconfig.routing.json` compiles `src/content` and the routing files the plain-Node scripts import to `.routing-dist/`, git-ignored.
 - `check:translations` — prints the translation notices, see Articles.
@@ -168,7 +168,7 @@ Netlify project `robusta-build`, in a team on the Free plan, linked to the repos
 
 - the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
 - the publish directory, `apps/robusta-build/dist/client`: the prerendered output and nothing else. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
-- the redirect rule of `/` to `/en`, see One URL per page
+- the two redirect rules from `/en…` to the unprefixed page, see One URL per page
 - the ignore rule: `git diff --quiet` between the cached and the current commit over the site, the design system and the root build files. Exit 0 skips the build.
 - `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 

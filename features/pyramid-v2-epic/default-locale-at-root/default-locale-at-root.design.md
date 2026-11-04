@@ -3,7 +3,7 @@
 **Last update:** 2026-11-03
 **Feature:** default-locale-at-root
 **Infix:** ROOTLOCALE
-**Status:** APPROVED (2026-11-03 — validated by boss atw)
+**Status:** IMPLEMENTED (2026-11-03, commit 2fbc7be)
 **Sources:** [story](default-locale-at-root.story.md), [brainstorm](default-locale-at-root.brainstorm.md), [epic](../pyramid-v2.epic.md), [multilingual-site](../multilingual-site/multilingual-site.design.md)
 
 ## Goal

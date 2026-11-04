@@ -42,3 +42,16 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Contrôle : AC-ROOTLOCALE-1 à 6 cités mot pour mot, `## Boundaries` rempli.
 - Décisions de designman acceptées sans entrée : `src/routes/$locale/` devient `{-$locale}/` avec une route de layout qui résout le segment (`en` explicite ou Locale inconnue → 404, `vite dev` compris) ; `localeOfSegment` ajoutée à `url-scheme` ; la garde `index.html` de `check-route-table` devient un cas ordinaire ; `netlify.toml` : `/en` → `/` et `/en/*` → `/:splat` en 301 sans `force`, spec renommée `marked-locale-redirect.spec.ts` ; R-ROOTLOCALE-04, spec qui refuse une Locale valant le content root ou l'asset root.
 - Choix : DRAFT → APPROVED, `validated by boss atw`.
+
+## D5 : implémentation (tddman), vérification sur deploy
+
+- tddman `LFG fast`, aucune décision qui change la direction de la feature. 13/13 R-.
+- Vérifié par boss : 490 tests du site (464 avant), lint du site vert ; tddman : `tsc --noEmit` propre, `yarn build:robusta` vert (33 pages, 53 fichiers de données), v1 map 82 lignes, 67/5/10, 44 lignes changées (43 destinations `en` et la raison de `/`).
+- Draft deploy Netlify CLI 27.16.2, alias `dev` (deploy `6aea49cee5e834ef0e27b242`, https://dev--robusta-build.netlify.app), jamais `--prod` : `/` 200 `lang="en"` RB Compound ; `/en`, `/en/` → 301 `/` ; `/en/articles/c/blockchain` → 301 `/articles/c/blockchain` ; `/en/articles/c/theory` → 301 puis 404 ; `/fr/`, `/es/` → 301 sans barre ; `/articles`, `leaving-gmail`, l'article fr d'AC-2 → 200 ; `/articles/c/theory`, `/es/articles`, `/l/en`, `/de` → 404 anglaise. AC-ROOTLOCALE-1 à 6 tenus.
+- Commit : `2fbc7be`. Bloc Progress non écrit : le submit suit dans le même run.
+
+## D6 : submit (`storyman submit`)
+
+- storyman submit coupé par une limite d'API après ses cinq étapes, avant son rapport. Constaté par boss : docman (README du site, `CLAUDE.md`), archiman (`robusta-build.archi.md`, `url-scheme.archi.md`, `root.archi.md`, en-têtes de `router.tsx`, `scheme.ts`, `url-scheme/index.ts`, `check-route-table.mjs`, `prerender-pages.mjs`, commentaires seuls), design IMPLEMENTED sans bloc Progress, story SUBMITTED, item passé en Done dans `ROADMAP.md`, puce Fait d'epicman.
+- `ROADMAP.md` et `pyramid-v2.epic.md` modifiés par le submit par-dessus les changements de l'autre session : non commités. Hunk BR-PYRAMID-5 de `business-rules.md` : non commité.
+- Commit de clôture exécuté par boss, message court.
