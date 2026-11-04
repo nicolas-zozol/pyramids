@@ -33,3 +33,10 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - drop-section-default-copy : `designman update` plie Gap-SECTIONCOPY-3 (Nicolas) et OQ-SECTIONCOPY-4 (`lgtm (designman)`), aligne les AC réécrits et les Dependencies (blog-rolls après, sans nouvelle Section). Aucun contrat changé, aucune entrée nouvelle.
 - blog-rolls : `designman update` plie OQ-BLOGROLLS-7 (`lgtm (designman)`, package `src/listing`), cite les décisions de la story, passe les adresses `en` sans préfixe (routes `/{-$locale}/articles…`, vérifiées sur `apps/robusta-build/src/routing`). Aucune signature changée, aucune entrée nouvelle.
 - Contrôle boss : chaque AC des deux stories cité mot pour mot, `## Boundaries` rempli, aucune entrée `ask` en attente dans story, brainstorm ou design → APPROVED (validated by boss).
+
+## D3 : brainstorm de glossary-refresh, tri des entrées
+
+- Phase : brainstorm (`glossary-refresh.brainstorm.md`)
+- Gap-GLOSSARY-4 (`Workspace` et `Green set` hors de la story, contredisent `Module`) : `ask`, il change ce que la story livre et le « mot pour mot » d'AC-GLOSSARY-7. Resolution vide ; les agents suivants supposent la Proposition.
+- Gap-GLOSSARY-5 (`Build chain` contre la lecture des CSS et assets du design system par robusta.build) : `ask`, contradiction entre un document et le code, jamais tranchée en faveur du code. Resolution vide ; Proposition supposée.
+- Conséquence rloq : glossary-refresh va jusqu'à son design DRAFT et s'y arrête.
