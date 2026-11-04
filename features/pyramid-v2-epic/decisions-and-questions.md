@@ -40,3 +40,10 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Gap-GLOSSARY-4 (`Workspace` et `Green set` hors de la story, contredisent `Module`) : `ask`, il change ce que la story livre et le « mot pour mot » d'AC-GLOSSARY-7. Resolution vide ; les agents suivants supposent la Proposition.
 - Gap-GLOSSARY-5 (`Build chain` contre la lecture des CSS et assets du design system par robusta.build) : `ask`, contradiction entre un document et le code, jamais tranchée en faveur du code. Resolution vide ; Proposition supposée.
 - Conséquence rloq : glossary-refresh va jusqu'à son design DRAFT et s'y arrête.
+
+## D4 : design de glossary-refresh, laissé DRAFT
+
+- Phase : design (`glossary-refresh.design.md`)
+- OQ-GLOSSARY-6 (exemple `/en/articles/c/theory` dans l'entrée `Canonical URL`, ou la règle seule) : `decide`, signée `lgtm (designman)`, sans contradiction avec AC-GLOSSARY-2 ; pliée par `designman update`.
+- Contrôle : AC-GLOSSARY-1 à 7 cités mot pour mot, `## Boundaries` rempli.
+- Statut : DRAFT, Gap-GLOSSARY-4 et 5 du brainstorm restant `ask` pour Nicolas (rloq). Une réponse, puis `boss prepare pyramid-v2-epic batch B1` : `storyman update glossary-refresh avec brainstorm`, `designman update`, approbation.
