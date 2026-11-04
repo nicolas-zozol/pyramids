@@ -10,13 +10,15 @@ Site : Un domaine déployé construit sur la pyramid — robusta.build, dakar.su
 
 Site configuration : La source de vérité propre à chaque site : domaine, nom et titre du site, mission, logo, locale par défaut, autres locales, réglages du blog, et la page copy que le site ne tire pas de ses articles. Elle vit dans `src/seopyramids.config.ts`, à l'intérieur du site.
 
-Design system : L'identité visuelle d'un site : les tokens de couleur et de typographie, les assets de marque, et les primitives et surfaces de page construites dessus. Un design system par site ; les sites peuvent partager tout ou partie d'un design system.
+Design system : L'identité visuelle d'un site : les tokens de couleur et de typographie, les assets de marque, et les primitives et les sections construites dessus. Un design system par site ; les sites peuvent partager tout ou partie d'un design system.
+
+Section : Un bloc pleine largeur d'une page, rendu par un composant du design system : `SiteHeader`, `Hero`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview`, `CTA`, `SiteFooter`. Une section est faite de primitives, et son texte est la page copy que le site lui passe (BR-PYRAMID-8). La partie d'un article qu'ouvre un titre `h2` n'est pas une section.
 
 Design token : Une valeur visuelle nommée (couleur, police, espacement), exposée comme variable CSS et consommée par les composants. Les tokens sont le seul moyen admis pour qu'un composant connaisse une couleur.
 
-Breakpoint : Une largeur d'écran à partir de laquelle la mise en page d'une surface change. Le design system d'un site les fixe ; celui de robusta.build en a cinq, `sm`, `md`, `lg`, `xl` et `2xl` : 40, 48, 64, 80 et 96rem. 320 px, la largeur minimale que tiennent les surfaces, n'en est pas un.
+Breakpoint : Une largeur d'écran à partir de laquelle la mise en page d'une section change. Le design system d'un site les fixe ; celui de robusta.build en a cinq, `sm`, `md`, `lg`, `xl` et `2xl` : 40, 48, 64, 80 et 96rem. 320 px, la largeur minimale que tiennent les sections, n'en est pas un.
 
-Landing page : La page d'accueil d'un site, construite à partir de son design system. C'est une surface marketing, distincte de toute page de contenu.
+Landing page : La page d'accueil d'un site, construite à partir de son design system. C'est une page marketing faite de sections, distincte de toute page de contenu.
 
 Page copy : Le texte qu'un visiteur lit sur une page, fourni par le site qui la publie. Un texte dessiné dans un asset de marque, comme le wordmark, n'en est pas : il appartient au design system.
 
@@ -40,7 +42,7 @@ Translation identifier : La valeur durable que partagent les versions d'un même
 
 Content source : L'origine des articles d'un site — aujourd'hui, des fichiers markdown livrés avec le site, dans une arborescence que le site déclare et que la base partagée sait lire. Elle est lue pendant la build d'un site, une fois par processus de build, et jamais pendant qu'un site sert une requête (BR-PYRAMID-7).
 
-Content root : Le segment unique sous lequel un site publie sa section de contenu, nommé par la site configuration. `articles` pour robusta.build ; un autre site nomme le sien.
+Content root : Le segment unique sous lequel un site publie son contenu, nommé par la site configuration. `articles` pour robusta.build ; un autre site nomme le sien.
 
 Asset root : Le préfixe d'URL sous lequel un site publie les fichiers que ses articles référencent. Ce n'est pas le content root : il ne porte aucune page, il adresse des fichiers et non des pages, et chaque site nomme le sien.
 

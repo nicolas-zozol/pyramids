@@ -54,12 +54,12 @@ Inchangés et non listés : le site lui-même, ses packages et les scripts racin
 - OQ-NETLIFY-1 : Quel périmètre de déploiement cette story livre-t-elle, alors que robusta.build est aujourd'hui le seul site sur Netlify ?
 - Proposition : Le projet `robusta-build`, la clé et la CLI côté dépôt, la règle d'ignore générique et le retour arrière. L'anneau `stable` (un projet par site client, branche de production `stable`, promotion par `git push origin main:stable`, publication automatique coupée au besoin) attend le premier site client ; robusta reste le canari sur `main`.
 - Rationale : avec un seul site, une branche `stable` ne protège personne et doublerait les déploiements de production à 15 crédits, alors que la règle d'ignore sert dès maintenant, dakar et les packages v1 vivant dans le même dépôt.
-- Resolution:
+- Resolution: lgtm
 
 - OQ-NETLIFY-2 : La CLI Netlify s'installe-t-elle sur le poste avec la clé, par le projet Ubuntu System, ou comme dépendance de développement du dépôt ?
 - Proposition : Sur le poste, par Ubuntu System, avec la clé ; le dépôt n'en dépend pas et le README du site donne la version attendue, `netlify-cli` 27 sur Node 22.13 ou plus.
 - Rationale : en dépendance du dépôt, elle ajouterait des centaines de paquets à `yarn.lock`, et chaque changement de `yarn.lock` relance le build du site.
-- Resolution:
+- Resolution: lgtm
 
 ## Documentation updates
 

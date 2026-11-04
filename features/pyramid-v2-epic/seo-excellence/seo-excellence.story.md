@@ -93,12 +93,12 @@ Client code : `page-data`, scripts de build.
 - OQ-SEOEXCELLENCE-22 : vers quoi pointe le x-default d'une page qui n'a pas de version `en`, comme un article français sans traduction ou la Category `theory` ?
 - Proposition : nulle part. Le x-default désigne la version `en` quand elle existe ; une page qui n'en a pas ne déclare pas de x-default, et une page à version unique ne déclare aucun hreflang.
 - Rationale : pointer vers `/` ou vers `/en/` enverrait le lecteur sur une page qui ne traite pas le même sujet.
-- Resolution:
+- Resolution:lgtm
 
 - OQ-SEOEXCELLENCE-23 : quelle date porte au sitemap `/es/`, landing page qui ne liste aucun article tant qu'aucun article espagnol n'est publié ?
 - Proposition : aucune. Une page sans article daté figure au sitemap sans date.
 - Rationale : la date est facultative au sitemap, et la seule qu'on pourrait poser serait inventée ; la règle d'une date par entrée vise les pages qui en ont une.
-- Resolution:
+- Resolution: lgtm
 
 ## Documentation updates
 
