@@ -32,7 +32,7 @@ import '@robusta/pyramids-design-system/sketch.css';
 
 The robusta site links them from the head of its root route, `apps/robusta-build/src/routes/__root.tsx`.
 
-`colors_and_type.css` defines the CSS variables (`--paper`, `--ink`, `--font-sans`, `--t-h1`, …) and loads no font: the header of that file says how a consumer supplies the faces. `fonts.css`, linked before it, is the Google Fonts delivery for a consumer with no build step. `sketch.css` defines the hand-drawn primitives (`.sk-box`, `.sk-btn`, `.sk-callout`, `.sk-arrow-right`, …) and the layout of the marketing surfaces, and depends on those variables.
+`colors_and_type.css` defines the CSS variables (`--paper`, `--ink`, `--font-sans`, `--t-h1`, …) and loads no font: the header of that file says how a consumer supplies the faces. `fonts.css`, linked before it, is the Google Fonts delivery for a consumer with no build step. `sketch.css` defines the hand-drawn primitives (`.sk-box`, `.sk-btn`, `.sk-callout`, `.sk-arrow-right`, …) and the layout of the marketing sections, and depends on those variables.
 
 ## Import — assets
 
@@ -53,7 +53,7 @@ Available assets:
 
 ## Import — components
 
-The package exports six primitives, `BrandLogo`, `SkButton`, `SkCallout`, `SkTag`, `SkInput` and `SkArrowRight`, and eight marketing surfaces, `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview` and `CTA`, each with its props type, plus `SkLinkProps` and `SkLinkComponent`.
+The package exports six primitives, `BrandLogo`, `SkButton`, `SkCallout`, `SkTag`, `SkInput` and `SkArrowRight`, and eight marketing sections, `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview` and `CTA`, each with its props type, plus `SkLinkProps` and `SkLinkComponent`.
 
 ```tsx
 import { SiteHeader, type SkLinkProps } from '@robusta/pyramids-design-system';
@@ -80,11 +80,11 @@ export function Header() {
 
 `homeHref` is the wordmark's target, `/` when absent. A `NavLink` given a `locale` writes it as the `lang` and `hrefLang` of its anchor. `FlowDiagram` takes the `id` of its section, `approach` when absent: two diagrams on one page need two.
 
-No component carries a `'use client'` or `'use server'` directive or reads the viewport in JavaScript, and `src/package-contract.spec.tsx` fails on any of them. Every call to action of `Hero`, `SiteHeader` and `CTA` is an anchor to its `primaryCtaHref`, `secondaryCtaHref` or `ctaHref`. Submitting the CTA email input is wired by the consuming site, in a component of its own around the surface.
+No component carries a `'use client'` or `'use server'` directive or reads the viewport in JavaScript, and `src/package-contract.spec.tsx` fails on any of them. Every call to action of `Hero`, `SiteHeader` and `CTA` is an anchor to its `primaryCtaHref`, `secondaryCtaHref` or `ctaHref`. Submitting the CTA email input is wired by the consuming site, in a component of its own around the section.
 
-`SiteHeader`, `SiteFooter`, `Hero`, `CTA`, `NotesPreview` and `ServicesGrid` take a `linkComponent`, an `SkLinkComponent`, and so does `SkButton` given an `href`. It renders every anchor of the surface, those of its buttons included, with the `href`, `className` and children the anchor would carry; without one, the anchor is a plain `<a>`. The package imports no router and creates no React context.
+`SiteHeader`, `SiteFooter`, `Hero`, `CTA`, `NotesPreview` and `ServicesGrid` take a `linkComponent`, an `SkLinkComponent`, and so does `SkButton` given an `href`. It renders every anchor of the section, those of its buttons included, with the `href`, `className` and children the anchor would carry; without one, the anchor is a plain `<a>`. The package imports no router and creates no React context.
 
-Every text a marketing surface or `BrandLogo` renders, alternative text included, comes from a prop whose default is the copy of the `ui_kits/marketing/*.jsx` prototype. The brand lockup alone is fixed: the wordmark's alt text and the 💪 🏗 glyphs. A site passes every text prop of the surfaces it publishes (BR-PYRAMID-8). The robusta site does so in `apps/robusta-build/src/landing` and `src/chrome`, from its site configuration's `pageCopy`.
+Every text a marketing section or `BrandLogo` renders, alternative text included, is a prop the site passes (BR-PYRAMID-8). Absent, `null` or `''`, a text prop renders no element, and an absent list renders no item; a `Hero` with no `mascotAlt` renders its mascot with `alt=""`. The brand lockup alone is fixed: the wordmark's alt text and the 💪 🏗 glyphs. `src/page-copy.spec.tsx` renders every export of `src/index.ts` with no text and fails on any readable text, alt, placeholder, aria-label and title included, that the render did not pass, naming the export. The robusta site passes its text in `apps/robusta-build/src/landing` and `src/chrome`, from its site configuration's `pageCopy`.
 
 `SkButton` renders an anchor when given an `href`, a button otherwise. A footer item and a service card's link line take an optional `href`; without one, the label renders as text and no anchor. The props are typed in `dist/**/*.d.ts`; the architectural map is `design-system.archi.md`.
 
@@ -105,7 +105,7 @@ Every text a marketing surface or `BrandLogo` renders, alternative text included
 README.md                  — you are here
 SKILL.md                   — agent skill manifest (Claude Code compatible)
 colors_and_type.css        — css vars: color, type scale, semantic styles, paper textures
-sketch.css                 — hand-drawn primitives, marketing surface layout, breakpoints
+sketch.css                 — hand-drawn primitives, marketing section layout, breakpoints
 
 assets/                    — mascot and wordmark, listed under Import — assets
 
@@ -190,7 +190,7 @@ The error ramp, `--brand-error`, `--brand-error-soft` and `--brand-error-deep`, 
 
 The type scale is ten `--t-*` steps, each a `clamp()` running from its size at 320px to its size at 1536px, so text shrinks continuously as the viewport narrows:
 
-- `--t-display` — 34–80px, the largest text of a surface: the hero and closing-CTA headlines
+- `--t-display` — 34–80px, the largest text of a section: the hero and closing-CTA headlines
 - `--t-h1` — 28–56px, a section headline
 - `--t-h2` — 24–40px
 - `--t-h3` — 20–28px
@@ -221,9 +221,9 @@ The package switches at five breakpoints, the Tailwind default set shadcn sits o
 - `xl` — 80rem, 1280px
 - `2xl` — 96rem, 1536px
 
-Each width is written once, in one `@media (min-width: …)` block of the responsive section closing `sketch.css`; no `--bp-*` custom property exists. The rules are mobile-first: the base rule set is the narrow layout and each block widens it. 320px is a floor, not a breakpoint: no rule keys on it, and no surface scrolls sideways there. A consuming site picks no breakpoint of its own; on Tailwind 4, its `md:` switches at the same width as the surfaces.
+Each width is written once, in one `@media (min-width: …)` block at the end of `sketch.css`; no `--bp-*` custom property exists. The rules are mobile-first: the base rule set is the narrow layout and each block widens it. 320px is a floor, not a breakpoint: no rule keys on it, and no section scrolls sideways there. A consuming site picks no breakpoint of its own; on Tailwind 4, its `md:` switches at the same width as the sections.
 
-`preview/marketing-page.html` composes the eight surfaces as one page, to resize from 320px up.
+`preview/marketing-page.html` composes the eight sections as one page, to resize from 320px up.
 
 ### backgrounds
 
@@ -298,9 +298,9 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 - **buttons** — `.sk-btn`, `.sk-btn--primary`, `.sk-btn--ghost`.
 - **inputs** — `.sk-input` inside `.sk-input-wrap`.
 
-The marketing surfaces carry their layout as classes of `sketch.css`, one block per surface named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, and `.sk-brand-logo` for the logo. A part is `.sk-<surface>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
+The marketing sections carry their layout as classes of `sketch.css`, one block per section named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, and `.sk-brand-logo` for the logo. A part is `.sk-<section>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
 
-These class names are the override surface of the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A surface root takes `className` and `style`, `style` applied last; no surface takes a prop per part.
+These class names are the override surface of the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A section root takes `className` and `style`, `style` applied last; no section takes a prop per part.
 
 ---
 
