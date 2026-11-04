@@ -327,21 +327,6 @@ Client code : packages `routes`, `listing`, `chrome`.
 
 ### Gaps
 
-- Gap-BLOGROLLS-3 : La liste d'articles du design system rend un titre vide, ou celui du prototype s'il manque ; blog-rolls attend-il le retrait des textes par défaut des sections ?
-- Proposition : oui. blog-rolls dépend de drop-section-default-copy et ne passe à la liste ni surtitre ni titre, que cette story cesse de rendre quand ils manquent ; l'« ordre libre » de drop-section-default-copy devient « avant blog-rolls ».
-- Rationale : livré avant, blog-rolls choisirait entre un `h2` vide sous le titre de la page et un surtitre écrit pour remplir la section ; toucher la section ferait se croiser les Boundaries du batch.
-- Resolution: lgtm
-
-- Gap-BLOGROLLS-4 : La story confie à seo-excellence le fil d'Ariane des pages de listing, qu'aucun de ses critères ne livre ; une page de Category montre-t-elle un fil d'Ariane ?
-- Proposition : oui, livré par seo-excellence, dont le critère du fil d'Ariane s'étend aux pages de Category : accueil du blog puis Category, sur chaque page du roll. L'accueil du blog n'en montre pas, et blog-rolls n'en rend aucun.
-- Rationale : le brainstorm de seo-excellence le prévoyait, et une donnée structurée de fil d'Ariane exige qu'il soit affiché ; sans lui, une page de Category ne lie l'accueil du blog que par le pied de page.
-- Resolution: lgtm
-
-- Gap-BLOGROLLS-5 : La story retire l'accueil du blog d'une Locale sans article, le schéma garde celui de la Locale par défaut ; un accueil du blog vide peut-il exister ?
-- Proposition : oui, pour la Locale par défaut seule. La story suit le schéma, et son cas limite vise une Locale autre que la Locale par défaut ; vide, `/en/articles` montrerait son titre et aucun article.
-- Rationale : le cas ne se produit pas tant que `en` publie 8 articles, et changer la règle déplacerait le jeu d'URL pour une page qu'aucun lien ne viserait.
-- Resolution: lgtm
-
 ---
 
 ## Next Steps
