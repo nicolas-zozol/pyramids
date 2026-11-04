@@ -1,16 +1,16 @@
 # Design: les sections du design system ne rendent que le texte du site
 
-**Last update:** 2026-10-31
+**Last update:** 2026-11-04
 **Feature:** drop-section-default-copy
 **Infix:** SECTIONCOPY
-**Status:** DRAFT
+**Status:** APPROVED (2026-11-04 — validated by boss)
 **Sources:** [story](drop-section-default-copy.story.md), [epic](../pyramid-v2.epic.md), [robusta-landing-page](../robusta-landing-page/robusta-landing-page.design.md), [blog-rolls](../blog-rolls/blog-rolls.story.md)
 
 ## Goal
 
 Les 34 props de texte des huit sections et de `BrandLogo` perdent leur défaut : absente, `null` ou vide, une prop de texte ne rend pas l'élément qui la porte, et une liste absente ne rend aucun item. Un spec du design system rend chaque export du module sans texte et échoue sur tout texte qu'il ne reçoit pas, section future comprise. Le garde d'AC-LANDING-2 du site cesse de lire les défauts qu'on retire. Le pourquoi : [story](drop-section-default-copy.story.md).
 
-Le design suit la Proposition d'OQ-SECTIONCOPY-1 de la story : un vide, props optionnelles, types inchangés.
+Props optionnelles, types inchangés : une prop oubliée laisse un vide, sans faire échouer la compilation.
 
 ## Boundaries
 
@@ -27,7 +27,7 @@ Le design suit la Proposition d'OQ-SECTIONCOPY-1 de la story : un vide, props op
 
 ### library API of module `@robusta/pyramids-design-system` — modified
 
-Client code : app `@robusta/robusta-build`, packages `landing` et `chrome` ; app `@robusta/build`, par `src/app/_design-test/page.tsx` seule.
+Client code : app `@robusta/robusta-build`, packages `landing` et `chrome`, puis la page de listing de blog-rolls, qui rend `NotesPreview` sans `eyebrow`, `title` ni `allLinkLabel` ; app `@robusta/build`, par `src/app/_design-test/page.tsx` seule.
 
 Types et signatures inchangés : `HeroProps`, `SiteHeaderProps`, `SiteFooterProps`, `ServicesGridProps`, `FlowDiagramProps`, `PrinciplesListProps`, `NotesPreviewProps`, `CTAProps`, `BrandLogoProps`, et les types d'item `NavLink`, `FooterColumn`, `FooterLink`, `ServiceItem`, `FlowStep`, `Principle`, `NotePost`. Chaque prop de texte reste optionnelle ; les champs de texte d'un item restent requis et se rendent tels que le site les passe.
 
@@ -35,10 +35,10 @@ Garanties :
 
 - Absente, `null` ou `''`, une prop de texte ne rend pas son élément ; absente, une liste vaut `[]` et ne rend aucun item. Aucun texte du module n'atteint un lecteur, textes alternatifs et placeholder compris, sauf la marque : les glyphes 💪 🏗 et le texte alternatif « Robusta Build » du wordmark.
 - Déjà conditionnels, inchangés : `primaryCtaLabel`, `secondaryCtaLabel`, `ctaLabel` et leur bouton, `footnote`, `annotation` et sa flèche, `subtitle` et `emailPlaceholder` de `CTA`, `caveat` et sa mascotte, `allLinkLabel`, `tagline` de `BrandLogo`, `moreLabel` d'une carte.
-- Deviennent conditionnels (Gap-SECTIONCOPY-3) : `eyebrow`, flèche comprise, `title` et `subtitle` de `Hero` ; `eyebrow` et `title` de `ServicesGrid`, `FlowDiagram`, `PrinciplesList` et `NotesPreview` ; `title` de `CTA` ; `tagline`, `copyright` et `versionLine` de `SiteFooter`.
+- Deviennent conditionnels, les 15 éléments rendus vides aujourd'hui (AC-SECTIONCOPY-3) : `eyebrow`, flèche comprise, `title` et `subtitle` de `Hero` ; `eyebrow` et `title` de `ServicesGrid`, `FlowDiagram`, `PrinciplesList` et `NotesPreview` ; `title` de `CTA` ; `tagline`, `copyright` et `versionLine` de `SiteFooter`.
 - `mascotAlt` absent écrit `alt=""` : la mascotte reste, décorative.
-- Restent rendus, vides s'il le faut : les conteneurs `__head`, `__actions`, `__form`, `nav`, `__list`, `__steps`, `__items` et `__bottom`.
-- Inchangés (OQ-SECTIONCOPY-2 de la story) : le lockup de `BrandLogo`, les destinations `#book`, `#audit` et `#notes`, `homeHref`, l'`id` de `FlowDiagram`, les `id` `work` et `notes`, le `#` d'un `NotePost` sans `href`, `mascotSrc` et `wordmarkSrc`.
+- Restent rendus, vides s'il le faut, avec leurs marges : les conteneurs `__head`, `__actions`, `__form`, `nav`, `__list`, `__steps`, `__items` et `__bottom`. Un `NotesPreview` sans `eyebrow`, `title` ni `allLinkLabel` ne rend aucun `h2`, et sa tête vide garde sa marge basse au-dessus de la liste.
+- Inchangés : le lockup de `BrandLogo`, les destinations `#book`, `#audit` et `#notes`, `homeHref`, l'`id` de `FlowDiagram`, les `id` `work` et `notes`, le `#` d'un `NotePost` sans `href`, `mascotSrc` et `wordmarkSrc`.
 - Aucune erreur levée : une section se rend quelles que soient les props absentes.
 
 Client code, dans un second site :
@@ -54,13 +54,6 @@ import { Hero } from '@robusta/pyramids-design-system';
   mascotSrc={heroMascotSrc}
 />;
 ```
-
-Si OQ-SECTIONCOPY-1 se tranche pour l'échec de compilation :
-
-- les 34 props deviennent requises dans leurs `*Props`, et `BrandLogoProps` une union discriminée sur `size`, `tagline` requise sous `full` seule ; un site masque un élément en passant `''` ou `[]`, une mascotte décorative par `mascotAlt=""` ;
-- robusta.build compile sans changement, `landing` et `chrome` passant déjà chaque prop (R-LANDING-83) ;
-- `next build` type-checke `_design-test/page.tsx` de la v1, qui ne passe pas de `tagline` : la page v1 doit changer, alors que CLAUDE.md la gèle ;
-- le rendu « sans texte » du garde (R-SECTIONCOPY-23) passe chaque prop de texte à `''` ou `[]`, et les specs du module qui rendent `<Hero />` sans props ne compilent plus.
 
 ### library API of package `test-support` in module `@robusta/pyramids-design-system` — modified
 
@@ -116,17 +109,17 @@ Client code : `yarn workspace @robusta/robusta-build run test`.
 
 ### Site
 
-- R-SECTIONCOPY-41 : `src/landing/LandingPage.spec.tsx` garde AC-LANDING-2 par inventaire : chaque texte lisible des trois landing pages, en-tête et pied de page compris, est une valeur de la page copy de sa Locale, le `localeName` d'une autre Locale, `contact.email`, le titre ou la date d'une note de son feed, le numéro d'une étape, ou la marque. La liste tirée du rendu des sections sans props et son seuil `> 20` disparaissent ; l'expression des phrases du prototype reste (OQ-SECTIONCOPY-4).
+- R-SECTIONCOPY-41 : `src/landing/LandingPage.spec.tsx` garde AC-LANDING-2 par inventaire : chaque texte lisible des trois landing pages, en-tête et pied de page compris, est une valeur de la page copy de sa Locale, le `localeName` d'une autre Locale, `contact.email`, le titre ou la date d'une note de son feed, le numéro d'une étape, ou la marque. La liste tirée du rendu des sections sans props et son seuil `> 20` disparaissent ; l'expression des phrases du prototype reste. Aucune liste figée des textes du prototype n'entre dans le site.
 - R-SECTIONCOPY-42 : le code de `landing` et `chrome` ne change pas, ses props vides `footnote`, `emailPlaceholder` et `versionLine` comprises. Seul `src/chrome/chrome.spec.tsx` suit le pied de page : sa ligne du bas n'a plus que le `<div>` du copyright.
 - R-SECTIONCOPY-43 : chaque document prérendu de `dist/client` garde son texte lisible mot pour mot ; son balisage ne perd que le `<div>` vide de la ligne de version.
 
 ## Acceptance Criteria
 
-- AC-SECTIONCOPY-1 : Given un site qui rend une section sans lui passer l'une de ses props de texte, When un visiteur lit la page, textes alternatifs compris, Then aucun mot du prototype ne lui parvient et l'élément qui aurait porté ce texte n'est pas rendu (Proposition d'OQ-SECTIONCOPY-1).
+- AC-SECTIONCOPY-1 : Given un site qui rend une section sans lui passer l'une de ses props de texte, When un visiteur lit la page, textes alternatifs compris, Then aucun mot du prototype ne lui parvient et l'élément qui aurait porté ce texte n'est pas rendu.
 - AC-SECTIONCOPY-2 : Given les huit sections et `BrandLogo` en variante `full`, When on les rend sans aucune prop de texte, Then le seul texte lisible est la marque : les glyphes 💪 🏗 et le texte alternatif du wordmark.
-- AC-SECTIONCOPY-3 : Given un site qui passe une prop de texte, When la section se rend, Then elle rend ce texte comme aujourd'hui, et une prop vide masque son élément comme aujourd'hui.
-- AC-SECTIONCOPY-4 : Given robusta.build, When il est construit après la story, Then ses pages prérendues ne changent pas d'un mot, et ses tests refusent toujours un texte du prototype sur ses landing pages (AC-LANDING-2).
-- AC-SECTIONCOPY-5 : Given une section ajoutée plus tard au design system, celle que blog-rolls créerait comprise, When elle porte un texte par défaut, Then les tests du design system échouent.
+- AC-SECTIONCOPY-3 : Given un site qui passe une prop de texte, When la section se rend, Then elle rend ce texte comme aujourd'hui ; vide, `''` ou `null`, une prop de texte se rend comme absente et son élément n'est pas rendu, y compris pour les 15 props qui rendent aujourd'hui un élément vide, dont le surtitre et le titre de `NotesPreview`.
+- AC-SECTIONCOPY-4 : Given robusta.build, When il est construit après la story, Then ses pages prérendues ne changent pas d'un mot (seul le `<div>` vide de la ligne de version quitte le pied de page), et ses tests refusent toujours un texte du prototype sur ses landing pages (AC-LANDING-2).
+- AC-SECTIONCOPY-5 : Given une section ajoutée plus tard au design system, When elle porte un texte par défaut, Then les tests du design system échouent.
 - AC-SECTIONCOPY-6 : Given les cas limites, When on les rejoue, Then une liste absente (liens de navigation, colonnes de pied de page, cartes, étapes, principes, articles) ne rend aucun item ; un `Hero` sans titre ne rend pas de `h1` vide ; une mascotte sans `mascotAlt` est décorative, `alt=""` ; la page `_design-test` de `apps/robusta`, non routée, compile encore et perd la tagline du prototype ; le prototype `ui_kits/marketing` garde son texte.
 
 Référence d'AC-SECTIONCOPY-4 : le texte lisible des 34 documents de `dist/client` (3 landing pages, 30 URL de contenu, `404.html`), relevé avant et après la story, est identique.
@@ -135,6 +128,7 @@ Edge cases to test :
 
 - une liste absente, liens, colonnes, cartes, étapes, principes ou articles, ne rend aucun item, son conteneur restant ;
 - un `Hero` sans `title` ne rend aucun `h1` ; sans `eyebrow`, ni l'eyebrow ni sa flèche ;
+- un `NotesPreview` sans `eyebrow`, `title` ni `allLinkLabel` ne rend aucun `h2` ni texte au-dessus de ses articles, sa tête vide restant ;
 - la mascotte d'un `Hero` sans `mascotAlt` est rendue avec `alt=""` ;
 - un `CTA` sans `emailPlaceholder` ne rend aucun champ, et un placeholder compte comme texte lisible ;
 - `BrandLogo` `full` sans `tagline` ne rend que le lockup, et `_design-test` de `apps/robusta` compile ;
@@ -146,16 +140,4 @@ Edge cases to test :
 ## Dependencies
 
 - Depends on : aucune.
-- Parallèle : blog-rolls, même batch. Sa Proposition laisse le design system inchangé (OQ-BLOGROLLS-1) ; si elle ajoute une section, son export entre dans `src/page-copy.spec.tsx`, et livrée après cette story, elle le fait échouer tant que l'export n'y a pas son rendu.
-
-## Open Questions & Gaps
-
-- Gap-SECTIONCOPY-3 : La story dit qu'une prop de texte vide masque déjà son élément, or 15 des 34 rendent aujourd'hui un élément vide. Vide les masque-t-il aussi ?
-- Proposition : oui. Absente, `null` ou `''`, chacune des 34 ne rend pas son élément. Sur robusta.build, seul le `<div>` vide de la ligne de version quitte le pied de page de chaque document, aucun mot ne change, et `chrome.spec.tsx` suit (R-SECTIONCOPY-42).
-- Rationale : c'est la seule lecture qui tienne avec AC-SECTIONCOPY-1, le `h1` vide qu'AC-SECTIONCOPY-6 refuse et la Proposition d'OQ-SECTIONCOPY-1, « absente se rend comme vide ». Garder l'élément vide pour `''` ferait diverger une prop vide et une prop absente.
-- Resolution: lgtm
-
-- OQ-SECTIONCOPY-4 : Les tests du site prouvent-ils l'absence du prototype par l'inventaire des textes que le site fournit, ou par une liste figée des textes du prototype ?
-- Proposition : l'inventaire (R-SECTIONCOPY-41), avec l'expression des phrases du prototype qui reste.
-- Rationale : il ne dépend pas des défauts du module et attrape un défaut qui reviendrait ; une liste figée recopierait le prototype dans le site et dériverait de lui.
-- Resolution: lgtm (designman)
+- Blocks : blog-rolls, même batch B1, livrée après cette story (Gap-BLOGROLLS-3) : sa page de listing rend `NotesPreview` sans surtitre ni titre, et elle n'ajoute aucune section au design system (OQ-BLOGROLLS-1).
