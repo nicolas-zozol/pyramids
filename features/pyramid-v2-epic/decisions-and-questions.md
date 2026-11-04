@@ -71,3 +71,16 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - `storyman update avec brainstorm` : Gap-GLOSSARY-4 et 5 (Nicolas) pliés ; seule la phrase du Contexte change, aucun AC réécrit ; entrées retirées du brainstorm. Aucune entrée nouvelle.
 - `designman update` : la ligne du Goal qui disait les Propositions en attente cite leur retenue ; aucun contrat changé, aucune entrée nouvelle.
 - Contrôle boss : AC-GLOSSARY-1 à 7 cités mot pour mot, `## Boundaries` rempli, aucune entrée `ask` en attente → APPROVED (validated by boss).
+
+## D7 : drop-section-default-copy, implémentée et soumise
+
+- Phase : code et submit
+- tddman : commit `3b16c72`. Tests du design system 209/209, `yarn build:deps` vert, tests de robusta-build 490/490, lint et `yarn build:robusta` verts, `tsc --noEmit` de `apps/robusta` vert. Pages prérendues avant/après : même texte lisible sur les 34 documents, seul le `<div>` vide de la ligne de version quitte le pied de page (AC-SECTIONCOPY-4).
+- Décisions de tddman, sans effet sur la direction : le second rendu d'une section sans liste passe chaque prop de texte à `''` ; la `readableTexts` du site lit aussi `placeholder`, `aria-label` et `title`.
+- submit : commit `2662cc4`, design IMPLEMENTED, story SUBMITTED, item retiré du ROADMAP, epicman update (nouvel item B4 surface-identifiers).
+
+## D8 : blog-rolls, implémentée
+
+- Phase : code (commit `bc568f7`). tddman interrompu par la limite d'API, repris sur le même arbre.
+- Checker : tests de robusta-build 552/552, lint, `tsc --noEmit` et `yarn build:robusta` verts (33 pages, 69 fichiers de données dont 13 roll pages et 3 locale rolls). AC-BLOGROLLS-3 prouvé sur fixture ; les 404 lus dans `dist` (fichiers absents), sans draft deploy, l'hébergeur ne changeant pas.
+- Décisions de tddman, sans effet sur la direction : un roll vide ne rend que son h1 ; `getLocaleRolls` rend `[]` pour une Locale sans article. La page copy des pages de listing (`ListingCopy` en, fr, es) est écrite par tddman : à relire par Nicolas.

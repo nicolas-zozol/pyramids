@@ -3,7 +3,7 @@
 **Last update:** 2026-11-04
 **Feature:** blog-rolls
 **Infix:** BLOGROLLS
-**Status:** APPROVED (2026-11-04 — validated by boss)
+**Status:** IMPLEMENTED (2026-11-04, commit bc568f7)
 **Sources:** [story](blog-rolls.story.md), [brainstorm](blog-rolls.brainstorm.md), [epic](../pyramid-v2.epic.md), [drop-section-default-copy](../drop-section-default-copy/drop-section-default-copy.design.md), [multilingual-site](../multilingual-site/multilingual-site.design.md), [default-locale-at-root](../default-locale-at-root/default-locale-at-root.design.md)
 
 ## Goal

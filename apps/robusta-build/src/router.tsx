@@ -10,6 +10,8 @@
  * Requirements: R-MULTILINGUAL-28, R-MULTILINGUAL-42, R-MULTILINGUAL-45, R-MULTILINGUAL-62
  * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-21, R-ROOTLOCALE-22, R-ROOTLOCALE-23, R-ROOTLOCALE-61
+ * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
+ * Requirements: R-BLOGROLLS-26, R-BLOGROLLS-61
  */
 import { createRouter } from '@tanstack/react-router';
 import { NavigationFailure } from './components/NavigationFailure.tsx';

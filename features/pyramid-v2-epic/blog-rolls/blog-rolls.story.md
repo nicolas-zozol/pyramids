@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-04
 **Feature :** blog-rolls
 **Infix :** BLOGROLLS
-**Status :** ACTIVE
+**Status :** SUBMITTED (2026-11-04, commit bc568f7)
 
 ## Story
 
@@ -11,19 +11,39 @@
 
 ## Contexte & objectif
 
-Les 13 pages de listing du site affichent un `RoutePlaceholder` : leur titre et leur adresse. Ce sont l'accueil du blog et 5 pages de Category de `en`, sous `/articles` (la Locale par défaut se sert sans préfixe, BR-PYRAMID-14), et l'accueil du blog et 6 pages de Category de `fr`, sous `/fr/articles`. Le lien de Category de chaque page article et le lien « tous les articles » de la Section de notes des landing pages y mènent pourtant. Le pied de page n'a aucune colonne de liens depuis robusta-landing-page, qui la laissait à cette story.
-
-Item 1 de l'epic depuis le 2026-10-06 (Gap-LANDING-11, Gap-SEOEXCELLENCE-17) : aucun item ne rendait ces pages, et un roll est de la page copy, pas une déclaration. seo-excellence attend cette story pour ses critères des pages de listing, go-live pour qu'aucune page de listing ne s'ouvre vide à l'indexation.
-
-La roll size est la constante de 12 que la Site configuration expose sans la choisir (`blogConfig.rollSize`). Avec 8 articles anglais et 9 français, datés de 2019 à 2022, aucun roll n'a de page 2 aujourd'hui. Une Category se nomme par `getCategoryLabel`, dans la Locale de la page. Le site fournit la page copy (BR-PYRAMID-8), le design system les valeurs (BR-PYRAMID-6), et le contenu n'est lu qu'au build (BR-PYRAMID-7).
+Les 13 pages de listing affichaient un `RoutePlaceholder`, alors que le lien de Category de chaque page article et le lien « tous les articles » des landing pages y menaient, et le pied de page n'avait aucune colonne de liens. Item 1 de l'epic depuis le 2026-10-06 (Gap-LANDING-11, Gap-SEOEXCELLENCE-17) : seo-excellence l'attendait pour ses critères des pages de listing, go-live pour qu'aucune ne s'ouvre vide à l'indexation.
 
 ## Partage avec seo-excellence
 
-- blog-rolls : ce que le lecteur voit sur une page de listing (titre, roll, liens entre les pages d'un roll) et toute sa page copy, titre et description du head compris, comme une landing page porte les siens ; la colonne du pied de page. Aucun fil d'Ariane.
+- blog-rolls : ce que le lecteur voit sur une page de listing (titre, roll, liens entre les pages d'un roll) et toute sa page copy, titre et description du head compris ; la colonne du pied de page. Aucun fil d'Ariane.
 - seo-excellence : ce que la page déclare (canonical URL, hreflang, indexabilité, sitemap, aperçu de partage, données structurées) et le fil d'Ariane, d'une page article comme de chaque page d'un roll de Category : accueil du blog puis Category. L'accueil du blog n'en montre pas.
 - go-live : l'ouverture à l'indexation. Jusque-là, une page de listing reste `noindex` comme le reste du site.
 
-## Acceptance Criteria
+## Livré
+
+### Requirements
+
+- R-BLOGROLLS-01 : `url-scheme` exporte `RollUrl`, la `PageUrl` d'une page de roll.
+- R-BLOGROLLS-02 : `getRollPage` rend les articles de la page `n` d'un roll, tranche de `ROLL_SIZE` des articles de sa Locale, ceux de sa Category sur un roll de Category, du plus récent au plus ancien, lus au build (BR-PYRAMID-7, BR-PYRAMID-10).
+- R-BLOGROLLS-03 : la date d'un post porte jour, mois abrégé et année, écrits dans la Locale de la page ; son `tag`, slug de la Category, n'existe que sur un accueil du blog et pour un article qui en revendique une (BR-PYRAMID-9).
+- R-BLOGROLLS-04 : `previousUrl` et `nextUrl` sont les pages `n - 1` et `n + 1` du même roll prises dans le jeu d'URL et construites par `buildUrl` ; la précédente de la page 2 est la première page, sans `/p/`.
+- R-BLOGROLLS-05 : au build, `getRollPage` lève en nommant la page quand le jeu d'URL ne la porte pas.
+- R-BLOGROLLS-06 : `getLocaleRolls` rend la première page de chaque roll de la Locale prise dans le jeu d'URL, accueil du blog d'abord, et `[]` pour une Locale sans article publié.
+- R-BLOGROLLS-21 : un package `src/listing`, entrée `index.ts`, exporte `ListingPage` et `listingHead`.
+- R-BLOGROLLS-22 : `ListingPage` rend dans un `<main>` le `h1` du roll, puis `NotesPreview` sans surtitre, titre ni lien vers tous les articles, les Categories nommées par `getCategoryLabel` dans la Locale de la page.
+- R-BLOGROLLS-23 : la pagination est un `nav` nommé par la page copy, qui lie la page précédente et la suivante quand elles existent ; un roll d'une seule page n'en a pas.
+- R-BLOGROLLS-24 : le `h1` et la pagination ne portent que des valeurs du design system, `var(--…)` en style inline comme `ArticleView`, et aucune classe hors de lui (BR-PYRAMID-6).
+- R-BLOGROLLS-25 : `listingHead` rend le head de la route, `title` puis `description` : le modèle de la Locale et de la sorte de page, `{category}` rempli par le libellé, et dès la page 2 `pageSuffix`, `{page}` rempli, ajouté au titre et à la description.
+- R-BLOGROLLS-26 : les quatre routes de listing, sous `/{-$locale}/articles`, chargent `getRollPage`, posent le head de `listingHead` et rendent `ListingPage` ; `RoutePlaceholder` et son spec disparaissent.
+- R-BLOGROLLS-27 : chaque texte lisible d'une page de listing, en-tête et pied de page compris, est une valeur de la page copy de sa Locale, un libellé de Category, le titre ou la date d'un article du roll, le `localeName` d'une autre Locale, `contact.email` ou la marque : l'inventaire de R-SECTIONCOPY-41, étendu aux pages de listing (BR-PYRAMID-8).
+- R-BLOGROLLS-41 : `PageCopy.listing` devient `ListingCopy`, rempli pour `en`, `fr` et `es`, et le commentaire de `PageCopy.head` exclut les pages de listing.
+- R-BLOGROLLS-42 : chaque modèle de head est une phrase de la langue de sa Locale, et chaque modèle de Category porte `{category}` : `articles` et les quatre libellés que `en` et `fr` partagent donnent des heads distincts.
+- R-BLOGROLLS-61 : le loader de la route racine charge `rolls` par `getLocaleRolls` pour la Locale de la page, la Locale par défaut hors du schéma et sur la 404, et `RootDocument` le passe à `Footer`.
+- R-BLOGROLLS-62 : `Footer` rend une colonne quand `rolls` n'est pas vide : l'accueil du blog puis chaque Category, rangées par ordre alphabétique de libellé dans la Locale ; sinon aucune.
+- R-BLOGROLLS-63 : ni `Footer`, ni `ListingPage`, ni `listingHead` ne rattrapent l'erreur de `getCategoryLabel`.
+- R-BLOGROLLS-81 : `expectedDataFiles` compte un fichier par page de listing du jeu d'URL et un par landing page pour le pied de page ; la ligne de succès et le message d'écart nomment ces deux sources.
+
+### Acceptance Criteria
 
 - AC-BLOGROLLS-1 : Given une Locale qui publie des articles, When un visiteur ouvre son accueil du blog, Then il lit sous un titre de la page copy les articles publiés de cette Locale et d'elle seule, du plus récent au plus ancien, 12 au plus, chacun avec son titre, sa date année comprise et le libellé de sa Category, sans excerpt ni couverture, chacun menant à sa page article ; la page se lit et se parcourt sans JavaScript, et plus aucune page de listing ne montre de placeholder ni son adresse.
 - AC-BLOGROLLS-2 : Given une page article qui revendique une Category, When le visiteur suit son lien de Category, Then il arrive sur le roll de cette Category dans la Locale de l'article, titré par son libellé dans cette Locale, qui ne liste que les articles de cette Locale qui la revendiquent, sans répéter ce libellé sur chacun ; le lien « tous les articles » d'une landing page mène de même à l'accueil du blog de sa Locale, `/articles` depuis `/`.
@@ -35,67 +55,84 @@ La roll size est la constante de 12 que la Site configuration expose sans la cho
 ## Boundaries
 
 ```
-  Packages de l'app `@robusta/robusta-build`.
-  Flèche = dépend de, du code client vers l'API (library). Aucune boucle.
+  Packages de l'app `@robusta/robusta-build`. Flèche : client code ──→ API,
+  toutes library. Aucune boucle.
 
                  routes [modified]
           ┌──────────┼──────────────┐
           ↓          ↓              ↓
-     page-data     chrome      seopyramids.config
-     [modified]    [modified] ──→ [modified]
+    listing [new] ─→ page-data    chrome [modified]
+          │          [modified]     │
+          ↓                         ↓
+    seopyramids.config [modified], url-scheme [modified]
 
-  components [modified] perd RoutePlaceholder, que plus rien n'utilise.
+  components [modified] perd RoutePlaceholder. Le design system ne change pas.
 ```
-
-Le design system ne change pas. La liste d'articles est rendue par `NotesPreview`, seule Section du design system qui affiche des articles, sans surtitre ni titre ; le `h1` de la page et les liens entre les pages d'un roll sont du balisage du site sur les tokens du design system, comme la page article. Où vit la vue d'un roll, et où le pied de page lit les Categories d'une Locale, c'est au design de le dire.
 
 ### HTTP API of app `@robusta/robusta-build` — modified
 
 Client code : navigateurs et crawlers. `en` sans préfixe, `{locale}` vaut `fr` ou `es` (BR-PYRAMID-14).
 
-- `GET /articles`, `GET /articles/c/{category}`, `GET /{locale}/articles`, `GET /{locale}/articles/c/{category}` · modifiés — 200 avec le roll de la page au lieu du placeholder ; 13 pages aujourd'hui, 6 sous `/articles`, 7 sous `/fr/articles`
-- `GET /articles/p/{n}`, `GET /articles/c/{category}/p/{n}` et leurs formes `/{locale}/…` · modifiés — construites dès qu'un roll dépasse 12 articles, aucune aujourd'hui ; 404 pour `n` = 1 et au-delà de la dernière page
-- `GET /en/articles…` · inchangé — 301 de l'hébergeur vers la forme sans préfixe
-- `GET` sur tout document · modifié — le pied de page porte la colonne de liens de sa Locale
+- `GET /articles`, `GET /articles/c/{category}` et leurs formes `/{locale}/…` · modifiés — 200 avec le roll de la page : 13 pages, 6 sous `/articles`, 7 sous `/fr/articles` dont `theory`
+- `GET …/p/{n}` · modifiés — construites de `n = 2` à la dernière page, aucune aujourd'hui ; 404 par `404.html` pour `n = 1` et au-delà
+- `GET` sur tout document · modifié — le pied de page porte la colonne de liens de sa Locale : aucune sous `/es`, celle de `en` sur `404.html`
+- `GET /__tsr/staticServerFnCache/{sha1}.json` · modifié — un fichier par page de listing et un par Locale pour le pied de page, 69 au total
 
 ### CLI API of app `@robusta/robusta-build` — modified
 
 Client code : la build Netlify, Nicolas.
 
-- `yarn build` · modifié — son contrôle de la route table couvre les pages de listing ; sortie non nulle sur une page de listing manquante, ou rendue en repli faute du libellé d'une Category dans sa Locale
+- `yarn build` · modifié — `check-route-table` compte `rollPages` et `localeRolls` ; exit 1 sur un écart, une page de listing manquante ou rendue en repli faute d'un libellé de Category
 
 ### library API of package `page-data` in app `@robusta/robusta-build` — modified
 
-Client code : package `routes`, les quatre routes de listing.
+Client code : package `routes`, les quatre routes de listing et la route racine.
 
 ```ts
-type PageUrl, NotePost // déjà connus
-type RollPage
+type RollPage; // locale, category?, posts: NotePost[], previousUrl?, nextUrl?
 
 interface PageData {
-  /** une page de blog roll ou de roll de Category : ses articles, du plus récent au plus ancien, 12 au plus, et ses pages voisines ; un fichier de données par page, écrit au prérendu */
-  getRollPage(call: { data: PageUrl }): Promise<RollPage>;
+  getRollPage(call: { data: RollUrl }): Promise<RollPage>;                      // new
+  getLocaleRolls(call: { data: { locale: string } }): Promise<RollUrl[]>;     // new
 }
 ```
 
+### library API of package `listing` in app `@robusta/robusta-build` — new
+
+- `ListingPage({ page: RollPage })` — le `h1`, le roll par `NotesPreview`, puis le `nav` entre les pages du roll
+- `listingHead(page: RollUrl)` — `title` et `description` de la route
+
+### library API of package `url-scheme` in package `routing` — modified
+
+- `RollUrl` · nouveau — `Extract<PageUrl, { kind: 'blog-home' } | { kind: 'category' }>`
+
 ### library API of package `chrome` in app `@robusta/robusta-build` — modified
 
-- `Footer` · modifié — rend une colonne de liens, titrée dans la page copy, pour une Locale qui publie, aucune sinon ; ce qu'il reçoit en plus de la Locale, le design le dira
+- `Footer({ locale, rolls: RollUrl[] })` · modifié — une colonne quand `rolls` n'est pas vide, aucune sinon
 
-### library API of package `seopyramids.config` in app `@robusta/robusta-build` — modified
+### library API of the Site configuration `seopyramids.config` in app `@robusta/robusta-build` — modified
 
-- `PageCopy` · modifié — `listing` porte, par Locale, les modèles du titre et de la description du head de chaque sorte de page de listing, son titre visible, les libellés des liens entre les pages d'un roll, le titre de la colonne du pied de page et son lien vers l'accueil du blog ; `getCategoryLabel` reste la seule source du libellé d'une Category
+- `PageCopy.listing` · modifié — devient `ListingCopy` : `blogTitle`, `head` (`blogHome`, `category`, `pageSuffix`), `pagination` et `footer` ; `getCategoryLabel` reste la seule source du libellé d'une Category
 
 ### library API of package `components` in app `@robusta/robusta-build` — modified
 
-- `RoutePlaceholder` · retiré — les quatre routes de listing étaient ses seuls clients
+- `RoutePlaceholder` · retiré avec son spec
+
+## Décisions
+
+- 2026-11-04 — Le roll est rendu par `NotesPreview`, sans surtitre ni titre, dans un nouveau package `listing` ; le `h1` et la pagination sont du balisage du site sur les tokens du design system. Pourquoi : `NotesPreview` est la seule Section qui affiche des articles, et le design system ne change pas.
+- 2026-11-04 — Un roll vide ne rend que son `h1`, sans `NotesPreview`. Pourquoi : `/articles` reste construite pour la Locale par défaut même sans article (AC-BLOGROLLS-6).
+- 2026-11-04 — La page copy de `ListingCopy` en `en`, `fr` et `es` a été rédigée à l'implémentation : heads « Articles by Nicolas Zozol, Robusta Build » et « {category}: articles by Nicolas Zozol », `pageSuffix` « (page {page}) » ou « (página {page}) », pagination « newer articles » et « older articles », pied de page « all articles », « tous les articles », « todos los artículos ». À relire par Nicolas.
+- 2026-11-04 — AC-BLOGROLLS-3 est prouvé sur un corpus de fixture, aucune Locale ne dépassant 12 articles ; les 404 de `/p/1`, des pages au-delà de la dernière, de `/articles/c/theory` et de `/es/articles` sont prouvés par l'absence de leur fichier dans `dist`, sans draft deploy.
 
 ## Documentation updates
 
-- change la section Routing de `apps/robusta-build/README.md` (« What they render », le pied de page, le compte des pages et des fichiers de données) — why: les quatre routes de listing rendent leur roll et non plus `RoutePlaceholder`, et le pied de page a une colonne de liens.
+- changed la section Routing in `apps/robusta-build/README.md` : les routes de listing rendent `ListingPage`, le pied de page a sa colonne de liens, 69 fichiers de données.
+- changed l'Overview, les packages `routes`, `page-data`, `listing`, `chrome`, `components`, la Site configuration, le diagramme et les API HTTP et CLI in `apps/robusta-build/robusta-build.archi.md`.
+- changed les Boundaries et les clients (`RollUrl`, `listing`) in `apps/robusta-build/src/routing/url-scheme/url-scheme.archi.md`.
 
 ## Dependencies
 
-- Dep 1 : drop-section-default-copy, même batch B1, livrée avant blog-rolls. La liste d'articles se rend sans surtitre ni titre sous le titre de la page, et n'affiche ni titre vide ni texte du prototype qu'une fois les textes par défaut retirés des Sections.
-- multilingual-site, dont les rolls suivent le schéma préfixé et la page copy par Locale : levée, LANDED le 2026-10-31 (`fb4803b`).
-- default-locale-at-root, qui sert la Locale par défaut sans préfixe : levée, SUBMITTED le 2026-11-03 (`2fbc7be`).
+- drop-section-default-copy, livrée avant blog-rolls pour rendre `NotesPreview` sans surtitre ni titre : levée, SUBMITTED le 2026-11-04 (`3b16c72`).
+- multilingual-site : levée, LANDED le 2026-10-31 (`fb4803b`).
+- default-locale-at-root : levée, SUBMITTED le 2026-11-03 (`2fbc7be`).

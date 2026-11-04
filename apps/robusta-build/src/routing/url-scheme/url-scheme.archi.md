@@ -1,6 +1,6 @@
 # Architecture: url-scheme
 
-**Last updated:** 2026-11-03
+**Last updated:** 2026-11-04
 **Kind:** package
 
 ## Parent
@@ -15,11 +15,12 @@ Le package `url-scheme`, dans le package `routing` de l'app `@robusta/robusta-bu
 
 ### library API of package `url-scheme` in package `routing`
 
-Client code : les fichiers de `routing`, `page-data`, `chrome`, `landing`, `components` et `routes`, le loader de la route racine et la route de layout `{-$locale}` compris, et `scripts/prerender-pages.mjs` et `scripts/check-route-table.mjs`, sur sa copie compilée sous `.routing-dist`.
+Client code : les fichiers de `routing`, `page-data`, `chrome`, `landing`, `listing`, `components` et `routes`, le loader de la route racine et la route de layout `{-$locale}` compris, et `scripts/prerender-pages.mjs` et `scripts/check-route-table.mjs`, sur sa copie compilée sous `.routing-dist`.
 
 ```ts
 type UrlScheme;          // contentRoot, defaultLocale, otherLocales, rollSize
 type PageUrl;            // landing, blog-home, category, tag, article
+type RollUrl;            // the PageUrl of a roll page: blog-home or category
 type AddressableArticle; // slug, locale, one category at most
 type SchemeViolation;    // reserved-segment, duplicate-slug, nested-category,
                          // unknown-locale, non-canonical-segment
@@ -66,5 +67,5 @@ function isReservedSegment(segment: string): boolean;
 ## Dependencies
 
 - Depends on : rien.
-- Used by : `routing` (`scheme.ts` pour le type `UrlScheme`, `content-urls.ts`, `counterparts.ts`, `v1-url-map.ts`), `page-data`, `chrome`, `landing`, `components`, `routes`, et les scripts `prerender-pages.mjs` et `check-route-table.mjs`.
+- Used by : `routing` (`scheme.ts` pour le type `UrlScheme`, `content-urls.ts`, `counterparts.ts`, `v1-url-map.ts`), `page-data`, `chrome`, `landing`, `listing` (`listing-head.ts` pour le type `RollUrl`), `components`, `routes`, et les scripts `prerender-pages.mjs` et `check-route-table.mjs`.
 - Build : compilé avec le site par Vite, et par `compile:seams` sous `.routing-dist` pour les scripts.
