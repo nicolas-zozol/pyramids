@@ -22,6 +22,7 @@ const HTML_IMAGE = /<img\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']/gi;
 /** A scheme, a protocol-relative host or a site-absolute path: not the corpus's to answer. */
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|\/)/i;
 
+/** True for a reference the corpus does not resolve: a URL with a scheme, a protocol-relative host or a site-absolute path. */
 export function isExternalReference(reference: string): boolean {
   return EXTERNAL.test(reference);
 }

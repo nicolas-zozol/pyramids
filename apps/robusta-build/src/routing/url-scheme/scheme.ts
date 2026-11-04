@@ -33,6 +33,7 @@ export type SchemeViolation =
   | { code: 'unknown-locale'; locale: string; slug: string }
   | { code: 'non-canonical-segment'; segment: string; slug: string };
 
+/** Every Locale of the scheme, the default one first. */
 export function knownLocales(scheme: UrlScheme): readonly string[] {
   return [scheme.defaultLocale, ...scheme.otherLocales];
 }

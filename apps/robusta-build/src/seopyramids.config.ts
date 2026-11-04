@@ -533,6 +533,7 @@ const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
   pageCopy: { en, fr, es },
 };
 
+/** The site configuration the base packages read: content section, contact and the page copy of every Locale. */
 export function getSeoPyramidsConfig() {
   return robustaBuildPyramidsConfig;
 }

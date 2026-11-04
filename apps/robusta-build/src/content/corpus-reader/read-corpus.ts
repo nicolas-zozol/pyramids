@@ -32,6 +32,7 @@ import { translationNotices } from './translation-notices.ts';
  */
 const reads = new Map<string, Promise<CorpusRead>>();
 
+/** The published articles, violations and translation notices of a corpus, frozen and read once per resolved root and process. */
 export function readCorpus(corpus: CorpusSpec): Promise<CorpusRead> {
   const root = resolve(process.cwd(), corpus.root);
 

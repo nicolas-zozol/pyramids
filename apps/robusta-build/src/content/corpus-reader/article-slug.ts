@@ -7,6 +7,7 @@
 // the v1 reader does at `apps/robusta/src/logic/posts.ts`.
 import slugify from 'slugify';
 
+/** The URL segment of an article, derived from its title exactly as v1 derived it. */
 export function articleSlug(title: string, locale: string): string {
   return slugify(title, {
     lower: true,

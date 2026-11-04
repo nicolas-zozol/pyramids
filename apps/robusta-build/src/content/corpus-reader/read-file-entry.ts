@@ -37,6 +37,7 @@ export interface IndexedArticle {
   fingerprint: string;
 }
 
+/** Parses one markdown file of the corpus and lists every schema and asset violation it carries, published or not. */
 export async function readFileEntry(
   root: string,
   path: string,
