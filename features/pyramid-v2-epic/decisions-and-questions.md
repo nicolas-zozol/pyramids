@@ -96,3 +96,19 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - submit : design IMPLEMENTED, story SUBMITTED, item et titre de B1 retirés du ROADMAP, epicman update. B1 est vide ; B2 seo-excellence et B3 rb-compound-positioning n'attendent plus glossary-refresh.
 - Gap-PYRAMID-5, écrit par epicman dans l'epic (reformuler `Stale translation` pour enregistrer BR-PYRAMID-15) : `ask`, il touche le registre des BR. Resolution vide, pour Nicolas ; boss n'écrit pas l'epic.
 - Le run s'arrête après B1, comme la requête le demande (`batch B1`).
+
+## D11 : batch B2, branche, état de départ
+
+- Requête : `boss atw pyramid-v2-epic batch B2`. Mode atw : boss tranche les entrées `ask`, signées `lgtm (boss atw)`, jusqu'au submit de chaque story.
+- Branche : `epic/robusta-v2`, celle de l'epic pyramid-v2 depuis B1 ; boss y reste.
+- Verrou : B1 vidé le 2026-11-04, B2 passe au code.
+- seo-excellence : story ACTIVE, brainstorm du 2026-10-06 déjà plié le 2026-10-25, pas de design. Reprise à l'étape `storyman update avec brainstorm`, avec les événements de la requête.
+- go-live : ligne « story à écrire » du batch ; storyman l'écrit. OQ-LANDING-12 et OQ-SEOEXCELLENCE-19 sont répondues `lgtm` (décision de l'epic du 2026-10-06) : rien à trancher.
+- Le bulk `pyramid-v2.bulk.md` porte encore OQ-SEOEXCELLENCE-21 ; boss ne l'écrit pas, il sera périmé jusqu'au prochain `bulkman` de Nicolas.
+- `pyramid-v2.epic.md` et `ROADMAP.md` portent le journal d'epicman non commité ; boss ne les commite pas.
+
+## D12 : stories de seo-excellence et go-live
+
+- seo-excellence, `storyman update avec brainstorm` : OQ-SEOEXCELLENCE-22 et 23 pliées ; Contexte, AC-1, 2, 4 et 7 réécrits sur le schéma de default-locale-at-root ; fil d'Ariane des pages de roll (Gap-BLOGROLLS-4) dans AC-4 ; page `n` d'un roll en AC-7 ; toutes les Dependencies levées. OQ-SEOEXCELLENCE-21 reformulée, Resolution vide.
+- go-live : story écrite par storyman, 5 AC, aucune entrée. Dep 2 : passer l'équipe Netlify en offre Personal avant le merge sur `main`, action de Nicolas hors dépôt.
+- D12a — atw OQ-SEOEXCELLENCE-21 — seo-excellence.story.md — retained: la Proposition, chaque landing page (`/`, `/fr`, `/es`) déclare Robusta Build comme organisation, aucune entreprise locale. Set aside: une entreprise locale sur `/fr` seule, ou l'organisation sur `/` seule. Confidence: high.
