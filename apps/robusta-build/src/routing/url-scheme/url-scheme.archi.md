@@ -15,7 +15,7 @@ Le package `url-scheme`, dans le package `routing` de l'app `@robusta/robusta-bu
 
 ### library API of package `url-scheme` in package `routing`
 
-Client code : les fichiers de `routing`, `page-data`, `chrome`, `landing`, `listing`, `components` et `routes`, le loader de la route racine et la route de layout `{-$locale}` compris, et `scripts/prerender-pages.mjs` et `scripts/check-route-table.mjs`, sur sa copie compilée sous `.routing-dist`.
+Client code : les fichiers de `routing`, `page-data`, `article`, `listing`, `landing`, `chrome`, `components`, `seo` et `routes`, le loader de la route racine et la route de layout `{-$locale}` compris, et `scripts/prerender-pages.mjs`, `scripts/check-route-table.mjs` et `scripts/emit-site-files.mjs`, sur sa copie compilée sous `.routing-dist`.
 
 ```ts
 type UrlScheme;          // contentRoot, defaultLocale, otherLocales, rollSize
@@ -67,5 +67,5 @@ function isReservedSegment(segment: string): boolean;
 ## Dependencies
 
 - Depends on : rien.
-- Used by : `routing` (`scheme.ts` pour le type `UrlScheme`, `content-urls.ts`, `counterparts.ts`, `v1-url-map.ts`), `page-data`, `chrome`, `landing`, `listing` (`listing-head.ts` pour le type `RollUrl`), `components`, `routes`, et les scripts `prerender-pages.mjs` et `check-route-table.mjs`.
+- Used by : `routing` (`scheme.ts` pour le type `UrlScheme`, `listed-articles.ts` pour les types `PageUrl` et `RollUrl`, `content-urls.ts`, `counterparts.ts`, `v1-url-map.ts`), `page-data`, `article` (`article-head.ts`), `listing`, `landing`, `chrome`, `components`, `seo` (`indexing.ts` pour le type `PageUrl`, `sitemap.ts`), `routes`, et les scripts `prerender-pages.mjs`, `check-route-table.mjs` et `emit-site-files.mjs`.
 - Build : compilé avec le site par Vite, et par `compile:seams` sous `.routing-dist` pour les scripts.
