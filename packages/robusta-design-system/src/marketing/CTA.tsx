@@ -16,7 +16,7 @@ export interface CTAProps {
   footnote?: string;
   /** Path/URL for the waving-mascot SVG. Empty hides the mascot. */
   mascotSrc?: string;
-  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  /** Renders the section's anchors, a router link for instance; a plain `<a>` when absent. */
   linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;
@@ -24,7 +24,7 @@ export interface CTAProps {
 
 /**
  * Closing call-to-action: waving-tux mascot + headline + email + button.
- * The headline shares `--t-display` with the hero's — one surface, one
+ * The headline shares `--t-display` with the hero's — one section, one
  * largest text.
  *
  * Server-component-safe; consumer should wrap the email field in a client

@@ -27,7 +27,7 @@ export interface HeroProps {
   mascotAlt?: string;
   /** Caption beside the mascot. Empty ('' or null): no caption, no doodle arrow. */
   annotation?: ReactNode;
-  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  /** Renders the section's anchors, a router link for instance; a plain `<a>` when absent. */
   linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;

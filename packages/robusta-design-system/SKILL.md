@@ -20,7 +20,7 @@ Robusta Build is an independent senior engineering practice. Its identity is a *
 ## How to use
 
 1. **Read `README.md` first.** The voice and don'ts matter more than any token.
-2. **Always import both stylesheets** when building a surface:
+2. **Always import both stylesheets** when building a section:
    ```html
    <link rel="stylesheet" href="colors_and_type.css">
    <link rel="stylesheet" href="sketch.css">
@@ -32,7 +32,7 @@ Robusta Build is an independent senior engineering practice. Its identity is a *
 
 ## When invoked
 
-If the user invokes this skill without other guidance: ask what they want to build, ask 4–6 clarifying questions (audience, surface, tone level, needs Crystal Tux?, single page or flow?), then act as an expert designer. Output static HTML artifacts unless they explicitly want production code.
+If the user invokes this skill without other guidance: ask what they want to build, ask 4–6 clarifying questions (audience, section, tone level, needs Crystal Tux?, single page or flow?), then act as an expert designer. Output static HTML artifacts unless they explicitly want production code.
 
 ## Caveats
 

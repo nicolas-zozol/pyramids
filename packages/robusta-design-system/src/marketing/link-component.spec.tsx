@@ -32,7 +32,7 @@ function withoutProbe(nodes: StaticNode[]): StaticNode[] {
   });
 }
 
-const SURFACES: {
+const SECTIONS: {
   name: string;
   render: (linkComponent?: SkLinkComponent) => ReactElement;
 }[] = [
@@ -122,7 +122,7 @@ const SURFACES: {
   },
 ];
 
-for (const { name, render } of SURFACES) {
+for (const { name, render } of SECTIONS) {
   describe(`${name} given a linkComponent`, () => {
     const plain = renderStatic(render());
     const linked = renderStatic(render(probe));

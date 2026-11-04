@@ -9,17 +9,17 @@
 
 ## Overview
 
-`@robusta/pyramids-design-system` est le design system du site robusta.build (BR-PYRAMID-3) : son langage visuel sketchnote dessiné à la main, livré en un seul module — deux feuilles de style de Design tokens et de classes, les assets de marque, six primitives React et huit surfaces marketing rendues contre ces feuilles. Le site robusta.build est le seul à l'utiliser (BR-PYRAMID-13) et tire de lui tous ses Design tokens (BR-PYRAMID-6). Le module ne fournit aucune Page copy : chaque texte qu'un composant rend est une prop sans défaut, et l'élément qui la porte n'est rendu que si le site la passe (BR-PYRAMID-8). Les composants sont présentationnels : ni état, ni gestionnaire d'événement, ni contexte React, ni import de router, ni directive `'use client'` ou `'use server'`, ni lecture du viewport en JavaScript ; tout le responsive est en CSS. Ce n'est ni `pyramids-themes`, les tokens JS des sites DaisyUI, ni une bibliothèque de composants génériques.
+`@robusta/pyramids-design-system` est le design system du site robusta.build (BR-PYRAMID-3) : son langage visuel sketchnote dessiné à la main, livré en un seul module — deux feuilles de style de Design tokens et de classes, les assets de marque, six primitives React et huit sections marketing rendues contre ces feuilles. Le site robusta.build est le seul à l'utiliser (BR-PYRAMID-13) et tire de lui tous ses Design tokens (BR-PYRAMID-6). Le module ne fournit aucune Page copy : chaque texte qu'un composant rend est une prop sans défaut, et l'élément qui la porte n'est rendu que si le site la passe (BR-PYRAMID-8). Les composants sont présentationnels : ni état, ni gestionnaire d'événement, ni contexte React, ni import de router, ni directive `'use client'` ou `'use server'`, ni lecture du viewport en JavaScript ; tout le responsive est en CSS. Ce n'est ni `pyramids-themes`, les tokens JS des sites DaisyUI, ni une bibliothèque de composants génériques.
 
 ## Apps, modules, packages
 
 - package `primitives` — `src/primitives/` : `BrandLogo`, le lockup 💪 🏗 et le wordmark, et `SkButton`, `SkCallout`, `SkTag`, `SkInput`, `SkArrowRight`, chacune rendue sur une classe `.sk-*` de `sketch.css`. `SkLink.tsx` porte `SkLinkProps` et `SkLinkComponent`, le contrat du composant de lien d'un site, et `PlainLink`, l'ancre rendue sans lui, code interne.
-- package `marketing` — `src/marketing/` : `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview` et `CTA`, les surfaces d'une page marketing, composées des primitives. Leur mise en page est dans `sketch.css`, sous une classe par élément ; leur racine prend `className` et `style`, et les six qui rendent une ancre prennent `linkComponent`.
+- package `marketing` — `src/marketing/` : `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview` et `CTA`, les sections d'une page marketing, composées des primitives. Leur mise en page est dans `sketch.css`, sous une classe par élément ; leur racine prend `className` et `style`, et les six qui rendent une ancre prennent `linkComponent`.
 - `colors_and_type.css` — les Design tokens dans `:root` et les styles d'élément, de `html` à `pre`. Aucune police chargée.
-- `sketch.css` — les classes `.sk-*` des primitives, la mise en page des huit surfaces, puis la section responsive.
+- `sketch.css` — les classes `.sk-*` des primitives, la mise en page des huit sections, puis la section responsive.
 - `fonts.css` — IBM Plex Sans, IBM Plex Mono et Caveat depuis Google Fonts, pour un consommateur sans build ; le site robusta ne le charge pas.
 - `assets/` — Crystal Tux en quatre poses SVG, la pose de base aussi en PNG, et le wordmark `robusta-build-wordmark.png`, 1603×312.
-- `preview/` — les planches HTML du système, dont `marketing-page.html`, les huit surfaces en une page à redimensionner depuis 320 px ; `ui_kits/marketing/`, le prototype JSX des surfaces ; `uploads/`, les images sources ; `SKILL.md`, le skill de la marque. Aucun n'est livré : `package.json#files` s'arrête à `dist`, `*.css`, `assets` et `README.md`.
+- `preview/` — les planches HTML du système, dont `marketing-page.html`, les huit sections en une page à redimensionner depuis 320 px ; `ui_kits/marketing/`, le prototype JSX des sections ; `uploads/`, les images sources ; `SKILL.md`, le skill de la marque. Aucun n'est livré : `package.json#files` s'arrête à `dist`, `*.css`, `assets` et `README.md`.
 - `src/test-support/` — le rendu statique et `readableText`, le texte qu'un lecteur en reçoit, puis la lecture des fichiers livrés et celle des sources de `src/`, pour les specs ; hors build.
 
 ## Diagram
@@ -32,11 +32,11 @@
        │                     │
        ↓                     ↓
   `marketing` ──────────→ `primitives`
-  8 surfaces              6 primitives
+  8 sections              6 primitives
        │                     │
        │ class names         │ class names
        ↓                     ↓
-  sketch.css  .sk-* rules, surface layout, the five @media widths
+  sketch.css  .sk-* rules, section layout, the five @media widths
        │
        │ var(--…)
        ↓
@@ -67,7 +67,7 @@ Composants, depuis `.` :
 Feuilles de style, sous-chemins de `exports`, chargées une fois par site dans cet ordre :
 
 - `colors_and_type.css` — papier et encre ; les rampes `--brand-primary`, `--brand-secondary`, `--brand-accent` et `--brand-error`, chacune en base, `-soft` et `-deep` ; les familles `--font-sans`, `--font-script` et `--font-mono` ; l'échelle `--t-*`, dix pas en `clamp()` de 320 à 1536 px ; `--lh-*`, `--sp-1` à `--sp-9`, `--r-*`, `--measure` à 68ch ; les surligneurs `.highlight-*`. Chaque famille lit `--font-ibm-plex-sans`, `--font-ibm-plex-mono` ou `--font-caveat`, puis le nom de la face, puis une pile système ; le site robusta ne pose aucune de ces propriétés et auto-héberge les faces sous ces noms.
-- `sketch.css` — les classes `.sk-*` ; la mise en page des surfaces sous `.sk-<surface>`, `.sk-<surface>__<part>` et `--<modifier>`, en spécificité d'une classe et sans `!important`, qu'un sélecteur du site portant une classe de plus surcharge quel que soit l'ordre de chargement ; 40, 48, 64, 80 et 96rem, chacune dans un seul `@media (min-width)`, la base étant la mise en page étroite.
+- `sketch.css` — les classes `.sk-*` ; la mise en page des sections sous `.sk-<section>`, `.sk-<section>__<part>` et `--<modifier>`, en spécificité d'une classe et sans `!important`, qu'un sélecteur du site portant une classe de plus surcharge quel que soit l'ordre de chargement ; 40, 48, 64, 80 et 96rem, chacune dans un seul `@media (min-width)`, la base étant la mise en page étroite.
 
 Assets, sous `./assets/` : `crystal-tux.svg`, `crystal-tux.png`, `crystal-tux-head.svg`, `crystal-tux-waving.svg`, `crystal-tux-thinking.svg`, `robusta-build-wordmark.png`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
 

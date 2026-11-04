@@ -240,27 +240,27 @@
 }
 
 /* =========================================================
-   marketing surfaces — layout
+   marketing sections — layout
    =========================================================
 
-   One block per surface, named after the component in kebab-case:
-   `.sk-<surface>` for the root, `.sk-<surface>__<part>` for a part,
+   One block per section, named after the component in kebab-case:
+   `.sk-<section>` for the root, `.sk-<section>__<part>` for a part,
    `--<modifier>` for a variant — the rule `.sk-btn--primary` already
    follows, extended with a part separator.
 
-   These class names are the override surface. Every rule below is written
+   These class names are what a site overrides. Every rule below is written
    at single-class specificity and carries no `!important`, so a consuming
    site overrides one with a selector carrying one class more and wins
    whatever the load order — which matters, since a site's own stylesheet
    may well load before this file.
 
    Mobile-first: what follows is the narrow layout, and the responsive
-   section at the end of this file widens it. No surface declares a font
+   section at the end of this file widens it. No section declares a font
    size; every size reads a --t-* step of colors_and_type.css.
    ========================================================= */
 
 /* ---------- brand logo ----------
-   Not a surface — a primitive the header and the footer both embed. The
+   Not a section — a primitive the header and the footer both embed. The
    lockup has to be able to shrink, or the wordmark alone is wider than a
    320px viewport. The emoji glyph sizes and the tagline's indent stay
    inline: they are dimensions of the mark, tuned against the wordmark's
@@ -740,7 +740,7 @@
    Five widths — sm, md, lg, xl, 2xl at 640, 768, 1024, 1280 and 1536px, the
    Tailwind default set shadcn sits on. This package imports no Tailwind theme
    and inherits nothing: it restates the five values, so a site writing `md:`
-   and a surface's own query switch at the same width. Each appears in exactly
+   and a section's own query switch at the same width. Each appears in exactly
    one `@media` prelude below and nowhere else in this file.
 
    No --bp-* custom property ships. A media query cannot read one, so a token
@@ -806,7 +806,7 @@
   .sk-hero__doodle     { display: block; position: absolute; top: 60px; right: 50px; width: 80px; height: 60px; }
 }
 
-/* -------- 2xl — the surfaces reach the proportions they render at their
+/* -------- 2xl — the sections reach the proportions they render at their
    widest, which is where the type scale tops out as well -------- */
 @media (min-width: 96rem) {
   .sk-hero__mascot         { height: 360px; }

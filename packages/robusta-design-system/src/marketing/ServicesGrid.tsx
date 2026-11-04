@@ -23,7 +23,7 @@ export interface ServicesGridProps {
   eyebrow?: string;
   title?: string;
   services?: ServiceItem[];
-  /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
+  /** Renders the section's anchors, a router link for instance; a plain `<a>` when absent. */
   linkComponent?: SkLinkComponent;
   className?: string;
   style?: CSSProperties;

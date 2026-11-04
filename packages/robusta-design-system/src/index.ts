@@ -1,5 +1,5 @@
 /**
- * Package @robusta/pyramids-design-system — the robusta site's design system: its React primitives and marketing surfaces here, its stylesheets and brand assets as subpath exports (see README).
+ * Package @robusta/pyramids-design-system — the robusta site's design system: its React primitives and marketing sections here, its stylesheets and brand assets as subpath exports (see README).
  *
  * Design: features/pyramid-v2-epic/unblock-build/unblock-build.design.md
  * Requirements: R-UNBLOCKBUILD-1, R-UNBLOCKBUILD-2, R-UNBLOCKBUILD-3, R-UNBLOCKBUILD-5, R-UNBLOCKBUILD-11, R-UNBLOCKBUILD-12

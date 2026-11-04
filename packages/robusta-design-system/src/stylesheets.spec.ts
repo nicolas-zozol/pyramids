@@ -118,8 +118,8 @@ describe('breakpoints', () => {
   });
 });
 
-describe('layout override surface', () => {
-  const SURFACE_BLOCKS = [
+describe('layout overrides', () => {
+  const SECTION_BLOCKS = [
     'sk-hero',
     'sk-site-header',
     'sk-site-footer',
@@ -133,16 +133,16 @@ describe('layout override surface', () => {
   const selectors = [...sketch.matchAll(/([^{}]+)\{[^{}]*\}/g)]
     .flatMap(([, list]) => list.split(','))
     .map((selector) => selector.trim());
-  const surfaceSelectors = selectors.filter((selector) =>
-    SURFACE_BLOCKS.some((block) =>
+  const sectionSelectors = selectors.filter((selector) =>
+    SECTION_BLOCKS.some((block) =>
       new RegExp(`\\.${block}(?![a-z-])`).test(selector),
     ),
   );
 
-  it('writes every surface rule at single-class specificity', () => {
-    assert.ok(surfaceSelectors.length > 0);
+  it('writes every section rule at single-class specificity', () => {
+    assert.ok(sectionSelectors.length > 0);
     assert.deepEqual(
-      surfaceSelectors.filter((selector) => !/^\.[a-z0-9_-]+$/.test(selector)),
+      sectionSelectors.filter((selector) => !/^\.[a-z0-9_-]+$/.test(selector)),
       [],
     );
   });

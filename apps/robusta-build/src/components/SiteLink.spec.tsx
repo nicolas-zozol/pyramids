@@ -28,7 +28,7 @@ describe('SiteLink', () => {
     expect(html).toMatch(/<a [^>]*lang="en"[^>]*>English<\/a>/);
   });
 
-  it('serves as the design system’s link component, passing on the class a surface gives it', async () => {
+  it('serves as the design system’s link component, passing on the class a section gives it', async () => {
     const linkComponent: SkLinkComponent = SiteLink;
     const html = await renderInRouter(
       <SkButton href="/en/articles" linkComponent={linkComponent}>

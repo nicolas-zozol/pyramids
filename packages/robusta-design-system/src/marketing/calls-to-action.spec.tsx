@@ -20,11 +20,11 @@ function nestedInteractive(element: HostElement): HostElement[] {
   );
 }
 
-const SURFACES: { name: string; surface: ReactNode; destinations: string[] }[] =
+const SECTIONS: { name: string; section: ReactNode; destinations: string[] }[] =
   [
     {
       name: 'Hero',
-      surface: (
+      section: (
         <Hero
           primaryCtaLabel="écrire"
           primaryCtaHref="/contact"
@@ -36,7 +36,7 @@ const SURFACES: { name: string; surface: ReactNode; destinations: string[] }[] =
     },
     {
       name: 'CTA',
-      surface: (
+      section: (
         <CTA
           emailPlaceholder="votre e-mail"
           ctaLabel="écrire"
@@ -47,14 +47,14 @@ const SURFACES: { name: string; surface: ReactNode; destinations: string[] }[] =
     },
     {
       name: 'SiteHeader',
-      surface: <SiteHeader ctaLabel="écrire" ctaHref="/contact" />,
+      section: <SiteHeader ctaLabel="écrire" ctaHref="/contact" />,
       destinations: ['/contact'],
     },
   ];
 
-for (const { name, surface, destinations } of SURFACES) {
+for (const { name, section, destinations } of SECTIONS) {
   describe(`${name} calls to action`, () => {
-    const tree = renderStatic(surface);
+    const tree = renderStatic(section);
     const callsToAction = byClass(tree, 'sk-btn');
 
     it('are each one anchor carrying its destination', () => {

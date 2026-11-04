@@ -274,7 +274,7 @@ This system **avoids icon fonts** — they look too geometric and clean. Icons s
 **Approach (in order of preference):**
 
 1. **Inline hand-drawn SVGs** with `stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"` and slight path imperfections. The primitives in `sketch.css` (`.sk-arrow-right`, `.sk-check`, `.sk-circle`) are the seed of an icon set — extend it as needed.
-2. **Lucide via CDN** as a fallback for utility icons (chevrons, x, search, etc.) **with `stroke-width="1.6"` and a `class` that applies a slight `transform: rotate(-1deg)`** to fight the cleanness. This is a substitution — flag it whenever it appears in a real surface.
+2. **Lucide via CDN** as a fallback for utility icons (chevrons, x, search, etc.) **with `stroke-width="1.6"` and a `class` that applies a slight `transform: rotate(-1deg)`** to fight the cleanness. This is a substitution — flag it whenever it appears in a real section.
 3. **Unicode characters** are acceptable for terminal-style accents: `→ ← ↗ ✓ ✗ ~ //`.
 4. **No emoji** in the product itself, with one exception: the brand logo uses 💪 + 🏗 as its mark (see `BrandLogo.jsx`). They break tone everywhere else.
 
@@ -300,7 +300,7 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 
 The marketing sections carry their layout as classes of `sketch.css`, one block per section named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, and `.sk-brand-logo` for the logo. A part is `.sk-<section>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
 
-These class names are the override surface of the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A section root takes `className` and `style`, `style` applied last; no section takes a prop per part.
+These class names are what a site overrides in the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A section root takes `className` and `style`, `style` applied last; no section takes a prop per part.
 
 ---
 

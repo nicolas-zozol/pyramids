@@ -1,5 +1,5 @@
 /**
- * Package primitives — the brand lockup and the five `.sk-*` primitives the surfaces are composed of, with the link contract they render their anchors through.
+ * Package primitives — the brand lockup and the five `.sk-*` primitives the sections are composed of, with the link contract they render their anchors through.
  *
  * Design: features/pyramid-v2-epic/__done/design-system-responsive/design-system-responsive.design.md
  * Requirements: R-RESPONSIVE-03, R-RESPONSIVE-04, R-RESPONSIVE-41, R-RESPONSIVE-45, R-RESPONSIVE-63, R-RESPONSIVE-82, R-RESPONSIVE-83, R-RESPONSIVE-101, R-RESPONSIVE-105
