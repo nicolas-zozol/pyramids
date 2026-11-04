@@ -3,7 +3,7 @@
 **Last update:** 2026-11-04
 **Feature:** glossary-refresh
 **Infix:** GLOSSARY
-**Status:** APPROVED (2026-11-04 — validated by boss)
+**Status:** IMPLEMENTED (2026-11-04, commit 3ca46f9)
 **Sources:** [story](glossary-refresh.story.md), [brainstorm](glossary-refresh.brainstorm.md), [epic](../pyramid-v2.epic.md)
 
 ## Goal

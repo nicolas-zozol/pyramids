@@ -84,3 +84,15 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Phase : code (commit `bc568f7`). tddman interrompu par la limite d'API, repris sur le même arbre.
 - Checker : tests de robusta-build 552/552, lint, `tsc --noEmit` et `yarn build:robusta` verts (33 pages, 69 fichiers de données dont 13 roll pages et 3 locale rolls). AC-BLOGROLLS-3 prouvé sur fixture ; les 404 lus dans `dist` (fichiers absents), sans draft deploy, l'hébergeur ne changeant pas.
 - Décisions de tddman, sans effet sur la direction : un roll vide ne rend que son h1 ; `getLocaleRolls` rend `[]` pour une Locale sans article. La page copy des pages de listing (`ListingCopy` en, fr, es) est écrite par tddman : à relire par Nicolas.
+
+## D9 : blog-rolls soumise, glossary-refresh implémentée
+
+- blog-rolls, submit : commit `ab90ca6`, design IMPLEMENTED, story SUBMITTED, epicman update (nouvel item B4 listing-copy-review pour la page copy des pages de listing).
+- glossary-refresh, code : codeman plutôt que tddman, la story ne touche que `ubiquitous-language.md`, sans test à écrire. Commit `3ca46f9` : 12 entrées réécrites, 4 créées (RB Compound, Original, Stale translation, Module). AC-GLOSSARY-1 à 7 vérifiés sur le fichier.
+- Hors du design : l'entrée `Category` (« Chaque category a sa propre page ») et une entrée « Blog home » proposée par docman restent une suite, le design gardant les autres entrées mot pour mot.
+
+## D10 : glossary-refresh soumise, fin du batch B1
+
+- submit : design IMPLEMENTED, story SUBMITTED, item et titre de B1 retirés du ROADMAP, epicman update. B1 est vide ; B2 seo-excellence et B3 rb-compound-positioning n'attendent plus glossary-refresh.
+- Gap-PYRAMID-5, écrit par epicman dans l'epic (reformuler `Stale translation` pour enregistrer BR-PYRAMID-15) : `ask`, il touche le registre des BR. Resolution vide, pour Nicolas ; boss n'écrit pas l'epic.
+- Le run s'arrête après B1, comme la requête le demande (`batch B1`).

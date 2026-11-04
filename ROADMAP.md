@@ -27,12 +27,6 @@ Bootstrapped on 2026-07-29 by `/start` from the epic and from the flags left by 
 
 Les batches de l'epic pyramid-v2, dans l'ordre de priorité décidé le 2026-10-31 ; le raisonnement est dans la section À faire de `features/pyramid-v2-epic/pyramid-v2.epic.md`.
 
-### B1 — Pages de listing
-
-Ce qui doit précéder seo-excellence. Les trois stories se codent en parallèle.
-
-1. glossary-refresh — remettre `ubiquitous-language.md` à jour : les entrées prévues par multilingual-site (`Locale`, `Pyramid`, `Discriminant`, `Content source`, `Design system`, `Site` et `Site configuration` à réécrire, `Original`, `Stale translation` et `Module` à créer), `Canonical URL`, qui dit encore que toute autre forme d'une URL redirige en permanent, et `RB Compound`. Absorbe multilingual-glossary, canonical-url-glossary et la moitié glossaire de rb-compound-positioning. Avant le design de seo-excellence. Story : `features/pyramid-v2-epic/glossary-refresh/glossary-refresh.story.md`, ACTIVE.
-
 ### B2 — Indexation
 
 Après B1 ; go-live suit seo-excellence.
