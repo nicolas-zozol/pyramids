@@ -118,3 +118,13 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - bsman : Netlify ne pose pas `X-Robots-Tag: noindex` sur le dernier déploiement d'une branche (`epic-robusta-v2--robusta-build.netlify.app` répond 200 sans l'en-tête) : la build reste fermée hors production, par `CONTEXT`. `robusta-build.netlify.app` répond 200 sans redirection.
 - OQ-GOLIVE-1 : `decide`, signée `lgtm (bsman)`, gardée.
 - D13a — atw OQ-GOLIVE-2 — go-live.brainstorm.md — retained: la Proposition, un 301 forcé dans `netlify.toml` limité à l'hôte `robusta-build.netlify.app`, vers la même page sous `https://www.robusta.build`. Set aside: la copie ouverte rattachée par la seule canonical URL. Confidence: medium.
+
+## D14 : design de seo-excellence, tri des entrées
+
+- designman : DRAFT, 32 R-, package `seo` nouveau, scripts `emit-site-files.mjs` et `check-seo.mjs`. L'indexation reste fermée par une constante de build `INDEXING_OPEN`, `false` ; go-live la rend vraie en production seule.
+- OQ-SEOEXCELLENCE-35 : `decide`, signée `lgtm (designman)`.
+- D14a — atw Gap-SEOEXCELLENCE-31 — seo-excellence.design.md — retained: la Proposition, corriger les cinq corps à second `h1` (dont `leaving-gmail`, titre setext vérifié dans le corpus) dans les deux arbres, un seul commit. Set aside: s'en tenir aux quatre de la story. Confidence: high.
+- D14b — atw OQ-SEOEXCELLENCE-34 — seo-excellence.design.md — retained: la Proposition, `og:locale` en `en_US`, `fr_FR`, `es_ES`. Set aside: le code de Locale seul. Confidence: high.
+- D14c — atw OQ-SEOEXCELLENCE-33 — seo-excellence.design.md — retained: la Proposition, un `h2` et une liste de liens, et les textes de page copy proposés en trois Locales. Set aside: `NotesPreview` avec date et image. Confidence: medium. Ces textes sont rédigés par un agent : à relire avec listing-copy-review.
+- D14d — atw OQ-SEOEXCELLENCE-32 — seo-excellence.design.md — retained: la Proposition, le `<title>` d'un article est son titre seul. Set aside: un suffixe du nom du site. Confidence: medium.
+- `designman update` : les cinq entrées pliées, aucun contrat changé, aucune entrée nouvelle. Contrôle boss : AC-SEOEXCELLENCE-1 à 7 cités mot pour mot, `## Boundaries` rempli → APPROVED (validated by boss atw).
