@@ -128,3 +128,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - D14c — atw OQ-SEOEXCELLENCE-33 — seo-excellence.design.md — retained: la Proposition, un `h2` et une liste de liens, et les textes de page copy proposés en trois Locales. Set aside: `NotesPreview` avec date et image. Confidence: medium. Ces textes sont rédigés par un agent : à relire avec listing-copy-review.
 - D14d — atw OQ-SEOEXCELLENCE-32 — seo-excellence.design.md — retained: la Proposition, le `<title>` d'un article est son titre seul. Set aside: un suffixe du nom du site. Confidence: medium.
 - `designman update` : les cinq entrées pliées, aucun contrat changé, aucune entrée nouvelle. Contrôle boss : AC-SEOEXCELLENCE-1 à 7 cités mot pour mot, `## Boundaries` rempli → APPROVED (validated by boss atw).
+
+## D15 : design de go-live
+
+- designman : DRAFT, 7 R-. `INDEXING_OPEN` lu au build par un `define` de Vite ; 301 forcé de `robusta-build.netlify.app` vers `www` dans `netlify.toml`. OQ-GOLIVE-3 (`decide`, `lgtm (designman)`) pliée.
+- Vérifié par designman dans la doc Netlify et la source de netlify-cli 27.16.2 : un `netlify deploy` ou `netlify build` du CLI construit avec `CONTEXT=production` ; seul un build des serveurs Netlify pose `NETLIFY=true`.
+- D15a — atw Gap-GOLIVE-4 — go-live.design.md — retained: la Proposition, ouvrir seulement quand `NETLIFY=true` et `CONTEXT=production` ; la story est corrigée par `storyman update`. Set aside: documenter `--context deploy-preview`, qui laisse AC-GOLIVE-3 à la discipline de qui lance la commande. Confidence: high.
+- Reste ouvert, signalé : un `netlify deploy --remote` (build distant d'un draft) n'est pas documenté ; le README de go-live l'exclut des commandes de draft.
+- `designman update` et `storyman update` : Gap-GOLIVE-4 plié dans le design et la story, aucun contrat changé. Contrôle boss : AC-GOLIVE-1 à 7 cités mot pour mot, `## Boundaries` rempli → APPROVED (validated by boss atw).

@@ -13,7 +13,7 @@
 
 Le domaine sert déjà la v2 depuis la bascule DNS du 2026-10-06 (tanstack-start-migration), production sur la branche `main` de Netlify, mais la route racine déclare `robots: noindex, nofollow` sur chaque page. seo-excellence fait déclarer à chaque page son indexabilité, écrit le sitemap et `robots.txt`, et garde tout fermé jusqu'à go-live. go-live est l'ouverture : la racine garde `noindex` par défaut, chaque page que seo-excellence déclare indexable s'ouvre, et rien d'autre. C'est la décision de l'epic du 2026-10-06, OQ-LANDING-12 et OQ-SEOEXCELLENCE-19 répondues `lgtm`.
 
-Une page ne s'ouvre que si deux conditions sont réunies : seo-excellence la déclare indexable, et la build est celle de la production. Netlify n'ajoute `X-Robots-Tag: noindex` qu'aux deploy previews et aux anciens déploiements de branche : le dernier déploiement de `epic/robusta-v2` est public et sans cet en-tête, il s'ouvrirait dès le commit de go-live. La build se sait production par la variable `CONTEXT` de Netlify, ouverte seulement sur `production` ; une build locale ne la porte pas et reste fermée. La condition est fixée au build, et le head recalculé dans le navigateur dit la même chose que le HTML prérendu.
+Une page ne s'ouvre que si deux conditions sont réunies : seo-excellence la déclare indexable, et la build est celle de la production. Netlify n'ajoute `X-Robots-Tag: noindex` qu'aux deploy previews et aux anciens déploiements de branche : le dernier déploiement de `epic/robusta-v2` est public et sans cet en-tête, il s'ouvrirait dès le commit de go-live. La build se sait production par deux variables de Netlify, réunies : `NETLIFY=true`, posée par ses seuls serveurs de build et en lecture seule, et `CONTEXT=production`. Une build du CLI Netlify (`netlify deploy`, `netlify build`) porte `CONTEXT=production` mais pas `NETLIFY` : elle reste fermée, comme une build locale, qui ne porte aucune des deux. La condition est fixée au build, et le head recalculé dans le navigateur dit la même chose que le HTML prérendu.
 
 La production sert aussi `robusta-build.netlify.app`, en 200 : go-live le renvoie en 301 vers la même page sous `https://www.robusta.build`, pour qu'aucune copie ouverte ne vive sous un second hôte. L'apex `robusta.build` renvoie déjà vers `www`.
 
@@ -37,18 +37,18 @@ Hors périmètre : ce que chaque page déclare, le sitemap, `robots.txt`, les ca
   Arrow = depends on, from client code to the API it uses.
   Nothing points into an app, no loop.
 
-  Netlify build (sets CONTEXT)         crawlers
-      │                                   │
-      │ CLI                               │ HTTP
-      ↓                                   ↓
+  Netlify build (sets NETLIFY, CONTEXT)   crawlers
+      │                                      │
+      │ CLI                                  │ HTTP
+      ↓                                      ↓
   app `@robusta/robusta-build` [modified]
 ```
 
 ### CLI API of app `@robusta/robusta-build` — modified
 
-Client code : la build Netlify, et une build locale.
+Client code : la build Netlify, une build du CLI Netlify et une build locale.
 
-- `yarn build:robusta` · modifié — lit `CONTEXT` ; `production` ouvre les pages indexables, toute autre valeur ou son absence garde tout fermé. Codes de sortie inchangés.
+- `yarn build:robusta` · modifié — lit `NETLIFY` et `CONTEXT` ; seuls `NETLIFY=true` et `CONTEXT=production` ensemble ouvrent les pages indexables, toute autre combinaison, une build du CLI Netlify comprise, garde tout fermé. Codes de sortie inchangés.
 
 ### HTTP API of app `@robusta/robusta-build` — modified
 
@@ -61,7 +61,8 @@ Client code : crawlers.
 
 ## Documentation updates
 
-- change la section Netlify de `apps/robusta-build/README.md` — why: elle dit l'équipe en offre Free à 300 crédits, et ne dit ni que seule la build de production s'ouvre, ni que `robusta-build.netlify.app` renvoie vers `www`.
+- change la section Netlify de `apps/robusta-build/README.md` — why: elle dit l'équipe en offre Free à 300 crédits, et ne dit ni que seule la build de production s'ouvre, ni que `robusta-build.netlify.app` renvoie vers `www`. Elle nomme la commande de draft deploy, `npx netlify-cli deploy` sans `--prod`, fermée par construction, et exclut `netlify deploy --remote`, dont le `CONTEXT` n'est pas documenté.
+- change le paragraphe `noindex` de la section « Where the truth of this site lives » de `apps/robusta-build/README.md` — why: il dit `noindex, nofollow` sur chaque document et renvoie la levée à l'item go-live ; à go-live, seules les pages non indexables, et toute build hors production, le gardent.
 - change la ligne robusta.build de `README.md` et celle de `apps/robusta-build` dans `CLAUDE.md` — why: toutes deux disent `noindex` sur chaque page.
 - change la ligne go-live de `.claude/skills/geo-article/SKILL.md` — why: elle dit chaque page v2 `noindex` et aucun article citable.
 
