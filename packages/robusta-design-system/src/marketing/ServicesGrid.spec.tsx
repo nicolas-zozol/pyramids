@@ -85,43 +85,23 @@ describe('ServicesGrid link line of a card', () => {
   });
 });
 
-describe('ServicesGrid default services', () => {
-  const cards = cardsOf();
-
-  it('are the three cards of the prototype', () => {
-    assert.equal(cards.length, 3);
-  });
-
-  it('each carry the prototype line "see how it works" as text, with no destination', () => {
-    for (const card of cards) {
-      assert.deepEqual(textNodes(moreLineOf(card)), ['see how it works']);
-      assert.ok(carriesNoDestination(card));
-    }
-  });
-});
-
 describe('ServicesGrid rendered with every text prop', () => {
-  it('lets no text of the prototype reach the reader', () => {
-    const prototype = new Set(readableText(renderStatic(<ServicesGrid />)));
+  it('lets the texts it is given alone reach the reader', () => {
     const tree = renderStatic(
       <ServicesGrid
         eyebrow="Ce que nous faisons"
         title="Trois façons de travailler."
-        services={[
-          { ...AUDIT, tag: 'le plus demandé', tagTone: 'pink' },
-          {
-            ...EMBEDDED,
-            moreLabel: undefined,
-            tag: 'enjeux forts',
-            tagTone: 'blue',
-          },
-          { ...SURGERY, tag: 'ciblé', tagTone: 'green' },
-        ]}
+        services={[{ ...AUDIT, tag: 'le plus demandé', tagTone: 'pink' }]}
       />,
     );
-    assert.deepEqual(
-      readableText(tree).filter((text) => prototype.has(text)),
-      [],
-    );
+    assert.deepEqual(readableText(tree), [
+      'Ce que nous faisons',
+      'Trois façons de travailler.',
+      'le plus demandé',
+      "L'audit",
+      '2 à 3 semaines',
+      'Nous lisons votre code et vos incidents.',
+      'voir le déroulé',
+    ]);
   });
 });

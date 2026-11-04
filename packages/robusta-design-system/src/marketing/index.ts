@@ -7,6 +7,8 @@
  * Requirements: R-LANDING-21, R-LANDING-22, R-LANDING-23
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-46, R-MULTILINGUAL-65
+ * Design: features/pyramid-v2-epic/drop-section-default-copy/drop-section-default-copy.design.md
+ * Requirements: R-SECTIONCOPY-01, R-SECTIONCOPY-02, R-SECTIONCOPY-03, R-SECTIONCOPY-04, R-SECTIONCOPY-05
  */
 export { Hero, type HeroProps } from './Hero.tsx';
 export { SiteHeader, type SiteHeaderProps, type NavLink } from './SiteHeader.tsx';

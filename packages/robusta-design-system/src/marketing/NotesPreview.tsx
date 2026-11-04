@@ -16,7 +16,7 @@ export interface NotePost {
 export interface NotesPreviewProps {
   eyebrow?: string;
   title?: string;
-  /** Right-rail link label ("all notes"). Empty hides it. */
+  /** Right-rail link label. Empty hides it. */
   allLinkLabel?: string;
   allLinkHref?: string;
   posts?: NotePost[];
@@ -26,43 +26,16 @@ export interface NotesPreviewProps {
   style?: CSSProperties;
 }
 
-const DEFAULT_POSTS: NotePost[] = [
-  {
-    title: 'idempotency keys: a love letter',
-    tag: 'distributed systems',
-    tagTone: 'blue',
-    date: 'apr 12',
-  },
-  {
-    title: 'the audit memo we send every client',
-    tag: 'process',
-    tagTone: 'default',
-    date: 'mar 28',
-  },
-  {
-    title: 'why we still pick postgres',
-    tag: 'opinions',
-    tagTone: 'pink',
-    date: 'mar 04',
-  },
-  {
-    title: 'reading code is harder than writing it',
-    tag: 'craft',
-    tagTone: 'green',
-    date: 'feb 19',
-  },
-];
-
 /**
  * Engineering-blog preview grid: date + title + tag rows, one column below
  * `sm` and two above.
  */
 export function NotesPreview({
-  eyebrow = '// notes from the desk',
-  title = 'things we wrote down.',
-  allLinkLabel = 'all notes',
+  eyebrow,
+  title,
+  allLinkLabel,
   allLinkHref = '#notes',
-  posts = DEFAULT_POSTS,
+  posts = [],
   linkComponent: Link = PlainLink,
   className,
   style,
@@ -73,8 +46,10 @@ export function NotesPreview({
     <section id="notes" className={merged} style={style}>
       <div className="sk-notes-preview__head">
         <div>
-          <div className="sk-notes-preview__eyebrow">{eyebrow}</div>
-          <h2 className="sk-notes-preview__title">{title}</h2>
+          {eyebrow ? (
+            <div className="sk-notes-preview__eyebrow">{eyebrow}</div>
+          ) : null}
+          {title ? <h2 className="sk-notes-preview__title">{title}</h2> : null}
         </div>
         {allLinkLabel ? (
           <Link href={allLinkHref} className="sk-notes-preview__all">

@@ -22,21 +22,30 @@ function mascotOf(tree: StaticNode[]) {
 describe('Hero rendered without its text props', () => {
   const tree = renderStatic(<Hero mascotSrc={MASCOT} />);
 
-  it('captions the mascot with the prototype annotation, on two lines', () => {
-    const [annotation] = byClass(tree, 'sk-hero__annotation');
-    assert.deepEqual(textNodes([annotation]), [
-      'this is crystal tux.',
-      'she lives here.',
-    ]);
-    assert.equal(byTag([annotation], 'br').length, 1);
+  it('renders neither the eyebrow nor its arrow', () => {
+    assert.equal(byClass(tree, 'sk-hero__eyebrow').length, 0);
+    assert.equal(byClass(tree, 'sk-hero__eyebrow-arrow').length, 0);
   });
 
-  it('keeps the doodle arrow pointing from the annotation', () => {
-    assert.equal(byClass(tree, 'sk-hero__doodle').length, 1);
+  it('renders no h1 and no subtitle', () => {
+    assert.equal(byTag(tree, 'h1').length, 0);
+    assert.equal(byClass(tree, 'sk-hero__subtitle').length, 0);
   });
 
-  it('gives the mascot the prototype alt text', () => {
-    assert.equal(attribute(mascotOf(tree), 'alt'), 'crystal tux');
+  it('renders no call to action, no footnote, no caption and no doodle, the actions row staying', () => {
+    assert.equal(byClass(tree, 'sk-hero__actions').length, 1);
+    assert.equal(byClass(tree, 'sk-btn').length, 0);
+    assert.equal(byClass(tree, 'sk-hero__footnote').length, 0);
+    assert.equal(byClass(tree, 'sk-hero__annotation').length, 0);
+    assert.equal(byClass(tree, 'sk-hero__doodle').length, 0);
+  });
+
+  it('writes an empty alt on the mascot, decorative', () => {
+    assert.equal(attribute(mascotOf(tree), 'alt'), '');
+  });
+
+  it('lets no text reach the reader', () => {
+    assert.deepEqual(readableText(tree), []);
   });
 });
 
@@ -87,10 +96,7 @@ describe('Hero mascotAlt', () => {
 });
 
 describe('Hero rendered with every text prop', () => {
-  it('lets no text of the prototype reach the reader, alt text included', () => {
-    const prototype = new Set(
-      readableText(renderStatic(<Hero mascotSrc={MASCOT} />)),
-    );
+  it('lets the texts it is given alone reach the reader, alt text included', () => {
     const tree = renderStatic(
       <Hero
         eyebrow="Sites web rapides et applications sur mesure"
@@ -103,12 +109,24 @@ describe('Hero rendered with every text prop', () => {
         footnote="Disponible ce trimestre."
         mascotSrc={MASCOT}
         mascotAlt="Crystal Tux, la mascotte de Robusta Build"
-        annotation=""
+        annotation="Une seule légende."
       />,
     );
-    assert.deepEqual(
-      readableText(tree).filter((text) => prototype.has(text)),
-      [],
-    );
+    assert.deepEqual(readableText(tree), [
+      'Sites web rapides et applications sur mesure',
+      'Des logiciels que vous maintiendrez encore dans cinq ans.',
+      'Une petite équipe, une longue mémoire.',
+      'Prendre rendez-vous',
+      'Lire un audit',
+      'Disponible ce trimestre.',
+      'Une seule légende.',
+      'Crystal Tux, la mascotte de Robusta Build',
+    ]);
+  });
+
+  it('renders the eyebrow with its arrow', () => {
+    const tree = renderStatic(<Hero eyebrow="Sites web rapides" />);
+    const [eyebrow] = byClass(tree, 'sk-hero__eyebrow');
+    assert.equal(byClass([eyebrow], 'sk-hero__eyebrow-arrow').length, 1);
   });
 });

@@ -31,12 +31,12 @@ export interface CTAProps {
  * form when wiring submit behavior.
  */
 export function CTA({
-  title = 'ok, ready when you are.',
-  subtitle = "first call is 30 minutes, no slides. tell us what hurts. we'll tell you whether we're the right people to help.",
-  emailPlaceholder = 'your email',
-  ctaLabel = 'book a call →',
+  title,
+  subtitle,
+  emailPlaceholder,
+  ctaLabel,
   ctaHref = '#book',
-  footnote = 'no newsletter funnel. one human reads it. promise.',
+  footnote,
   mascotSrc = '',
   linkComponent,
   className,
@@ -49,7 +49,7 @@ export function CTA({
       {mascotSrc ? (
         <img className="sk-cta__mascot" src={mascotSrc} alt="" />
       ) : null}
-      <h2 className="sk-cta__title">{title}</h2>
+      {title ? <h2 className="sk-cta__title">{title}</h2> : null}
       {subtitle ? <p className="sk-cta__subtitle">{subtitle}</p> : null}
       <div className="sk-cta__form">
         {emailPlaceholder ? (

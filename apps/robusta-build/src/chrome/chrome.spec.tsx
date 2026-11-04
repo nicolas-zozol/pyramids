@@ -259,7 +259,7 @@ describe('Footer', () => {
       )?.[1];
 
     expect(bottom).toBe(
-      `<div>${htmlText(getPageCopy('en').footer.copyright)}</div><div></div>`,
+      `<div>${htmlText(getPageCopy('en').footer.copyright)}</div>`,
     );
   });
 

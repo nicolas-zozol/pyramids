@@ -85,10 +85,14 @@ export function textNodes(nodes: StaticNode[]): string[] {
   );
 }
 
-/** What a reader receives from the tree: its text nodes, then the alt texts of its images. */
+const READABLE_ATTRIBUTES = ['alt', 'placeholder', 'aria-label', 'title'];
+
+/** What a reader receives from the tree: its text nodes, then the non-empty alt, placeholder, aria-label and title of its elements. */
 export function readableText(nodes: StaticNode[]): string[] {
-  const altTexts = byTag(nodes, 'img')
-    .map((image) => attribute(image, 'alt'))
-    .filter((alt): alt is string => Boolean(alt));
-  return [...textNodes(nodes), ...altTexts];
+  const attributeTexts = hostElements(nodes).flatMap((element) =>
+    READABLE_ATTRIBUTES.map((name) => attribute(element, name)).filter(
+      (text): text is string => Boolean(text),
+    ),
+  );
+  return [...textNodes(nodes), ...attributeTexts];
 }

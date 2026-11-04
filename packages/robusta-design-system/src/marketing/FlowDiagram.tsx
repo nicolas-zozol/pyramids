@@ -16,8 +16,7 @@ export interface FlowDiagramProps {
   eyebrow?: string;
   /**
    * Section title. Pass a `ReactNode` to inline highlight spans (e.g.
-   * `<span className="highlight-pink">five steps.</span>`). The default
-   * preserves the prototype's pink-highlighted "five steps."
+   * `<span className="highlight-pink">five steps.</span>`).
    */
   title?: ReactNode;
   steps?: FlowStep[];
@@ -29,24 +28,6 @@ export interface FlowDiagramProps {
   style?: CSSProperties;
 }
 
-const DEFAULT_STEPS: FlowStep[] = [
-  { n: 1, label: 'hello', sub: '30 min, free' },
-  { n: 2, label: 'scope', sub: '1 page, written' },
-  { n: 3, label: 'audit', sub: '2–3 weeks' },
-  { n: 4, label: 'work', sub: 'embedded or scoped' },
-  { n: 5, label: 'handoff', sub: 'docs + a memo' },
-];
-
-const DEFAULT_TITLE = (
-  <>
-    no surprises. just <span className="highlight-pink">five steps.</span>
-  </>
-);
-
-const DEFAULT_CAVEAT = (
-  <>we'll say no if your problem isn't a fit. honestly, that happens about 1 in 3 calls.</>
-);
-
 /**
  * "How an engagement runs" flow diagram on dotted-grid paper. Each step is a
  * numbered circle + label + sub.
@@ -57,10 +38,10 @@ const DEFAULT_CAVEAT = (
  */
 export function FlowDiagram({
   id = 'approach',
-  eyebrow = '// how an engagement runs',
-  title = DEFAULT_TITLE,
-  steps = DEFAULT_STEPS,
-  caveat = DEFAULT_CAVEAT,
+  eyebrow,
+  title,
+  steps = [],
+  caveat,
   mascotSrc = '',
   className,
   style,
@@ -70,8 +51,10 @@ export function FlowDiagram({
   return (
     <section id={id} className={merged} style={style}>
       <div className="sk-flow-diagram__head">
-        <div className="sk-flow-diagram__eyebrow">{eyebrow}</div>
-        <h2 className="sk-flow-diagram__title">{title}</h2>
+        {eyebrow ? (
+          <div className="sk-flow-diagram__eyebrow">{eyebrow}</div>
+        ) : null}
+        {title ? <h2 className="sk-flow-diagram__title">{title}</h2> : null}
       </div>
       <div className="sk-flow-diagram__steps">
         {steps.map((s, i) => (

@@ -23,7 +23,7 @@ export interface SiteFooterProps {
   columns?: FooterColumn[];
   /** Bottom-left line. */
   copyright?: string;
-  /** Bottom-right line. Original prototype self-references the design system. */
+  /** Bottom-right line. */
   versionLine?: string;
   /** Renders the surface's anchors, a router link for instance; a plain `<a>` when absent. */
   linkComponent?: SkLinkComponent;
@@ -32,51 +32,15 @@ export interface SiteFooterProps {
 }
 
 /**
- * The package knows no site's URL, so its own defaults declare no
- * destination and render as text. A site supplying `columns` supplies real
- * links — which is the only honest way for a design system to ship default
- * copy it cannot resolve.
- */
-const DEFAULT_COLUMNS: FooterColumn[] = [
-  {
-    h: 'work',
-    items: [
-      { label: 'the audit' },
-      { label: 'embedded eng' },
-      { label: 'rebuild surgery' },
-      { label: 'past projects' },
-    ],
-  },
-  {
-    h: 'notes',
-    items: [
-      { label: 'all posts' },
-      { label: 'rss' },
-      { label: 'on github' },
-      { label: 'on bsky' },
-    ],
-  },
-  {
-    h: 'company',
-    items: [
-      { label: 'about' },
-      { label: 'engagement notes' },
-      { label: 'contact' },
-      { label: 'privacy' },
-    ],
-  },
-];
-
-/**
- * Site footer — brand block + three link columns + bottom line. One column
+ * Site footer — brand block, its link columns, then the bottom line. One column
  * below `sm`, two up to `lg`, and the 1.4fr/1fr/1fr/1fr row above.
  */
 export function SiteFooter({
   wordmarkSrc,
-  tagline = 'a small senior engineering practice.\nremote, distributed across europe + na.',
-  columns = DEFAULT_COLUMNS,
-  copyright = '© robusta build · made by hand, with care.',
-  versionLine = '// v1.0 · the system you\'re reading is itself.',
+  tagline,
+  columns = [],
+  copyright,
+  versionLine,
   linkComponent: Link = PlainLink,
   className,
   style,
@@ -87,7 +51,7 @@ export function SiteFooter({
     <footer className={merged} style={style}>
       <div className="sk-site-footer__brand">
         <BrandLogo size="compact" wordmarkSrc={wordmarkSrc} />
-        <p className="sk-site-footer__tagline">{tagline}</p>
+        {tagline ? <p className="sk-site-footer__tagline">{tagline}</p> : null}
       </div>
       {columns.map((col) => (
         <div key={col.h} className="sk-site-footer__col">
@@ -108,8 +72,8 @@ export function SiteFooter({
         </div>
       ))}
       <div className="sk-site-footer__bottom">
-        <div>{copyright}</div>
-        <div>{versionLine}</div>
+        {copyright ? <div>{copyright}</div> : null}
+        {versionLine ? <div>{versionLine}</div> : null}
       </div>
     </footer>
   );

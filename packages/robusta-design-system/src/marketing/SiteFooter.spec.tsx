@@ -44,14 +44,23 @@ describe('SiteFooter item', () => {
   });
 });
 
-describe('SiteFooter default columns', () => {
-  it('declare no destination, the package knowing no site URL', () => {
-    const columns = byClass(
-      renderStatic(<SiteFooter />),
-      'sk-site-footer__col',
+describe('SiteFooter rendered without text', () => {
+  const tree = renderStatic(<SiteFooter wordmarkSrc="/wordmark.png" />);
+
+  it('renders no column, no tagline and no bottom line, the bottom row staying', () => {
+    assert.equal(byClass(tree, 'sk-site-footer__col').length, 0);
+    assert.equal(byClass(tree, 'sk-site-footer__tagline').length, 0);
+    const [bottom] = byClass(tree, 'sk-site-footer__bottom');
+    assert.ok(bottom, 'the bottom row is rendered');
+    assert.deepEqual(bottom.children, []);
+  });
+
+  it('hides the version line it is given empty, the copyright alone staying', () => {
+    const [bottom] = byClass(
+      renderStatic(<SiteFooter copyright="© Robusta Build" versionLine="" />),
+      'sk-site-footer__bottom',
     );
-    assert.equal(columns.length, 3);
-    assert.equal(byTag(columns, 'a').length, 0);
-    assert.equal(byTag(columns, 'li').length, 12);
+    assert.equal(bottom.children.length, 1);
+    assert.deepEqual(textNodes([bottom]), ['© Robusta Build']);
   });
 });

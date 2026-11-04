@@ -9,7 +9,6 @@ export interface HeroProps {
   /**
    * Main headline. Pass a `ReactNode` if you want inline scribble/highlight
    * spans (e.g. `<span className="highlight-yellow">five years.</span>`).
-   * Default preserves the original prototype copy with sketch decorations.
    */
   title?: ReactNode;
   /** Sub-paragraph below the headline. */
@@ -34,55 +33,19 @@ export interface HeroProps {
   style?: CSSProperties;
 }
 
-const DEFAULT_ANNOTATION = (
-  <>
-    this is crystal tux.
-    <br />
-    she lives here.
-  </>
-);
-
-const DEFAULT_TITLE = (
-  <>
-    we build software
-    <br />
-    you can still{' '}
-    <span className="sk-scribble sk-hero__title-scribble">maintain</span> in
-    <br />
-    <span className="highlight-yellow">five years.</span>
-  </>
-);
-
-const DEFAULT_SUBTITLE = (
-  <>
-    small team. long memory. for high-stakes systems where
-    <span className="highlight-blue">
-      {' '}architecture, reliability, and the next engineer
-    </span>{' '}
-    all matter.
-  </>
-);
-
-const DEFAULT_FOOTNOTE = (
-  <>
-    <span className="sk-check" />
-    currently booking q3 · 2 slots left this quarter
-  </>
-);
-
-/** Marketing hero — headline, subtitle, two calls to action and the captioned mascot, every text a prop defaulting to the prototype copy. */
+/** Marketing hero — headline, subtitle, two calls to action and the captioned mascot; each text a prop, its element rendered only when the text is given. */
 export function Hero({
-  eyebrow = 'independent senior engineering',
-  title = DEFAULT_TITLE,
-  subtitle = DEFAULT_SUBTITLE,
-  primaryCtaLabel = 'book a call →',
+  eyebrow,
+  title,
+  subtitle,
+  primaryCtaLabel,
   primaryCtaHref = '#book',
-  secondaryCtaLabel = 'read a sample audit',
+  secondaryCtaLabel,
   secondaryCtaHref = '#audit',
-  footnote = DEFAULT_FOOTNOTE,
+  footnote,
   mascotSrc = '',
-  mascotAlt = 'crystal tux',
-  annotation = DEFAULT_ANNOTATION,
+  mascotAlt = '',
+  annotation,
   linkComponent,
   className,
   style,
@@ -93,16 +56,18 @@ export function Hero({
     <section className={merged} style={style}>
       <div className="sk-hero__grid">
         <div className="sk-hero__copy">
-          <div className="sk-hero__eyebrow">
-            <SkArrowRight
-              width={38}
-              verticalAlign="middle"
-              className="sk-hero__eyebrow-arrow"
-            />
-            {eyebrow}
-          </div>
-          <h1 className="sk-hero__title">{title}</h1>
-          <p className="sk-hero__subtitle">{subtitle}</p>
+          {eyebrow ? (
+            <div className="sk-hero__eyebrow">
+              <SkArrowRight
+                width={38}
+                verticalAlign="middle"
+                className="sk-hero__eyebrow-arrow"
+              />
+              {eyebrow}
+            </div>
+          ) : null}
+          {title ? <h1 className="sk-hero__title">{title}</h1> : null}
+          {subtitle ? <p className="sk-hero__subtitle">{subtitle}</p> : null}
           <div className="sk-hero__actions">
             {primaryCtaLabel ? (
               <SkButton

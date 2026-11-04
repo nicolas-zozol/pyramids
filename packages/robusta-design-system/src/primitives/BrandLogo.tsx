@@ -39,7 +39,7 @@ const emojiStyle = (h: number): CSSProperties => ({
 /** The 💪 + 🏗 + "robusta build" wordmark lockup, its `full` variant carrying the tagline beneath. */
 export function BrandLogo({
   size = 'compact',
-  tagline = 'senior engineering, hand-built.',
+  tagline,
   wordmarkSrc = DEFAULT_WORDMARK_SRC,
   style,
   className,

@@ -61,9 +61,12 @@ describe('SiteHeader rendered without homeHref nor a link locale', () => {
   });
 
   it('writes the attributes of each link it wrote before, in the same order', () => {
+    const links = ['#work', '#notes'].map((href) => ({ label: href, href }));
     assert.deepEqual(
-      linksOf(<SiteHeader />).map((link) => Object.entries(link.props)),
-      ['#work', '#approach', '#notes', '#about'].map((href) => [
+      linksOf(<SiteHeader links={links} />).map((link) =>
+        Object.entries(link.props),
+      ),
+      ['#work', '#notes'].map((href) => [
         ['href', href],
         ['className', 'sk-site-header__link'],
       ]),
@@ -75,5 +78,15 @@ describe('SiteHeader rendered without homeHref nor a link locale', () => {
       renderStatic(<SiteHeader />),
       renderStatic(<SiteHeader homeHref="/" />),
     );
+  });
+});
+
+describe('SiteHeader rendered without text', () => {
+  const tree = renderStatic(<SiteHeader ctaHref="/contact" />);
+
+  it('renders no link and no call to action, its nav staying', () => {
+    assert.equal(byClass(tree, 'sk-site-header__nav').length, 1);
+    assert.equal(byClass(tree, 'sk-site-header__link').length, 0);
+    assert.equal(byClass(tree, 'sk-btn').length, 0);
   });
 });

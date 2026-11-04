@@ -39,7 +39,12 @@ const SURFACES: {
   {
     name: 'SiteHeader',
     render: (linkComponent) => (
-      <SiteHeader ctaHref="mailto:x@y.z" linkComponent={linkComponent} />
+      <SiteHeader
+        links={[{ label: 'notes', href: '/articles' }]}
+        ctaLabel="écrire"
+        ctaHref="mailto:x@y.z"
+        linkComponent={linkComponent}
+      />
     ),
   },
   {
@@ -63,7 +68,9 @@ const SURFACES: {
     name: 'Hero',
     render: (linkComponent) => (
       <Hero
+        primaryCtaLabel="écrire"
         primaryCtaHref="mailto:x@y.z"
+        secondaryCtaLabel="profil"
         secondaryCtaHref="https://example.org"
         linkComponent={linkComponent}
       />
@@ -72,13 +79,18 @@ const SURFACES: {
   {
     name: 'CTA',
     render: (linkComponent) => (
-      <CTA ctaHref="mailto:x@y.z" linkComponent={linkComponent} />
+      <CTA
+        ctaLabel="écrire"
+        ctaHref="mailto:x@y.z"
+        linkComponent={linkComponent}
+      />
     ),
   },
   {
     name: 'NotesPreview',
     render: (linkComponent) => (
       <NotesPreview
+        allLinkLabel="tous les articles"
         allLinkHref="/articles"
         posts={[
           {

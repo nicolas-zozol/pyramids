@@ -1,15 +1,4 @@
-import {
-  BrandLogo,
-  CTA,
-  FlowDiagram,
-  Hero,
-  NotesPreview,
-  PrinciplesList,
-  SiteFooter,
-  SiteHeader,
-  type NotePost,
-} from '@robusta/pyramids-design-system';
-import { renderToStaticMarkup } from 'react-dom/server';
+import type { NotePost } from '@robusta/pyramids-design-system';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.ts';
 import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
@@ -31,6 +20,7 @@ import { LandingPage } from './index.ts';
 const { contact } = getSeoPyramidsConfig();
 const MAILTO = `mailto:${contact.email}`;
 const WITH_NOTES: Locale[] = ['en', 'fr'];
+const BRAND = ['💪', '🏗', 'Robusta Build'];
 
 /** A landing page as the prerender writes it: the chrome around it, on the real feed of its Locale. */
 async function landingPage(
@@ -49,6 +39,36 @@ async function landingPage(
     </>,
     buildUrl(urlScheme, page),
   );
+}
+
+/** Every text the site supplies to the landing page of `locale`, as React DOM escapes it. */
+async function suppliedTexts(locale: Locale): Promise<Set<string>> {
+  const copy = getPageCopy(locale);
+  const { openSource, complete } = copy.landing;
+  const otherLocaleNames = LOCALES.filter((other) => other !== locale).map(
+    (other) => getPageCopy(other).localeName,
+  );
+  const feed = await notesFeed({ locale, limit: 4 });
+  const stepNumbers = [openSource, complete].flatMap((flow) =>
+    flow.steps.map((step) => String(step.n)),
+  );
+
+  return new Set(
+    [
+      ...stringsOf(copy),
+      ...otherLocaleNames,
+      contact.email,
+      ...feed.flatMap((post) => [post.title, post.date]),
+      ...stepNumbers,
+      ...BRAND,
+    ].map(htmlText),
+  );
+}
+
+function stringsOf(value: unknown): string[] {
+  if (typeof value === 'string') return [value];
+  if (typeof value !== 'object' || value === null) return [];
+  return Object.values(value).flatMap(stringsOf);
 }
 
 const sectionOf = (html: string, marker: string): string =>
@@ -166,30 +186,13 @@ describe('the two diagrams of a landing page', () => {
 });
 
 describe('the words of the landing page', () => {
-  it('reach a reader with none of the design system’s prototype copy, alt texts included (AC-LANDING-2)', () => {
-    const brand = new Set(
-      readableTexts(renderToStaticMarkup(<BrandLogo size="compact" />)),
-    );
-    const prototype = [
-      <SiteHeader key="header" />,
-      <Hero key="hero" mascotSrc="x.svg" />,
-      <FlowDiagram key="flow" mascotSrc="x.svg" />,
-      <PrinciplesList key="principles" />,
-      <NotesPreview key="notes" />,
-      <CTA key="cta" />,
-      <SiteFooter key="footer" />,
-    ]
-      .flatMap((surface) => readableTexts(renderToStaticMarkup(surface)))
-      .filter((text) => !brand.has(text))
-      // The badges of the diagram's steps, numbers and not copy.
-      .filter((text) => !/^\d+$/.test(text));
-
-    expect(prototype.length).toBeGreaterThan(20);
-    for (const [locale, page] of Object.entries(pages)) {
-      const read = new Set(readableTexts(page));
+  it('reach a reader with no text the site does not supply, header, footer and alt texts included (AC-LANDING-2)', async () => {
+    for (const locale of LOCALES) {
+      const supplied = await suppliedTexts(locale);
+      const page = pages[locale];
 
       expect(
-        prototype.filter((text) => read.has(text)),
+        readableTexts(page).filter((text) => !supplied.has(text)),
         locale,
       ).toEqual([]);
       expect(page).not.toMatch(

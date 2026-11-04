@@ -21,10 +21,10 @@ function rootOf(tree: ReturnType<typeof renderStatic>): HostElement {
 }
 
 describe('BrandLogo full variant', () => {
-  it('renders the prototype tagline under the lockup by default', () => {
-    const root = rootOf(renderStatic(<BrandLogo size="full" />));
-    assert.equal(root.children.length, 2);
-    assert.deepEqual(textNodes([root.children[1]]), [PROTOTYPE_TAGLINE]);
+  it('renders the lockup alone when no tagline is given', () => {
+    const tree = renderStatic(<BrandLogo size="full" />);
+    assert.equal(rootOf(tree).children.length, 1);
+    assert.deepEqual(readableText(tree), BRAND_MARK);
   });
 
   it('renders the tagline it is given', () => {
@@ -44,17 +44,16 @@ describe('BrandLogo full variant', () => {
     assert.ok(!textNodes([root]).includes(PROTOTYPE_TAGLINE));
   });
 
-  it('lets no text of the prototype reach the reader when its tagline is supplied, the brand mark aside', () => {
-    const prototype = new Set(
-      readableText(renderStatic(<BrandLogo size="full" />)),
-    );
+  it('lets the brand mark and the tagline it is given alone reach the reader', () => {
     const tree = renderStatic(
       <BrandLogo size="full" tagline="Ingénierie senior, faite main." />,
     );
-    assert.deepEqual(
-      readableText(tree).filter((text) => prototype.has(text)),
-      BRAND_MARK,
-    );
+    assert.deepEqual(readableText(tree), [
+      '💪',
+      '🏗',
+      'Ingénierie senior, faite main.',
+      'Robusta Build',
+    ]);
   });
 });
 

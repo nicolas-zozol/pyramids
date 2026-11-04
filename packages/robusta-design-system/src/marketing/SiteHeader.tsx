@@ -27,13 +27,6 @@ export interface SiteHeaderProps {
   style?: CSSProperties;
 }
 
-const DEFAULT_LINKS: NavLink[] = [
-  { label: 'work', href: '#work' },
-  { label: 'approach', href: '#approach' },
-  { label: 'notes', href: '#notes' },
-  { label: 'about', href: '#about' },
-];
-
 /**
  * Top nav: logo on the left, link list + primary CTA on the right. Below
  * `md` the three parts stack and centre; the layout lives in `.sk-site-header`
@@ -45,8 +38,8 @@ const DEFAULT_LINKS: NavLink[] = [
 export function SiteHeader({
   wordmarkSrc,
   homeHref = '/',
-  links = DEFAULT_LINKS,
-  ctaLabel = 'book a call',
+  links = [],
+  ctaLabel,
   ctaHref = '#book',
   linkComponent: Link = PlainLink,
   className,

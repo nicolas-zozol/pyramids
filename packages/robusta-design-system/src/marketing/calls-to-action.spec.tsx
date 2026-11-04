@@ -24,17 +24,30 @@ const SURFACES: { name: string; surface: ReactNode; destinations: string[] }[] =
   [
     {
       name: 'Hero',
-      surface: <Hero primaryCtaHref="/contact" secondaryCtaHref="/audit" />,
+      surface: (
+        <Hero
+          primaryCtaLabel="écrire"
+          primaryCtaHref="/contact"
+          secondaryCtaLabel="lire un audit"
+          secondaryCtaHref="/audit"
+        />
+      ),
       destinations: ['/contact', '/audit'],
     },
     {
       name: 'CTA',
-      surface: <CTA ctaHref="/contact" />,
+      surface: (
+        <CTA
+          emailPlaceholder="votre e-mail"
+          ctaLabel="écrire"
+          ctaHref="/contact"
+        />
+      ),
       destinations: ['/contact'],
     },
     {
       name: 'SiteHeader',
-      surface: <SiteHeader ctaHref="/contact" />,
+      surface: <SiteHeader ctaLabel="écrire" ctaHref="/contact" />,
       destinations: ['/contact'],
     },
   ];

@@ -32,11 +32,13 @@ export function classNames(html: string): string[] {
   return [...new Set(names)];
 }
 
-/** What a reader receives: the text nodes, then the alt texts, unescaped HTML left as written. */
+/** What a reader receives: the text nodes, then the non-empty alt, placeholder, aria-label and title, unescaped HTML left as written. */
 export function readableTexts(html: string): string[] {
   const texts = [...html.matchAll(/>([^<]+)</g)]
     .map(([, text]) => text.trim())
     .filter(Boolean);
-  const alts = [...html.matchAll(/\salt="([^"]+)"/g)].map(([, alt]) => alt);
-  return [...texts, ...alts];
+  const attributes = [
+    ...html.matchAll(/\s(?:alt|placeholder|aria-label|title)="([^"]+)"/g),
+  ].map(([, text]) => text);
+  return [...texts, ...attributes];
 }

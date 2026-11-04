@@ -29,7 +29,7 @@ const MASCOT = '/assets/crystal-tux.svg';
 const LOCKUP_GLYPHS = ['💪', '🏗'];
 
 const EVERY_COMPONENT: ReactNode[] = [
-  <BrandLogo key="full" size="full" />,
+  <BrandLogo key="full" size="full" tagline="x" />,
   <BrandLogo key="compact" size="compact" />,
   <BrandLogo key="mark" size="mark" />,
   <SkButton key="button">x</SkButton>,

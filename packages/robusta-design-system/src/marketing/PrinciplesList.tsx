@@ -15,38 +15,14 @@ export interface PrinciplesListProps {
   style?: CSSProperties;
 }
 
-const DEFAULT_PRINCIPLES: Principle[] = [
-  { k: 'we read before we write.', v: 'no commits in the first week. promise.' },
-  {
-    k: 'boring tech, on purpose.',
-    v: 'postgres, sql, http. fewer moving parts is the feature.',
-  },
-  {
-    k: 'the next engineer matters most.',
-    v: 'every choice is a memo to whoever inherits it.',
-  },
-  {
-    k: "we don't take work we can't finish.",
-    v: 'small slate. long horizons. quarter-shaped projects.',
-  },
-  {
-    k: 'tests are documentation.',
-    v: "if it isn't covered, we don't know how it should behave.",
-  },
-  {
-    k: 'incidents are not surprises.',
-    v: 'they are the signal that an invariant was wrong.',
-  },
-];
-
 /**
  * List of values, sketchnote bullet style. Each row is a checkmark + bold
  * key line + sub caption. One column below `sm`, two above.
  */
 export function PrinciplesList({
-  eyebrow = '// what we believe',
-  title = 'principles, written down.',
-  principles = DEFAULT_PRINCIPLES,
+  eyebrow,
+  title,
+  principles = [],
   className,
   style,
 }: PrinciplesListProps) {
@@ -55,8 +31,10 @@ export function PrinciplesList({
   return (
     <section className={merged} style={style}>
       <div className="sk-principles-list__head">
-        <div className="sk-principles-list__eyebrow">{eyebrow}</div>
-        <h2 className="sk-principles-list__title">{title}</h2>
+        {eyebrow ? (
+          <div className="sk-principles-list__eyebrow">{eyebrow}</div>
+        ) : null}
+        {title ? <h2 className="sk-principles-list__title">{title}</h2> : null}
       </div>
       <ul className="sk-principles-list__items">
         {principles.map((it, i) => (
