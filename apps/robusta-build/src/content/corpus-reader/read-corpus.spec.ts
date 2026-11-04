@@ -337,8 +337,18 @@ describe('readCorpus — the schema', () => {
 
     expect(violations).toEqual(
       expect.arrayContaining([
-        { code: 'malformed-date', path: 'shape.md', date: '20/01/2022' },
-        { code: 'malformed-date', path: 'calendar.md', date: '2022-02-31' },
+        {
+          code: 'malformed-date',
+          path: 'shape.md',
+          field: 'date',
+          date: '20/01/2022',
+        },
+        {
+          code: 'malformed-date',
+          path: 'calendar.md',
+          field: 'date',
+          date: '2022-02-31',
+        },
       ]),
     );
   });
@@ -354,6 +364,51 @@ describe('readCorpus — the schema', () => {
 
     expect(violations).toEqual([]);
     expect(articles[0].date).toBe('2021-11-30');
+  });
+
+  // R-SEOEXCELLENCE-101: `updated` is optional, read and refused as `date` is.
+  it('reads an optional update date, quoted or as a YAML timestamp, and none when it is absent', async () => {
+    const root = await writeCorpus({
+      'quoted.md': article(
+        `title: 'A'\nlocale: 'en'\ndate: '2021-11-30'\nupdated: '2024-02-01'\nauthor: 'Nina'\npublished: true`,
+      ),
+      'unquoted.md': article(
+        `title: 'B'\nlocale: 'en'\ndate: '2021-11-29'\nupdated: 2024-03-04\nauthor: 'Nina'\npublished: true`,
+      ),
+      'never.md': article(
+        `title: 'C'\nlocale: 'en'\ndate: '2021-11-28'\nauthor: 'Nina'\npublished: true`,
+      ),
+    });
+
+    const { articles, violations } = await readCorpus(spec(root));
+    const updatedOf = (path: string) =>
+      articles.find((entry) => entry.path === path)?.updated;
+
+    expect(violations).toEqual([]);
+    expect(updatedOf('quoted.md')).toBe('2024-02-01');
+    expect(updatedOf('unquoted.md')).toBe('2024-03-04');
+    expect(
+      articles.find((entry) => entry.path === 'never.md'),
+    ).not.toHaveProperty('updated');
+  });
+
+  it('refuses an update date that is not a YYYY-MM-DD calendar date, naming the field', async () => {
+    const root = await writeCorpus({
+      'shape.md': article(
+        `title: 'A'\nlocale: 'en'\ndate: '2022-01-20'\nupdated: 'last week'\nauthor: 'Nina'\npublished: true`,
+      ),
+    });
+
+    const { violations } = await readCorpus(spec(root));
+
+    expect(violations).toEqual([
+      {
+        code: 'malformed-date',
+        path: 'shape.md',
+        field: 'updated',
+        date: 'last week',
+      },
+    ]);
   });
 
   it('names the file whose frontmatter cannot be read', async () => {

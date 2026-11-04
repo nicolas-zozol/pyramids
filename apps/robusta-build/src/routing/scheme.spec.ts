@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { corpus } from '../content/corpus.ts';
-import { LOCALES, urlScheme } from './scheme.ts';
+import { LOCALES, NOTES_FEED_SIZE, SITE_ORIGIN, urlScheme } from './scheme.ts';
 
 /** The first segments a Locale must never take: the content root and the first segment of the asset root. */
 function firstSegmentsTakenBy(
@@ -45,5 +45,16 @@ describe('the first segment of a site URL', () => {
     expect(
       collidingLocales(LOCALES, urlScheme.contentRoot, assetUrlPrefix ?? ''),
     ).toEqual([]);
+  });
+});
+
+// R-SEOEXCELLENCE-44: the host of every canonical URL and the size of the notes feed.
+describe('the SEO constants of the scheme', () => {
+  it('names https://www.robusta.build as the origin of the site, with no trailing slash', () => {
+    expect(SITE_ORIGIN).toBe('https://www.robusta.build');
+  });
+
+  it('lists four notes on a landing page', () => {
+    expect(NOTES_FEED_SIZE).toBe(4);
   });
 });

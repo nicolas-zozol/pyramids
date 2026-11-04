@@ -1,26 +1,42 @@
 import { buildUrl } from '../routing/url-scheme/index.ts';
-import { getArticleBody, getAssetUrl } from '../content/article-index.ts';
-import { findArticle } from '../content/article-lookup.ts';
+import {
+  getArticleBody,
+  getAssetUrl,
+  getExcerptText,
+} from '../content/article-index.ts';
+import { findArticle, findRelated } from '../content/article-lookup.ts';
 import { urlScheme } from '../routing/scheme.ts';
-import { articlePageUrl } from './article-url.ts';
+import { articlePageUrl, articleUrl } from './article-url.ts';
 import { pageCounterparts } from './page-counterparts.ts';
 import type { ArticleKey, ArticlePage } from './types.ts';
 
-/** Everything one article page renders, read from the seams at build. */
+const RELATED_LIMIT = 3;
+
+/** Everything one article page renders and declares, read from the seams at build. */
 export async function articlePage({
   locale,
   slug,
 }: ArticleKey): Promise<ArticlePage> {
   const article = await findArticle(locale, slug);
-  const [{ html }, versions] = await Promise.all([
+  const [{ html }, versions, related] = await Promise.all([
     getArticleBody(article),
     pageCounterparts(articlePageUrl(article)),
+    findRelated(article, RELATED_LIMIT),
   ]);
 
   return {
     article,
+    url: articleUrl(article),
+    description: getExcerptText(article),
     html,
     writtenDate: writtenDate(article.date, article.locale),
+    ...(article.updated === undefined
+      ? {}
+      : { writtenUpdated: writtenDate(article.updated, article.locale) }),
+    related: related.map((entry) => ({
+      title: entry.title,
+      url: articleUrl(entry),
+    })),
     versions: versions.map((version) => ({
       locale: version.locale,
       url: buildUrl(urlScheme, version),

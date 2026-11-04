@@ -2,7 +2,12 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import { getArticleIndex } from './content/article-index.ts';
-import { LOCALES, urlScheme, type Locale } from './routing/scheme.ts';
+import {
+  LOCALES,
+  SITE_ORIGIN,
+  urlScheme,
+  type Locale,
+} from './routing/scheme.ts';
 import {
   getCategoryLabel,
   getPageCopy,
@@ -56,6 +61,42 @@ describe('the Site configuration', () => {
 
     expect(config).not.toHaveProperty('siteTitle');
     expect(config).not.toHaveProperty('mission');
+  });
+});
+
+// R-SEOEXCELLENCE-121, 122 and 44.
+describe('the SEO of the Site configuration', () => {
+  it('declares no mandatory keyword', () => {
+    expect(getSeoPyramidsConfig().blogConfig).not.toHaveProperty(
+      'mandatoryKeywords',
+    );
+  });
+
+  it('reads its domain from the origin of the scheme', () => {
+    expect(getSeoPyramidsConfig().domain).toBe(SITE_ORIGIN);
+  });
+
+  it('titles the Related articles, prefixes the update date and names the breadcrumb in each Locale', () => {
+    const texts = (locale: Locale) => {
+      const { article, breadcrumb } = getPageCopy(locale);
+      return [article.relatedTitle, article.updatedPrefix, breadcrumb.navLabel];
+    };
+
+    expect(texts('en')).toEqual([
+      'Related articles',
+      'Updated on',
+      'Breadcrumb',
+    ]);
+    expect(texts('fr')).toEqual([
+      'Articles liés',
+      'Mis à jour le',
+      "Fil d'Ariane",
+    ]);
+    expect(texts('es')).toEqual([
+      'Artículos relacionados',
+      'Actualizado el',
+      'Ruta de navegación',
+    ]);
   });
 });
 

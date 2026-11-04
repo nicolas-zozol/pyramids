@@ -50,6 +50,8 @@ export interface ArticleEntry {
   title: string;
   /** `YYYY-MM-DD`. */
   date: string;
+  /** `YYYY-MM-DD`, the day the article was last revised; absent when it declares none. */
+  updated?: string;
   /** Read from the frontmatter. Required, like the title and the date. */
   author: string;
   tags: readonly string[];
@@ -80,7 +82,12 @@ export type CorpusViolation =
       path: string;
       field: 'title' | 'date' | 'locale' | 'excerpt' | 'author';
     }
-  | { code: 'malformed-date'; path: string; date: string }
+  | {
+      code: 'malformed-date';
+      path: string;
+      field: 'date' | 'updated';
+      date: string;
+    }
   | { code: 'non-boolean-published'; path: string; value: string }
   | {
       code: 'duplicate-translation-id';

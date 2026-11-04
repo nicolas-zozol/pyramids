@@ -11,7 +11,7 @@ featured: true
 translationId: yield-farming
 original:
   locale: "fr"
-  fingerprint: "96d4eef9a099"
+  fingerprint: "bba7d0482dcb"
 ---
 
 The Blockchain is not just a Ponzi scheme. This article explains where the money that fuels DeFi actually comes from.
@@ -20,7 +20,7 @@ The Blockchain is not just a Ponzi scheme. This article explains where the money
 
 This article provides information, not financial advice. Only invest your *fun money*: the amount you can afford to lose without worry!
 
-# Yield Farming in cryptocurrencies: where does the “magical DeFi money” come from?
+## Yield Farming in cryptocurrencies: where does the “magical DeFi money” come from?
 
 Yield farming is a process that aims to generate more assets from an initial portfolio. This process can use very aggressive strategies or more passive ones.
 

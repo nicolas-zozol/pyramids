@@ -11,6 +11,8 @@
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
  * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-04, R-ROOTLOCALE-42, R-ROOTLOCALE-81
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-04, R-SEOEXCELLENCE-22, R-SEOEXCELLENCE-42, R-SEOEXCELLENCE-44
  */
 import type { UrlScheme } from './url-scheme/index.ts';
 
@@ -20,6 +22,12 @@ import type { UrlScheme } from './url-scheme/index.ts';
  * testable at any value; what is fixed is the value this site supplies.
  */
 export const ROLL_SIZE = 12;
+
+/** The host of every canonical URL, with no trailing slash; the Site configuration's `domain` reads it. */
+export const SITE_ORIGIN = 'https://www.robusta.build';
+
+/** The notes a landing page lists. */
+export const NOTES_FEED_SIZE = 4;
 
 /** The site's three Locales, the default one first. */
 export const LOCALES = ['en', 'fr', 'es'] as const;

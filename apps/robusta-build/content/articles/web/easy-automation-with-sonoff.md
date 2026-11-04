@@ -16,8 +16,6 @@ a bit of Javascript.
 
 ---
 
-# Easy automation with Sonoff and Javascript
-
 ## Sonoff
 
 [Sonoff](https://amzn.to/39a54eI) is a company that builds smart and cheap components (5$ - 40$), compatible with IFTTT softwares. Some competitors of Sonoff are first [Shelly](https://amzn.to/38YKjm4), but also [Horsky](https://amzn.to/3nnwva2), Kankun.... But in terms of Javascript, I only found something similar with [Kankun](https://www.npmjs.com/package/homebridge-smartplug), but was published 3 years ago. So don't count on it.

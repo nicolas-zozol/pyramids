@@ -4,7 +4,7 @@ import { getRollPage } from '@/page-data/index.ts';
 import type { RollUrl } from '@/routing/url-scheme/index.ts';
 
 export const Route = createFileRoute('/{-$locale}/articles/c/$category/')({
-  head: ({ params }) => listingHead(rollAt(params)),
+  head: ({ params, loaderData }) => listingHead(rollAt(params), loaderData),
   loader: ({ params }) => getRollPage({ data: rollAt(params) }),
   component: CategoryPage,
 });
@@ -20,5 +20,7 @@ function rollAt(params: { locale: string; category: string }): RollUrl {
 }
 
 function CategoryPage() {
-  return <ListingPage page={Route.useLoaderData()} />;
+  return (
+    <ListingPage page={Route.useLoaderData()} url={rollAt(Route.useParams())} />
+  );
 }

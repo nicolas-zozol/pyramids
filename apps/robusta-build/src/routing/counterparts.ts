@@ -71,3 +71,25 @@ function articlePageUrl(article: ArticleIndexEntry): PageUrl {
     slug: article.slug,
   };
 }
+
+/** The same page in each other Locale that has it; for a roll page n, page n of the same roll, never its first page. */
+export function versionsOf(
+  page: PageUrl,
+  urls: readonly PageUrl[],
+  articles: readonly ArticleIndexEntry[],
+): PageUrl[] {
+  const others = LOCALES.filter((locale) => locale !== page.locale);
+
+  switch (page.kind) {
+    case 'landing':
+    case 'tag':
+    case 'article':
+      return counterpartsOf(page, urls, articles);
+    case 'blog-home':
+    case 'category':
+      return within(
+        urls,
+        others.map((locale) => ({ ...page, locale })),
+      );
+  }
+}

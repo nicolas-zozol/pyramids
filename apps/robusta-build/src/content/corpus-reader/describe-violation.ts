@@ -14,7 +14,7 @@ export function describeViolation(violation: CorpusViolation): string {
     case 'missing-field':
       return `${violation.path}: the article declares no ${violation.field}`;
     case 'malformed-date':
-      return `${violation.path}: the date '${violation.date}' is not a YYYY-MM-DD calendar date`;
+      return `${violation.path}: the ${violation.field === 'date' ? 'date' : `${violation.field} date`} '${violation.date}' is not a YYYY-MM-DD calendar date`;
     case 'non-boolean-published':
       return `${violation.path}: 'published' carries '${violation.value}', which is not a boolean, so the article is neither published nor knowingly unpublished`;
     case 'duplicate-translation-id':

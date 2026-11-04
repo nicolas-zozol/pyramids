@@ -25,7 +25,7 @@ import {
   readableTexts,
 } from '../test-support/markup.ts';
 import { renderInRouter } from '../test-support/render-in-router.tsx';
-import { ListingPage, listingHead } from './index.ts';
+import { ListingPage, listingHead, rollTrail } from './index.ts';
 
 const { contact } = getSeoPyramidsConfig();
 const BRAND = ['💪', '🏗', 'Robusta Build'];
@@ -38,7 +38,7 @@ async function listingPage(url: RollUrl): Promise<string> {
   return renderInRouter(
     <>
       <Header locale={url.locale} counterparts={await pageCounterparts(url)} />
-      <ListingPage page={await rollPage(url)} />
+      <ListingPage page={await rollPage(url)} url={url} />
       <Footer
         locale={url.locale}
         rolls={await localeRolls({ locale: url.locale })}
@@ -79,18 +79,30 @@ const fixturePost = (n: number) => ({
 
 const firstOfTwo: RollPage = {
   locale: 'en',
+  indexable: true,
+  versions: [],
   posts: Array.from({ length: 12 }, (_, i) => fixturePost(i + 1)),
   nextUrl: '/articles/p/2',
 };
 
 const secondOfThree: RollPage = {
   locale: 'en',
+  indexable: true,
+  versions: [],
   posts: Array.from({ length: 12 }, (_, i) => fixturePost(i + 13)),
   previousUrl: '/articles',
   nextUrl: '/articles/p/3',
 };
 
-const emptyBlogHome: RollPage = { locale: 'en', posts: [] };
+const EN_HOME_1: RollUrl = { kind: 'blog-home', locale: 'en', page: 1 };
+const EN_HOME_2: RollUrl = { kind: 'blog-home', locale: 'en', page: 2 };
+
+const emptyBlogHome: RollPage = {
+  locale: 'en',
+  indexable: false,
+  versions: [],
+  posts: [],
+};
 
 const navOf = (html: string) => /<nav\b[\s\S]*?<\/nav>/.exec(html)?.[0] ?? '';
 const mainOf = (html: string) =>
@@ -111,10 +123,13 @@ beforeAll(async () => {
 describe('ListingPage', () => {
   it('heads the blog home with the blog title of its Locale, and a Category roll with its label', async () => {
     const english = await renderInRouter(
-      <ListingPage page={{ locale: 'en', posts: [] }} />,
+      <ListingPage page={emptyBlogHome} url={EN_HOME_1} />,
     );
     const theory = await renderInRouter(
-      <ListingPage page={{ locale: 'fr', category: 'theory', posts: [] }} />,
+      <ListingPage
+        page={{ ...emptyBlogHome, locale: 'fr', category: 'theory' }}
+        url={{ kind: 'category', locale: 'fr', category: 'theory', page: 1 }}
+      />,
     );
 
     expect(/<h1[^>]*>([^<]*)<\/h1>/.exec(english)?.[1]).toBe(
@@ -127,7 +142,7 @@ describe('ListingPage', () => {
 
   it('renders in one <main> the h1, then the roll by NotesPreview without eyebrow, title nor "all articles" link', async () => {
     const html = mainOf(
-      await renderInRouter(<ListingPage page={firstOfTwo} />),
+      await renderInRouter(<ListingPage page={firstOfTwo} url={EN_HOME_1} />),
     );
 
     expect(html.indexOf('<h1')).toBeLessThan(html.indexOf('sk-notes-preview'));
@@ -142,6 +157,8 @@ describe('ListingPage', () => {
       <ListingPage
         page={{
           locale: 'fr',
+          indexable: true,
+          versions: [],
           posts: [
             {
               title: 'Quitter Gmail',
@@ -151,6 +168,7 @@ describe('ListingPage', () => {
             },
           ],
         }}
+        url={{ kind: 'blog-home', locale: 'fr', page: 1 }}
       />,
     );
 
@@ -160,7 +178,9 @@ describe('ListingPage', () => {
 
   it('links the next page from the first one, in a nav named by the page copy', async () => {
     const { pagination } = getPageCopy('en').listing;
-    const nav = navOf(await renderInRouter(<ListingPage page={firstOfTwo} />));
+    const nav = navOf(
+      await renderInRouter(<ListingPage page={firstOfTwo} url={EN_HOME_1} />),
+    );
 
     expect(nav).toContain(`aria-label="${htmlText(pagination.navLabel)}"`);
     expect(hrefs(nav)).toEqual(['/articles/p/2']);
@@ -171,7 +191,9 @@ describe('ListingPage', () => {
   it('links page 2 back to the first page without /p/, and on to page 3', async () => {
     const { pagination } = getPageCopy('en').listing;
     const nav = navOf(
-      await renderInRouter(<ListingPage page={secondOfThree} />),
+      await renderInRouter(
+        <ListingPage page={secondOfThree} url={EN_HOME_2} />,
+      ),
     );
 
     expect(hrefs(nav)).toEqual(['/articles', '/articles/p/3']);
@@ -180,7 +202,9 @@ describe('ListingPage', () => {
   });
 
   it('has no nav on a roll of one page, and shows only its title on an empty blog home', async () => {
-    const empty = await renderInRouter(<ListingPage page={emptyBlogHome} />);
+    const empty = await renderInRouter(
+      <ListingPage page={emptyBlogHome} url={EN_HOME_1} />,
+    );
 
     expect(empty).not.toContain('<nav');
     expect(empty).not.toContain('sk-notes-preview__post');
@@ -191,7 +215,10 @@ describe('ListingPage', () => {
 
   it('throws naming the Category and the Locale when the Locale has no label for the roll’s Category', () => {
     expect(() =>
-      ListingPage({ page: { locale: 'es', category: 'web', posts: [] } }),
+      ListingPage({
+        page: { ...emptyBlogHome, locale: 'es', category: 'web' },
+        url: { kind: 'category', locale: 'es', category: 'web', page: 1 },
+      }),
     ).toThrow(/"web"[\s\S]*"es"/);
   });
 
@@ -199,9 +226,10 @@ describe('ListingPage', () => {
     expect(() =>
       ListingPage({
         page: {
-          locale: 'en',
+          ...emptyBlogHome,
           posts: [{ title: 't', href: '/a', tag: 'theory', date: 'd' }],
         },
+        url: EN_HOME_1,
       }),
     ).toThrow(/"theory"[\s\S]*"en"/);
   });
@@ -254,7 +282,9 @@ describe('the listing pages of the site', () => {
   });
 
   it('style the h1 and the nav with values of the design system alone', async () => {
-    const html = await renderInRouter(<ListingPage page={secondOfThree} />);
+    const html = await renderInRouter(
+      <ListingPage page={secondOfThree} url={EN_HOME_2} />,
+    );
     const styles = [...mainOf(html).matchAll(/\sstyle="([^"]*)"/g)].map(
       ([, style]) => style,
     );
@@ -283,8 +313,10 @@ describe('listingHead', () => {
     category: slug,
     page,
   });
-  const titleOf = (url: RollUrl) => listingHead(url).meta[0].title;
-  const descriptionOf = (url: RollUrl) => listingHead(url).meta[1].content;
+  const titleOf = (url: RollUrl) =>
+    (listingHead(url).meta[0] as { title: string }).title;
+  const descriptionOf = (url: RollUrl) =>
+    (listingHead(url).meta[1] as { content: string }).content;
 
   it('gives the title then the description of the blog home model of its Locale', () => {
     for (const locale of ['en', 'fr']) {
@@ -295,6 +327,8 @@ describe('listingHead', () => {
           { title: model.title },
           { name: 'description', content: model.description },
         ],
+        links: [],
+        scripts: [],
       });
     }
   });
@@ -347,5 +381,148 @@ describe('listingHead', () => {
     expect(() => listingHead(category('en', 'theory'))).toThrow(
       /"theory"[\s\S]*"en"/,
     );
+  });
+});
+
+const ORIGIN = 'https://www.robusta.build';
+
+// R-SEOEXCELLENCE-63: a Category roll leads with its breadcrumb, the blog home has none.
+describe('rollTrail', () => {
+  const theoryPage: RollPage = {
+    locale: 'fr',
+    category: 'theory',
+    indexable: true,
+    versions: [],
+    posts: [],
+  };
+  const blogTitle = getPageCopy('fr').listing.blogTitle;
+  const theory = getCategoryLabel('fr', 'theory');
+
+  it('is the blog home then the Category as text on page 1 of a Category roll', () => {
+    expect(
+      rollTrail(theoryPage, {
+        kind: 'category',
+        locale: 'fr',
+        category: 'theory',
+        page: 1,
+      }),
+    ).toEqual([{ label: blogTitle, url: '/fr/articles' }, { label: theory }]);
+  });
+
+  it('links the Category to its page 1 from page 2 on', () => {
+    expect(
+      rollTrail(theoryPage, {
+        kind: 'category',
+        locale: 'fr',
+        category: 'theory',
+        page: 2,
+      }),
+    ).toEqual([
+      { label: blogTitle, url: '/fr/articles' },
+      { label: theory, url: '/fr/articles/c/theory' },
+    ]);
+  });
+
+  it('is nothing on a blog home', () => {
+    expect(
+      rollTrail(
+        { ...emptyBlogHome, locale: 'fr' },
+        { kind: 'blog-home', locale: 'fr', page: 1 },
+      ),
+    ).toEqual([]);
+  });
+});
+
+describe('ListingPage and its breadcrumb', () => {
+  it('renders the breadcrumb of a Category roll above its h1, named by the page copy', async () => {
+    const html = pages.get(
+      rolls.find(
+        (url) =>
+          url.kind === 'category' &&
+          url.locale === 'fr' &&
+          url.category === 'theory',
+      ) as RollUrl,
+    ) as string;
+    const main = mainOf(html);
+
+    expect(
+      main.indexOf(
+        `<nav aria-label="${htmlText(getPageCopy('fr').breadcrumb.navLabel)}"`,
+      ),
+    ).toBeGreaterThan(-1);
+    expect(main.indexOf('<nav')).toBeLessThan(main.indexOf('<h1'));
+    expect(main).toContain(
+      `<span aria-current="page">${htmlText(getCategoryLabel('fr', 'theory'))}</span>`,
+    );
+  });
+
+  it('renders no breadcrumb on a blog home', async () => {
+    const html = mainOf(
+      pages.get(
+        rolls.find((url) => url.kind === 'blog-home') as RollUrl,
+      ) as string,
+    );
+
+    expect(html).not.toContain(htmlText(getPageCopy('en').breadcrumb.navLabel));
+  });
+});
+
+// R-SEOEXCELLENCE-01, 03, 04, 22 and 63.
+describe('listingHead with the roll page', () => {
+  const theoryUrl: RollUrl = {
+    kind: 'category',
+    locale: 'fr',
+    category: 'theory',
+    page: 1,
+  };
+
+  it('adds the declaration of the roll page: canonical URL, BreadcrumbList on a Category roll', async () => {
+    const head = listingHead(theoryUrl, await rollPage(theoryUrl));
+    const data = head.scripts.map((script) => JSON.parse(script.children));
+
+    expect(head.meta.slice(0, 2)).toEqual(listingHead(theoryUrl).meta);
+    expect(head.links).toEqual([
+      { rel: 'canonical', href: `${ORIGIN}/fr/articles/c/theory` },
+    ]);
+    expect(data).toEqual([
+      expect.objectContaining({
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          expect.objectContaining({
+            position: 1,
+            item: `${ORIGIN}/fr/articles`,
+          }),
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: getCategoryLabel('fr', 'theory'),
+          },
+        ],
+      }),
+    ]);
+  });
+
+  it('declares the versions of the blog home, and no structured data', async () => {
+    const url: RollUrl = { kind: 'blog-home', locale: 'fr', page: 1 };
+    const head = listingHead(url, await rollPage(url));
+
+    expect(
+      head.links
+        .filter((link) => link.rel === 'alternate')
+        .map((link) => [link.hrefLang, link.href]),
+    ).toEqual([
+      ['en', `${ORIGIN}/articles`],
+      ['fr', `${ORIGIN}/fr/articles`],
+      ['x-default', `${ORIGIN}/articles`],
+    ]);
+    expect(head.scripts).toEqual([]);
+  });
+
+  it('declares only the title and the description of a roll page that is not indexable', () => {
+    const url: RollUrl = { kind: 'blog-home', locale: 'en', page: 1 };
+
+    expect(
+      listingHead(url, { ...emptyBlogHome, indexable: false, versions: [] }),
+    ).toEqual(listingHead(url));
   });
 });

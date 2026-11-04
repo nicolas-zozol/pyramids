@@ -9,7 +9,11 @@
  * Requirements: R-MIGRATELEARN-24, R-MIGRATELEARN-82
  * Design: features/pyramid-v2-epic/article-page/article-page.design.md
  * Requirements: R-ARTICLEPAGE-06, R-ARTICLEPAGE-22
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-02, R-SEOEXCELLENCE-81, R-SEOEXCELLENCE-101
  */
+import type { Nodes } from 'mdast';
+import { remark } from 'remark';
 import {
   describeViolation,
   readArticleBody,
@@ -85,3 +89,25 @@ export function getAssetUrl(
 ): string {
   return resolveAssetUrl(corpus, entry, reference);
 }
+
+/** The excerpt as plain text, whole: markdown marks dropped, their text kept, lines and paragraphs joined by one space. */
+export function getExcerptText(entry: ArticleIndexEntry): string {
+  return plainText(remark().parse(entry.excerpt)).replace(/\s+/g, ' ').trim();
+}
+
+function plainText(node: Nodes): string {
+  if (node.type === 'text' || node.type === 'inlineCode') {
+    return node.value;
+  }
+  if (node.type === 'break') {
+    return ' ';
+  }
+  if (!('children' in node)) {
+    return '';
+  }
+  // Blocks are joined by a space, the inline nodes of one block by nothing.
+  const separator = BLOCK_CONTAINERS.has(node.type) ? ' ' : '';
+  return node.children.map((child) => plainText(child)).join(separator);
+}
+
+const BLOCK_CONTAINERS = new Set(['root', 'blockquote', 'list', 'listItem']);

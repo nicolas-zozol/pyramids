@@ -13,10 +13,6 @@ GMail was a revolution in 2004. Is Google too big now ?
 ---
 
 
-Leaving Gmail
-====
-
-
 Why ?
 ----
 

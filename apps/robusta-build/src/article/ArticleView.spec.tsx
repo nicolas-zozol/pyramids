@@ -21,10 +21,13 @@ const coverless: ArticlePage = {
     tags: ['web', 'css'],
     excerpt: 'Un extrait.',
   },
+  url: '/fr/articles/c/web/a-fixture',
+  description: 'Un extrait.',
   html: '<p>Le corps de l’article.</p>',
   categoryUrl: '/fr/articles/c/web',
   writtenDate: '5 mars 2024',
   versions: [],
+  related: [],
 };
 
 const covered: ArticlePage = {
@@ -61,7 +64,13 @@ const inPrivacy: ArticlePage = {
   categoryUrl: '/fr/articles/c/privacy',
 };
 
-const endOfPage = (html: string): string =>
+/** The last nav of the page: the end of page, the breadcrumb leading it. */
+const endOfPage = (html: string): string => {
+  const start = html.lastIndexOf('<nav');
+  return html.slice(start, html.indexOf('</nav>', start) + '</nav>'.length);
+};
+
+const breadcrumbOf = (html: string): string =>
   html.slice(html.indexOf('<nav'), html.indexOf('</nav>') + '</nav>'.length);
 
 describe('ArticleView', () => {
@@ -178,7 +187,7 @@ describe('ArticleView', () => {
       expect(nav).not.toMatch(/^<nav [^>]*lang=/);
       expect(
         html.indexOf(`<article lang="${page.article.locale}">`),
-      ).toBeLessThan(html.indexOf('<nav'));
+      ).toBeLessThan(html.lastIndexOf('<nav'));
     }
   });
 
@@ -207,5 +216,95 @@ describe('ArticleView', () => {
 
     expect(html).not.toMatch(/hreflang/i);
     expect(html).not.toContain(htmlText(versionsPrefix));
+  });
+
+  // R-SEOEXCELLENCE-62: blog home, Category, then the article as text.
+  it('leads the page with its breadcrumb, above the cover, named by the page copy of its Locale', async () => {
+    const french = getPageCopy('fr');
+    const html = await renderInRouter(<ArticleView page={covered} />);
+    const nav = breadcrumbOf(html);
+
+    expect(html.indexOf(nav)).toBeLessThan(html.indexOf('<img'));
+    expect(nav).toMatch(
+      new RegExp(
+        `^<nav [^>]*aria-label="${htmlText(french.breadcrumb.navLabel)}"`,
+      ),
+    );
+    expect(nav).toMatch(
+      new RegExp(
+        [
+          '<ol[^>]*>',
+          `<li><a href="/fr/articles">${htmlText(french.listing.blogTitle)}</a></li>`,
+          `<li><a href="/fr/articles/c/web">${htmlText(getCategoryLabel('fr', 'web'))}</a></li>`,
+          `<li><span aria-current="page">${htmlText(covered.article.title)}</span></li>`,
+          '</ol>',
+        ].join(''),
+      ),
+    );
+  });
+
+  it('leaves the Category out of the breadcrumb of an article that claims none', async () => {
+    const uncategorised: ArticlePage = {
+      ...english,
+      article: { ...english.article, category: undefined },
+      categoryUrl: undefined,
+    };
+    const nav = breadcrumbOf(
+      await renderInRouter(<ArticleView page={uncategorised} />),
+    );
+
+    expect(nav.match(/<li>/g)).toHaveLength(2);
+    expect(nav).toContain('<a href="/articles">');
+  });
+
+  // R-SEOEXCELLENCE-65.
+  it('shows the update date beside the publication date, in a time element, only when the article declares one', async () => {
+    const { updatedPrefix } = getPageCopy('fr').article;
+    const revised: ArticlePage = {
+      ...coverless,
+      article: { ...coverless.article, updated: '2024-06-02' },
+      writtenUpdated: '2 juin 2024',
+    };
+    const html = await renderInRouter(<ArticleView page={revised} />);
+
+    expect(html).toMatch(
+      new RegExp(
+        `<time dateTime="2024-03-05">5 mars 2024</time>[^<]*${htmlText(updatedPrefix)}[^<]*<time dateTime="2024-06-02">2 juin 2024</time>`,
+      ),
+    );
+    expect(
+      await renderInRouter(<ArticleView page={coverless} />),
+    ).not.toContain(htmlText(updatedPrefix));
+  });
+
+  // R-SEOEXCELLENCE-82, AC-SEOEXCELLENCE-5.
+  it('ends the page on its Related articles, an h2 and a list of links to their titles, after the end of page', async () => {
+    const { relatedTitle } = getPageCopy('fr').article;
+    const related: ArticlePage = {
+      ...coverless,
+      related: [
+        { title: 'Un autre article', url: '/fr/articles/c/web/un-autre' },
+        { title: 'Un troisième', url: '/fr/articles/c/web/un-troisieme' },
+      ],
+    };
+    const html = await renderInRouter(<ArticleView page={related} />);
+    const block = html.slice(
+      html.indexOf(`<h2>${htmlText(relatedTitle)}</h2>`),
+    );
+
+    expect(html.indexOf('</nav>', html.lastIndexOf('<nav'))).toBeLessThan(
+      html.indexOf(`<h2>${htmlText(relatedTitle)}</h2>`),
+    );
+    expect(block).toMatch(
+      /^<h2>[^<]*<\/h2><ul><li><a href="\/fr\/articles\/c\/web\/un-autre">Un autre article<\/a><\/li><li><a href="\/fr\/articles\/c\/web\/un-troisieme">Un troisième<\/a><\/li><\/ul>/,
+    );
+  });
+
+  it('renders no Related articles block when the article has none', async () => {
+    const { relatedTitle } = getPageCopy('fr').article;
+    const html = await renderInRouter(<ArticleView page={coverless} />);
+
+    expect(html).not.toContain(htmlText(relatedTitle));
+    expect(html).not.toContain('<h2');
   });
 });

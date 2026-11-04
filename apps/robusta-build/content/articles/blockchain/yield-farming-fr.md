@@ -18,7 +18,7 @@ La Blockchain n'est pas qu'un Ponzi. Cet article explique la provenance de l'arg
 
 Cet article propose de l'information, pas des conseils financiers. N'investissez que de la *fun money* : ce que vous pouvez perdre sans soucis !
 
-# Le Yield Farming des cryptocurrencies : d'où vient l'argent magique de la DeFi ?
+## Le Yield Farming des cryptocurrencies : d'où vient l'argent magique de la DeFi ?
 
 Le Yield farming - que l'on peut traduire comme agriculture de rendement - est un processus permettant de générer plus d'actifs
 en partant d'un portefeuille initial. Ce processus peut utiliser des stratégies très agressives ou plutôt passives.

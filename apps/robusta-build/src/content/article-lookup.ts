@@ -35,3 +35,52 @@ export async function findArticle(
   }
   return found;
 }
+
+/** Published, same Locale, sharing the Category or a tag, itself excluded; same Category first, then more shared tags, then newest; `limit` at most. */
+export async function findRelated(
+  entry: ArticleIndexEntry,
+  limit: number,
+): Promise<ArticleIndexEntry[]> {
+  return relatedAmong(entry, await getArticleIndex(), limit);
+}
+
+/** `findRelated` among the articles of an index, newest first as the index gives them. */
+export function relatedAmong(
+  entry: ArticleIndexEntry,
+  articles: readonly ArticleIndexEntry[],
+  limit: number,
+): ArticleIndexEntry[] {
+  return articles
+    .filter(
+      (other) =>
+        other.locale === entry.locale &&
+        other.path !== entry.path &&
+        (sameCategory(entry, other) || sharedTags(entry, other) > 0),
+    )
+    .sort(
+      (a, b) =>
+        Number(sameCategory(entry, b)) - Number(sameCategory(entry, a)) ||
+        sharedTags(entry, b) - sharedTags(entry, a) ||
+        newestFirst(a, b),
+    )
+    .slice(0, limit);
+}
+
+function sameCategory(
+  entry: ArticleIndexEntry,
+  other: ArticleIndexEntry,
+): boolean {
+  return entry.category !== undefined && other.category === entry.category;
+}
+
+function sharedTags(
+  entry: ArticleIndexEntry,
+  other: ArticleIndexEntry,
+): number {
+  return other.tags.filter((tag) => entry.tags.includes(tag)).length;
+}
+
+function newestFirst(a: ArticleIndexEntry, b: ArticleIndexEntry): number {
+  if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+  return a.path < b.path ? -1 : a.path > b.path ? 1 : 0;
+}

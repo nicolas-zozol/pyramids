@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { getExcerptText } from '../content/article-index.ts';
 import { articlePage } from './article-page.ts';
 
 const YIELD_EN = 'the-source-of-yield-farming-profits';
@@ -81,5 +82,31 @@ describe('articlePage', () => {
     await expect(
       articlePage({ locale: 'en', slug: 'never-written' }),
     ).rejects.toThrow(/'en'.*'never-written'/);
+  });
+
+  // R-SEOEXCELLENCE-02, 65 and 81.
+  it('carries its canonical path and its excerpt as plain text, whole, for its description', async () => {
+    const page = await articlePage({ locale: 'fr', slug: 'quitter-gmail' });
+
+    expect(page.url).toBe('/fr/articles/c/privacy/quitter-gmail');
+    expect(page.description).toBe(getExcerptText(page.article));
+  });
+
+  it('writes no update date for an article declaring none', async () => {
+    const page = await articlePage({ locale: 'en', slug: 'leaving-gmail' });
+
+    expect(page).not.toHaveProperty('writtenUpdated');
+  });
+
+  it('carries three related articles at most, of its own Locale, each a title and a canonical URL', async () => {
+    const page = await articlePage({ locale: 'fr', slug: YIELD_FR });
+
+    expect(page.related.length).toBeGreaterThan(0);
+    expect(page.related.length).toBeLessThanOrEqual(3);
+    for (const related of page.related) {
+      expect(Object.keys(related).sort()).toEqual(['title', 'url']);
+      expect(related.url).toMatch(/^\/fr\/articles\//);
+    }
+    expect(page.related[0].url).toMatch(/^\/fr\/articles\/c\/blockchain\//);
   });
 });

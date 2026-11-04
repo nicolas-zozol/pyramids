@@ -1,19 +1,11 @@
-/**
- * Package article — one article page rendered from its payload, and the one boundary where its body reaches the DOM.
- *
- * Design: features/pyramid-v2-epic/article-page/article-page.design.md
- * Requirements: R-ARTICLEPAGE-02, R-ARTICLEPAGE-03, R-ARTICLEPAGE-04, R-ARTICLEPAGE-05, R-ARTICLEPAGE-41, R-ARTICLEPAGE-42, R-ARTICLEPAGE-43, R-ARTICLEPAGE-61, R-ARTICLEPAGE-62, R-ARTICLEPAGE-63, R-ARTICLEPAGE-65
- * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
- * Requirements: R-TANSTACK-47, R-TANSTACK-48
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
- * Requirements: R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-64
- */
 import { SkTag } from '@robusta/pyramids-design-system';
 import { Fragment } from 'react';
+import { Breadcrumb } from '../components/Breadcrumb.tsx';
 import { SiteLink } from '../components/SiteLink.tsx';
 import type { ArticlePage } from '../page-data/index.ts';
 import { getCategoryLabel, getPageCopy } from '../seopyramids.config.ts';
 import { ArticleProse } from './ArticleProse.tsx';
+import { articleTrail } from './article-head.ts';
 
 interface ArticleViewProps {
   page: ArticlePage;
@@ -21,10 +13,24 @@ interface ArticleViewProps {
 
 /** One article page, rendered from its payload and the page copy of the article's Locale: every URL and every date arrives computed. */
 export function ArticleView({ page }: ArticleViewProps) {
-  const { article, html, coverUrl, categoryUrl, versions, writtenDate } = page;
-  const { navLabel, categoryPrefix, versionsPrefix } = getPageCopy(
-    article.locale,
-  ).article;
+  const {
+    article,
+    html,
+    coverUrl,
+    categoryUrl,
+    versions,
+    writtenDate,
+    writtenUpdated,
+    related,
+  } = page;
+  const copy = getPageCopy(article.locale);
+  const {
+    navLabel,
+    categoryPrefix,
+    versionsPrefix,
+    relatedTitle,
+    updatedPrefix,
+  } = copy.article;
   const categoryLabel =
     article.category === undefined
       ? undefined
@@ -38,6 +44,7 @@ export function ArticleView({ page }: ArticleViewProps) {
         padding: 'var(--sp-8) var(--sp-6)',
       }}
     >
+      <Breadcrumb label={copy.breadcrumb.navLabel} trail={articleTrail(page)} />
       <article lang={article.locale}>
         {coverUrl !== undefined && (
           <div
@@ -68,6 +75,12 @@ export function ArticleView({ page }: ArticleViewProps) {
 
         <p style={{ color: 'var(--fg-3)' }}>
           <time dateTime={article.date}>{writtenDate}</time>
+          {article.updated !== undefined && writtenUpdated !== undefined && (
+            <>
+              {` · ${updatedPrefix} `}
+              <time dateTime={article.updated}>{writtenUpdated}</time>
+            </>
+          )}
           {' — '}
           {article.author}
         </p>
@@ -120,6 +133,18 @@ export function ArticleView({ page }: ArticleViewProps) {
           )}
         </nav>
       </article>
+      {related.length > 0 && (
+        <section style={{ marginTop: 'var(--sp-7)' }}>
+          <h2>{relatedTitle}</h2>
+          <ul>
+            {related.map((entry) => (
+              <li key={entry.url}>
+                <SiteLink href={entry.url}>{entry.title}</SiteLink>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </main>
   );
 }

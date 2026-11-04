@@ -29,7 +29,12 @@ const VIOLATIONS: readonly [CorpusViolation, string][] = [
     'blockchain/ledger.md',
   ],
   [
-    { code: 'malformed-date', path: 'web/sonoff.md', date: '20/01/2022' },
+    {
+      code: 'malformed-date',
+      path: 'web/sonoff.md',
+      field: 'date',
+      date: '20/01/2022',
+    },
     'web/sonoff.md',
   ],
   [
@@ -125,6 +130,19 @@ describe('describeViolation', () => {
       }),
     ).toBe(
       'privacy/quitter-gmail.md: the declaration of its original is malformed — it declares no translationId',
+    );
+  });
+
+  it('names the date field a malformed date was read from', () => {
+    expect(
+      describeViolation({
+        code: 'malformed-date',
+        path: 'web/sonoff.md',
+        field: 'updated',
+        date: 'last week',
+      }),
+    ).toBe(
+      "web/sonoff.md: the updated date 'last week' is not a YYYY-MM-DD calendar date",
     );
   });
 

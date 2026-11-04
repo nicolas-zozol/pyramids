@@ -14,7 +14,7 @@ Vous avez travaillé quelques années avec un langage principal que vous maîtri
 
 ---
 
-# Objectifs
+## Objectifs
 
 Les objectifs pour apprendre un nouveau langage sont nombreux:
 
@@ -28,9 +28,9 @@ Cet article sera plus orienté sur les deux premiers points. C'est de toute faç
 Les langages ne sont pas classés par pertinence, mais rangé par plateforme puis ordonné par mon niveau de compétence. Par conséquent, ne tenez pas trop compte du dernier paragraphe 😅
 
 
-# Tour d'horizon
+## Tour d'horizon
 
-## La Java Virtual Machine
+### La Java Virtual Machine
 
 La **JVM** est le moteur de Java et d'autre langages. C'est interessant de pouvoir travailler dessus car elle est excellente pour :
 
@@ -44,7 +44,7 @@ La JVM supporte plusieurs langages. Java évidemment, mais aussi Kotlin, Groovy,
 
 Le défaut de la JVM est que beaucoup de sa vitesse vient d'un trade-off sur l'utilisation assez massive de mémoire et une lenteur au demarrage. Dans un monde de conteneurs Docker, c'est assez problématique. Graal VM est une VM Java annulant le coût de la VM, mais réduisant les possiblités d'introspection, des annotations... et l'outillage existant permettant d'analyser les performances ne fonctionne plus.
 
-### Java
+#### Java
 
 **Java** est le langage objet le plus utilisé. C'est aussi le langage par défaut de la JVM, et il a donc toutes les qualités associées.
 
@@ -70,7 +70,7 @@ Beaucoup d'applications de bureau ont été développées en Java. C'est toujour
 
 Notons que les projets backend sont souvent plus long que les projects frontend, garantissant un emploi plus fixe. Le multithreading, c'est compliqué et du coup mieux payé.
 
-### Kotlin
+#### Kotlin
 
 **Kotlin** est l'un de ces langages modernes, classé avec Swift ou Rust. Il a été créé par Jetbrains pour les aider au développement d'IntelliJ. C'est évidemment une belle publicité pour l'éditeur lorsque vous voulez créer une application en Kotlin.
 
@@ -91,7 +91,7 @@ fun getPublicCompanyName( name : String? ) : String {
 
 Kotlin a une ambition assez folle d'être multiplateforme. Le pari est déjà tenu sur le serveur, le client Android et le client lourd, puisque Idea l'utilise. J'ai creusé React en Kotlin et ne suis pas convaincu. Toutefois, Jetbrains a connu très peu d'echecs, et c'est donc une affaire à suivre.
 
-### Groovy, Scala, et autres
+#### Groovy, Scala, et autres
 
 **Groovy** a été le premier langage alternatif important sur la JVM. Si aujourd'hui, vous préférerez Kotlin en tout point, Groovy était vraiment agréable en son temps.
 
@@ -117,7 +117,7 @@ En découvrant Scala, vous travaillerez sans doute avec des gens de haut niveau.
 Les autres langages de la JVM sont très anecdotiques. **Clojure** est toutefois un Lisp assez utilisé dans le monde du Big Data.   
 
 
-## Javascript
+### Javascript
 
 **Javascript** est LE langage du Web. C'est lui qui agit sur le navigateur. Pas de javascript, pas de web. Ou si peu. Son histoire est amusante et permet de comprendre le problème. En 1995, alors que Microsoft galérait avec Windows 95 comme d'autres avec CyberPunk, **Netscape** s'est dit qu'il fallait sortir ce langage avant que Microsoft ne redresse la barre et n'assomme le web de son contrôle. Ce qu'ils ont manqué de très peu avec [VBScript](https://fr.wikipedia.org/wiki
     /VBScript).
@@ -140,13 +140,13 @@ Le backend utilise Node JS combiné en général avec le mini framework Express.
 Les opportunités d'embauche sont donc légion. La moitié des offres des agences d'élite [Toptal](https://www.toptal.com#expect-solely-agile-software-engineers) ou [Upstack](https://secure.upstack.co/developer/apply?5F659E66) contiennent du Javascript. N'étant pas cantonné à une seule tâche, le travail s'ouvre sur d'autres horizons intellectuels.
 
 
-### TypeScript
+#### TypeScript
 
 **TypeScript** est une surcouche typée de Javascript. Plus que Kotlin avec Java, il est raisonnable de connaitre Javascript avant de se mettre à TypeScript. Ce qui simplifiera votre apprentissage. Si toutefois vous travaillez avec l'excellent framework Angular, vous pourrez sauter directement le pas. Étant guidé par le framework, vous ne serez pas totalement perdu.
 
 Typescript est donc un langage typé visant une utilisation sur le navigateur, et interagissant facilement avec les bibliothèques Javascript déjà existantes. Il existe d'autres langages typés ciblant le navigateur tels que Elm ou PureScript. Mais outre un surplus de complexité, ils ont échoué sur leur capacité à utiliser facilement les bibliothèques existantes. L'envers du décor est d'utiliser un peu trop facilement le type `any` en TypeScript.
 
-### Note sur la Variance
+#### Note sur la Variance
 
 Puisque le niveau des développeurs Javascript est très variable, il était logique que l'approche des génériques de TypeScript soit simplifiée. Les générics en TypeScript sont **bivariants**. Si vous n'êtes pas familiers avec les termes covariance, contravariance, invariance ou bivariance, mais que vous êtes productifs avec TypeScript, c'est que les concepteurs du langage ont eu raison de choisir une voie plus simple bien que, logiquement, fausse.
 
@@ -170,7 +170,7 @@ newCat.meow();  // => a duck can't meow(). It's a bug !!!
 
 Nous avons créé un bug, même en nommant correctement nos variables. C'est pour éviter cela que Java introduit les affreux `<? extends T>` ou `<? super T>`. [Le concept est plus clair](https://kotlinlang.org/docs/reference/generics.html) avec `in` et `out` de Kotlin. [Comprendre la variance](https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-9d18d3719e1d) est en fait aussi important qu'apprendre un nouveau langage.
 
-## Python
+### Python
 
 
 
@@ -190,7 +190,7 @@ Pour faire un client lourd en Python, on peut noter une version de **Qt** [assez
 
 Python a un typage dynamique fort. Moins typé que Java, plus que Javascript, c'est peut-être le juste milieu. Je ne sais pas si c'est une bonne chose, mais j'ai trouvé cela très agréable. Il n'y a pas de support des generics.
 
-## PHP
+### PHP
 
 **PHP** a à peu prêt la même histoire que Python. C'était une collection de fonctions C plutôt que des scripts shell. Il est devenu objet vers 2005 avec PHP 5. PHP 6 n'existe pas, mais PHP 7 a permis quelques approches fonctionnelles.
 
@@ -204,13 +204,13 @@ Depuis PHP 7, le langage est également typé, mais avec une syntaxe pas optimal
 
 Alors faut-il se lancer dans PHP ? Je ne dénigre pas du tout ce langage qui fait ce qu'il faut, permet tout type d'architecture, que j'utilise depuis près de 20 ans et qui est là pour longtemps. Mais je ne pense pas que ce soit un "move" très ambitieux, sauf à vouloir créer votre projet e-commerce sans la complexité associée à Saas. Peu ambitieux, mais peut-être pertinent: PHP permet de sécuriser sa situation professionnel, car il y a beaucoup d'offres d'emploi.
 
-## Warning pour la suite
+### Warning pour la suite
 
 J'ai utilisé professionnellement et avec succès tous les langages décrit au-dessus. Ci-dessous, je me suis contenté de quelques tutoriels Haskell, et du C nécessaire à l'acquisition d'une licence en Informatique.
 
 ![](./images/no-idea.png)
 
-## Rust
+### Rust
 
 
 
@@ -240,7 +240,7 @@ Rust est d'abord utilisé pour gérer le très bas niveau, pourrait apparaître 
 
 Il y a quelques offres d'emploi en Rust, et peu de développeurs, donc une porte peut s'ouvrir.
 
-## Swift
+### Swift
 
 **Swift** est le langage d'Apple pour remplacer le vieillissant **Objective C**. L'objectif est dépassé puisqu'il ne fait plus débat, tant les crochets omniprésents embarassait les développeurs sur **iOS**. 
 
@@ -262,7 +262,7 @@ C'est un peu mieux, et ce serait beaucoup mieux sans les noms étranges de Cocoa
 
 En principe, Swift devrait être utilisable pour tout le backend. IBM a un peu poussé un temps en ce sens, mais Apple n'a pas trop suivi, et [la firme bleue a jeté l'éponge](https://www.infoq.com/news/2020/01/ibm-stop-work-swift-server/). Il n'y a pas eu d'engouement alors qu'il était possible vers 2017-2018 de prendre de une place de langage généraliste plus performant autour de Java. Mais puisque Swift est un meilleur Objective C qui est un autre C, autant travailler aujourd'hui en Rust ou Go qui ont les mêmes objectifs, une meilleure adoption et plus d'outillage.
 
-## Go
+### Go
 
 **Go** est un langage créé et largement utilisé par Google pour déployer des microservices sur leurs systèmes de containers. Go est rapide, démarre très rapidement et consomme peu de mémoire. C'est une alternative au C, permettant une base de code plus large et pouvant être adopté facilement par un plus large public.
 
@@ -272,7 +272,7 @@ Cela dit, Go est très rapide et avec un écosystème très riche, et très proc
 
 Si vous vous lancez dans les containers et Kubernetes, apprendre Go est une bonne idée. Moi, je ne touche pas à Kubernetes. Pourquoi ? Je préfère être utilisateur de ces architectures très ponctuellement, sur le Hyper-hot-spot d'une application. Je suis sceptique sur la redondance à tout va. Une application bugguée redondante va bugguer continuellement. Un serveur PHP non buggué vivra éternellement.
 
-## Vite dit
+### Vite dit
 
 **Ruby** est un langage qui a eu sa popularité en 2004 grâce au gros framework **Ruby on Rails**, et **Sinatra**, un serveur d'api plus léger. Il est encore très utilisé aux USA mais presque inexistant ailleurs. C'est un langage généraliste parfaitement capable, mais devenu aujourd'hui assez quelconque. Il est assez lent et nécessite une Machine Virtuelle.
 
@@ -288,7 +288,7 @@ En apparté, si Java et C#, langages généralistes, déclinent continuellement 
 
 Je n'ai pas touché à **Erlang** ni **Elixir**. Erlang est un langage développé par la société de télécommunication Ericsson, et est surtout conçu pour que les applicatifs soient plus facilement **résistants aux pannes** dans un réseau de nœuds déployés: le système d'**Actor** est intégré au bytecode de la machine virtuelle d'Erlang. L'écosystème Erlang a pour atout d'avoir un outillage industriel plus développé autour d'Elixir, un langage proche de Ruby tournant sur la machine d'Erlang.
 
-# Conclusion
+## Conclusion
 
 Vous avez tout lu ? Je ne peux pas choisir pour vous, donc c'est à vous de conclure !  Bonne année, bon langage.
 

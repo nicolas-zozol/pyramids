@@ -18,7 +18,11 @@ import { buildUrl, urlSet } from '../routing/url-scheme/index.ts';
 import { afterAll, describe, expect, it } from 'vitest';
 import { urlScheme } from '../routing/scheme.ts';
 import { v1UrlMap } from '../routing/v1-url-map.ts';
-import { getArticleIndex, getTranslationNotices } from './article-index.ts';
+import {
+  getArticleBody,
+  getArticleIndex,
+  getTranslationNotices,
+} from './article-index.ts';
 import { corpus } from './corpus.ts';
 
 /**
@@ -349,6 +353,30 @@ describe('the copy step, over the site’s corpus', () => {
  * `scripts/check-route-table.mjs` then holds the prerender manifest against this
  * same derivation (AC-MIGRATELEARN-61).
  */
+// R-SEOEXCELLENCE-102, AC-SEOEXCELLENCE-7: the page gives the h1, never the body.
+describe('the bodies of the corpus', () => {
+  it('render no first-level heading, the page titling the article once', async () => {
+    const withH1: string[] = [];
+    for (const entry of await getArticleIndex()) {
+      if (/<h1[\s>]/.test((await getArticleBody(entry)).html))
+        withH1.push(entry.path);
+    }
+
+    expect(withH1).toEqual([]);
+  });
+
+  it('keep the sections of quel-second-langage one level down, its tree intact', async () => {
+    const [entry] = (await getArticleIndex()).filter(
+      (article) => article.path === 'theory/quel-second-langage.md',
+    );
+    const { html } = await getArticleBody(entry);
+
+    expect(html).toContain('<h2>Objectifs</h2>');
+    expect(html).toContain('<h3>La Java Virtual Machine</h3>');
+    expect(html).toContain('<h4>Java</h4>');
+  });
+});
+
 describe('what the corpus lights up', () => {
   it('derives thirty content URLs, and no roll page in either locale', async () => {
     const pages = urlSet(urlScheme, await getArticleIndex());

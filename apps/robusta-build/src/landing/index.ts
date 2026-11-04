@@ -1,5 +1,5 @@
 /**
- * Package landing — the landing page of each Locale: the design system's sections fed with the site's page copy.
+ * Package landing — the landing page of each Locale: the design system's sections fed with the site's page copy, and its declaration to search engines.
  *
  * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
  * Requirements: R-MIGRATELEARN-44
@@ -11,6 +11,9 @@
  * Requirements: R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-45, R-MULTILINGUAL-47, R-MULTILINGUAL-50
  * Design: features/pyramid-v2-epic/drop-section-default-copy/drop-section-default-copy.design.md
  * Requirements: R-SECTIONCOPY-41, R-SECTIONCOPY-42
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-01, R-SEOEXCELLENCE-02, R-SEOEXCELLENCE-04, R-SEOEXCELLENCE-64
  */
 export { LandingPage, type LandingPageProps } from './LandingPage.tsx';
+export { landingHead } from './landing-head.ts';
 export { NotesSection, type NotesSectionProps } from './NotesSection.tsx';

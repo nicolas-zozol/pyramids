@@ -239,7 +239,12 @@ describe('the articles of a roll', () => {
   });
 
   it('give the default Locale an empty blog home when it publishes nothing', () => {
-    expect(pageOf(blogHome(1), french)).toEqual({ locale: 'en', posts: [] });
+    expect(pageOf(blogHome(1), french)).toEqual({
+      locale: 'en',
+      indexable: false,
+      versions: [],
+      posts: [],
+    });
   });
 
   it('give a Locale other than the default one no blog home when it publishes nothing', () => {
@@ -286,6 +291,8 @@ describe('rollPage', () => {
     expect(page).toEqual({
       locale: 'fr',
       category: 'theory',
+      indexable: true,
+      versions: [],
       posts: [
         {
           title: expect.stringMatching(/^Quel langage/),
@@ -307,6 +314,53 @@ describe('rollPage', () => {
   it('throws naming /articles/c/theory, which the URL set does not hold', async () => {
     await expect(rollPage(categoryRoll('theory', 1))).rejects.toThrow(
       /"theory"/,
+    );
+  });
+});
+
+// R-SEOEXCELLENCE-22, AC-SEOEXCELLENCE-7: what a roll page declares of itself.
+describe('the declaration of a roll page', () => {
+  const both = [...articles(13, 'fr'), ...articles(13, 'en')];
+
+  it('is indexable when it lists an article, a Category of one article included', () => {
+    expect(pageOf(blogHome(1), both).indexable).toBe(true);
+    expect(
+      pageOf(categoryRoll('privacy', 1), articles(1, 'en', 'privacy'))
+        .indexable,
+    ).toBe(true);
+  });
+
+  it('is not indexable on an empty en blog home', () => {
+    expect(pageOf(blogHome(1), articles(2, 'fr')).indexable).toBe(false);
+  });
+
+  it('gives page 2 the page 2 of the same roll in the other Locale, never its first page', () => {
+    expect(pageOf(blogHome(2, 'fr'), both).versions).toEqual([
+      { locale: 'en', url: '/articles/p/2' },
+    ]);
+    expect(pageOf(categoryRoll('web', 2), both).versions).toEqual([
+      { locale: 'fr', url: '/fr/articles/c/web/p/2' },
+    ]);
+  });
+
+  it('gives page 2 no version when the other Locale has a single page', () => {
+    const index = [...articles(13, 'fr'), ...articles(1, 'en')];
+
+    expect(pageOf(blogHome(2, 'fr'), index).versions).toEqual([]);
+  });
+
+  it('names no version that is not indexable, the empty en blog home included', () => {
+    const index = articles(2, 'fr');
+
+    expect(pageOf(blogHome(1, 'fr'), index).versions).toEqual([]);
+  });
+
+  it('carries the versions of the corpus pages that have one', async () => {
+    expect((await rollPage(blogHome(1, 'fr'))).versions).toEqual([
+      { locale: 'en', url: '/articles' },
+    ]);
+    expect((await rollPage(categoryRoll('theory', 1, 'fr'))).versions).toEqual(
+      [],
     );
   });
 });

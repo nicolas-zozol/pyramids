@@ -12,6 +12,8 @@
  * Requirements: R-MULTILINGUAL-62, R-MULTILINGUAL-64
  * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-02, R-BLOGROLLS-03, R-BLOGROLLS-04, R-BLOGROLLS-05, R-BLOGROLLS-06
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-02, R-SEOEXCELLENCE-22, R-SEOEXCELLENCE-65, R-SEOEXCELLENCE-81
  */
 import { createServerFn } from '@tanstack/react-start';
 import { staticFunctionMiddleware } from '@tanstack/start-static-server-functions';
@@ -31,6 +33,7 @@ export type {
   LocaleRequest,
   NotesFeedRequest,
   PageData,
+  RelatedArticle,
   RollPage,
 } from './types.ts';
 

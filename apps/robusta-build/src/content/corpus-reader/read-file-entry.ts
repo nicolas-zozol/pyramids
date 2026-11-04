@@ -82,6 +82,7 @@ export async function readFileEntry(
   const excerpt = required(text(parsed.excerpt), 'excerpt', path, violations);
   const author = required(text(declared.author), 'author', path, violations);
   const date = readDate(declared.date, path, violations);
+  const updated = readUpdated(declared.updated, path, violations);
   const translationId = text(declared.translationId);
   const original = readOriginal(
     declared.original,
@@ -107,6 +108,7 @@ export async function readFileEntry(
     ...optional('category', declared.category),
     title,
     date,
+    ...(updated === undefined ? {} : { updated }),
     author,
     tags: readTags(declared.tags),
     excerpt,
@@ -288,6 +290,27 @@ function readDate(
     return undefined;
   }
 
+  return calendarDate(value, 'date', path, violations);
+}
+
+/** The optional update date: absent, or a calendar date like `date` (R-SEOEXCELLENCE-101). */
+function readUpdated(
+  value: unknown,
+  path: string,
+  violations: CorpusViolation[],
+): string | undefined {
+  if (value === undefined || value === null || value === '') {
+    return undefined;
+  }
+  return calendarDate(value, 'updated', path, violations);
+}
+
+function calendarDate(
+  value: unknown,
+  field: 'date' | 'updated',
+  path: string,
+  violations: CorpusViolation[],
+): string | undefined {
   // YAML reads an unquoted `2021-11-30` as a timestamp, whose UTC day is the
   // same YYYY-MM-DD the schema asks for. Anything else is compared as written.
   const written =
@@ -296,7 +319,7 @@ function readDate(
       : String(value).trim();
 
   if (!isCalendarDate(written)) {
-    violations.push({ code: 'malformed-date', path, date: written });
+    violations.push({ code: 'malformed-date', path, field, date: written });
     return undefined;
   }
   return written;

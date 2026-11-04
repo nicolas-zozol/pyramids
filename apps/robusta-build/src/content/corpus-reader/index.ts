@@ -10,6 +10,8 @@
  * Requirements: R-MIGRATELEARN-21, R-MIGRATELEARN-22, R-MIGRATELEARN-23, R-MIGRATELEARN-28, R-MIGRATELEARN-29, R-MIGRATELEARN-82
  * Design: features/pyramid-v2-epic/article-page/article-page.design.md
  * Requirements: R-ARTICLEPAGE-07, R-ARTICLEPAGE-21, R-ARTICLEPAGE-26, R-ARTICLEPAGE-27
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-101
  */
 export type {
   ArticleBody,

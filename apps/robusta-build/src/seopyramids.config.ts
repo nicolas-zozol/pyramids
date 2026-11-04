@@ -5,17 +5,18 @@
  * Requirements: R-MULTILINGUAL-41, R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-44, R-MULTILINGUAL-48, R-MULTILINGUAL-49
  * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-41, R-BLOGROLLS-42
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-44, R-SEOEXCELLENCE-121, R-SEOEXCELLENCE-122
  */
 import type { FlowStep, Principle } from '@robusta/pyramids-design-system';
 import { wordmarkSrc } from './design-system/assets.ts';
 import {
   LOCALES,
   ROLL_SIZE,
+  SITE_ORIGIN,
   urlScheme,
   type Locale,
 } from './routing/scheme.ts';
-
-const url = 'https://www.robusta.build';
 
 export { ROLL_SIZE };
 
@@ -25,7 +26,6 @@ export interface BlogConfig {
   defaultLocale: string;
   otherLocales: string[];
   debugImagePath: boolean;
-  mandatoryKeywords: string[];
   rollSize: typeof ROLL_SIZE;
   author?: string;
 }
@@ -56,10 +56,18 @@ export interface PageCopy {
   tagline: string;
   header: { contactLabel: string };
   footer: { copyright: string };
-  /** The title and the description of every page of the Locale but its landing page and its listing pages. */
+  /** The title and the description of the page 404 and of the failed navigation state. */
   head: { title: string; description: string };
-  /** The end of an article page. */
-  article: { navLabel: string; categoryPrefix: string; versionsPrefix: string };
+  /** The end of an article page, its update date and its Related articles. */
+  article: {
+    navLabel: string;
+    categoryPrefix: string;
+    versionsPrefix: string;
+    relatedTitle: string;
+    updatedPrefix: string;
+  };
+  /** The breadcrumb of an article page and of a Category roll. */
+  breadcrumb: { navLabel: string };
   /** The listing pages: the blog home and the Category rolls. */
   listing: ListingCopy;
   landing: LandingCopy;
@@ -142,7 +150,10 @@ const en: PageCopy = {
     navLabel: 'Keep reading',
     categoryPrefix: 'Filed under ',
     versionsPrefix: 'Also in: ',
+    relatedTitle: 'Related articles',
+    updatedPrefix: 'Updated on',
   },
+  breadcrumb: { navLabel: 'Breadcrumb' },
   listing: {
     blogTitle: 'articles',
     head: {
@@ -264,7 +275,10 @@ const fr: PageCopy = {
     navLabel: 'Pour continuer la lecture',
     categoryPrefix: 'Classé dans ',
     versionsPrefix: 'Autres langues : ',
+    relatedTitle: 'Articles liés',
+    updatedPrefix: 'Mis à jour le',
   },
+  breadcrumb: { navLabel: "Fil d'Ariane" },
   listing: {
     blogTitle: 'articles',
     head: {
@@ -388,7 +402,10 @@ const es: PageCopy = {
     navLabel: 'Seguir leyendo',
     categoryPrefix: 'Archivado en ',
     versionsPrefix: 'Otros idiomas: ',
+    relatedTitle: 'Artículos relacionados',
+    updatedPrefix: 'Actualizado el',
   },
+  breadcrumb: { navLabel: 'Ruta de navegación' },
   listing: {
     blogTitle: 'artículos',
     head: {
@@ -491,12 +508,12 @@ const es: PageCopy = {
 };
 
 const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
-  domain: url,
+  domain: SITE_ORIGIN,
   siteName: 'Robusta Build',
   // The design system's wordmark, resolved through the package's assets
   // subpath — no brand file is copied into `public/`. `logo` is a bare URL and
   // `domain` is absolute, so the root-relative hashed path is prefixed here.
-  logo: `${url}${wordmarkSrc}`,
+  logo: `${SITE_ORIGIN}${wordmarkSrc}`,
   defaultLocale: urlScheme.defaultLocale,
   otherLocales: [...urlScheme.otherLocales],
   blogConfig: {
@@ -506,7 +523,6 @@ const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
     defaultLocale: urlScheme.defaultLocale,
     otherLocales: [...urlScheme.otherLocales],
     debugImagePath: false,
-    mandatoryKeywords: ['robusta build', 'freelance'],
     rollSize: ROLL_SIZE,
     author: 'Nicolas Zozol',
   },

@@ -4,12 +4,15 @@ import {
   type ArticleIndexEntry,
 } from '../content/article-index.ts';
 import { contentUrls } from '../routing/content-urls.ts';
+import { versionsOf } from '../routing/counterparts.ts';
+import { articlesListedBy } from '../routing/listed-articles.ts';
 import { urlScheme } from '../routing/scheme.ts';
 import {
   buildUrl,
   type PageUrl,
   type RollUrl,
 } from '../routing/url-scheme/index.ts';
+import { isIndexable, type PageVersion } from '../seo/index.ts';
 import { articleUrl } from './article-url.ts';
 import type { RollPage } from './types.ts';
 
@@ -22,7 +25,7 @@ export async function rollPage(page: RollUrl): Promise<RollPage> {
   return rollPageOf(page, articles, urls);
 }
 
-/** One page of a roll among `articles`, newest first as the index gives them; its neighbours read in `urls`. Throws naming the page when `urls` does not hold it. */
+/** One page of a roll among `articles`, newest first as the index gives them; its neighbours and its versions read in `urls`. Throws naming the page when `urls` does not hold it. */
 export function rollPageOf(
   page: RollUrl,
   articles: readonly ArticleIndexEntry[],
@@ -39,28 +42,34 @@ export function rollPageOf(
     throw new Error(`The URL set holds no roll page ${JSON.stringify(page)}`);
   }
 
-  const { rollSize } = urlScheme;
-  const start = (page.page - 1) * rollSize;
   const previousUrl = urlOf(page.page - 1);
   const nextUrl = urlOf(page.page + 1);
+  const indexable = isIndexable(page, articles);
 
   return {
     locale: page.locale,
     ...(page.kind === 'category' ? { category: page.category } : {}),
-    posts: articles
-      .filter((article) => inRoll(article, page))
-      .slice(start, start + rollSize)
-      .map((article) => rollPost(article, page.kind === 'blog-home')),
+    indexable,
+    versions: indexable ? indexableVersions(page, articles, urls) : [],
+    posts: articlesListedBy(page, articles).map((article) =>
+      rollPost(article, page.kind === 'blog-home'),
+    ),
     ...(previousUrl === undefined ? {} : { previousUrl }),
     ...(nextUrl === undefined ? {} : { nextUrl }),
   };
 }
 
-function inRoll(article: ArticleIndexEntry, page: RollUrl): boolean {
-  return (
-    article.locale === page.locale &&
-    (page.kind === 'blog-home' || article.category === page.category)
-  );
+function indexableVersions(
+  page: RollUrl,
+  articles: readonly ArticleIndexEntry[],
+  urls: readonly PageUrl[],
+): PageVersion[] {
+  return versionsOf(page, urls, articles)
+    .filter((version) => isIndexable(version, articles))
+    .map((version) => ({
+      locale: version.locale,
+      url: buildUrl(urlScheme, version),
+    }));
 }
 
 function rollPost(article: ArticleIndexEntry, tagged: boolean): NotePost {

@@ -1,17 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { LandingPage } from '@/landing/index.ts';
+import { LandingPage, landingHead } from '@/landing/index.ts';
 import { getNotesFeed } from '@/page-data/index.ts';
-import { getPageCopy } from '@/seopyramids.config.ts';
-
-const NOTES_LIMIT = 4;
+import { NOTES_FEED_SIZE } from '@/routing/scheme.ts';
 
 export const Route = createFileRoute('/{-$locale}/')({
-  head: ({ params }) => {
-    const { title, description } = getPageCopy(params.locale).landing.head;
-    return { meta: [{ title }, { name: 'description', content: description }] };
-  },
+  head: ({ params }) => landingHead(params.locale),
   loader: ({ params }) =>
-    getNotesFeed({ data: { locale: params.locale, limit: NOTES_LIMIT } }),
+    getNotesFeed({ data: { locale: params.locale, limit: NOTES_FEED_SIZE } }),
   component: Landing,
 });
 

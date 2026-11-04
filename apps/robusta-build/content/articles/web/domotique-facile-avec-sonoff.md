@@ -11,7 +11,7 @@ featured: true
 translationId: easy-automation-with-sonoff
 original:
   locale: "en"
-  fingerprint: "7d80f75e3027"
+  fingerprint: "c6fa5150c819"
 ---
 
 Allumez et éteignez votre vieux radiateur électrique avec du code. Un peu de Javascript suffit pour faire des économies et

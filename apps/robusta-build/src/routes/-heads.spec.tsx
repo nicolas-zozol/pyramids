@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { localeRolls } from '../page-data/locale-rolls.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
 import { rollPage } from '../page-data/roll-page.ts';
-import { LOCALES } from '../routing/scheme.ts';
+import { articleHead } from '../article/index.ts';
+import { landingHead } from '../landing/index.ts';
+import { articlePage } from '../page-data/article-page.ts';
+import { LOCALES, NOTES_FEED_SIZE } from '../routing/scheme.ts';
 import type { PageUrl, RollUrl } from '../routing/url-scheme/index.ts';
 import { listingHead } from '../listing/index.ts';
 import { getPageCopy } from '../seopyramids.config.ts';
@@ -12,6 +15,8 @@ import { Route as BlogHomeRoute } from './{-$locale}/articles/index.tsx';
 import { Route as BlogRollRoute } from './{-$locale}/articles/p/$n.tsx';
 import { Route as CategoryRoute } from './{-$locale}/articles/c/$category/index.tsx';
 import { Route as CategoryRollRoute } from './{-$locale}/articles/c/$category/p/$n.tsx';
+import { Route as ArticleRoute } from './{-$locale}/articles/$slug.tsx';
+import { Route as CategorisedArticleRoute } from './{-$locale}/articles/c/$category/$slug.tsx';
 import { Route as RootRoute } from './__root.tsx';
 import { routeTree } from '../routeTree.gen.ts';
 
@@ -21,12 +26,17 @@ const getCounterparts = vi.hoisted(() =>
 const getRollPage = vi.hoisted(() =>
   vi.fn<(call: { data: RollUrl }) => Promise<unknown>>(),
 );
+const getNotesFeed = vi.hoisted(() =>
+  vi.fn<
+    (call: { data: { locale: string; limit: number } }) => Promise<unknown>
+  >(async () => []),
+);
 
 /** The server function needs the Start runtime; its handler's own function answers in its place. */
 vi.mock('../page-data/index.ts', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../page-data/index.ts')>()),
   getCounterparts,
-  getNotesFeed: async () => [],
+  getNotesFeed,
   getRollPage,
   getLocaleRolls: ({ data }: { data: { locale: string } }) => localeRolls(data),
 }));
@@ -286,6 +296,41 @@ describe('the landing route', () => {
         await headOf(LandingRoute.options.head, { params: { locale } }),
       ).toEqual(getPageCopy(locale).landing.head);
   });
+
+  // R-SEOEXCELLENCE-01 and 44.
+  it('takes its whole head from landingHead', async () => {
+    for (const locale of LOCALES)
+      expect(
+        await LandingRoute.options.head?.({ params: { locale } } as never),
+      ).toEqual(landingHead(locale));
+  });
+
+  it('loads the NOTES_FEED_SIZE newest notes of its Locale', async () => {
+    const loader = LandingRoute.options.loader as unknown as (
+      context: never,
+    ) => unknown;
+    await loader({ params: { locale: 'fr' } } as never);
+
+    expect(getNotesFeed).toHaveBeenLastCalledWith({
+      data: { locale: 'fr', limit: NOTES_FEED_SIZE },
+    });
+  });
+});
+
+// R-SEOEXCELLENCE-01: the two article routes declare their page by articleHead.
+describe('the two article routes', () => {
+  it('take their head from articleHead on the payload their loader gives', async () => {
+    const page = await articlePage({ locale: 'fr', slug: 'quitter-gmail' });
+
+    for (const route of [ArticleRoute, CategorisedArticleRoute]) {
+      expect(await route.options.head?.({ loaderData: page } as never)).toEqual(
+        articleHead(page),
+      );
+      expect(
+        await route.options.head?.({ loaderData: undefined } as never),
+      ).toEqual({ meta: [], links: [], scripts: [] });
+    }
+  });
 });
 
 const LISTING_ROUTES = [
@@ -314,12 +359,31 @@ const LISTING_ROUTES = [
 describe('the four listing routes', () => {
   it('take their head from listingHead, on the roll page their params name', async () => {
     for (const { route, params, url } of LISTING_ROUTES) {
-      const { meta } = listingHead(url);
+      const [title, description] = listingHead(url).meta as [
+        { title: string },
+        { content: string },
+      ];
 
       expect(await headOf(route.options.head, { params })).toEqual({
-        title: meta[0].title,
-        description: meta[1].content,
+        title: title.title,
+        description: description.content,
       });
+    }
+  });
+
+  it('declare their roll page from the payload their loader gives', async () => {
+    for (const { route, params, url } of LISTING_ROUTES) {
+      const roll = {
+        locale: url.locale,
+        indexable: true,
+        versions: [],
+        posts: [],
+        ...(url.kind === 'category' ? { category: url.category } : {}),
+      };
+
+      expect(
+        await route.options.head?.({ params, loaderData: roll } as never),
+      ).toEqual(listingHead(url, roll));
     }
   });
 

@@ -1,6 +1,7 @@
 import type { NotePost } from '@robusta/pyramids-design-system';
 import type { ArticleIndexEntry } from '../content/article-index.ts';
 import type { PageUrl, RollUrl } from '../routing/url-scheme/index.ts';
+import type { PageVersion } from '../seo/index.ts';
 
 export interface ArticleKey {
   locale: string;
@@ -14,6 +15,10 @@ export interface ArticleVersion {
 
 export interface ArticlePage {
   article: ArticleIndexEntry;
+  /** Its root-relative canonical path. */
+  url: string;
+  /** The excerpt as plain text, whole. */
+  description: string;
   /** The body, every reference resolved. */
   html: string;
   /** Absent when the article declares no cover. */
@@ -24,6 +29,16 @@ export interface ArticlePage {
   versions: ArticleVersion[];
   /** The date as the article's locale writes it, computed at build. */
   writtenDate: string;
+  /** `updated` as the article's Locale writes it; absent without one. */
+  writtenUpdated?: string;
+  /** Three at most, of the article's Locale. */
+  related: RelatedArticle[];
+}
+
+/** A Related article, reduced to its title and its canonical URL. */
+export interface RelatedArticle {
+  title: string;
+  url: string;
 }
 
 export interface NotesFeedRequest {
@@ -40,6 +55,10 @@ export interface RollPage {
   locale: string;
   /** Absent on a blog home. */
   category?: string;
+  /** isIndexable of the page, at build. */
+  indexable: boolean;
+  /** The same page in the other Locales, built and indexable only. */
+  versions: PageVersion[];
   /** Newest first, ROLL_SIZE at most. */
   posts: NotePost[];
   /** Absent on the first page; on page 2, the first page, without /p/. */

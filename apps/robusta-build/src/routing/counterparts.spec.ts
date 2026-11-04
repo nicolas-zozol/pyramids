@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ArticleIndexEntry } from '../content/article-index.ts';
-import { counterpartsOf } from './counterparts.ts';
+import { counterpartsOf, versionsOf } from './counterparts.ts';
 import { urlScheme } from './scheme.ts';
 import {
   buildUrl,
@@ -178,6 +178,82 @@ describe('counterpartsOf a tag page', () => {
 
     expect(
       counterpartsOf(tagged, siteOf(THIRTEEN_FRENCH), THIRTEEN_FRENCH),
+    ).toEqual([]);
+  });
+});
+
+function versionsAt(
+  path: string,
+  articles: ArticleIndexEntry[],
+  urls: PageUrl[] = siteOf(articles),
+): string[] {
+  const page = parseUrl(urlScheme, path);
+  if (page === undefined) throw new Error(`${path} is no URL of the scheme`);
+  return versionsOf(page, urls, articles).map((version) =>
+    buildUrl(urlScheme, version),
+  );
+}
+
+// R-SEOEXCELLENCE-04 and 22, AC-SEOEXCELLENCE-7: the versions a page declares.
+describe('versionsOf', () => {
+  const thirteenEnglish = Array.from({ length: 13 }, (_, i) =>
+    english(`english-${i + 1}`),
+  );
+
+  it('is the landing page of each other Locale for a landing page', () => {
+    expect(versionsAt('/fr', [])).toEqual(['/', '/es']);
+  });
+
+  it('is page n of the same roll in each other Locale that builds it, never its first page', () => {
+    const articles = [...THIRTEEN_FRENCH, ...thirteenEnglish];
+
+    expect(versionsAt('/fr/articles/p/2', articles)).toEqual(['/articles/p/2']);
+    expect(versionsAt('/fr/articles/c/web/p/2', articles)).toEqual([
+      '/articles/c/web/p/2',
+    ]);
+  });
+
+  it('is nothing for page n when the other Locale has a single page, where counterpartsOf gives its first page', () => {
+    const articles = [...THIRTEEN_FRENCH, english('one-article')];
+
+    expect(versionsAt('/fr/articles/p/2', articles)).toEqual([]);
+    expect(versionsAt('/fr/articles/c/web/p/2', articles)).toEqual([]);
+    expect(counterpartsAt('/fr/articles/p/2', articles)).toEqual(['/articles']);
+  });
+
+  it('is the first page of the roll in the other Locale for a first page', () => {
+    const articles = [...THIRTEEN_FRENCH, english('one-article')];
+
+    expect(versionsAt('/fr/articles', articles)).toEqual(['/articles']);
+    expect(versionsAt('/fr/articles/c/web', articles)).toEqual([
+      '/articles/c/web',
+    ]);
+  });
+
+  it('is every other published version of an article, as counterpartsOf gives it', () => {
+    const articles = [
+      entry({
+        locale: 'en',
+        slug: 'leaving-gmail',
+        category: 'privacy',
+        translationId: 'gmail',
+      }),
+      entry({
+        locale: 'fr',
+        slug: 'quitter-gmail',
+        category: 'privacy',
+        translationId: 'gmail',
+      }),
+    ];
+
+    expect(
+      versionsAt('/fr/articles/c/privacy/quitter-gmail', articles),
+    ).toEqual(['/articles/c/privacy/leaving-gmail']);
+  });
+
+  it('is nothing for a tag page', () => {
+    expect(
+      versionsOf({ kind: 'tag', locale: 'en', tag: 'css', page: 1 }, [], []),
     ).toEqual([]);
   });
 });
