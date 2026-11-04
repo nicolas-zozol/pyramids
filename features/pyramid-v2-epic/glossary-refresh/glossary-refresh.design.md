@@ -3,14 +3,14 @@
 **Last update:** 2026-11-04
 **Feature:** glossary-refresh
 **Infix:** GLOSSARY
-**Status:** DRAFT
+**Status:** APPROVED (2026-11-04 — validated by boss)
 **Sources:** [story](glossary-refresh.story.md), [brainstorm](glossary-refresh.brainstorm.md), [epic](../pyramid-v2.epic.md)
 
 ## Goal
 
 Réécrire douze entrées de `ubiquitous-language.md` et en créer quatre, pour qu'elles disent l'état livré par multilingual-site et default-locale-at-root ; toute autre entrée reste mot pour mot. Aucun code ne change. Le pourquoi : [story](glossary-refresh.story.md).
 
-`Workspace` et `Green set` suivent la Proposition de Gap-GLOSSARY-4, `Build chain` celle de Gap-GLOSSARY-5, toutes deux en attente dans le [brainstorm](glossary-refresh.brainstorm.md).
+`Workspace` et `Green set` suivent la Proposition de Gap-GLOSSARY-4, `Build chain` celle de Gap-GLOSSARY-5, retenues par Nicolas le 2026-11-04.
 
 ## Boundaries
 

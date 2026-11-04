@@ -17,7 +17,7 @@ L'entrée `Locale` dit de nouveau vrai sur la Locale par défaut sans marqueur. 
 
 La story regroupe trois items de l'epic : multilingual-glossary, canonical-url-glossary, en attente depuis le 2026-10-07, et la moitié glossaire de rb-compound-positioning, l'entrée `RB Compound`. Refaire `documentation/geo-questions.md` autour de ce terme reste à rb-compound-positioning.
 
-Le glossaire décrit la base v2. Il ne cite la v1 que là où il le fait déjà, comme pour `Article` ; dakar.surf, obsolète, reste un exemple de site et sera migré quand il le faudra. Le livrable est le seul fichier `ubiquitous-language.md` : aucun code ne change. L'entrée `Section`, qui remplace le mot « surface » depuis `a859736`, reste telle quelle, comme toute entrée que la story ne cite pas. Pour `Workspace`, `Green set` et `Build chain`, la story suit les Propositions de Gap-GLOSSARY-4 et Gap-GLOSSARY-5, en attente dans `glossary-refresh.brainstorm.md`.
+Le glossaire décrit la base v2. Il ne cite la v1 que là où il le fait déjà, comme pour `Article` ; dakar.surf, obsolète, reste un exemple de site et sera migré quand il le faudra. Le livrable est le seul fichier `ubiquitous-language.md` : aucun code ne change. L'entrée `Section`, qui remplace le mot « surface » depuis `a859736`, reste telle quelle, comme toute entrée que la story ne cite pas. `Workspace` et `Green set` changent aussi, pour ne plus contredire `Module` (Gap-GLOSSARY-4), et `Build chain` admet qu'un site lise les CSS et assets d'un module tels qu'écrits (Gap-GLOSSARY-5) : Nicolas a retenu les deux Propositions le 2026-11-04.
 
 ## Acceptance Criteria
 

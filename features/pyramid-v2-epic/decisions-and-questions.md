@@ -47,3 +47,27 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - OQ-GLOSSARY-6 (exemple `/en/articles/c/theory` dans l'entrée `Canonical URL`, ou la règle seule) : `decide`, signée `lgtm (designman)`, sans contradiction avec AC-GLOSSARY-2 ; pliée par `designman update`.
 - Contrôle : AC-GLOSSARY-1 à 7 cités mot pour mot, `## Boundaries` rempli.
 - Statut : DRAFT, Gap-GLOSSARY-4 et 5 du brainstorm restant `ask` pour Nicolas (rloq). Une réponse, puis `boss prepare pyramid-v2-epic batch B1` : `storyman update glossary-refresh avec brainstorm`, `designman update`, approbation.
+
+---
+
+# Run 2 : `boss pyramid-v2-epic batch B1`
+
+**Date :** 2026-11-04
+**Requête :** `boss pyramid-v2-epic batch B1` — chaque story de B1 codée et soumise, une après l'autre : drop-section-default-copy, blog-rolls, glossary-refresh. Mode rloq.
+
+## D5 : branche, état de départ
+
+- Phase : pré-vol
+- Choix : rester sur `epic/robusta-v2`, branche attendue. HEAD `7b3b62d`, arbre propre. B1 est le premier batch : le lock le laisse passer.
+- État lu :
+  - drop-section-default-copy : design APPROVED, aucune entrée en attente → Phase 6.
+  - blog-rolls : design APPROVED, aucune entrée en attente → Phase 6, après drop-section-default-copy (Dep 1).
+  - glossary-refresh : design DRAFT, Gap-GLOSSARY-4 et 5 répondus `lgtm (Nicolas, 2026-11-04)` dans le brainstorm → `storyman update avec brainstorm`, `designman update`, Phase 5.
+- Parallèle : les documents de glossary-refresh avancent pendant l'implémentation de drop-section-default-copy ; fichiers disjoints, le code reste linéaire.
+
+## D6 : glossary-refresh, fold et approbation
+
+- Phase : story et design
+- `storyman update avec brainstorm` : Gap-GLOSSARY-4 et 5 (Nicolas) pliés ; seule la phrase du Contexte change, aucun AC réécrit ; entrées retirées du brainstorm. Aucune entrée nouvelle.
+- `designman update` : la ligne du Goal qui disait les Propositions en attente cite leur retenue ; aucun contrat changé, aucune entrée nouvelle.
+- Contrôle boss : AC-GLOSSARY-1 à 7 cités mot pour mot, `## Boundaries` rempli, aucune entrée `ask` en attente → APPROVED (validated by boss).
