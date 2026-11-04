@@ -1,6 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ArticleIndexEntry } from '../content/article-index.ts';
 import { INDEXING_OPEN, isIndexable, robotsOf } from './index.ts';
 
@@ -22,7 +22,7 @@ const article = (
 
 // R-SEOEXCELLENCE-23 and 25: closed until go-live, by one constant.
 describe('robotsOf', () => {
-  it('closes every page while INDEXING_OPEN is false, the constant of this story', () => {
+  it('closes every page in a build that is not the Netlify production one, as the specs run', () => {
     expect(INDEXING_OPEN).toBe(false);
     expect(robotsOf(true)).toBe('noindex, nofollow');
     expect(robotsOf(false)).toBe('noindex, nofollow');
@@ -53,6 +53,81 @@ describe('robotsOf', () => {
     }
 
     expect(writers).toEqual(['indexing.ts']);
+  });
+});
+
+/** INDEXING_OPEN as a fresh load of its module reads it, under the given build variables. */
+async function indexingOpenUnder(
+  env: Partial<Record<'NETLIFY' | 'NETLIFY_LOCAL' | 'CONTEXT', string>>,
+): Promise<boolean> {
+  for (const name of ['NETLIFY', 'NETLIFY_LOCAL', 'CONTEXT'] as const)
+    vi.stubEnv(name, env[name]);
+  vi.resetModules();
+  const indexing = await import('./indexing.ts');
+  return indexing.INDEXING_OPEN;
+}
+
+// R-GOLIVE-01, R-GOLIVE-05: open on the production build run by Netlify only.
+describe('INDEXING_OPEN', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it('is open on a production build run by Netlify', async () => {
+    expect(
+      await indexingOpenUnder({ NETLIFY: 'true', CONTEXT: 'production' }),
+    ).toBe(true);
+  });
+
+  it('stays closed on a build without NETLIFY nor CONTEXT, a local build', async () => {
+    expect(await indexingOpenUnder({})).toBe(false);
+  });
+
+  it('stays closed on Netlify outside production: branch deploy, deploy preview, dev', async () => {
+    for (const CONTEXT of ['branch-deploy', 'deploy-preview', 'dev'])
+      expect(
+        await indexingOpenUnder({ NETLIFY: 'true', CONTEXT }),
+        CONTEXT,
+      ).toBe(false);
+  });
+
+  it('stays closed on a build of the Netlify CLI, CONTEXT production without NETLIFY', async () => {
+    expect(
+      await indexingOpenUnder({ NETLIFY_LOCAL: 'true', CONTEXT: 'production' }),
+    ).toBe(false);
+  });
+
+  it('opens an indexable page only, once open', async () => {
+    vi.stubEnv('NETLIFY', 'true');
+    vi.stubEnv('CONTEXT', 'production');
+    vi.resetModules();
+    const indexing = await import('./indexing.ts');
+
+    expect(indexing.robotsOf(true)).toBe('index, follow');
+    expect(indexing.robotsOf(false)).toBe('noindex, nofollow');
+  });
+
+  it('is the only reader of NETLIFY and CONTEXT under src', async () => {
+    const src = resolve(process.cwd(), 'src');
+    const entries = await readdir(src, {
+      recursive: true,
+      withFileTypes: true,
+    });
+    const readers: string[] = [];
+    for (const entry of entries) {
+      if (
+        !entry.isFile() ||
+        !/\.tsx?$/.test(entry.name) ||
+        /\.spec\./.test(entry.name)
+      )
+        continue;
+      const text = await readFile(join(entry.parentPath, entry.name), 'utf8');
+      if (/process\.env\.(NETLIFY|CONTEXT)\b/.test(text))
+        readers.push(entry.name);
+    }
+
+    expect(readers).toEqual(['indexing.ts']);
   });
 });
 

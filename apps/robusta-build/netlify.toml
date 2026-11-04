@@ -3,11 +3,16 @@
 # every path below is relative to it, and the root .nvmrc picks Node 22.
 #
 # Netlify publishes the prerendered client output, with no function, no header
-# rule and no plugin. The default Locale is served unprefixed, `/` being its
-# landing page, an index.html like any other page. Two redirect rules lead a page
-# marked with the default Locale permanently to the same page unmarked: `/en` to
-# `/`, `/en/{rest}` to `/{rest}`. Without `force`, and no file existing under
-# `en`, they always apply; a target the site does not build answers 404.
+# rule and no plugin. The first redirect rule, forced and matching the Netlify
+# subdomain alone, leads every path of robusta-build.netlify.app permanently to
+# the same path on www.robusta.build; www, branch deploys and deploy previews
+# answer under their own host and are not redirected.
+#
+# The default Locale is served unprefixed, `/` being its landing page, an
+# index.html like any other page. Two redirect rules lead a page marked with the
+# default Locale permanently to the same page unmarked: `/en` to `/`, `/en/{rest}`
+# to `/{rest}`. Without `force`, and no file existing under `en`, they always
+# apply; a target the site does not build answers 404.
 
 [build]
   command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta"
@@ -19,6 +24,12 @@
 [build.environment]
   # Netlify's default, --ignore-optional, is an unknown option to yarn 4.
   YARN_FLAGS = "--immutable"
+
+[[redirects]]
+  from = "https://robusta-build.netlify.app/*"
+  to = "https://www.robusta.build/:splat"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/en"

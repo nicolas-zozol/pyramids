@@ -2,8 +2,9 @@ import type { ArticleIndexEntry } from '../content/article-index.ts';
 import { articlesListedBy } from '../routing/listed-articles.ts';
 import type { PageUrl } from '../routing/url-scheme/index.ts';
 
-/** The go-live switch: a build-time constant, false in this story. */
-export const INDEXING_OPEN: boolean = false;
+/** The go-live switch: true on a production build run by Netlify only, fixed at build time. */
+export const INDEXING_OPEN: boolean =
+  process.env.NETLIFY === 'true' && process.env.CONTEXT === 'production';
 
 /** 'index, follow' only when indexable and indexing is open, 'noindex, nofollow' otherwise. */
 export function robotsOf(indexable: boolean, open = INDEXING_OPEN): string {
