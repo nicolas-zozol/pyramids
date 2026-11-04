@@ -112,3 +112,9 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - seo-excellence, `storyman update avec brainstorm` : OQ-SEOEXCELLENCE-22 et 23 pliées ; Contexte, AC-1, 2, 4 et 7 réécrits sur le schéma de default-locale-at-root ; fil d'Ariane des pages de roll (Gap-BLOGROLLS-4) dans AC-4 ; page `n` d'un roll en AC-7 ; toutes les Dependencies levées. OQ-SEOEXCELLENCE-21 reformulée, Resolution vide.
 - go-live : story écrite par storyman, 5 AC, aucune entrée. Dep 2 : passer l'équipe Netlify en offre Personal avant le merge sur `main`, action de Nicolas hors dépôt.
 - D12a — atw OQ-SEOEXCELLENCE-21 — seo-excellence.story.md — retained: la Proposition, chaque landing page (`/`, `/fr`, `/es`) déclare Robusta Build comme organisation, aucune entreprise locale. Set aside: une entreprise locale sur `/fr` seule, ou l'organisation sur `/` seule. Confidence: high.
+
+## D13 : brainstorm de go-live
+
+- bsman : Netlify ne pose pas `X-Robots-Tag: noindex` sur le dernier déploiement d'une branche (`epic-robusta-v2--robusta-build.netlify.app` répond 200 sans l'en-tête) : la build reste fermée hors production, par `CONTEXT`. `robusta-build.netlify.app` répond 200 sans redirection.
+- OQ-GOLIVE-1 : `decide`, signée `lgtm (bsman)`, gardée.
+- D13a — atw OQ-GOLIVE-2 — go-live.brainstorm.md — retained: la Proposition, un 301 forcé dans `netlify.toml` limité à l'hôte `robusta-build.netlify.app`, vers la même page sous `https://www.robusta.build`. Set aside: la copie ouverte rattachée par la seule canonical URL. Confidence: medium.
