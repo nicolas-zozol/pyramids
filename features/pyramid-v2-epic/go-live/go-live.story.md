@@ -71,6 +71,7 @@ Client code : crawlers.
 - 2026-11-04 — `robusta-build.netlify.app` répond 301 forcé vers `https://www.robusta.build`, règle limitée à cet hôte. Pourquoi : aucune copie ouverte ne vit sous un second hôte ; les déploiements de branche, les deploy previews et `www` ne sont pas redirigés (OQ-GOLIVE-2).
 - 2026-11-04 — Le draft deploy se fait par `npx netlify-cli deploy` sans `--prod`, fermé par construction ; `netlify deploy --remote` est exclu. Pourquoi : la documentation Netlify ne dit pas le `CONTEXT` d'un draft distant.
 - 2026-11-04 — Vérifié au submit : build locale fermée, build `NETLIFY=true CONTEXT=production` à 33 pages `index, follow` égales au sitemap, 404 en `noindex`, draft deploy `https://dev--robusta-build.netlify.app` en `noindex, nofollow`. Restent à `storyman done`, après le merge sur `main` : AC-GOLIVE-4 dans la console webmaster et AC-GOLIVE-7 en direct.
+- 2026-11-04 — L'équipe Netlify reste en offre Free ; le passage en Personal avec recharge automatique avant le merge, décidé le 2026-10-06, est abandonné. Pourquoi : Nicolas, « Y'a pas à discuter, on reste en free. On payeras si besoin, pas avant. » Le risque des crédits épuisés par les crawlers est accepté : au plafond de 300 crédits, l'offre Free met les sites de l'équipe en pause, et Nicolas paiera seulement si le besoin apparaît.
 
 ## Documentation updates
 
@@ -78,9 +79,7 @@ Client code : crawlers.
 - changed the `noindex` paragraph of « Where the truth of this site lives » in `apps/robusta-build/README.md`.
 - changed the robusta.build line of `README.md` and the `apps/robusta-build` line of `CLAUDE.md`.
 - changed the go-live line of `.claude/skills/geo-article/SKILL.md`.
-- change the Netlify plan in the Deployment section of `apps/robusta-build/README.md` — why: il dit encore l'offre Free à 300 crédits ; à écrire une fois Dep 2 faite.
 
 ## Dependencies
 
 - Dep 1: seo-excellence, B2 — levée, soumise le 2026-11-04 avec `93f6770`.
-- Dep 2: l'équipe Netlify passe en offre Personal avec recharge automatique avant le merge sur `main` (décision du 2026-10-06) — action de Nicolas hors dépôt.
