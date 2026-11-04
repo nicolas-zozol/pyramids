@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-04
 **Feature :** seo-excellence
 **Infix :** SEOEXCELLENCE
-**Status :** ACTIVE
+**Status :** SUBMITTED (2026-11-04, commit 93f6770)
 
 ## Story
 
@@ -11,13 +11,7 @@
 
 ## Contexte & objectif
 
-L'epic porte une intention SEO : les bonnes pratiques, jamais l'agressivité. Aucune règle métier n'en sort ; cette story en fait des critères vérifiables.
-
-Lu dans le code le 2026-11-04 : la racine déclare `robots: noindex, nofollow` et, sur toute page, le titre et la description de la page copy de sa Locale ; seules la landing page et les pages de listing posent les leurs (robusta-landing-page, blog-rolls), une page article partage donc ceux de sa Locale. Ni canonical URL, ni hreflang, ni sitemap, ni `robots.txt`, ni données structurées. Quatre corps d'article déclarent un second `h1` (`yield-farming`, `easy-automation-with-sonoff`, `yield-farming-fr`, `quel-second-langage`), et `mandatoryKeywords: ['robusta build', 'freelance']` est toujours dans la Site configuration. article-page a laissé exprès deux sujets à cette story : le bloc de Related articles en fin d'article et ces titres.
-
-La story livre sur le site que multilingual-site et default-locale-at-root ont construit : robusta.build en trois Locales (BR-ROBUSTA-1), `en` par défaut et servie sans préfixe (BR-PYRAMID-14), `fr` et `es` sous `/fr` et `/es`. `/` est la landing page `en`, pas une redirection. L'hébergeur répond 301 de `/en…` vers la forme sans préfixe et d'une barre finale vers la forme sans barre, et sert en 200 le jumeau `.html` de chaque page (Gap-ROOTLOCALE-3). Un article n'existe que dans les Locales où une version publiée existe (BR-PYRAMID-10). Une canonical URL est la forme que le schéma construit, au sens de l'entrée `Canonical URL` du glossaire, sur `https://www.robusta.build`. blog-rolls rend chaque page de listing, titre et description compris ; cette story déclare le reste. Le site met en avant RB Compound ; cette story n'écrit aucun texte pour lui, elle déclare la page copy existante (OQ-PYRAMID-4 de l'epic). Le site reste fermé à l'indexation jusqu'à go-live.
-
-Hors périmètre : SEO hors site, fiche Google Business Profile comprise ; Core Web Vitals ; toute analytics (BR-PYRAMID-2) ; `<html lang>`, le schéma d'URL et les redirections de l'hébergeur (multilingual-site, default-locale-at-root) ; la suppression du jumeau `.html`, réglage d'hébergeur ; la page copy, titres et descriptions des landing pages et des pages de listing compris ; le rendu des rolls (blog-rolls) ; l'ouverture à l'indexation (go-live) ; les adresses v1 (restore-v1-urls).
+Avant cette story, la racine déclarait `noindex` et la page copy de sa Locale sur toute page : ni canonical URL, ni hreflang, ni sitemap, ni `robots.txt`, ni données structurées, cinq corps d'article avec un second titre de premier niveau, et `mandatoryKeywords` dans la Site configuration. Chaque page de robusta.build, en `en`, `fr` et `es`, déclare désormais ce qu'elle est ; le site reste fermé à l'indexation jusqu'à go-live, qui n'a que `INDEXING_OPEN` à basculer.
 
 ## Ce que « pas agressif » veut dire ici
 
@@ -26,7 +20,41 @@ Hors périmètre : SEO hors site, fiche Google Business Profile comprise ; Core 
 - Un lien interne existe pour un lecteur qui le suivrait ; un bloc de liens est omis plutôt que rembourré.
 - Les données structurées décrivent ce que la page affiche, jamais plus.
 
-## Acceptance Criteria
+## Livré
+
+### Requirements
+
+- R-SEOEXCELLENCE-01 : `pageHead` est le seul producteur des balises SEO du head. Les sept routes de page le reçoivent par `landingHead`, `listingHead` ou `articleHead` ; la route racine reste inchangée.
+- R-SEOEXCELLENCE-02 : titre et description : `landing.head` de la Locale pour une landing page, les modèles de `listingHead` pour une page de listing, et pour un article son titre seul, sans nom de site ajouté, et `getExcerptText` de son excerpt, entier, sans troncature.
+- R-SEOEXCELLENCE-03 : la canonical URL d'une page est `absoluteUrl(buildUrl(urlScheme, page))` ; le jumeau `.html` sert le même document, donc déclare la canonical URL de sa page (BR-PYRAMID-14).
+- R-SEOEXCELLENCE-04 : les versions d'une page : `ArticlePage.versions` pour un article, les deux autres landing pages pour une landing page, `RollPage.versions` pour une page de roll ; `pageHead` en tire hreflang et x-default selon ses garanties (BR-ROBUSTA-1).
+- R-SEOEXCELLENCE-05 : l'aperçu de partage : `og:type` `article` sur une page article, posé par `shareType`, et `website` ailleurs, `og:title` et `og:description` égaux au titre et à la description, `og:url` égal à la canonical URL, `og:locale` `en_US`, `fr_FR` ou `es_ES` selon la Locale, correspondance fixe écrite dans `src/seo`, alors que `inLanguage` et `<html lang>` gardent le code de la Locale, `og:image` absolu sur la couverture d'un article qui en déclare une, sur aucune autre page.
+- R-SEOEXCELLENCE-21 : `isIndexable` est la règle unique : une landing page et une page article le sont, une page de roll l'est quand `articlesListedBy` n'est pas vide, une page de tag ne l'est jamais. Une page sans `PageUrl`, la 404, n'a pas de déclaration.
+- R-SEOEXCELLENCE-22 : `RollPage.indexable` vient de `isIndexable` au build ; `RollPage.versions` est `versionsOf` restreint aux pages indexables et construites, si bien qu'aucun hreflang ne nomme une page non indexable.
+- R-SEOEXCELLENCE-23 : le `robots` d'une page déclarée est `robotsOf(indexable)`. `INDEXING_OPEN` vaut `false` : chaque page sort `noindex, nofollow`, et une page indexable se reconnaît dans la build à sa canonical URL, que seule une déclaration indexable porte.
+- R-SEOEXCELLENCE-24 : une route qui ne pose aucun head garde le `noindex, nofollow` de la racine et n'est pas au sitemap.
+- R-SEOEXCELLENCE-25 : `INDEXING_OPEN` est écrit une fois, dans `src/seo/indexing.ts`, et rien d'autre ne décide de l'ouverture : go-live n'a qu'elle à changer. Le second paramètre de `robotsOf` ne sert qu'aux tests ; aucun code de production ne le passe.
+- R-SEOEXCELLENCE-41 : `emit-site-files.mjs` passe à `sitemapEntries` `landingPages` puis `contentUrls`, dans cet ordre ; `sitemapEntries` garde cet ordre, garde les pages que `isIndexable` accepte, publiées seulement puisque l'index ne porte qu'elles (BR-PYRAMID-10), et les écrit au build, jamais sur une requête (BR-PYRAMID-7).
+- R-SEOEXCELLENCE-42 : `lastmod` : pour un article, `updated` s'il existe, `date` sinon ; pour une landing page ou une page de roll, le plus récent de ces mêmes dates parmi `articlesListedBy` ; absent quand la page ne liste aucun article.
+- R-SEOEXCELLENCE-43 : `robotsTxt` autorise tout et nomme `absoluteUrl('/sitemap.xml')` : l'asset root et `/learn` restent lisibles.
+- R-SEOEXCELLENCE-44 : `SITE_ORIGIN` et `NOTES_FEED_SIZE` sont écrits dans `src/routing/scheme.ts` ; la Site configuration lit le premier, la route de la landing page et `articlesListedBy` le second.
+- R-SEOEXCELLENCE-61 : une page article déclare `articleData` — `headline`, `datePublished`, `dateModified` seulement si `updated` existe, `author` comme `Person` nommée, `inLanguage`, `image` absolue sous l'asset root quand la couverture existe — et `breadcrumbData(articleTrail(page))`.
+- R-SEOEXCELLENCE-62 : `articleTrail` : l'accueil du blog de la Locale, libellé `listing.blogTitle`, puis la Category, libellée par `getCategoryLabel`, quand l'article en revendique une, puis le titre de l'article sans lien. `ArticleView` le rend dans un `nav` nommé `breadcrumb.navLabel`, une liste ordonnée, chaque lien par `SiteLink`, le dernier élément en texte marqué `aria-current="page"`.
+- R-SEOEXCELLENCE-63 : une page d'un roll de Category rend et déclare `rollTrail` : l'accueil du blog, puis la Category, en texte sur la page 1 et liée à la page 1 dès la page 2. L'accueil du blog ne rend ni ne déclare de fil d'Ariane.
+- R-SEOEXCELLENCE-64 : chaque landing page déclare `organizationData` : `siteName`, sa propre canonical URL, `contact.email` et `contact.linkedIn` en `sameAs`. Aucune page ne déclare `LocalBusiness`, d'adresse ni de zone.
+- R-SEOEXCELLENCE-65 : une page article montre `article.updatedPrefix` et `writtenUpdated` dans un `<time dateTime>` à côté de la date de publication, seulement quand l'article déclare `updated`, écrite au build dans sa Locale et en UTC comme `writtenDate`.
+- R-SEOEXCELLENCE-66 : la vue et la déclaration lisent la même valeur — `articleTrail`, `rollTrail`, le titre, les dates, l'auteur, la couverture — de sorte qu'aucune donnée structurée ne porte un champ que la page n'affiche pas. Fil d'Ariane et bloc de Related articles ne stylent qu'en tokens du design system (BR-PYRAMID-6) et ne lisent que la page copy de leur Locale (BR-PYRAMID-8) ; le design system ne gagne aucun composant.
+- R-SEOEXCELLENCE-81 : `ArticlePage.related` est `findRelated(article, 3)`, dont la règle vit dans `relatedAmong`, chaque article réduit à son titre et à sa canonical URL.
+- R-SEOEXCELLENCE-82 : `ArticleView` termine la page sur un bloc titré `article.relatedTitle` en `h2`, une liste de liens par `SiteLink` vers les titres, sans date ni image, après le `nav` de fin de page ; aucun bloc quand `related` est vide.
+- R-SEOEXCELLENCE-101 : `updated` est un champ optionnel du frontmatter, `YYYY-MM-DD`, entre guillemets ou lu comme timestamp YAML, comparé au jour calendaire comme `date`.
+- R-SEOEXCELLENCE-102 : les cinq corps qui déclarent un titre de premier niveau sont corrigés dans `content/articles` et dans `apps/robusta/content/blog`, dans un même commit : `leaving-gmail`, titré en setext, et `easy-automation-with-sonoff` perdent le titre qui répète le leur ; `yield-farming` et `yield-farming-fr` descendent le leur au deuxième niveau, libellé gardé ; `quel-second-langage` descend tout son arbre d'un niveau. `quitter-gmail`, `domotique-facile-avec-sonoff` et `yield-farming` redéclarent le fingerprint de leur original dans ce commit.
+- R-SEOEXCELLENCE-121 : `BlogConfig` perd `mandatoryKeywords`, et aucune page ne déclare de mot-clé.
+- R-SEOEXCELLENCE-122 : `PageCopy` gagne `article.relatedTitle`, `article.updatedPrefix` et `breadcrumb.navLabel` pour `en`, `fr` et `es` : `relatedTitle` « Related articles », « Articles liés », « Artículos relacionados » ; `updatedPrefix` « Updated on », « Mis à jour le », « Actualizado el » ; `breadcrumb.navLabel` « Breadcrumb », « Fil d'Ariane », « Ruta de navegación ».
+- R-SEOEXCELLENCE-141 : `check-seo.mjs` échoue, en nommant la page, sur : un titre ou une description absent ou partagé avec une autre page de la même `<html lang>` ; une page portant une canonical URL absente du sitemap, ou une entrée du sitemap sans page construite qui la déclare canonique ; un `href` interne qui ne mène ni à une page construite ni à un fichier de `dist/client` ; un `alternate` qui mène à une page non construite ou qui ne lui rend pas le lien ; un nombre de `<h1>` autre que un.
+- R-SEOEXCELLENCE-142 : il échoue aussi quand le `robots` d'une page diffère de `robotsOf` appliqué à la présence de sa canonical URL, `INDEXING_OPEN` lu dans `.routing-dist` : tant qu'il vaut `false`, aucune page ne porte `index`.
+- R-SEOEXCELLENCE-143 : aucun fichier ni balise de vérification n'est livré : robusta.build est vérifié dans la console webmaster par un enregistrement DNS, hors du dépôt (BR-PYRAMID-2).
+
+### Acceptance Criteria
 
 - AC-SEOEXCELLENCE-1 : Given toute page indexable, When un moteur de recherche ou une plateforme sociale la lit, Then il y trouve un titre et une description qui lui sont propres (celle d'un article est son excerpt, entier, en texte brut), une canonical URL qui la nomme sous sa forme canonique, la langue de sa Locale, un aperçu de partage construit sur ces mêmes valeurs, un lien hreflang vers chacune de ses versions publiées en `en`, `fr` et `es`, elle-même comprise, et un x-default vers sa version `en`, sans préfixe, quand elle en a une ; il n'y trouve aucun mot-clé ajouté par la Site configuration.
 - AC-SEOEXCELLENCE-2 : Given une page sans contenu propre (la page 404) ou une page qui ne déclare rien de son indexation, When le site est construit, Then cette page se déclare non indexable et le sitemap l'omet, alors que landing pages, pages de listing et pages article sont indexables ; aucune canonical URL, aucun lien hreflang ni aucune entrée du sitemap ne nomme une forme que l'hébergeur redirige (`/en…`, une barre finale) ni un jumeau `.html`, et ce jumeau déclare la canonical URL de sa page. Jusqu'à go-live, aucune page n'est ouverte à l'indexation.
@@ -41,61 +69,69 @@ Hors périmètre : SEO hors site, fiche Google Business Profile comprise ; Core 
 ```
   Packages de l'app `@robusta/robusta-build` [modified]
 
-  routes · page-data · scripts de build
+  routes · scripts de build (emit-site-files, check-seo)
       │
-      ├──library──→  package `routing`
+      ├──library──→  article · listing · landing [modified]
+      │                  │
+      │                  └──library──→  package `seo` [new]
       │
-      └──library──→  package `content` [modified]
+      ├──library──→  package `page-data` [modified]
+      │
+      ├──library──→  package `routing` [modified]
+      │
+      └──library──→  package `content`, `corpus-reader` compris [modified]
 ```
-
-Les packages `routing` et `content` sont ceux que multilingual-site a rapatriés de `@robusta/pyramids-routing` et `@robusta/pyramids-content` (BR-PYRAMID-12). Où vivent les déclarations dans le site, c'est au design de le dire, sur TanStack Start.
 
 ### HTTP API of app `@robusta/robusta-build` — modified
 
 Client code : crawlers et plateformes sociales.
 
-- `GET /sitemap.xml` · nouveau — 200, les pages indexables des trois Locales sous leur forme canonique, datées quand le contenu le permet, généré au build
+- `GET /sitemap.xml` · nouveau — 200, les pages indexables des trois Locales sous leur forme canonique, `lastmod` quand le contenu le permet, écrit au build
 - `GET /robots.txt` · nouveau — 200, nomme le sitemap, n'interdit rien
-- `GET` sur toute page, jumeau `.html` compris · modifié — son head déclare titre, description, canonical URL, indexabilité, liens hreflang, x-default et aperçu de partage ; une page article ajoute ses données structurées et montre fil d'Ariane et Related articles ; une page d'un roll de Category montre et déclare son fil d'Ariane ; une landing page ajoute l'organisation
+- `GET` sur toute page, jumeau `.html` compris · modifié — son head déclare titre, description, `robots`, canonical URL, hreflang, x-default et aperçu de partage ; une page article ajoute `BlogPosting` et `BreadcrumbList` et montre fil d'Ariane et Related articles ; une page d'un roll de Category montre et déclare son fil d'Ariane ; une landing page ajoute `Organization`
+
+### library API of package `seo` in app `@robusta/robusta-build` — new
+
+Client code : `article`, `listing`, `landing`, scripts de build.
+
+- `pageHead`, `isIndexable`, `INDEXING_OPEN`, `robotsOf`
+- `articleData`, `breadcrumbData`, `organizationData`
+- `absoluteUrl`, `sitemapEntries`, `sitemapXml`, `robotsTxt`
 
 ### library API of package `content` in app `@robusta/robusta-build` — modified
 
 Client code : `page-data`, scripts de build.
 
-- `ArticleEntry` · modifié — gagne une date de mise à jour optionnelle, lue dans un champ `updated` du frontmatter
-- `readCorpus(corpus)` · modifié — refuse une date de mise à jour malformée comme il refuse un `date` malformé
+- `ArticleEntry` · modifié — gagne `updated` optionnel, lu dans le frontmatter
+- `readCorpus(corpus)` · modifié — refuse un `updated` malformé comme un `date` malformé
+- `getExcerptText`, `findRelated`, `relatedAmong` · nouveaux
 
 ### library API of package `seopyramids.config` in app `@robusta/robusta-build` — modified
 
 - `BlogConfig` · modifié — perd `mandatoryKeywords`
+- `PageCopy` · modifié — gagne `article.relatedTitle`, `article.updatedPrefix`, `breadcrumb.navLabel`
 
 ## Décisions
 
-- 2026-07-29 — Pas de routes de tag : les tags restent des métadonnées qui choisissent les Related articles, la navigation passe par les Categories. Pourquoi : découpé par tag, le corpus donne des pages d'un ou deux articles, la page mince que la story refuse (R-URLSCHEME-31 réserve `/articles/t/{tag}` sans rien y servir).
-- 2026-07-29 — `mandatoryKeywords` quitte la configuration v2. Pourquoi : il colle les deux mêmes termes commerciaux à chaque article quel que soit son sujet, le motif agressif que l'epic écarte.
-- 2026-07-30 — « Une page indexable porte un contenu propre » reste un critère de la story, pas une règle métier. Pourquoi : c'est la définition même d'`Indexable page` au glossaire ; BR-PYRAMID-4 est retiré.
-- 2026-07-30 — Une Category qui ne contient qu'un article est indexable. Pourquoi : sinon ses articles ne sont joignables que depuis l'accueil du blog, et la page montre quelque chose de réel.
-- 2026-07-30 — L'aperçu de partage se limite au titre, à la description, à l'image, à la canonical URL et à la langue, tirés de valeurs que la page calcule déjà. Pourquoi : rien à rédiger ni à entretenir.
-- 2026-07-30 — La date du sitemap vient d'un champ `updated` optionnel du frontmatter, à défaut de la date de publication ; une page qui liste des articles prend la plus récente. Pourquoi : c'est la seule date que le contenu possède, un horodatage de fichier ne veut rien dire après un checkout de CI.
-- 2026-07-30 — La seule mesure gardée est l'inscription du site dans la console webmaster d'un moteur de recherche, vérifiée par DNS ou fichier statique. Pourquoi : elle ne livre aucun code au visiteur et n'identifie personne (BR-PYRAMID-2).
-- 2026-10-06 — blog-rolls rend l'accueil du blog et les rolls de Category, avant cette story. Pourquoi : un roll est de la page copy, l'intégrer ici doublerait la story.
-- 2026-10-06 — La racine garde `noindex` par défaut et chaque page indexable se déclare indexable ; les pages s'ouvrent à go-live. Pourquoi : supprimer la directive de la racine ouvrirait aussi la 404, et chaque canonical URL nomme `https://www.robusta.build`, qui sert v1 jusqu'à la bascule.
-- 2026-10-25 — Les quatre corps qui déclarent un second `h1` sont corrigés dans l'arbre v2 et dans l'arbre v1 figé, dans un même commit, pour que `corpus-freeze.spec.ts` garde les copies identiques. Pourquoi : BR-ROBUSTA-1 garde les articles anglais sur le site, `yield-farming` et `easy-automation-with-sonoff` ne partent plus ; v1 a le même défaut, et exempter des fichiers affaiblirait le seul contrôle de la copie.
-- 2026-10-25 — Retour du multilingue : chaque page déclare la langue de sa Locale et ses versions publiées dans les autres Locales. Pourquoi : BR-ROBUSTA-1 remplace la décision du 2026-10-06 d'une seule Locale `fr`, sans version alternative.
-- 2026-11-04 — Le x-default désigne la version `en` d'une page, sans préfixe ; une page sans version `en` n'en déclare pas. Pourquoi : pointer vers `/` enverrait le lecteur sur une page qui ne traite pas le même sujet.
-- 2026-11-04 — Une page qui ne liste aucun article daté figure au sitemap sans date. Pourquoi : la date est facultative au sitemap, et la seule qu'on pourrait poser serait inventée.
-- 2026-11-04 — Le jumeau `.html` reste servi ; il déclare la canonical URL de sa page. Pourquoi : le supprimer est un réglage d'hébergeur pour tout le site, et l'epic a confié son canonical link à cette story le 2026-11-03.
-- 2026-11-04 — Le fil d'Ariane s'étend à chaque page d'un roll de Category, accueil du blog puis Category ; l'accueil du blog n'en a pas. Pourquoi : blog-rolls n'en rend aucun et le confie à cette story.
-- 2026-11-04 — La page `n` d'un roll a pour versions la page `n` du même roll dans les autres Locales, pas la page 1 que donne `counterpartsOf`. Pourquoi : une page 1 ne rendrait pas le lien, et la réciprocité d'AC-SEOEXCELLENCE-6 échouerait dès qu'une page 2 existe.
-- 2026-11-04 — Chaque landing page, `/`, `/fr` et `/es`, déclare Robusta Build comme organisation, avec le nom et le contact qu'elle affiche ; aucune page ne déclare d'entreprise locale, et la fiche Google Business Profile reste hors story (OQ-SEOEXCELLENCE-21). Pourquoi : les landing pages mettent en avant RB Compound et ne montrent aucune zone, et `/fr` et `/es` affichent la même organisation que `/`.
+- 2026-07-29 — Pas de routes de tag : les tags choisissent les Related articles, la navigation passe par les Categories. Pourquoi : découpé par tag, le corpus donne des pages d'un ou deux articles.
+- 2026-07-29 — `mandatoryKeywords` quitte la configuration v2. Pourquoi : il collait les deux mêmes termes commerciaux à chaque article, le motif agressif que l'epic écarte.
+- 2026-07-30 — « Une page indexable porte un contenu propre » reste un critère de la story, pas une règle métier. Pourquoi : c'est la définition d'`Indexable page` au glossaire ; BR-PYRAMID-4 est retiré.
+- 2026-07-30 — Une Category qui ne contient qu'un article est indexable. Pourquoi : sinon ses articles ne sont joignables que depuis l'accueil du blog.
+- 2026-07-30 — La date du sitemap vient d'un champ `updated` optionnel du frontmatter, à défaut de la date de publication. Pourquoi : un horodatage de fichier ne veut rien dire après un checkout de CI.
+- 2026-07-30 — La seule mesure gardée est l'inscription du site dans la console webmaster d'un moteur de recherche, vérifiée par DNS. Pourquoi : elle ne livre aucun code au visiteur (BR-PYRAMID-2).
+- 2026-10-06 — La racine garde `noindex` par défaut et chaque page indexable se déclare indexable ; les pages s'ouvrent à go-live. Pourquoi : chaque canonical URL nomme `https://www.robusta.build`, qui servait v1 jusqu'à la bascule.
+- 2026-10-25 — Les corps à second `h1` sont corrigés dans l'arbre v2 et dans l'arbre v1 figé, dans un même commit. Pourquoi : `corpus-freeze.spec.ts` garde les copies identiques.
+- 2026-11-04 — Le x-default désigne la version `en` d'une page ; une page sans version `en` n'en déclare pas. Pourquoi : `/` ne traite pas le même sujet.
+- 2026-11-04 — Le jumeau `.html` reste servi et déclare la canonical URL de sa page. Pourquoi : le supprimer est un réglage d'hébergeur pour tout le site.
+- 2026-11-04 — La page `n` d'un roll a pour versions la page `n` du même roll dans les autres Locales, pas la page 1 que donne `counterpartsOf`. Pourquoi : la réciprocité d'AC-SEOEXCELLENCE-6 échouerait dès qu'une page 2 existe.
+- 2026-11-04 — Chaque landing page déclare Robusta Build comme organisation ; aucune page ne déclare d'entreprise locale, la fiche Google Business Profile reste hors story (OQ-SEOEXCELLENCE-21). Pourquoi : les landing pages mettent en avant RB Compound et ne montrent aucune zone.
+- 2026-11-04 — Les textes `relatedTitle`, `updatedPrefix` et `breadcrumb.navLabel` en `en`, `fr` et `es` ont été rédigés à l'implémentation. À relire par Nicolas avec listing-copy-review.
+- 2026-11-04 — L'inscription de robusta.build dans une console webmaster, par un enregistrement TXT chez Hover, reste à faire hors du dépôt : c'est la dernière phrase d'AC-SEOEXCELLENCE-6.
 
 ## Documentation updates
 
-- change l'Overview et la ligne de Site configuration de `root.archi.md` — why: l'Overview décrit une chaîne qui produit des pages indexables alors que le site déclare `noindex` sans sitemap, et la ligne nomme encore les mandatory keywords que la story retire.
-- create une section SEO dans `apps/robusta-build/README.md`, à côté de la section Routing — why: ce qu'une page déclare, hreflang, x-default et canonical URL du jumeau `.html` compris, et ce que le site refuse de faire, c'est ce que le prochain site recopie.
-- change la ligne Site web de `documentation/google-business-profile.md` — why: elle dit que les données structurées de `/` déclarent le même nom, la même zone et le même contact que la fiche ; chaque landing page déclare désormais Robusta Build comme organisation, sans zone (OQ-SEOEXCELLENCE-21).
-
-## Dependencies
-
-- Aucune dépendance ouverte.
-- Levées : multilingual-site (LANDED, `fb4803b`), default-locale-at-root (SUBMITTED, `2fbc7be`), blog-rolls (SUBMITTED, `bc568f7`, `ab90ca6`), canonical-url-glossary, absorbé par glossary-refresh (SUBMITTED, `3ca46f9`, entrée `Canonical URL` réécrite), tanstack-start-migration (DONE, `9396d94`), default-locale-fr (LANDED le 2026-10-08), robusta-landing-page (LANDED, `79b4eb0`), migrate-learn-content (`0282952`) et article-page (`3ab28e7`) ; translate-english-articles, remplacé par multilingual-site, n'en est plus une.
+- created la section SEO in `apps/robusta-build/README.md` : ce qu'une page déclare, la règle d'indexabilité, `INDEXING_OPEN`, le sitemap, `robots.txt` et l'audit `check-seo.mjs` ; `mandatoryKeywords` retiré, champ `updated` ajouté.
+- changed l'Overview, la ligne `apps/robusta-build`, la ligne Site configuration, la build chain et le green set in `root.archi.md`.
+- changed l'Overview, le package `routes`, le nouveau package `seo`, `page-data`, `article`, `listing`, `landing`, `content`, `routing`, les scripts, le diagramme et les API HTTP et CLI in `apps/robusta-build/robusta-build.archi.md`.
+- changed `ArticleEntry` et son `updated` in `apps/robusta-build/src/content/corpus-reader/corpus-reader.archi.md`.
+- changed la ligne Site web in `documentation/google-business-profile.md` : chaque landing page déclare Robusta Build comme organisation, sans zone.

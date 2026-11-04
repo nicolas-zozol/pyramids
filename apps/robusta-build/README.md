@@ -6,13 +6,11 @@ The version 1 site lives in `apps/robusta`, whose README documents the v1 route 
 
 ## Where the truth of this site lives
 
-`src/seopyramids.config.ts` — domain, site name, logo, default and other Locales, the blog configuration (content root, roll size, mandatory keywords, author), the contact and the page copy of each Locale. A per-site value is read from there, not hardcoded in a component.
+`src/seopyramids.config.ts` — domain, site name, logo, default and other Locales, the blog configuration (content root, roll size, author), the contact and the page copy of each Locale. A per-site value is read from there, not hardcoded in a component.
 
-`contact` holds the e-mail address and the LinkedIn profile URL every call to action leads to. `pageCopy` holds one block per Locale, `en`, `fr` and `es`; a missing Locale or text fails the typecheck. A block holds, in plain text and in its Locale, every text a page of that Locale displays, alternative text included: `localeName`, the Locale named in its own language; `head`, the title and description of every page but the landing and listing pages; `landing`, the head and the sections of the landing page; `listing`, the title, the head models, the pagination labels and the footer column of the listing pages; the header, the footer, the end of an article; and `categoryLabels`, the label of each category the Locale's published articles claim. `getPageCopy(locale)` and `getCategoryLabel(locale, category)` are the only read paths, and a category with no label in the page's Locale fails the build, naming the category and the Locale. The site passes every text prop of each design-system section it renders, from `pageCopy` or empty to hide the element (BR-PYRAMID-8).
+`contact` holds the e-mail address and the LinkedIn profile URL every call to action leads to. `pageCopy` holds one block per Locale, `en`, `fr` and `es`; a missing Locale or text fails the typecheck. A block holds, in plain text and in its Locale, every text a page of that Locale displays, alternative text included: `localeName`, the Locale named in its own language; `head`, the title and description of the 404 page and of the failed-navigation state; `landing`, the head and the sections of the landing page; `listing`, the title, the head models, the pagination labels and the footer column of the listing pages; the header, the footer, the end of an article with its update label and its Related articles title, the breadcrumb label; and `categoryLabels`, the label of each category the Locale's published articles claim. `getPageCopy(locale)` and `getCategoryLabel(locale, category)` are the only read paths, and a category with no label in the page's Locale fails the build, naming the category and the Locale. The site passes every text prop of each design-system section it renders, from `pageCopy` or empty to hide the element (BR-PYRAMID-8).
 
 What articles exist is answered by `src/content/article-index.ts`, at build time and at no other (BR-PYRAMID-7).
-
-Every document carries `robots` `noindex, nofollow`, set in the head of the root route, `src/routes/__root.tsx`. Lifting it belongs to the go-live item of `ROADMAP.md`.
 
 ## Articles
 
@@ -32,6 +30,7 @@ What the frontmatter must carry, or the build fails naming the file:
 What it may carry:
 
 - `category` — exactly one segment, and categories do not nest (BR-PYRAMID-9). A v1 `categoryPath` of `javascript/typescript` becomes `typescript`. An article claiming none is addressed at `/{locale}/articles/{slug}`; one claiming a category gets `/{locale}/articles/c/{category}/{slug}`, and the category a page in that Locale.
+- `updated` — the date of the last update, `YYYY-MM-DD`, read and checked like `date`. The page shows it beside the publication date, and it dates the article in its structured data and in the sitemap.
 - `tags` — a list, any number of them. A tag has no page.
 - `image` — the cover, a path relative to the article's own file.
 - `translationId` — the value the Locale versions of one article share, so a page can link them. It is authored, not derived: lowercase, locale-neutral, a subject name. Two published articles of one Locale may not share one.
@@ -46,7 +45,7 @@ A translation is stale when the fingerprint of its original differs from the one
 - `untracked-pair` — versions sharing a `translationId`, none of them declaring an original; gives the fingerprint of each.
 - `missing-original` — the declared original is not published or has left the corpus; the translation is served without a link to it.
 
-Write the body in markdown only. HTML written in an article renders as its text alone, and nothing reports it: the renderer drops the tag whole, attributes included, so `<b>C</b>` reaches the page as `C` and an `<img>` tag as nothing. Emphasis is `**bold**` and `_italic_`, an image is `![alt](./images/file.png)`. Two migrated articles carry three such fragments, inline emphasis that renders as plain text.
+Write the body in markdown only. HTML written in an article renders as its text alone, and nothing reports it: the renderer drops the tag whole, attributes included, so `<b>C</b>` reaches the page as `C` and an `<img>` tag as nothing. Emphasis is `**bold**` and `_italic_`, an image is `![alt](./images/file.png)`. The page's `h1` is the title: a body starts its headings at the second level. Two migrated articles carry three such fragments, inline emphasis that renders as plain text.
 
 Images live beside their article, conventionally in an `images/` directory next to it, and are referenced relatively: `./images/vpn.png` from the body or the cover, `../images/shared.png` for the corpus-root folder. The reference is resolved against the article's own place in the corpus and published under the asset root: `blockchain/images/vpn.png` is served at `/article-images/blockchain/images/vpn.png`, so an article can change category without an image moving. A reference resolving to no file of the corpus is a violation and fails the build; an absolute or external URL passes through untouched.
 
@@ -72,9 +71,9 @@ Who owns what: the discriminants `c`, `p` and `t` and the shapes built from them
 
 ### The route table
 
-The routes live under `src/routes`, in TanStack Router's file convention, and the generator writes `src/routeTree.gen.ts`, importing each route file by its `.tsx` name. Beside the root route `__root.tsx` and `/404`, the layout route `{-$locale}/route.tsx` and seven route files sit under `{-$locale}`, an optional Locale segment: the landing page `{-$locale}/index.tsx` and six content routes. The layout route resolves the segment with `localeOfSegment`: absent, it is `en`; `fr` or `es`, that Locale; any other value, `en` included, matches no route. The root route's loader reads the Locale of the address with `parseUrl`, the default Locale for an address outside the scheme, the page's counterparts with `getCounterparts`, and the first page of each roll of that Locale with `getLocaleRolls`. `<html lang>`, the header, the footer and the title and description of every page but the landing page follow that Locale, at prerender and after every client navigation.
+The routes live under `src/routes`, in TanStack Router's file convention, and the generator writes `src/routeTree.gen.ts`, importing each route file by its `.tsx` name. Beside the root route `__root.tsx` and `/404`, the layout route `{-$locale}/route.tsx` and seven route files sit under `{-$locale}`, an optional Locale segment: the landing page `{-$locale}/index.tsx` and six content routes. The layout route resolves the segment with `localeOfSegment`: absent, it is `en`; `fr` or `es`, that Locale; any other value, `en` included, matches no route. The root route's loader reads the Locale of the address with `parseUrl`, the default Locale for an address outside the scheme, the page's counterparts with `getCounterparts`, and the first page of each roll of that Locale with `getLocaleRolls`. `<html lang>`, the header, the footer and the head of every page follow that Locale, at prerender and after every client navigation.
 
-What they render: the two article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`; an article page ends in its own Locale and links every other published version of the article. The four listing routes render `ListingPage`, from `src/listing`, from the payload their loader gets from `getRollPage`: an `h1`, the blog title or the category label, the roll's articles by `NotesPreview`, newest first and 12 at most, each dated with its year and, on the blog home only, labelled with its category, then a `nav` to the newer and the older page when one exists. Their head comes from `listingHead`: the `listing.head` model of the Locale and the kind of page, filled with the category label and, from page 2, the page number. `{-$locale}/index.tsx` renders `LandingPage`, from `src/landing`: `Hero`, the `FlowDiagram` of the open source version of RB Compound, `id="open-source"`, that of the complete version, `id="complete"`, `PrinciplesList`, the notes section and `CTA`, in that order, inside a `<main>`. The notes section shows the four newest articles of the page's Locale, from `getNotesFeed`, and is absent when that Locale publishes none, as `es` does. `/404` renders `NotFoundPage`, in English whatever the address, its link back leading to `/`.
+What they render: the two article routes render `src/article/ArticleView` from the payload their loader gets from `getArticlePage`; an article page shows its breadcrumb and its update date, ends in its own Locale, links every other published version of the article, then lists its Related articles, see SEO. The four listing routes render `ListingPage`, from `src/listing`, from the payload their loader gets from `getRollPage`: an `h1`, the blog title or the category label, the roll's articles by `NotesPreview`, newest first and 12 at most, each dated with its year and, on the blog home only, labelled with its category, then a `nav` to the newer and the older page when one exists; a Category roll shows its breadcrumb above the `h1`. Their head comes from `listingHead`: the `listing.head` model of the Locale and the kind of page, filled with the category label and, from page 2, the page number. `{-$locale}/index.tsx` renders `LandingPage`, from `src/landing`: `Hero`, the `FlowDiagram` of the open source version of RB Compound, `id="open-source"`, that of the complete version, `id="complete"`, `PrinciplesList`, the notes section and `CTA`, in that order, inside a `<main>`. The notes section shows the four newest articles of the page's Locale, from `getNotesFeed`, and is absent when that Locale publishes none, as `es` does. `/404` renders `NotFoundPage`, in English whatever the address, its link back leading to `/`.
 
 The root document, `src/routes/__root.tsx`, renders `Header` before and `Footer` after every page, the 404 and the failed-navigation state included. Both come from `src/chrome` and read the page copy of the page's Locale. `Header` is `SiteHeader` with the wordmark to the landing page of that Locale, the contact call to action, and one link per other Locale, named in its own language and marked with its `lang` and `hreflang`: to the same page in that Locale when it exists, to its landing page otherwise, a roll page leading to page one of the same roll. `Footer` is `SiteFooter` with the tagline, the copyright and, when the Locale publishes an article, one link column: the blog home, then each category of the Locale, in alphabetical order of label. `es` gets none, and `404.html` the column of `en`.
 
@@ -112,6 +111,46 @@ The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr
 
 Nothing serves the mapping and nothing in the build reads it. A v1 address, any `/learn` path included, answers 404 with the not-found page. Whether the old addresses come back is the restore-v1-urls item of `ROADMAP.md`.
 
+## SEO
+
+`src/seo` holds what a page declares of itself to a search engine: `pageHead`, the only producer of the SEO tags of a head, the indexability rule, the structured data, the sitemap and `robots.txt`. It imports no React and no value of `src/seopyramids.config.ts`, and the build scripts read it from `.routing-dist`. The landing, listing and article routes get their head from `landingHead`, `listingHead` and `articleHead`, which call `pageHead`. The root route sets the default head: the `head` title and description of the page copy and `robots` `noindex, nofollow`.
+
+An indexable page declares, in this order:
+
+- `<title>` and `description`: `landing.head` on a landing page, the `listing.head` models on a listing page, and on an article its title alone and its excerpt, whole, in plain text.
+- `robots`, from `robotsOf(indexable)`.
+- The share preview: `og:type`, `article` on an article page and `website` elsewhere, `og:title`, `og:description`, `og:url`, `og:locale` (`en_US`, `fr_FR`, `es_ES`), and `og:image` only on an article with a cover. No default image, no `keywords`, no `twitter:*`.
+- `<link rel="canonical">`: `SITE_ORIGIN`, `https://www.robusta.build`, written in `src/routing/scheme.ts` and read by the Site configuration's `domain`, followed by the page's canonical path. The `.html` twin serves the same document, so it declares the canonical URL of its page.
+- One `<link rel="alternate" hreflang>` per published version, the page included, in the order `en`, `fr`, `es`, then an `x-default` to the `en` version. A page published in one Locale declares none, a page with no `en` version no `x-default`. The versions of page n of a roll are page n of the same roll in the other Locales, built and indexable only, never their first page.
+- Its structured data, one `application/ld+json` script per block: `BlogPosting` and `BreadcrumbList` on an article page, `dateModified` only with `updated` and `image` only with a cover; `BreadcrumbList` on a Category roll; `Organization` on each landing page, with the site name, its canonical URL, the contact e-mail and the LinkedIn profile as `sameAs`. No page declares a `LocalBusiness`, an address or an area. Each field is one the page displays.
+
+No declared URL names `/en…`, a trailing slash other than `/`, or a `.html` file.
+
+`isIndexable` decides: a landing page and an article page are indexable, a roll page when it lists an article, a tag page never. A page that is not indexable declares its title and description only, and `404.html` declares nothing over the root head: neither gets a canonical, an hreflang, a preview, structured data or a sitemap entry.
+
+Every document carries `noindex, nofollow` while `INDEXING_OPEN`, in `src/seo/indexing.ts`, is `false`. It is the only switch, and flipping it belongs to the go-live item of `ROADMAP.md`. Until then, an indexable page is the one that carries a canonical link.
+
+The breadcrumb is `Breadcrumb`, from `src/components`, a `nav` named by `breadcrumb.navLabel`. On an article page, above the cover: the blog home, its Category when it claims one, then the article as text. On a Category roll, above the `h1`: the blog home, then the Category, as text on page 1 and linked to page 1 from page 2. The blog home has none. The trail shown and the trail declared are the same value.
+
+An article page ends on its Related articles, `findRelated(article, 3)`: published articles of its Locale sharing its Category or a tag, the same Category first, then the most shared tags, then the newest. They are an `h2` titled `article.relatedTitle` and a list of title links, after the end-of-page `nav`, and there is no block when none qualifies.
+
+### Sitemap and robots.txt
+
+`scripts/emit-site-files.mjs` runs after `vite build`, which empties `dist/client`, and writes `dist/client/sitemap.xml` and `dist/client/robots.txt`. The sitemap lists the indexable pages, landing pages first, then the content URLs: 33 entries, 3 landing pages, 13 listing pages and 17 articles. An article's `lastmod` is its `updated`, its `date` otherwise; a landing or roll page takes the most recent of the articles it lists, and a page listing none, `/es`, has no `lastmod`. `robots.txt` allows everything and names the sitemap.
+
+### The SEO audit
+
+`scripts/check-seo.mjs` reads the `.html` files of `dist/client` and the sitemap, and fails the build with one line `{url}: {defect}` per defect:
+
+- a title or a description missing, or shared with another page of the same `<html lang>`
+- a canonical URL absent from the sitemap, or a sitemap entry no built page declares canonical
+- an internal `href` that leads to no built page and no file of `dist/client`
+- an `alternate` that leads to a page not built, or whose page does not link back
+- a page without exactly one `<h1>`
+- a `robots` other than `robotsOf` applied to the presence of a canonical link
+
+It prints `seo: 34 pages checked, 33 indexable and all in the sitemap; indexing closed`.
+
 ## Styling
 
 The design system is `@robusta/pyramids-design-system`, the site's only workspace dependency. Per BR-PYRAMID-6 every token the site renders comes from it: the site adds names, never values.
@@ -148,10 +187,10 @@ yarn dev:robusta       # the site's dev
 
 The site's own scripts:
 
-- `build` — `check:source`, `compile:seams`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`.
+- `build` — `check:source`, `compile:seams`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`, `scripts/emit-site-files.mjs` and `scripts/check-seo.mjs`.
 - `dev` — `compile:seams`, `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the page-data functions run on each call and read the corpus. `netlify.toml` does not apply there: `/en` and `/en/…` answer the not-found page instead of a 301.
 - `check:source` — fails on a `'use client'` or `'use server'` directive, or on a local import, `vi.mock` paths included, that does not name its `.ts` or `.tsx` file exactly, anywhere under `src`, the generated route tree included. Each offence names the file, the line and, when the file exists, the expected specifier. An asset or a `.mjs` keeps its extension.
-- `compile:seams` — `tsc -p tsconfig.routing.json` compiles `src/content` and the routing files the plain-Node scripts import to `.routing-dist/`, git-ignored.
+- `compile:seams` — `tsc -p tsconfig.routing.json` compiles `src/content`, `src/seo` and the routing files the plain-Node scripts import to `.routing-dist/`, git-ignored.
 - `check:translations` — prints the translation notices, see Articles.
 - `emit:v1-map` — writes `src/routing/v1-url-map.generated.json`.
 - `copy:assets` — rewrites `public/article-images/`.

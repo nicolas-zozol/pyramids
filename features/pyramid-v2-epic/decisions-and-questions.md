@@ -136,3 +136,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - D15a — atw Gap-GOLIVE-4 — go-live.design.md — retained: la Proposition, ouvrir seulement quand `NETLIFY=true` et `CONTEXT=production` ; la story est corrigée par `storyman update`. Set aside: documenter `--context deploy-preview`, qui laisse AC-GOLIVE-3 à la discipline de qui lance la commande. Confidence: high.
 - Reste ouvert, signalé : un `netlify deploy --remote` (build distant d'un draft) n'est pas documenté ; le README de go-live l'exclut des commandes de draft.
 - `designman update` et `storyman update` : Gap-GOLIVE-4 plié dans le design et la story, aucun contrat changé. Contrôle boss : AC-GOLIVE-1 à 7 cités mot pour mot, `## Boundaries` rempli → APPROVED (validated by boss atw).
+
+## D16 : seo-excellence implémentée
+
+- tddman : commit `93f6770`. Contrôle boss : tests de robusta-build 666/666 (552 avant), lint vert, `yarn build:robusta` vert : sitemap de 33 pages indexables, `seo: 34 pages checked, 33 indexable and all in the sitemap; indexing closed`, 69 fichiers de données inchangés. Head prérendu de `leaving-gmail` lu : titre seul, `noindex, nofollow`, canonical, hreflang `en`, `fr`, x-default, Open Graph `en_US`, deux JSON-LD.
+- Tests v1 (`apps/robusta`, vitest sans script) : 22/71 rouges, tous dans les helpers prosemirror et `learn-segments`, sans environnement DOM ; étrangers à la story, qui ne change que cinq corps d'article v1.
+- Décisions de tddman, sans effet sur la direction : JSON-LD par `head().scripts` (le typage de `head().meta` refuse `script:ld+json`), `shareType` pour `og:type`, `robotsOf(indexable, open)`, prop `url` de `ListingPage`. Repliées dans le design par `designman update` avant submit.
+- tddman a lancé un `git stash` puis l'a dépilé aussitôt : `ROADMAP.md` et l'epic sont revenus inchangés.
+- submit : design IMPLEMENTED, story SUBMITTED, README (section SEO), `google-business-profile.md`, trois archi et l en-tête de `router.tsx` ; epicman update (Fait, item B2 webmaster-console, listing-copy-review élargi). `ROADMAP.md` et l epic restent non commités. Écarts relevés par archiman check, non corrigés : voir le rapport.

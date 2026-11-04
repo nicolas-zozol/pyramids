@@ -1,6 +1,6 @@
 # Architecture: corpus-reader
 
-**Last updated:** 2026-10-31
+**Last updated:** 2026-11-04
 **Kind:** package
 
 ## Parent
@@ -20,7 +20,8 @@ Client code : `content` (`corpus.ts` pour le type `CorpusSpec`, `article-index.t
 ```ts
 type CorpusSpec;          // root, localeFrom, exclude?, assets?
 type AssetSpec, LocaleSource, ArticleBody;
-type ArticleEntry;        // path, slug, locale, translationId?, original?, …
+type ArticleEntry;        // path, slug, locale, updated?, translationId?,
+                          // original?, …
 type OriginalDeclaration; // locale, fingerprint
 type CorpusRead;          // articles, violations, translationNotices,
                           // unpublished; all frozen
@@ -57,7 +58,7 @@ function describeViolation(violation: CorpusViolation): string;
 function describeTranslationNotice(notice: TranslationNotice): string;
 ```
 
-- Champs exigés d'un article, sinon violation nommant le fichier : `title`, `date` en `YYYY-MM-DD`, `author`, la Locale, `published: true` booléen et un excerpt, le bloc du corps avant son premier `---`. Le schéma complet est dans la section Articles de `apps/robusta-build/README.md`.
+- Champs exigés d'un article, sinon violation nommant le fichier : `title`, `date` en `YYYY-MM-DD`, `author`, la Locale, `published: true` booléen et un excerpt, le bloc du corps avant son premier `---`. `updated`, optionnel, se lit et se vérifie comme `date` ; une date mal formée est la violation `malformed-date`, qui nomme le champ. Le schéma complet est dans la section Articles de `apps/robusta-build/README.md`.
 - `published` vaut exactement `true` : absent, l'article est laissé de côté et nommé dans `unpublished` ; toute autre valeur est une violation.
 - Un article sans `original` est son propre original. Une déclaration mal formée est la violation `malformed-original`.
 - L'empreinte est les 12 premiers caractères hexadécimaux du SHA-256 du titre, de l'excerpt et du corps markdown brut, chaque suite de blancs lue comme une espace. `stale-translation` quand l'empreinte de l'original diffère de celle déclarée, `untracked-pair` quand plus d'une version d'un même `translationId` ne déclare pas d'original, `missing-original` quand l'original déclaré n'est pas publié.

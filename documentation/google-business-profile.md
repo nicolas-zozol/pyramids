@@ -1,8 +1,8 @@
 # Fiche Google Business Profile — Robusta Build
 
-Les champs à saisir sur business.google.com, prêts à coller. L'accroche est celle retenue le 2026-10-06 ; elle sert aussi à la présentation du site v2 (story `robusta-landing-page`).
+Les champs à saisir sur business.google.com, prêts à coller. L'accroche sert aussi à la présentation du site v2 (story `robusta-landing-page`).
 
-Positionnement du 2026-10-06 : Robusta Build est une entreprise locale qui aide les entreprises de sa région à grandir. Clientèle visée : les PME d'au moins 500 000 € de chiffre d'affaires annuel, que des logiciels adaptés à leur activité font passer le million. Le seuil guide la prospection et n'est pas affiché sur le profil.
+Positionnement : Robusta Build est une entreprise locale qui aide les entreprises de sa région à grandir. Clientèle visée : les PME d'au moins 500 000 € de chiffre d'affaires annuel, que des logiciels adaptés à leur activité font passer le million. Le seuil guide la prospection et n'est pas affiché sur le profil.
 
 ## Identité
 
@@ -12,7 +12,7 @@ Positionnement du 2026-10-06 : Robusta Build est une entreprise locale qui aide 
 - Catégories secondaires : celles que Google propose en tapant « logiciel » (développeur ou société de logiciels) et « informatique » (consultant en informatique)
 - Type : entreprise de services de proximité, adresse masquée — les clients sont rencontrés chez eux ou sur rendez-vous, sans local ouvert au public
 - Zone desservie : Toulouse, Haute-Garonne
-- Site web : https://www.robusta.build, l'hôte de toutes les URL canoniques du site ; les données structurées de `/` déclarent le même nom, la même zone et le même contact que cette fiche
+- Site web : https://www.robusta.build, l'hôte de toutes les URL canoniques du site. Chaque landing page, `/`, `/fr` et `/es`, déclare en données structurées l'organisation Robusta Build, sous le même nom que cette fiche, avec l'adresse e-mail et le profil LinkedIn du site, sans adresse ni zone
 - Téléphone et horaires : à compléter
 
 ## Description

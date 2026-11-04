@@ -12,6 +12,8 @@
  * Requirements: R-ROOTLOCALE-21, R-ROOTLOCALE-22, R-ROOTLOCALE-23, R-ROOTLOCALE-61
  * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-26, R-BLOGROLLS-61
+ * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Requirements: R-SEOEXCELLENCE-01, R-SEOEXCELLENCE-24
  */
 import { createRouter } from '@tanstack/react-router';
 import { NavigationFailure } from './components/NavigationFailure.tsx';

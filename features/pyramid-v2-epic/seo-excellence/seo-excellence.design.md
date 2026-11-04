@@ -3,7 +3,7 @@
 **Last update:** 2026-11-04
 **Feature:** seo-excellence
 **Infix:** SEOEXCELLENCE
-**Status:** APPROVED (2026-11-04 — validated by boss atw)
+**Status:** IMPLEMENTED (2026-11-04, commit 93f6770)
 **Sources:** [story](seo-excellence.story.md), [brainstorm](seo-excellence.brainstorm.md), [epic](../pyramid-v2.epic.md), [blog-rolls](../blog-rolls/blog-rolls.design.md), [article-page](../article-page/article-page.design.md)
 
 ## Goal
@@ -33,7 +33,7 @@ Le brainstorm date du 2026-10-06, avant multilingual-site et default-locale-at-r
   Omitted: routes → page-data; article and listing → page-data (types);
   page-data → routing; seo → content (types only); scripts → content and
   routing through .routing-dist; the view packages → seopyramids.config
-  [modified].
+  [modified]; article and listing → components (Breadcrumb [new]).
 ```
 
 La route racine ne change pas : elle garde `robots: noindex, nofollow`, le titre et la description de `PageCopy.head`, et ne déclare ni canonical ni hreflang. Une page la surcharge en posant son propre head, construit par `pageHead`.
@@ -88,9 +88,13 @@ type PageDeclaration = {
   description: string;
   indexable: boolean;
   // … versions: PageVersion[], image?: string, structuredData: StructuredData[]
+  shareType?: 'article' | 'website'; // og:type, 'website' when absent
 };
 
-type RouteHead = { meta: …; links: … }; // the shape a TanStack route's head returns
+type HeadMeta = { title: string } | { name: string; content: string } | { property: string; content: string };
+type HeadLink = { rel: string; href: string; hrefLang?: string };
+type HeadScript = { type: 'application/ld+json'; children: string }; // one JSON-LD block, serialized and escaped
+type RouteHead = { meta: HeadMeta[]; links: HeadLink[]; scripts: HeadScript[] }; // the shape a TanStack route's head returns
 type SitemapEntry = { loc: string; lastmod?: string };
 ```
 
@@ -105,8 +109,8 @@ const INDEXING_OPEN: boolean;
 interface Seo {
   /** title and description always; robots, og:*, canonical, hreflang and JSON-LD on an indexable declaration only */
   pageHead(declaration: PageDeclaration): RouteHead;
-  /** 'index, follow' only when indexable and INDEXING_OPEN, 'noindex, nofollow' otherwise */
-  robotsOf(indexable: boolean): string;
+  /** 'index, follow' only when indexable and open, 'noindex, nofollow' otherwise; `open` defaults to INDEXING_OPEN, tests pass it */
+  robotsOf(indexable: boolean, open?: boolean): string;
   /** landing and article pages; a roll page when it lists an article; never a tag page */
   isIndexable(page: PageUrl, articles: readonly ArticleIndexEntry[]): boolean;
   /** SITE_ORIGIN followed by a root-relative path */
@@ -119,7 +123,7 @@ interface Seo {
   /** Organization: name, url, email, sameAs */
   organizationData(name: string, url: string, email: string, profiles: string[]): StructuredData;
 
-  /** landing pages then content URLs, indexable only, each dated when it lists a dated article */
+  /** the indexable pages of `urls`, in the order given, each dated when it lists a dated article */
   sitemapEntries(urls: readonly PageUrl[], articles: readonly ArticleIndexEntry[]): SitemapEntry[];
   sitemapXml(entries: SitemapEntry[]): string;
   robotsTxt(): string;
@@ -131,6 +135,7 @@ Garanties de `pageHead` :
 - `versions` non vide : un `alternate` par Locale, la page comprise, puis un `x-default` vers la version `en`, la page elle-même quand elle est en `en` ; aucun `x-default` sans version `en`. `versions` vide : aucun lien `alternate`.
 - Chaque URL déclarée est absolue sur `SITE_ORIGIN` et sous sa forme canonique : jamais `/en…`, jamais de barre finale hors `/`, jamais `.html`.
 - `og:image` n'existe que si `image` est posé : pas d'image par défaut. Aucune balise `keywords`, aucune `twitter:*`.
+- Chaque `StructuredData` devient un `HeadScript` de `scripts`, `children` son `JSON.stringify` où `<`, `>` et `&` sont échappés en `\u003c`, `\u003e`, `\u0026`.
 - Aucune erreur levée : une valeur manquante est une erreur de compilation.
 
 Client code, dans package `landing` :
@@ -188,6 +193,8 @@ interface ContentReads {
   getExcerptText(entry: ArticleIndexEntry): string;
   /** article-lookup.ts — published, same Locale, sharing the Category or a tag, itself excluded; same Category first, then more shared tags, then newest; `limit` at most */
   findRelated(entry: ArticleIndexEntry, limit: number): Promise<ArticleIndexEntry[]>;
+  /** article-lookup.ts — the same rule, pure, among the given index; findRelated is it over getArticleIndex */
+  relatedAmong(entry: ArticleIndexEntry, articles: readonly ArticleIndexEntry[], limit: number): ArticleIndexEntry[];
 }
 ```
 
@@ -230,7 +237,7 @@ interface ArticleDeclarations {
 }
 ```
 
-`ArticleView` rend `articleTrail` dans un `nav` au-dessus de la couverture, `writtenUpdated` à côté de la date de publication, et, après la fin de page, le bloc de Related articles quand `related` n'est pas vide.
+`ArticleView` rend `articleTrail` par le composant du site `Breadcrumb` (`src/components/Breadcrumb.tsx`, props `{ label: string; trail: Crumb[] }`) au-dessus de la couverture, `writtenUpdated` à côté de la date de publication, et, après la fin de page, le bloc de Related articles quand `related` n'est pas vide.
 
 Client code, dans package `routes` :
 
@@ -258,7 +265,7 @@ interface ListingDeclarations {
 }
 ```
 
-`ListingPage` rend `rollTrail` au-dessus du `h1` quand il n'est pas vide. Les routes passent `loaderData` : `head: ({ params, loaderData }) => listingHead(rollAt(params), loaderData)`. Les modèles de `ListingCopy` ne changent pas (décision de l'epic du 2026-11-04).
+`ListingPage` gagne la prop requise `url: RollUrl`, la page du roll rendue, dont `rollTrail` lit le numéro ; il rend `rollTrail(page, url)` par `Breadcrumb` au-dessus du `h1` quand il n'est pas vide. Les routes passent `loaderData` : `head: ({ params, loaderData }) => listingHead(rollAt(params), loaderData)`. Les modèles de `ListingCopy` ne changent pas (décision de l'epic du 2026-11-04).
 
 ### library API of package `landing` in app `@robusta/robusta-build` — modified
 
@@ -291,7 +298,7 @@ type PageCopy = {
 
 ## Technical Constraints
 
-- TanStack Router 1.170.41, `buildTagsFromMatches` : un `meta` est dédupliqué par `name` ou `property` et le `title` par match, le plus profond gagne ; un `link` n'est jamais dédupliqué. D'où : la racine pose le `robots` par défaut, que la page surcharge, et seul le head de la page pose canonical et `alternate`, sinon ils sortent deux fois. Une entrée `{ 'script:ld+json': … }` sort en `<script type="application/ld+json">`, échappée par le router.
+- TanStack Router 1.170.41, `buildTagsFromMatches` : un `meta` est dédupliqué par `name` ou `property` et le `title` par match, le plus profond gagne ; un `link` n'est jamais dédupliqué. D'où : la racine pose le `robots` par défaut, que la page surcharge, et seul le head de la page pose canonical et `alternate`, sinon ils sortent deux fois. `head().meta` est typé en attributs JSX de `<meta>` : les données structurées passent par `head().scripts`, une entrée `{ type: 'application/ld+json', children }` par bloc, que le router sort en `<script type="application/ld+json">` avec `children` brut ; d'où l'échappement de `<`, `>` et `&` par `pageHead`.
 - Un `head` s'exécute au prérendu, à l'hydratation et à chaque navigation client. Chaque valeur vient du payload du loader ou d'une fonction pure ; aucune ne lit `process.env` au runtime. `INDEXING_OPEN` est une constante fixée au build, identique dans le bundle serveur et le bundle client : sinon l'hydratation réécrirait le `robots` prérendu.
 - `src/seo` est compilé par `tsc -p tsconfig.routing.json` pour les scripts Node : ni React, ni import de valeur de `seopyramids.config.ts` (import PNG du bundler) ni de `page-data` ; ses imports locaux nomment leur `.ts` (`check:source`). `tsconfig.routing.json` gagne `src/seo` et `src/routing/listed-articles.ts`.
 - L'option `sitemap` de TanStack Start reste absente : son générateur écrit la date du jour sur toute entrée sans `lastmod` et publie un `pages.json` dans `dist/client`.
@@ -307,7 +314,7 @@ type PageCopy = {
 - R-SEOEXCELLENCE-02 : titre et description : `landing.head` de la Locale pour une landing page, les modèles de `listingHead` pour une page de listing, et pour un article son titre seul, sans nom de site ajouté, et `getExcerptText` de son excerpt, entier, sans troncature.
 - R-SEOEXCELLENCE-03 : la canonical URL d'une page est `absoluteUrl(buildUrl(urlScheme, page))` ; le jumeau `.html` sert le même document, donc déclare la canonical URL de sa page (BR-PYRAMID-14).
 - R-SEOEXCELLENCE-04 : les versions d'une page : `ArticlePage.versions` pour un article, les deux autres landing pages pour une landing page, `RollPage.versions` pour une page de roll ; `pageHead` en tire hreflang et x-default selon ses garanties (BR-ROBUSTA-1).
-- R-SEOEXCELLENCE-05 : l'aperçu de partage : `og:type` `article` sur une page article et `website` ailleurs, `og:title` et `og:description` égaux au titre et à la description, `og:url` égal à la canonical URL, `og:locale` `en_US`, `fr_FR` ou `es_ES` selon la Locale, correspondance fixe écrite dans `src/seo`, alors que `inLanguage` et `<html lang>` gardent le code de la Locale, `og:image` absolu sur la couverture d'un article qui en déclare une, sur aucune autre page.
+- R-SEOEXCELLENCE-05 : l'aperçu de partage : `og:type` `article` sur une page article, posé par `shareType`, et `website` ailleurs, `og:title` et `og:description` égaux au titre et à la description, `og:url` égal à la canonical URL, `og:locale` `en_US`, `fr_FR` ou `es_ES` selon la Locale, correspondance fixe écrite dans `src/seo`, alors que `inLanguage` et `<html lang>` gardent le code de la Locale, `og:image` absolu sur la couverture d'un article qui en déclare une, sur aucune autre page.
 
 ### Indexabilité, fermée jusqu'à go-live
 
@@ -315,11 +322,11 @@ type PageCopy = {
 - R-SEOEXCELLENCE-22 : `RollPage.indexable` vient de `isIndexable` au build ; `RollPage.versions` est `versionsOf` restreint aux pages indexables et construites, si bien qu'aucun hreflang ne nomme une page non indexable.
 - R-SEOEXCELLENCE-23 : le `robots` d'une page déclarée est `robotsOf(indexable)`. `INDEXING_OPEN` vaut `false` : chaque page sort `noindex, nofollow`, et une page indexable se reconnaît dans la build à sa canonical URL, que seule une déclaration indexable porte.
 - R-SEOEXCELLENCE-24 : une route qui ne pose aucun head garde le `noindex, nofollow` de la racine et n'est pas au sitemap.
-- R-SEOEXCELLENCE-25 : `INDEXING_OPEN` est écrit une fois, dans `src/seo`, et rien d'autre ne décide de l'ouverture : go-live n'a qu'elle à changer.
+- R-SEOEXCELLENCE-25 : `INDEXING_OPEN` est écrit une fois, dans `src/seo/indexing.ts`, et rien d'autre ne décide de l'ouverture : go-live n'a qu'elle à changer. Le second paramètre de `robotsOf` ne sert qu'aux tests ; aucun code de production ne le passe.
 
 ### Sitemap et robots.txt
 
-- R-SEOEXCELLENCE-41 : `sitemapEntries` parcourt `landingPages` puis `contentUrls`, dans cet ordre, garde les pages que `isIndexable` accepte, publiées seulement puisque l'index ne porte qu'elles (BR-PYRAMID-10), et les écrit au build, jamais sur une requête (BR-PYRAMID-7).
+- R-SEOEXCELLENCE-41 : `emit-site-files.mjs` passe à `sitemapEntries` `landingPages` puis `contentUrls`, dans cet ordre ; `sitemapEntries` garde cet ordre, garde les pages que `isIndexable` accepte, publiées seulement puisque l'index ne porte qu'elles (BR-PYRAMID-10), et les écrit au build, jamais sur une requête (BR-PYRAMID-7).
 - R-SEOEXCELLENCE-42 : `lastmod` : pour un article, `updated` s'il existe, `date` sinon ; pour une landing page ou une page de roll, le plus récent de ces mêmes dates parmi `articlesListedBy` ; absent quand la page ne liste aucun article.
 - R-SEOEXCELLENCE-43 : `robotsTxt` autorise tout et nomme `absoluteUrl('/sitemap.xml')` : l'asset root et `/learn` restent lisibles.
 - R-SEOEXCELLENCE-44 : `SITE_ORIGIN` et `NOTES_FEED_SIZE` sont écrits dans `src/routing/scheme.ts` ; la Site configuration lit le premier, la route de la landing page et `articlesListedBy` le second.
@@ -335,7 +342,7 @@ type PageCopy = {
 
 ### Related articles
 
-- R-SEOEXCELLENCE-81 : `ArticlePage.related` est `findRelated(article, 3)`, chaque article réduit à son titre et à sa canonical URL.
+- R-SEOEXCELLENCE-81 : `ArticlePage.related` est `findRelated(article, 3)`, dont la règle vit dans `relatedAmong`, chaque article réduit à son titre et à sa canonical URL.
 - R-SEOEXCELLENCE-82 : `ArticleView` termine la page sur un bloc titré `article.relatedTitle` en `h2`, une liste de liens par `SiteLink` vers les titres, sans date ni image, après le `nav` de fin de page ; aucun bloc quand `related` est vide.
 
 ### Contenu
