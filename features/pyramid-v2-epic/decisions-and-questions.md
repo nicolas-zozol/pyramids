@@ -239,3 +239,10 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - D27a — atw Gap-NETLIFY-1 — netlify-deploy.brainstorm.md — retained: `yarn build:robusta` reste tel quel, `build:deps` compris ; la règle suit le seul graphe du site et saute un commit qui ne touche que les packages de base. Set aside: la Proposition, réduire `build:robusta` aux dépendances du site (scripts racine, CLAUDE.md et BR-PYRAMID-5 touchés, hors périmètre de la story). Confidence: medium.
 - D27b — atw OQ-NETLIFY-2 — netlify-deploy.brainstorm.md — retained: la Proposition, la règle dans `apps/robusta-build/scripts` avec sa spec vitest. Set aside: un script à la racine du dépôt. Confidence: high.
 - D27c — atw OQ-NETLIFY-3 (brainstorm) — netlify-deploy.brainstorm.md — retained: relecture du README seule ; la répétition sur www.robusta.build reste à Nicolas. Set aside: la Proposition, une répétition en production pendant le run, qui changerait ce que sert www.robusta.build. Confidence: high.
+
+## D28 : netlify-deploy, design
+
+- designman : `apps/robusta-build/scripts/netlify-ignore.mjs`, spec vitest à côté ; git et modules `node:` seuls ; la ref en cache n'est jugée que si elle est sur l'historique de premier parent de `COMMIT_REF`.
+- D28a — atw Gap-NETLIFY-1 — netlify-deploy.design.md — retained: la Proposition, accepter qu'un fast-forward de `main` dans la branche d'epic suivi d'un commit sans code saute la build de branche ; le README demande `git merge --no-ff main` et renvoie à une relance depuis le dashboard. Set aside: lire la dernière production par l'API Netlify, avec un jeton que la story exclut. Confidence: high. AC-NETLIFY-6 est resserré par `storyman update` pour dire cette exception.
+- OQ-NETLIFY-2 (design), signée `lgtm (designman)` : toute dépendance des quatre champs au nom d'un workspace entre au graphe ; ne contredit aucun AC.
+- Contrôle boss : AC-NETLIFY-4 à 6 cités mot pour mot, `## Boundaries` rempli, aucune entrée en attente. Design APPROVED (validated by boss atw).
