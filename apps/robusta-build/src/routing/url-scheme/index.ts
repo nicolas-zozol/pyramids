@@ -3,9 +3,9 @@
  * discriminants, the canonical builder, the parser, the Locale of a route
  * segment, the URL set.
  *
- * Design: features/pyramid-v2-epic/blog-rolls/blog-rolls.design.md
+ * Design: features/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-01
- * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-01, R-ROOTLOCALE-02, R-ROOTLOCALE-03
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-01, R-MULTILINGUAL-02, R-MULTILINGUAL-05, R-MULTILINGUAL-23

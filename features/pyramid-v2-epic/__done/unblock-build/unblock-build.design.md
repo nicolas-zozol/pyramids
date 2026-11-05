@@ -3,8 +3,8 @@
 **Last update:** 2026-07-30
 **Feature:** unblock-build
 **Infix:** UNBLOCKBUILD
-**Status:** APPROVED
-**Sources:** [story](unblock-build.story.md), [brainstorm](unblock-build.brainstorm.md), [epic](../pyramid-v2.epic.md), [business rules](../../../business-rules.md), [root architecture](../../../root.archi.md)
+**Status:** IMPLEMENTED (2026-07-31, commit d9199ad)
+**Sources:** [story](unblock-build.story.md), [brainstorm](unblock-build.brainstorm.md), [epic](../../pyramid-v2.epic.md), [business rules](../../../../business-rules.md), [root architecture](../../../../root.archi.md)
 
 ## Goal
 

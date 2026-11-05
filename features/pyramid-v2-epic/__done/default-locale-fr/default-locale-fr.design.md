@@ -3,8 +3,8 @@
 **Last update:** 2026-10-08
 **Feature:** default-locale-fr
 **Infix:** DEFAULTLOCALE
-**Status:** IMPLEMENTED (2026-10-08, implémentation non commitée, dans le working tree)
-**Sources:** [story](default-locale-fr.story.md), [brainstorm](default-locale-fr.brainstorm.md), [epic](../pyramid-v2.epic.md)
+**Status:** IMPLEMENTED (2026-10-08, commit d711893)
+**Sources:** [story](default-locale-fr.story.md), [brainstorm](default-locale-fr.brainstorm.md), [epic](../../pyramid-v2.epic.md)
 
 ## Goal
 

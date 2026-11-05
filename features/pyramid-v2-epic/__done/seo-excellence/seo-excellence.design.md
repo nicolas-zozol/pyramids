@@ -4,7 +4,7 @@
 **Feature:** seo-excellence
 **Infix:** SEOEXCELLENCE
 **Status:** IMPLEMENTED (2026-11-04, commit 93f6770)
-**Sources:** [story](seo-excellence.story.md), [brainstorm](seo-excellence.brainstorm.md), [epic](../pyramid-v2.epic.md), [blog-rolls](../blog-rolls/blog-rolls.design.md), [article-page](../article-page/article-page.design.md)
+**Sources:** [story](seo-excellence.story.md), [brainstorm](seo-excellence.brainstorm.md), [epic](../../pyramid-v2.epic.md), [blog-rolls](../blog-rolls/blog-rolls.design.md), [article-page](../article-page/article-page.design.md)
 
 ## Goal
 

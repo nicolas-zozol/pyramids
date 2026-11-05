@@ -5,7 +5,7 @@
  * Requirements: R-BOOTSTRAP-28
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-50
- * Design: features/pyramid-v2-epic/robusta-landing-page/robusta-landing-page.design.md
+ * Design: features/pyramid-v2-epic/__done/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-82
  */
 import heroMascot from '@robusta/pyramids-design-system/assets/crystal-tux.svg';

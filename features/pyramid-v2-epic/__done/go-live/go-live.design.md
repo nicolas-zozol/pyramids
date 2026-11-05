@@ -4,7 +4,7 @@
 **Feature:** go-live
 **Infix:** GOLIVE
 **Status:** IMPLEMENTED (2026-11-04, commit 6182d17)
-**Sources:** [story](go-live.story.md), [brainstorm](go-live.brainstorm.md), [epic](../pyramid-v2.epic.md), [seo-excellence](../seo-excellence/seo-excellence.design.md)
+**Sources:** [story](go-live.story.md), [brainstorm](go-live.brainstorm.md), [epic](../../pyramid-v2.epic.md), [seo-excellence](../seo-excellence/seo-excellence.design.md)
 
 ## Goal
 

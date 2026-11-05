@@ -87,7 +87,7 @@ import { getOpenAiKey } from '../api/get-key.js';       // v1, dakar, autres mod
 
 ### Images
 
-- `apps/robusta-build` : une couverture d'article est un `<img>` simple qui remplit sa boîte 16:9, sans optimiseur. Le corps d'un article est du markdown rendu par `remark-html`, qui assainit le HTML, injecté par `dangerouslySetInnerHTML` avec un CSS Module. Détail : `features/pyramid-v2-epic/article-page/article-page.design.md`.
+- `apps/robusta-build` : une couverture d'article est un `<img>` simple qui remplit sa boîte 16:9, sans optimiseur. Le corps d'un article est du markdown rendu par `remark-html`, qui assainit le HTML, injecté par `dangerouslySetInnerHTML` avec un CSS Module. Détail : `features/pyramid-v2-epic/__done/article-page/article-page.design.md`.
 - v1 et dakar : `next/image` avec un `alt` descriptif. `sizes` seulement sur une image `fill` ou responsive. Une image importée porte déjà `width`, `height` et `blurDataURL` : ne pas les réécrire. Les sources restent en PNG ou JPEG, le WebP vient de l'optimiseur.
 - Une image propre à un composant vit à côté de lui ; `public/` ne contient que de vrais assets publics.
 

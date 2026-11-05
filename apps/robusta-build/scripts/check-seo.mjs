@@ -4,9 +4,9 @@
  * page, and exit 1 on any. Reads the markup by tag patterns, as
  * `check-route-table.mjs` does. Runs after `emit-site-files.mjs`.
  *
- * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-141, R-SEOEXCELLENCE-142, R-SEOEXCELLENCE-143
- * Design: features/pyramid-v2-epic/go-live/go-live.design.md
+ * Design: features/pyramid-v2-epic/__done/go-live/go-live.design.md
  * Requirements: R-GOLIVE-03
  */
 import { existsSync } from 'node:fs';

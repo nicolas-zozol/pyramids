@@ -1,9 +1,9 @@
 /**
  * Package seo — what each page declares of itself to a search engine: its head, its structured data, its indexability, the sitemap and robots.txt.
  *
- * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-01, R-SEOEXCELLENCE-03, R-SEOEXCELLENCE-04, R-SEOEXCELLENCE-05, R-SEOEXCELLENCE-21, R-SEOEXCELLENCE-23, R-SEOEXCELLENCE-25, R-SEOEXCELLENCE-41, R-SEOEXCELLENCE-42, R-SEOEXCELLENCE-43, R-SEOEXCELLENCE-61, R-SEOEXCELLENCE-64
- * Design: features/pyramid-v2-epic/go-live/go-live.design.md
+ * Design: features/pyramid-v2-epic/__done/go-live/go-live.design.md
  * Requirements: R-GOLIVE-01, R-GOLIVE-04, R-GOLIVE-05
  */
 export type {

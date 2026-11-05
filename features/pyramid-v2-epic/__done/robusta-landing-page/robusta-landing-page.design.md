@@ -4,7 +4,7 @@
 **Feature:** robusta-landing-page
 **Infix:** LANDING
 **Status:** IMPLEMENTED (2026-10-15, commit 79b4eb0)
-**Sources:** [story](robusta-landing-page.story.md), [brainstorm](robusta-landing-page.brainstorm.md), [epic](../pyramid-v2.epic.md), [design-system-responsive](../__done/design-system-responsive/design-system-responsive.design.md), [tanstack-start-migration](../__done/tanstack-start-migration/tanstack-start-migration.design.md), [default-locale-fr](../default-locale-fr/default-locale-fr.design.md)
+**Sources:** [story](robusta-landing-page.story.md), [brainstorm](robusta-landing-page.brainstorm.md), [epic](../../pyramid-v2.epic.md), [design-system-responsive](../design-system-responsive/design-system-responsive.design.md), [tanstack-start-migration](../tanstack-start-migration/tanstack-start-migration.design.md), [default-locale-fr](../default-locale-fr/default-locale-fr.design.md)
 
 ## Goal
 

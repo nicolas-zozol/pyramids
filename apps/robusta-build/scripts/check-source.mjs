@@ -5,7 +5,7 @@
  *
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-11
- * Design: features/pyramid-v2-epic/ts-import-extensions/ts-import-extensions.design.md
+ * Design: features/pyramid-v2-epic/__done/ts-import-extensions/ts-import-extensions.design.md
  * Requirements: R-TSIMPORTS-41, R-TSIMPORTS-42, R-TSIMPORTS-43
  */
 import { readdir, readFile } from 'node:fs/promises';

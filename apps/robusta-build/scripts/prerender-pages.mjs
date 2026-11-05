@@ -5,7 +5,7 @@
  * under `.routing-dist`, and refuses a route tree that does not follow the
  * configured content root.
  *
- * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-24
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-21, R-TANSTACK-23, R-TANSTACK-26

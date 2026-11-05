@@ -4,7 +4,7 @@
 **Feature:** ts-import-extensions
 **Infix:** TSIMPORTS
 **Status:** IMPLEMENTED (2026-10-31, commit 6423560)
-**Sources:** [story](ts-import-extensions.story.md), [brainstorm](ts-import-extensions.brainstorm.md), [epic](../pyramid-v2.epic.md), [tanstack-start-migration](../__done/tanstack-start-migration/tanstack-start-migration.design.md)
+**Sources:** [story](ts-import-extensions.story.md), [brainstorm](ts-import-extensions.brainstorm.md), [epic](../../pyramid-v2.epic.md), [tanstack-start-migration](../tanstack-start-migration/tanstack-start-migration.design.md)
 
 ## Goal
 

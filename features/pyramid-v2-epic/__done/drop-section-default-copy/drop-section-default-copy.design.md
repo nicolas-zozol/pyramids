@@ -4,7 +4,7 @@
 **Feature:** drop-section-default-copy
 **Infix:** SECTIONCOPY
 **Status:** IMPLEMENTED (2026-11-04, commit 3b16c72)
-**Sources:** [story](drop-section-default-copy.story.md), [epic](../pyramid-v2.epic.md), [robusta-landing-page](../robusta-landing-page/robusta-landing-page.design.md), [blog-rolls](../blog-rolls/blog-rolls.story.md)
+**Sources:** [story](drop-section-default-copy.story.md), [epic](../../pyramid-v2.epic.md), [robusta-landing-page](../robusta-landing-page/robusta-landing-page.design.md), [blog-rolls](../blog-rolls/blog-rolls.story.md)
 
 ## Goal
 

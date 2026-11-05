@@ -3,13 +3,13 @@
  *
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-05, R-MULTILINGUAL-84, R-MULTILINGUAL-86
- * Design: features/pyramid-v2-epic/content-source/content-source.design.md
+ * Design: features/pyramid-v2-epic/__done/content-source/content-source.design.md
  * Requirements: R-CONTENTSOURCE-01, R-CONTENTSOURCE-22, R-CONTENTSOURCE-47, R-CONTENTSOURCE-62
- * Design: features/pyramid-v2-epic/migrate-learn-content/migrate-learn-content.design.md
+ * Design: features/pyramid-v2-epic/__done/migrate-learn-content/migrate-learn-content.design.md
  * Requirements: R-MIGRATELEARN-24, R-MIGRATELEARN-82
- * Design: features/pyramid-v2-epic/article-page/article-page.design.md
+ * Design: features/pyramid-v2-epic/__done/article-page/article-page.design.md
  * Requirements: R-ARTICLEPAGE-06, R-ARTICLEPAGE-22
- * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-02, R-SEOEXCELLENCE-81, R-SEOEXCELLENCE-101
  */
 import type { Nodes } from 'mdast';

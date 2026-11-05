@@ -5,9 +5,9 @@
  * Requirements: R-TANSTACK-47, R-TANSTACK-81, R-TANSTACK-83, R-TANSTACK-84
  * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-28
- * Design: features/pyramid-v2-epic/default-locale-at-root/default-locale-at-root.design.md
+ * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-61
- * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-62, R-SEOEXCELLENCE-63, R-SEOEXCELLENCE-66
  */
 export { Breadcrumb } from './Breadcrumb.tsx';

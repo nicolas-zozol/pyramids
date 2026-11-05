@@ -15,8 +15,8 @@ In scope: one article, from the question it answers to its file in the corpus.
 
 Out of scope, flagged in the report but never done here:
 
-- Sitemap, canonical URL, structured data, `robots.txt`, title and description in the head: site-level, owned by `features/pyramid-v2-epic/seo-excellence/seo-excellence.story.md`.
-- Opening to indexing: `features/pyramid-v2-epic/go-live/go-live.story.md`. An article opens on the Netlify production build only; every other deploy is `noindex`.
+- Sitemap, canonical URL, structured data, `robots.txt`, title and description in the head: site-level, owned by `features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.story.md`.
+- Opening to indexing: `features/pyramid-v2-epic/__done/go-live/go-live.story.md`. An article opens on the Netlify production build only; every other deploy is `noindex`.
 - IndexNow submission, mentions on other sites, domain authority: off-site work.
 - Landing page wording: the site configuration's page copy (BR-PYRAMID-8). ChatGPT checks a brand's own product and pricing pages after building its shortlist: a landing page that answers plainly matters, but it is not an article.
 

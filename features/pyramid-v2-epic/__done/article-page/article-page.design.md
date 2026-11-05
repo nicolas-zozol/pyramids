@@ -3,8 +3,8 @@
 **Last update:** 2026-08-02
 **Feature:** article-page
 **Infix:** ARTICLEPAGE
-**Status:** APPROVED (2026-08-02)
-**Sources:** [story](article-page.story.md), [epic](../pyramid-v2.epic.md), [content-source design](../content-source/content-source.design.md), [migrate-learn-content design](../migrate-learn-content/migrate-learn-content.design.md)
+**Status:** IMPLEMENTED (2026-08-02, commit 3ab28e7)
+**Sources:** [story](article-page.story.md), [epic](../../pyramid-v2.epic.md), [content-source design](../content-source/content-source.design.md), [migrate-learn-content design](../migrate-learn-content/migrate-learn-content.design.md)
 
 ## Goal
 

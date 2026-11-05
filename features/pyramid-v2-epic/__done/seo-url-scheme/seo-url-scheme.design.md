@@ -4,7 +4,7 @@
 **Feature:** seo-url-scheme
 **Infix:** URLSCHEME
 **Status:** APPROVED (2026-07-31)
-**Sources:** [story](seo-url-scheme.story.md) · [brainstorm](seo-url-scheme.brainstorm.md) · [epic](../pyramid-v2.epic.md) · [root.archi.md](../../../root.archi.md) · [business-rules.md](../../../business-rules.md) · [ubiquitous-language.md](../../../ubiquitous-language.md) · [v1 routing](../../../apps/robusta/README.md)
+**Sources:** [story](seo-url-scheme.story.md) · [brainstorm](seo-url-scheme.brainstorm.md) · [epic](../../pyramid-v2.epic.md) · [root.archi.md](../../../../root.archi.md) · [business-rules.md](../../../../business-rules.md) · [ubiquitous-language.md](../../../../ubiquitous-language.md) · [v1 routing](../../../../apps/robusta/README.md)
 
 ## Goal
 

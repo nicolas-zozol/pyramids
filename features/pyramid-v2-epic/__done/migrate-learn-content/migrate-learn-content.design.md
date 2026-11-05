@@ -3,8 +3,8 @@
 **Last update:** 2026-08-01
 **Feature:** migrate-learn-content
 **Infix:** MIGRATELEARN
-**Status:** APPROVED (2026-08-01)
-**Sources:** [story](migrate-learn-content.story.md) · [brainstorm](migrate-learn-content.brainstorm.md) · [epic](../pyramid-v2.epic.md) · [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md) · [content-source design](../content-source/content-source.design.md) · [business-rules.md](../../../business-rules.md) · [ubiquitous-language.md](../../../ubiquitous-language.md)
+**Status:** IMPLEMENTED (2026-08-02, commit 0282952)
+**Sources:** [story](migrate-learn-content.story.md) · [brainstorm](migrate-learn-content.brainstorm.md) · [epic](../../pyramid-v2.epic.md) · [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md) · [content-source design](../content-source/content-source.design.md) · [business-rules.md](../../../../business-rules.md) · [ubiquitous-language.md](../../../../ubiquitous-language.md)
 
 ## Goal
 

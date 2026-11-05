@@ -4,7 +4,7 @@
  * wrote under `.routing-dist`; a corpus or scheme violation, thrown by
  * `contentUrls`, fails it.
  *
- * Design: features/pyramid-v2-epic/seo-excellence/seo-excellence.design.md
+ * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-41, R-SEOEXCELLENCE-42, R-SEOEXCELLENCE-43
  */
 import { writeFile } from 'node:fs/promises';

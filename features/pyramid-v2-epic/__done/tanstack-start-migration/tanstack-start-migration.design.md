@@ -4,7 +4,7 @@
 **Feature:** tanstack-start-migration
 **Infix:** TANSTACK
 **Status:** IMPLEMENTED (2026-10-07, commit 7caa131)
-**Sources:** [story](tanstack-start-migration.story.md), [brainstorm](tanstack-start-migration.brainstorm.md), [epic](../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md)
+**Sources:** [story](tanstack-start-migration.story.md), [brainstorm](tanstack-start-migration.brainstorm.md), [epic](../../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md)
 
 ## Goal
 
