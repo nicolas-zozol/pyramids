@@ -3,14 +3,14 @@
 **Last update:** 2026-11-05
 **Feature:** rb-compound-positioning
 **Infix:** RBCOMPOUND
-**Status:** DRAFT
+**Status:** APPROVED (2026-11-05 — validated by boss)
 **Sources:** [story](rb-compound-positioning.story.md), [brainstorm](rb-compound-positioning.brainstorm.md), [epic](../pyramid-v2.epic.md)
 
 ## Goal
 
-Réécrire `documentation/geo-questions.md` par le mode `questions` du skill `geo-article` (`.claude/skills/geo-article/SKILL.md`), pour que le registre vise l'acheteur de RB Compound, en anglais et en français, et ne garde des PME qu'un reliquat couvert par le corpus. Corriger le schéma de la version open source dans la page copy des trois Locales : trois agents, epicman, storyman et designman (décision du 2026-10-26). Le pourquoi : [story](rb-compound-positioning.story.md).
+Réécrire `documentation/geo-questions.md` par le mode `questions` du skill `geo-article` (`.claude/skills/geo-article/SKILL.md`), pour que le registre vise l'acheteur de RB Compound, en anglais et en français, et ne garde des PME qu'un reliquat couvert par le corpus. Corriger le schéma de la version open source dans la page copy des trois Locales : trois agents, epicman, storyman et designman (décision du 2026-10-26), puis une étape 5 `code` tenue par l'agent de code du lecteur (décision du 2026-11-05). Le pourquoi : [story](rb-compound-positioning.story.md).
 
-Le design suit la Proposition d'OQ-RBCOMPOUND-7 (story), signée `lgtm (storyman)` et pas encore reprise dans la story.
+Le design suit la Proposition d'OQ-RBCOMPOUND-7 de la story, signée `lgtm (storyman)` et pas encore reprise dans son corps.
 
 ## Boundaries
 
@@ -115,8 +115,8 @@ Mots d'agent du schéma open source, dans l'ordre et identiques dans les trois L
 
 ### Schéma open source de la page copy
 
-- R-RBCOMPOUND-101: dans les trois Locales, le titre du schéma open source compte trois agents, selon le bloc de `## Boundaries` (OQ-RBCOMPOUND-8).
-- R-RBCOMPOUND-102: les étapes 1 à 4 restent inchangées ; l'étape 5 garde son `n` et son `label`, et son `sub` ne nomme aucun agent Compound, selon le bloc de `## Boundaries` (OQ-RBCOMPOUND-8).
+- R-RBCOMPOUND-101: dans les trois Locales, le titre du schéma open source compte trois agents, selon le bloc de `## Boundaries`.
+- R-RBCOMPOUND-102: les étapes 1 à 4 restent inchangées ; l'étape 5 garde son `n` et son `label`, et son `sub` ne nomme aucun agent Compound : l'agent de code du lecteur prend le relais au design approuvé, selon le bloc de `## Boundaries`.
 - R-RBCOMPOUND-103: `eyebrow` et `caveat` du schéma open source, le schéma de la version complète et le reste de la page copy restent inchangés.
 - R-RBCOMPOUND-104: le test du schéma open source de `seopyramids.config.spec.ts` attend `epicman`, `storyman`, `designman`, `DRAFT`, `APPROVED` et rien d'autre ; son intitulé ne nomme plus tddman.
 
@@ -146,10 +146,3 @@ Cas limites à vérifier, à la relecture :
 
 - Depends on : aucune dépendance ouverte ; l'entrée `RB Compound` du glossaire est livrée par glossary-refresh.
 - Blocks : le premier mode `write` d'un article RB Compound, qui choisit sa Category. La question de guide qui fait lancer les agents attend extract-compound-plugin, sans bloquer la livraison du registre.
-
-## Open Questions & Gaps
-
-- OQ-RBCOMPOUND-8 : Le schéma open source garde-t-il une cinquième étape, le code écrit par l'agent de code du lecteur, ou s'arrête-t-il au design approuvé ?
-- Proposition : garder cinq étapes ; l'étape 5 reste `code`, son sous-titre devient « your coding agent, from the approved design » et ses traductions, le titre « three agents, from epic to code. ».
-- Rationale : la version open source s'arrête au design approuvé, et l'étape 5 montre où l'agent de code du lecteur prend le relais sans prétendre au test-first que seul tddman garantit ; retirer l'étape ferait du schéma un pipeline sans code, à côté d'une landing page qui promet le code écrit par les agents.
-- Resolution:

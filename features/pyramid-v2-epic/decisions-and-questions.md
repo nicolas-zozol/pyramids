@@ -204,3 +204,12 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - OQ-RBCOMPOUND-8 (le schéma open source garde-t-il une cinquième étape `code` sans agent nommé) : `ask`, il change ce que le visiteur lit sur la landing page. Resolution vide ; R-101, R-102 et les Boundaries suivent la Proposition (cinq étapes, « three agents, from epic to code. »).
 - Reste DRAFT : une entrée `ask` en attente, rloq.
 - OQ-RBCOMPOUND-7 signée `lgtm (storyman)`, pliée dans le design ; le corps de la story la prendra au prochain `storyman update`.
+
+## D24 : design de rb-compound-positioning, plié, APPROVED
+
+- Phase : `boss prepare pyramid-v2-epic batch B3`, reprise après D23 ; branche `epic/robusta-v2`.
+- OQ-RBCOMPOUND-8 : `lgtm (Nicolas, 2026-11-05)`, la Proposition est retenue (cinq étapes, l'étape 5 `code` tenue par l'agent de code du lecteur, « three agents, from epic to code. »). `designman update` l'a pliée ; aucun contrat changé, aucune entrée nouvelle, la section Open Questions & Gaps du design est vide et retirée.
+- Contrôle boss : AC-RBCOMPOUND-1 à 7 cités mot pour mot, `## Boundaries` rempli, aucune entrée `ask` en attente dans la story, le brainstorm ni le design. Design passé en APPROVED (validated by boss).
+- OQ-RBCOMPOUND-7 (story), signée `lgtm (storyman)` : signature d'agent, pas de `storyman update` lancé pour elle seule ; elle se plie au prochain passage de storyman. Le design la suit déjà.
+- extract-compound-plugin (B3) : « pas de story » par décision d'epic du 2026-10-26, autre dépôt ; rien à préparer.
+- Arrêt : `prepare`, aucun code.
