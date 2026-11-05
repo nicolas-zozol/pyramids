@@ -246,3 +246,10 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - D28a — atw Gap-NETLIFY-1 — netlify-deploy.design.md — retained: la Proposition, accepter qu'un fast-forward de `main` dans la branche d'epic suivi d'un commit sans code saute la build de branche ; le README demande `git merge --no-ff main` et renvoie à une relance depuis le dashboard. Set aside: lire la dernière production par l'API Netlify, avec un jeton que la story exclut. Confidence: high. AC-NETLIFY-6 est resserré par `storyman update` pour dire cette exception.
 - OQ-NETLIFY-2 (design), signée `lgtm (designman)` : toute dépendance des quatre champs au nom d'un workspace entre au graphe ; ne contredit aucun AC.
 - Contrôle boss : AC-NETLIFY-4 à 6 cités mot pour mot, `## Boundaries` rempli, aucune entrée en attente. Design APPROVED (validated by boss atw).
+
+## D29 : netlify-deploy codé et SUBMITTED
+
+- tddman (LFG fast) : `apps/robusta-build/scripts/netlify-ignore.mjs` et sa spec (39 tests), clé `ignore` de `netlify.toml`, court-circuit de production gardé en tête. Commit `e44ac86`.
+- Vérifié par boss : test 716/716 (60 fichiers), lint vert, `yarn build:robusta` vert (33 pages, indexing closed). Chaîne `ignore` lancée par `sh -c` : production → exit 1 ; branche `e57501b..688d6c0` → skip ; `cd83f06^..cd83f06` → build ; deploy-preview docs seuls → skip ; commit dakar seul (clone jetable) → skip en branche, build en production ; ref inconnue, absente ou égale → build.
+- `storyman submit` : 5 étapes sur 5, design IMPLEMENTED, story SUBMITTED, item ROADMAP retiré, epic mis à jour ; epicman ajoute l'item `rollback-rehearsal` (B4, sans story).
+- Hand-offs laissés à Nicolas : répétition du retour arrière sur www.robusta.build ; libellés du dashboard du README non vérifiés en direct ; date de go-live du README (`6182d17`, 2026-11-04) contre l'ouverture de l'indexation du 2026-11-05 dans la story.

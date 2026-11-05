@@ -208,7 +208,7 @@ Netlify project `robusta-build`, in a team on the Free plan, linked to the repos
 - the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
 - the publish directory, `apps/robusta-build/dist/client`: the prerendered output and nothing else. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
 - the redirect rules: first, forced, `https://robusta-build.netlify.app/*` to `https://www.robusta.build/:splat` in 301; then the two rules from `/en…` to the unprefixed page, see One URL per page. `www`, branch deploys and deploy previews answer under their own host and are not redirected.
-- the ignore rule: production always builds. Elsewhere, `git diff --quiet` between the cached and the current commit over the site, the design system and the root build files; exit 0 skips the build. The cached commit is the last one built on any branch, so the rule cannot judge a production build against it.
+- the ignore rule: production always builds. Elsewhere, `scripts/netlify-ignore.mjs` skips the build when no commit of `CACHED_COMMIT_REF..COMMIT_REF` touches the site, a module it depends on, directly or not, through the four dependency fields of the manifests at `COMMIT_REF`, or a root install file: `package.json`, `yarn.lock`, `.yarnrc.yml`, `.yarn/releases`, `.nvmrc`. A push touching only dakar, v1, the base modules or `features/` is skipped. An absent, unknown or equal ref, a cached ref off the first-parent history of `COMMIT_REF`, and any error of the rule build. The deploy log shows one line, `skip: <reason>` or `build: <reason>`.
 - `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 
 The dashboard holds the rest:
@@ -223,7 +223,19 @@ Only the production build opens its indexable pages, see SEO: a branch deploy, a
 
 A production deploy costs 15 of the team's 300 monthly credits, a branch deploy none, and a spent balance pauses every site of the team: work goes to the epic branch, and `main` receives merges.
 
+Merge `main` into the epic branch with `git merge --no-ff main`. A fast-forward onto `main` followed, in the same push, by a commit outside the watched paths is skipped, and the branch deploy keeps serving its previous build: retry the deploy from the dashboard, which always builds.
+
 DNS stays at Hover, which is the domain's name server: `@` A `75.2.60.5`, Netlify's load balancer, and `www` CNAME `robusta-build.netlify.app`. Every other record of the zone belongs to another service: mail, `race`, `code`. Netlify holds no DNS zone for the domain, and must not: with one, it renews a wildcard certificate it can only validate through its own name servers, and renewal fails. Without one, its Let's Encrypt certificate covers `robusta.build` and `www.robusta.build`.
+
+### Rolling back production
+
+A previous production deploy is published again without a rebuild and without credits:
+
+1. In Deploys, open the last good production deploy and choose Publish deploy.
+2. Choose Lock to stop auto publishing. While locked, a merge on `main` still builds, but its deploy is not published, and costs no credit unless published.
+3. To roll forward, publish the fixed deploy, then choose Unlock to start auto publishing.
+
+On the Free plan a deploy is deleted after 30 days, except the published one and the latest successful one of each branch. Past that window, revert on `main`, which costs a production deploy. A deploy built from a commit older than go-live, `6182d17`, serves every page `noindex`: publishing it closes the whole site to indexing.
 
 ### Yarn on a build agent
 

@@ -3,7 +3,7 @@
 **Last update:** 2026-11-05
 **Feature:** netlify-deploy
 **Infix:** NETLIFY
-**Status:** APPROVED (2026-11-05 — validated by boss atw)
+**Status:** IMPLEMENTED (2026-11-05, commit e44ac86)
 **Sources:** [story](netlify-deploy.story.md), [brainstorm](netlify-deploy.brainstorm.md), [epic](../pyramid-v2.epic.md), [FIX-PYRAMID-1](../pyramid-v2.fix.md)
 
 ## Goal
