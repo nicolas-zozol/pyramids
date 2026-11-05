@@ -26,7 +26,7 @@ Read before writing, they override anything below:
 
 - `business-rules.md` — BR-PYRAMID-9 (one category at most), BR-PYRAMID-10 (published only when declared), BR-ROBUSTA-1 (robusta.build serves several locales, English by default).
 - `ubiquitous-language.md` — Article, Category, Tag, Slug, Locale, Translation identifier.
-- The reading contract: `packages/pyramids-content/src/contract.ts`.
+- The reading contract: `apps/robusta-build/src/content/corpus-reader/contract.ts`.
 
 ## Mode `questions`
 
@@ -45,8 +45,8 @@ Builds or refreshes `documentation/geo-questions.md`, the register of the questi
 Register entry format, one bullet per question:
 
 ```md
-- « ethers.js ou viem pour un nouveau projet ? » — versus, comparatif — aucun — à écrire
-- « Ledger contre MetaMask » — versus, comparatif — blockchain/ledger-contre-metamask.md — à auditer
+- « Test-first or code-first with AI coding agents? » — versus, comparatif — aucun — à écrire
+- « Quelles alternatives à Gmail pour une entreprise ? » — alternatives, listicle — privacy/quitter-gmail.md — à auditer
 ```
 
 The register ends with a `## Contrôle mensuel` section: the date of each check, and for each question which engines cite the site and which pages they cite instead. This skill cannot query the engines; Nicolas runs the questions (by hand or through an AI citation analyzer) and the section records what he reports. A question still uncited after two checks gets its article audited again. Expect months, not weeks: the newsletter's median site doubled its Google clicks after about seven months.
