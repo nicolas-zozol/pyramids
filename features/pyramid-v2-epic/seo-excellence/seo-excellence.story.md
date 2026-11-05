@@ -1,6 +1,6 @@
 # Story : SEO excellence sur le site v2
 
-**Dernière mise à jour :** 2026-11-04
+**Dernière mise à jour :** 2026-11-05
 **Feature :** seo-excellence
 **Infix :** SEOEXCELLENCE
 **Status :** SUBMITTED (2026-11-04, commit 93f6770)
@@ -125,7 +125,7 @@ Client code : `page-data`, scripts de build.
 - 2026-11-04 — Le jumeau `.html` reste servi et déclare la canonical URL de sa page. Pourquoi : le supprimer est un réglage d'hébergeur pour tout le site.
 - 2026-11-04 — La page `n` d'un roll a pour versions la page `n` du même roll dans les autres Locales, pas la page 1 que donne `counterpartsOf`. Pourquoi : la réciprocité d'AC-SEOEXCELLENCE-6 échouerait dès qu'une page 2 existe.
 - 2026-11-04 — Chaque landing page déclare Robusta Build comme organisation ; aucune page ne déclare d'entreprise locale, la fiche Google Business Profile reste hors story (OQ-SEOEXCELLENCE-21). Pourquoi : les landing pages mettent en avant RB Compound et ne montrent aucune zone.
-- 2026-11-04 — Les textes `relatedTitle`, `updatedPrefix` et `breadcrumb.navLabel` en `en`, `fr` et `es` ont été rédigés à l'implémentation. À relire par Nicolas avec listing-copy-review.
+- 2026-11-04 — Les textes `relatedTitle`, `updatedPrefix` et `breadcrumb.navLabel` en `en`, `fr` et `es`, rédigés à l'implémentation, sont validés par Nicolas sans correction (listing-copy-review, commit 0f16932).
 - 2026-11-04 — L'inscription de robusta.build dans une console webmaster, par un enregistrement TXT chez Hover, reste à faire hors du dépôt : c'est la dernière phrase d'AC-SEOEXCELLENCE-6.
 
 ## Documentation updates

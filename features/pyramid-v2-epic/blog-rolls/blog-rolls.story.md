@@ -1,6 +1,6 @@
 # Story : Les pages de listing de robusta.build
 
-**Dernière mise à jour :** 2026-11-04
+**Dernière mise à jour :** 2026-11-05
 **Feature :** blog-rolls
 **Infix :** BLOGROLLS
 **Status :** SUBMITTED (2026-11-04, commit bc568f7)
@@ -122,7 +122,7 @@ interface PageData {
 
 - 2026-11-04 — Le roll est rendu par `NotesPreview`, sans surtitre ni titre, dans un nouveau package `listing` ; le `h1` et la pagination sont du balisage du site sur les tokens du design system. Pourquoi : `NotesPreview` est la seule Section qui affiche des articles, et le design system ne change pas.
 - 2026-11-04 — Un roll vide ne rend que son `h1`, sans `NotesPreview`. Pourquoi : `/articles` reste construite pour la Locale par défaut même sans article (AC-BLOGROLLS-6).
-- 2026-11-04 — La page copy de `ListingCopy` en `en`, `fr` et `es` a été rédigée à l'implémentation : heads « Articles by Nicolas Zozol, Robusta Build » et « {category}: articles by Nicolas Zozol », `pageSuffix` « (page {page}) » ou « (página {page}) », pagination « newer articles » et « older articles », pied de page « all articles », « tous les articles », « todos los artículos ». À relire par Nicolas.
+- 2026-11-04 — La page copy de `ListingCopy` en `en`, `fr` et `es` a été rédigée à l'implémentation : heads « Articles by Nicolas Zozol, Robusta Build » et « {category}: articles by Nicolas Zozol », `pageSuffix` « (page {page}) » ou « (página {page}) », pagination « newer articles » et « older articles », pied de page « all articles », « tous les articles », « todos los artículos ». Validée par Nicolas le 2026-11-04, lgtm sans correction (listing-copy-review, `0f16932`).
 - 2026-11-04 — AC-BLOGROLLS-3 est prouvé sur un corpus de fixture, aucune Locale ne dépassant 12 articles ; les 404 de `/p/1`, des pages au-delà de la dernière, de `/articles/c/theory` et de `/es/articles` sont prouvés par l'absence de leur fichier dans `dist`, sans draft deploy.
 
 ## Documentation updates

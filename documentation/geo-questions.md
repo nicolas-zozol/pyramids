@@ -31,4 +31,4 @@ Ils restent publiés et ne visent aucune question du registre : bien-appliquer-c
 
 ## Contrôle mensuel
 
-Aucun contrôle tant que le site est en `noindex` (go-live). Format d'un contrôle : la date, puis pour chaque question les moteurs qui citent robusta.build et les pages qu'ils citent à la place.
+Le contrôle commence au merge de `epic/robusta-v2` sur `main`, quand le build de production Netlify ouvre les pages indexables. Format d'un contrôle : la date, puis pour chaque question les moteurs qui citent robusta.build et les pages qu'ils citent à la place.

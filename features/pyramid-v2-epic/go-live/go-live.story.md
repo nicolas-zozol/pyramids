@@ -1,6 +1,6 @@
 # Story : Ouvrir robusta.build à l'indexation
 
-**Dernière mise à jour :** 2026-11-04
+**Dernière mise à jour :** 2026-11-05
 **Feature :** go-live
 **Infix :** GOLIVE
 **Status :** SUBMITTED (2026-11-04, commit 6182d17)
@@ -79,6 +79,7 @@ Client code : crawlers.
 - changed the `noindex` paragraph of « Where the truth of this site lives » in `apps/robusta-build/README.md`.
 - changed the robusta.build line of `README.md` and the `apps/robusta-build` line of `CLAUDE.md`.
 - changed the go-live line of `.claude/skills/geo-article/SKILL.md`.
+- changed the « Contrôle mensuel » paragraph of `documentation/geo-questions.md`: the monthly control starts at the merge of `epic/robusta-v2` on `main`, when the Netlify production build opens the indexable pages.
 
 ## Dependencies
 
