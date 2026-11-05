@@ -19,9 +19,13 @@
   publish = "apps/robusta-build/dist/client"
   # Exit 0 skips the build. Production always builds: the cached ref is the
   # last commit built on any branch, so a branch deploy would hide from main the
-  # code it already built (FIX-PYRAMID-1). Elsewhere, a change under these paths
-  # exits 1, an unknown cached ref exits 128, and both build.
-  ignore = "[ \"$CONTEXT\" = production ] && exit 1; git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- apps/robusta-build packages/robusta-design-system package.json yarn.lock .yarnrc.yml .nvmrc"
+  # code it already built (FIX-PYRAMID-1). Elsewhere, scripts/netlify-ignore.mjs
+  # exits 0 only when no commit of CACHED_COMMIT_REF..COMMIT_REF touches the site,
+  # a module it reaches through the four dependency fields of the manifests at
+  # COMMIT_REF, or a root install file. An absent, unknown or equal ref, a cached
+  # ref off the first-parent history of COMMIT_REF, and any error exit 1 and build.
+  # It prints one line, `skip: <reason>` or `build: <reason>`.
+  ignore = "[ \"$CONTEXT\" = production ] && exit 1; node apps/robusta-build/scripts/netlify-ignore.mjs @robusta/robusta-build"
 
 [build.environment]
   # Netlify's default, --ignore-optional, is an unknown option to yarn 4.
