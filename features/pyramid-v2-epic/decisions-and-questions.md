@@ -172,3 +172,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - OQ-RBCOMPOUND-2 (langue des questions RB Compound) : `ask`, le marché visé par l'accompagnement payant n'est connu que de Nicolas. Resolution vide ; les agents suivants supposent la Proposition.
 - OQ-RBCOMPOUND-3 (sortie des questions blockchain) : `decide`, signée `lgtm (storyman)`, conforme à AC-RBCOMPOUND-4 ; boss n'y touche pas.
 - Relevé par storyman, hors périmètre : `.claude/skills/geo-article/SKILL.md` pointe encore `packages/pyramids-content/src/contract.ts`, devenu un package du site avec multilingual-site.
+
+## D20 : brainstorm de rb-compound-positioning, tri et fold
+
+- Phase : brainstorm (`rb-compound-positioning.brainstorm.md`), puis `storyman update avec brainstorm`
+- Gap-RBCOMPOUND-4 (version open source : quatre agents avec tddman dans la page copy, trois dans la décision d'epic du 2026-10-26) : `ask`, contradiction entre deux documents. Vérifié : `seopyramids.config.ts` nomme bien tddman. Resolution vide ; la story suit la Proposition (la page copy fait foi). La correction de l'epic revient à epicman, après réponse.
+- OQ-RBCOMPOUND-5 (outils tiers nommés) : `decide`, signée `lgtm (bsman)`, pliée dans AC-RBCOMPOUND-3.
+- OQ-RBCOMPOUND-6 (question sur le démarrage d'une équipe) : `ask`, seul Nicolas sait s'il a déjà accompagné une équipe. Resolution vide ; AC-RBCOMPOUND-3 suit la Proposition.
+- storyman : OQ-RBCOMPOUND-3 et 5 pliées, E1 à E5 intégrés aux AC, AC-7 allégé ; aucune entrée nouvelle.
