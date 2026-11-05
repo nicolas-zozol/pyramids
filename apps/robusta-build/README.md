@@ -208,7 +208,7 @@ Netlify project `robusta-build`, in a team on the Free plan, linked to the repos
 - the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
 - the publish directory, `apps/robusta-build/dist/client`: the prerendered output and nothing else. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
 - the redirect rules: first, forced, `https://robusta-build.netlify.app/*` to `https://www.robusta.build/:splat` in 301; then the two rules from `/en…` to the unprefixed page, see One URL per page. `www`, branch deploys and deploy previews answer under their own host and are not redirected.
-- the ignore rule: `git diff --quiet` between the cached and the current commit over the site, the design system and the root build files. Exit 0 skips the build.
+- the ignore rule: production always builds. Elsewhere, `git diff --quiet` between the cached and the current commit over the site, the design system and the root build files; exit 0 skips the build. The cached commit is the last one built on any branch, so the rule cannot judge a production build against it.
 - `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 
 The dashboard holds the rest:
