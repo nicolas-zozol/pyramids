@@ -152,3 +152,23 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Décisions de tddman, sans effet sur la direction : la valeur du `define` vient d'un helper `scripts/netlify-build-define.mjs`, testable ; `marked-locale-redirect.spec.ts` ne compte plus que les règles de chemin.
 - Restent après le merge sur `main`, à `storyman done` : AC-GOLIVE-4 (console webmaster) et AC-GOLIVE-7 vérifié en direct (301 de `robusta-build.netlify.app`).
 - submit : design IMPLEMENTED, story SUBMITTED, deux README, `CLAUDE.md`, skill geo-article, archi de robusta-build et en-tête de `check-seo.mjs` ; epicman update (go-live en Fait, retiré de B2). `ROADMAP.md` et l epic restent non commités. B2 ne garde que webmaster-console, action de Nicolas hors dépôt.
+
+# Run 4 : `boss prepare pyramid-v2-epic batch B3`
+
+**Date :** 2026-11-05
+**Requête :** `boss prepare pyramid-v2-epic batch B3` — chaque story de B3 jusqu'au design approuvé par boss, sans code. Mode rloq : une entrée `ask` reste à Nicolas.
+
+## D18 : batch B3, branche, état de départ
+
+- Branche : `epic/robusta-v2`, celle de l'epic pyramid-v2 depuis B1 ; boss y reste. HEAD `be08af6`, arbre propre.
+- prepare : aucun code, le verrou ne joue pas.
+- rb-compound-positioning : ligne « story à écrire » du batch ; storyman l'écrit.
+- extract-compound-plugin : hors du run, sur instruction de la requête (autre dépôt, « on fera ça plus tard ») ; aucune story écrite.
+
+## D19 : story de rb-compound-positioning, tri des entrées
+
+- Phase : story (`rb-compound-positioning.story.md`, ACTIVE, AC-RBCOMPOUND-1 à 7)
+- OQ-RBCOMPOUND-1 (les questions PME restent-elles en section secondaire) : `ask`, il change ce que le registre livre. Resolution vide ; les agents suivants supposent la Proposition.
+- OQ-RBCOMPOUND-2 (langue des questions RB Compound) : `ask`, le marché visé par l'accompagnement payant n'est connu que de Nicolas. Resolution vide ; les agents suivants supposent la Proposition.
+- OQ-RBCOMPOUND-3 (sortie des questions blockchain) : `decide`, signée `lgtm (storyman)`, conforme à AC-RBCOMPOUND-4 ; boss n'y touche pas.
+- Relevé par storyman, hors périmètre : `.claude/skills/geo-article/SKILL.md` pointe encore `packages/pyramids-content/src/contract.ts`, devenu un package du site avec multilingual-site.
