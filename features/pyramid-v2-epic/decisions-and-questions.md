@@ -188,3 +188,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Contrôle boss : AC-RBCOMPOUND-1 à 7 cités mot pour mot, `## Boundaries` rempli.
 - Reste DRAFT : quatre entrées `ask` en attente, OQ-RBCOMPOUND-1 et 2 (story), Gap-RBCOMPOUND-4 et OQ-RBCOMPOUND-6 (brainstorm).
 - Vérifié : go-live (`6182d17`) est sur `origin/main`, le contrôle mensuel est donc ouvert (R-RBCOMPOUND-81) ; la story garde « ouvert au merge » dans AC-RBCOMPOUND-2, sans contradiction.
+
+## D22 : reprise de rb-compound-positioning, réponses de Nicolas pliées dans la story
+
+- Phase : `boss prepare pyramid-v2-epic batch B3`, reprise après D21 ; branche `epic/robusta-v2`.
+- Réponses de Nicolas écrites dans les sources (le bulk `pyramid-v2.bulk.md` est périmé et ne les porte pas) : OQ-RBCOMPOUND-1 lgtm ; OQ-RBCOMPOUND-2, questions RB Compound en anglais et en français, aucune en espagnol ; Gap-RBCOMPOUND-4, trois agents (epicman, storyman, designman), la page copy est corrigée ; OQ-RBCOMPOUND-6, la question du démarrage d'une équipe entre au registre.
+- `storyman update avec brainstorm` : les quatre entrées pliées ; AC-RBCOMPOUND-1, 3, 4 et 5 réécrits ; la correction du schéma open source de la page copy (trois Locales) entre au périmètre, aucune mise à jour de documentation.
+- OQ-RBCOMPOUND-7 (une question bilingue tient en deux entrées) : `decide`, signée `lgtm (storyman)`, conforme à AC-RBCOMPOUND-2 et 5 ; boss n'y touche pas.
+- Relevé par storyman pour le code à venir : `apps/robusta-build/src/seopyramids.config.spec.ts:259-272` attend tddman dans le schéma open source.

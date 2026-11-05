@@ -201,22 +201,6 @@ Dans « Articles publiés sans question », un article se nomme par son fichier 
 
 ---
 
-## Open Questions & Gaps
-
-### Gaps
-
-- Gap-RBCOMPOUND-4 : La version open source compte quatre agents avec tddman dans la page copy, trois sans lui dans la décision d'epic du 2026-10-26 et la story : laquelle fait foi ?
-- Proposition : la page copy, qu'un requirement de multilingual-site a fixée : epicman, storyman, designman et tddman. epicman corrige la décision du 2026-10-26, storyman le Contexte de la story ; le registre décrit les versions d'après la page copy.
-- Rationale : AC-RBCOMPOUND-1 fait de la Site configuration la seule source, et R-MULTILINGUAL-48 nomme tddman dans le schéma open source ; le contenu du plugin, seul Nicolas le fixe.
-- Resolution:
-
-### Open Questions
-
-- OQ-RBCOMPOUND-6 : La question « How to get a development team started with AI coding agents? », qui vise l'accompagnement, entre-t-elle au registre dès maintenant ?
-- Proposition : non, tant que Nicolas n'a pas accompagné une première équipe ; elle entre au premier rafraîchissement qui suit.
-- Rationale : c'est la question de l'acheteur payant, mais AC-RBCOMPOUND-3 exige une expérience construite ou mesurée, et seul Nicolas sait s'il a déjà accompagné une équipe.
-- Resolution:
-
 ## Next Steps
 
 - `storyman update rb-compound-positioning avec brainstorm` : reprendre E1 à E5, le découpage éventuel d'AC-RBCOMPOUND-7, et la réponse à Gap-RBCOMPOUND-4.
