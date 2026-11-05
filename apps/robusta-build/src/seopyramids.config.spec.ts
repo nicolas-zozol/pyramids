@@ -256,16 +256,16 @@ describe('the landing copy of every Locale', () => {
         ).toEqual(agentWords(reference[diagram]));
   });
 
-  it('shows the open source version as the epic, the story, the design, its validation, then test-first code by tddman', () => {
+  it('shows the open source version as three agents for the epic, the story and the design, its validation, then the code by the reader’s own coding agent', () => {
     const { openSource } = getPageCopy('en').landing;
 
+    expect(openSource.title).toMatch(/^three agents\b/);
     expect(agentWords(openSource)).toEqual([
       'epicman',
       'storyman',
       'designman',
       'DRAFT',
       'APPROVED',
-      'tddman',
     ]);
     expect(openSource.caveat).toMatch(/\bfree\b/);
     expect(openSource.caveat).toMatch(/not published yet/);

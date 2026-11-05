@@ -7,6 +7,8 @@
  * Requirements: R-BLOGROLLS-41, R-BLOGROLLS-42
  * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-44, R-SEOEXCELLENCE-121, R-SEOEXCELLENCE-122
+ * Design: features/pyramid-v2-epic/rb-compound-positioning/rb-compound-positioning.design.md
+ * Requirements: R-RBCOMPOUND-101, R-RBCOMPOUND-102, R-RBCOMPOUND-103
  */
 import type { FlowStep, Principle } from '@robusta/pyramids-design-system';
 import { wordmarkSrc } from './design-system/assets.ts';
@@ -193,13 +195,17 @@ const en: PageCopy = {
     },
     openSource: {
       eyebrow: '// open source version',
-      title: 'four agents, from epic to code.',
+      title: 'three agents, from epic to code.',
       steps: [
         { n: 1, label: 'epic', sub: 'epicman' },
         { n: 2, label: 'story', sub: 'storyman' },
         { n: 3, label: 'design', sub: 'designman' },
         { n: 4, label: 'validation', sub: 'DRAFT → APPROVED' },
-        { n: 5, label: 'code', sub: 'tddman, test-first' },
+        {
+          n: 5,
+          label: 'code',
+          sub: 'your coding agent, from the approved design',
+        },
       ],
       caveat:
         'free and open source. not published yet: it will come out as a plugin.',
@@ -319,13 +325,17 @@ const fr: PageCopy = {
     },
     openSource: {
       eyebrow: '// version open source',
-      title: 'quatre agents, de l’epic au code.',
+      title: 'trois agents, de l’epic au code.',
       steps: [
         { n: 1, label: 'epic', sub: 'epicman' },
         { n: 2, label: 'story', sub: 'storyman' },
         { n: 3, label: 'design', sub: 'designman' },
         { n: 4, label: 'validation', sub: 'DRAFT → APPROVED' },
-        { n: 5, label: 'code', sub: 'tddman, test-first' },
+        {
+          n: 5,
+          label: 'code',
+          sub: 'votre agent de code, d’après le design approuvé',
+        },
       ],
       caveat:
         'gratuite et open source. pas encore publiée : elle sortira sous forme de plugin.',
@@ -447,13 +457,17 @@ const es: PageCopy = {
     },
     openSource: {
       eyebrow: '// versión open source',
-      title: 'cuatro agentes, del epic al código.',
+      title: 'tres agentes, del epic al código.',
       steps: [
         { n: 1, label: 'epic', sub: 'epicman' },
         { n: 2, label: 'story', sub: 'storyman' },
         { n: 3, label: 'design', sub: 'designman' },
         { n: 4, label: 'validación', sub: 'DRAFT → APPROVED' },
-        { n: 5, label: 'código', sub: 'tddman, test-first' },
+        {
+          n: 5,
+          label: 'código',
+          sub: 'tu agente de código, a partir del design aprobado',
+        },
       ],
       caveat: 'gratuita y open source. aún no publicada: saldrá como plugin.',
     },

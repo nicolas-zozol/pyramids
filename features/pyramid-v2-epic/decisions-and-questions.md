@@ -213,3 +213,13 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - OQ-RBCOMPOUND-7 (story), signée `lgtm (storyman)` : signature d'agent, pas de `storyman update` lancé pour elle seule ; elle se plie au prochain passage de storyman. Le design la suit déjà.
 - extract-compound-plugin (B3) : « pas de story » par décision d'epic du 2026-10-26, autre dépôt ; rien à préparer.
 - Arrêt : `prepare`, aucun code.
+
+## D25 : rb-compound-positioning codé, `boss atw pyramid-v2-epic batch B3`
+
+- Phase : implémentation (tddman, LFG fast) ; branche `epic/robusta-v2`. Mode atw : aucune entrée `ask` en attente dans la story, le brainstorm ni le design, rien à décider.
+- Lock : B3 est le premier batch d'À faire, rien au-dessus. extract-compound-plugin laissé hors du run : « pas de story », autre dépôt, non prioritaire.
+- Page copy, trois Locales : titre du schéma open source à trois agents, étape 5 `code` tenue par l'agent de code du lecteur, valeurs du bloc Boundaries. Test `seopyramids.config.spec.ts` : epicman, storyman, designman, DRAFT, APPROVED, plus rien.
+- Registre `documentation/geo-questions.md` : 14 entrées, 12 RB Compound (6 questions, anglais puis français, cinq types), 2 PME, 8 articles publiés sans question.
+- Écart relevé : le client visé cite la page copy mot pour mot, « les équipes et les responsables techniques qui construisent du logiciel avec des agents », là où R-RBCOMPOUND-01 paraphrase « produisent ... avec des agents IA ». AC-RBCOMPOUND-1 veut l'acheteur « tel que le dit la page copy » : la citation fait foi. Confidence: high.
+- `prettier --check` échoue sur le registre (`proseWrap: 'always'` couperait les entrées) ; déjà le cas avant la story. Laissé tel quel, hand-off à Nicolas.
+- Vérifié : test 677/677 (59 fichiers), lint vert, `yarn build:robusta` vert (33 pages, 0 violation).
