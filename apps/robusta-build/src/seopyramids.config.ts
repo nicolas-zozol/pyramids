@@ -1,7 +1,7 @@
 /**
  * Site configuration — the site's domain, Locales, contact and the page copy of each Locale, read through getPageCopy and getCategoryLabel.
  *
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-41, R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-44, R-MULTILINGUAL-48, R-MULTILINGUAL-49
  * Design: features/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-41, R-BLOGROLLS-42

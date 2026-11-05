@@ -3,7 +3,7 @@
  *
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-47, R-TANSTACK-81, R-TANSTACK-83, R-TANSTACK-84
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-28
  * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-61

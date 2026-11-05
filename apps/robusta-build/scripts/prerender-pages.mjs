@@ -9,7 +9,7 @@
  * Requirements: R-ROOTLOCALE-24
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-21, R-TANSTACK-23, R-TANSTACK-26
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-04
  */
 import { existsSync } from 'node:fs';

@@ -2,7 +2,7 @@
  * Package corpus-reader — the reading contract of the v2 base: a corpus a site
  * declares, read into an article index, its bodies and its assets.
  *
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-01, R-MULTILINGUAL-02, R-MULTILINGUAL-05, R-MULTILINGUAL-81, R-MULTILINGUAL-82, R-MULTILINGUAL-83, R-MULTILINGUAL-84, R-MULTILINGUAL-85
  * Design: features/pyramid-v2-epic/__done/content-source/content-source.design.md
  * Requirements: R-CONTENTSOURCE-01, R-CONTENTSOURCE-03, R-CONTENTSOURCE-04, R-CONTENTSOURCE-05, R-CONTENTSOURCE-06, R-CONTENTSOURCE-07, R-CONTENTSOURCE-08, R-CONTENTSOURCE-09, R-CONTENTSOURCE-21, R-CONTENTSOURCE-22, R-CONTENTSOURCE-23, R-CONTENTSOURCE-24, R-CONTENTSOURCE-41, R-CONTENTSOURCE-42, R-CONTENTSOURCE-43, R-CONTENTSOURCE-44, R-CONTENTSOURCE-45, R-CONTENTSOURCE-46, R-CONTENTSOURCE-47, R-CONTENTSOURCE-48

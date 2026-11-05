@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-10-31
 **Feature :** multilingual-site
 **Infix :** MULTILINGUAL
-**Status :** LANDED (2026-10-31, commit fb4803b)
+**Status :** DONE (2026-11-05, commit 9bd2ce7 sur main)
 
 ## Story
 
@@ -138,9 +138,9 @@ Client code : navigateurs et crawlers.
 - changed le commentaire de `build:deps` et la première phrase de `README.md` (BR-PYRAMID-3, BR-PYRAMID-12).
 - checked `CLAUDE.md` : rien de faux ni de manquant, inchangé.
 - changed `root.archi.md`, `apps/robusta-build/robusta-build.archi.md` et `packages/robusta-design-system/design-system.archi.md`, via archiman ; created `src/routing/url-scheme/url-scheme.archi.md` et `src/content/corpus-reader/corpus-reader.archi.md`, qui remplacent `routing.archi.md` et `content.archi.md`.
-- change la définition d'`untracked-pair` dans §Articles de `apps/robusta-build/README.md` — why: la notice liste les versions qui ne déclarent pas d'original, pas seulement quand aucune ne le fait.
-- change les entrées `Locale`, `Canonical URL` (même passe que canonical-url-glossary), `Pyramid`, `Discriminant`, `Content source`, `Design system`, `Site` et `Site configuration` de `ubiquitous-language.md` — why: Locales toutes préfixées, `l` hors du schéma, schéma et corpus hors de la base partagée, BR-PYRAMID-3, `siteTitle` et `mission` supprimés.
-- create les termes `Original`, `Stale translation`, `RB Compound` et `Module` dans `ubiquitous-language.md` — why: suivi des traductions, landing page, BR-PYRAMID-12 et 13.
+- changed la définition d'`untracked-pair` dans §Articles de `apps/robusta-build/README.md` — why: la notice liste les versions qui ne déclarent pas d'original, pas seulement quand aucune ne le fait.
+- changed les entrées `Locale`, `Canonical URL` (même passe que canonical-url-glossary), `Pyramid`, `Discriminant`, `Content source`, `Design system`, `Site` et `Site configuration` de `ubiquitous-language.md` — why: Locales toutes préfixées, `l` hors du schéma, schéma et corpus hors de la base partagée, BR-PYRAMID-3, `siteTitle` et `mission` supprimés.
+- created les termes `Original`, `Stale translation`, `RB Compound` et `Module` dans `ubiquitous-language.md` — why: suivi des traductions, landing page, BR-PYRAMID-12 et 13.
 
 ## Dependencies
 

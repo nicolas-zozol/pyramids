@@ -4,7 +4,7 @@
  * notice fails nothing; a corpus violation, thrown by the article index, does.
  * Runs on what `compile:seams` wrote under `.routing-dist`.
  *
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-84, R-MULTILINGUAL-85
  */
 import { dirname, join, resolve } from 'node:path';

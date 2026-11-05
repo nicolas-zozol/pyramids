@@ -8,7 +8,7 @@
  * Requirements: R-TANSTACK-61, R-TANSTACK-62, R-TANSTACK-63, R-TANSTACK-65
  * Design: features/pyramid-v2-epic/__done/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-86
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-62, R-MULTILINGUAL-64
  * Design: features/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-02, R-BLOGROLLS-03, R-BLOGROLLS-04, R-BLOGROLLS-05, R-BLOGROLLS-06

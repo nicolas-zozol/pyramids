@@ -4,7 +4,7 @@
 **Feature:** multilingual-site
 **Infix:** MULTILINGUAL
 **Status:** IMPLEMENTED (2026-10-31, commit fb4803b)
-**Sources:** [story](multilingual-site.story.md), [brainstorm](multilingual-site.brainstorm.md), [epic](../pyramid-v2.epic.md), [default-locale-fr](../__done/default-locale-fr/default-locale-fr.design.md), [robusta-landing-page](../__done/robusta-landing-page/robusta-landing-page.design.md)
+**Sources:** [story](multilingual-site.story.md), [brainstorm](multilingual-site.brainstorm.md), [epic](../../pyramid-v2.epic.md), [default-locale-fr](../default-locale-fr/default-locale-fr.design.md), [robusta-landing-page](../robusta-landing-page/robusta-landing-page.design.md)
 
 ## Goal
 

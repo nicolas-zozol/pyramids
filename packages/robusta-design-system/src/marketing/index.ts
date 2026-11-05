@@ -5,7 +5,7 @@
  * Requirements: R-RESPONSIVE-03, R-RESPONSIVE-22, R-RESPONSIVE-24, R-RESPONSIVE-42, R-RESPONSIVE-43, R-RESPONSIVE-45, R-RESPONSIVE-63, R-RESPONSIVE-82, R-RESPONSIVE-83, R-RESPONSIVE-101, R-RESPONSIVE-102, R-RESPONSIVE-103, R-RESPONSIVE-104
  * Design: features/pyramid-v2-epic/__done/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-21, R-LANDING-22, R-LANDING-23
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-46, R-MULTILINGUAL-65
  * Design: features/pyramid-v2-epic/__done/drop-section-default-copy/drop-section-default-copy.design.md
  * Requirements: R-SECTIONCOPY-01, R-SECTIONCOPY-02, R-SECTIONCOPY-03, R-SECTIONCOPY-04, R-SECTIONCOPY-05

@@ -1,7 +1,7 @@
 /**
  * Package content — the site's corpus, declared as data, and every read of it: the article index, a body, an asset URL, an article by its address, the translation notices.
  *
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-05, R-MULTILINGUAL-84, R-MULTILINGUAL-86
  * Design: features/pyramid-v2-epic/__done/content-source/content-source.design.md
  * Requirements: R-CONTENTSOURCE-01, R-CONTENTSOURCE-22, R-CONTENTSOURCE-47, R-CONTENTSOURCE-62

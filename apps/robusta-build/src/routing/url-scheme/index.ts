@@ -7,7 +7,7 @@
  * Requirements: R-BLOGROLLS-01
  * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-01, R-ROOTLOCALE-02, R-ROOTLOCALE-03
- * Design: features/pyramid-v2-epic/multilingual-site/multilingual-site.design.md
+ * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-01, R-MULTILINGUAL-02, R-MULTILINGUAL-05, R-MULTILINGUAL-23
  * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
  * Requirements: R-URLSCHEME-1, R-URLSCHEME-2, R-URLSCHEME-3, R-URLSCHEME-4, R-URLSCHEME-6, R-URLSCHEME-7, R-URLSCHEME-8, R-URLSCHEME-10, R-URLSCHEME-11, R-URLSCHEME-12, R-URLSCHEME-21, R-URLSCHEME-22, R-URLSCHEME-31
