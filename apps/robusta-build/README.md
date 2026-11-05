@@ -42,7 +42,7 @@ The slug is derived, not written: `articleSlug(title, locale)`, the v1 derivatio
 A translation is stale when the fingerprint of its original differs from the one it declares, and it stays published. The fingerprint is the first 12 hexadecimal characters of the SHA-256 of the title, the excerpt and the raw markdown body, each run of whitespace read as one space: a change of tags, date, category or cover leaves it unchanged, and so does a reflow. `check:translations` prints one line per notice, then their count, and fails nothing:
 
 - `stale-translation` — names the translation and its original, and gives the fingerprint to declare once the translation is updated.
-- `untracked-pair` — versions sharing a `translationId`, none of them declaring an original; gives the fingerprint of each.
+- `untracked-pair` — two or more versions sharing a `translationId` declare no original; lists those versions with the fingerprint of each.
 - `missing-original` — the declared original is not published or has left the corpus; the translation is served without a link to it.
 
 Write the body in markdown only. HTML written in an article renders as its text alone, and nothing reports it: the renderer drops the tag whole, attributes included, so `<b>C</b>` reaches the page as `C` and an `<img>` tag as nothing. Emphasis is `**bold**` and `_italic_`, an image is `![alt](./images/file.png)`. The page's `h1` is the title: a body starts its headings at the second level. Two migrated articles carry three such fragments, inline emphasis that renders as plain text.
