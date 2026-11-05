@@ -196,3 +196,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - `storyman update avec brainstorm` : les quatre entrées pliées ; AC-RBCOMPOUND-1, 3, 4 et 5 réécrits ; la correction du schéma open source de la page copy (trois Locales) entre au périmètre, aucune mise à jour de documentation.
 - OQ-RBCOMPOUND-7 (une question bilingue tient en deux entrées) : `decide`, signée `lgtm (storyman)`, conforme à AC-RBCOMPOUND-2 et 5 ; boss n'y touche pas.
 - Relevé par storyman pour le code à venir : `apps/robusta-build/src/seopyramids.config.spec.ts:259-272` attend tddman dans le schéma open source.
+
+## D23 : design de rb-compound-positioning, plié, laissé DRAFT
+
+- Phase : design, `designman update` (fold des réponses de D22 et de OQ-RBCOMPOUND-7) ; 24 R-, dont R-RBCOMPOUND-27, 28 et le groupe R-101 à 104 (schéma open source de la page copy, test `seopyramids.config.spec.ts`).
+- Contrôle boss : AC-RBCOMPOUND-1 à 7 cités mot pour mot, `## Boundaries` rempli.
+- OQ-RBCOMPOUND-8 (le schéma open source garde-t-il une cinquième étape `code` sans agent nommé) : `ask`, il change ce que le visiteur lit sur la landing page. Resolution vide ; R-101, R-102 et les Boundaries suivent la Proposition (cinq étapes, « three agents, from epic to code. »).
+- Reste DRAFT : une entrée `ask` en attente, rloq.
+- OQ-RBCOMPOUND-7 signée `lgtm (storyman)`, pliée dans le design ; le corps de la story la prendra au prochain `storyman update`.
