@@ -230,3 +230,12 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - archiman : date de `robusta-build.archi.md`, paire Design/Requirements content-source ajoutée à l'en-tête de `routing/scheme.ts`.
 - Hand-offs laissés à Nicolas : prettier sur le registre ; webmaster-console encore au ROADMAP (B2) ; JSDoc de `v1-url-map.ts` ; exemple blockchain dans `.claude/skills/geo-article/SKILL.md:49` ; aucun item roadmap pour écrire les articles RB Compound.
 - Fin du run : batch B3 nommé, aucune autre story à coder.
+
+## D27 : netlify-deploy, story et brainstorm, `boss atw netlify-deploy`
+
+- Requête : `boss atw netlify-deploy`, branche `epic/robusta-v2`. Mode atw : boss tranche les entrées `ask`, signées `lgtm (boss atw)`, jusqu'au submit.
+- Lock : netlify-deploy est en B4 ; B3 ne porte plus aucune story (extract-compound-plugin : « pas de story », autre dépôt). Rien ne la retient.
+- Story : réécrite par storyman le 2026-11-05, OQ-NETLIFY-3 (`lgtm (Nicolas, 2026-11-05)`) pliée : la règle suit les dépendances du site sur les seules builds de branche, la production construit toujours. Commit `1904296`.
+- D27a — atw Gap-NETLIFY-1 — netlify-deploy.brainstorm.md — retained: `yarn build:robusta` reste tel quel, `build:deps` compris ; la règle suit le seul graphe du site et saute un commit qui ne touche que les packages de base. Set aside: la Proposition, réduire `build:robusta` aux dépendances du site (scripts racine, CLAUDE.md et BR-PYRAMID-5 touchés, hors périmètre de la story). Confidence: medium.
+- D27b — atw OQ-NETLIFY-2 — netlify-deploy.brainstorm.md — retained: la Proposition, la règle dans `apps/robusta-build/scripts` avec sa spec vitest. Set aside: un script à la racine du dépôt. Confidence: high.
+- D27c — atw OQ-NETLIFY-3 (brainstorm) — netlify-deploy.brainstorm.md — retained: relecture du README seule ; la répétition sur www.robusta.build reste à Nicolas. Set aside: la Proposition, une répétition en production pendant le run, qui changerait ce que sert www.robusta.build. Confidence: high.
