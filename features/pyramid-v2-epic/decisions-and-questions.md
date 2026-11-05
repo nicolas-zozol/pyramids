@@ -180,3 +180,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - OQ-RBCOMPOUND-5 (outils tiers nommés) : `decide`, signée `lgtm (bsman)`, pliée dans AC-RBCOMPOUND-3.
 - OQ-RBCOMPOUND-6 (question sur le démarrage d'une équipe) : `ask`, seul Nicolas sait s'il a déjà accompagné une équipe. Resolution vide ; AC-RBCOMPOUND-3 suit la Proposition.
 - storyman : OQ-RBCOMPOUND-3 et 5 pliées, E1 à E5 intégrés aux AC, AC-7 allégé ; aucune entrée nouvelle.
+
+## D21 : design de rb-compound-positioning, laissé DRAFT
+
+- Phase : design (`rb-compound-positioning.design.md`, DRAFT, 18 R-, aucune entrée nouvelle)
+- Fold `designman update` non lancé : aucune Resolution remplie en attente dans story, brainstorm ou design, les deux signatures d'agent étant déjà pliées par storyman.
+- Contrôle boss : AC-RBCOMPOUND-1 à 7 cités mot pour mot, `## Boundaries` rempli.
+- Reste DRAFT : quatre entrées `ask` en attente, OQ-RBCOMPOUND-1 et 2 (story), Gap-RBCOMPOUND-4 et OQ-RBCOMPOUND-6 (brainstorm).
+- Vérifié : go-live (`6182d17`) est sur `origin/main`, le contrôle mensuel est donc ouvert (R-RBCOMPOUND-81) ; la story garde « ouvert au merge » dans AC-RBCOMPOUND-2, sans contradiction.
