@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-10-08
 **Feature :** default-locale-fr
 **Infix :** DEFAULTLOCALE
-**Status :** LANDED (2026-10-08, implémentation non commitée, dans le working tree)
+**Status :** DONE (2026-11-05, commit d711893 sur main)
 
 ## Story
 

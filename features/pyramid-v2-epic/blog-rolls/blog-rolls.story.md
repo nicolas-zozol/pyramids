@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-05
 **Feature :** blog-rolls
 **Infix :** BLOGROLLS
-**Status :** SUBMITTED (2026-11-04, commit bc568f7)
+**Status :** DONE (2026-11-05, commit bc568f7 sur main)
 
 ## Story
 

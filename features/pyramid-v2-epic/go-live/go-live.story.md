@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-05
 **Feature :** go-live
 **Infix :** GOLIVE
-**Status :** SUBMITTED (2026-11-04, commit 6182d17)
+**Status :** DONE (2026-11-05, commit 6182d17 sur main)
 
 ## Story
 

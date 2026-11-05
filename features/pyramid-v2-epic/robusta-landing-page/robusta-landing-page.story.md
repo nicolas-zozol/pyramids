@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-10-15
 **Feature :** robusta-landing-page
 **Infix :** LANDING
-**Status :** LANDED (2026-10-15, commit 79b4eb0)
+**Status :** DONE (2026-11-05, commit d55cc7a sur main)
 
 ## Story
 

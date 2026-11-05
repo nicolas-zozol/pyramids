@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-04
 **Feature :** drop-section-default-copy
 **Infix :** SECTIONCOPY
-**Status :** SUBMITTED (2026-11-04, commit 3b16c72)
+**Status :** DONE (2026-11-05, commit 3b16c72 sur main)
 
 ## Story
 

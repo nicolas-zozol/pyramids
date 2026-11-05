@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-08-02
 **Feature :** migrate-learn-content
 **Infix :** MIGRATELEARN
-**Status :** LANDED (2026-08-02, commit 0282952)
+**Status :** DONE (2026-11-05, commit 0282952 sur main)
 
 ## Story
 

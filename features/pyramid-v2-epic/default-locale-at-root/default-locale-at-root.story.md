@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-03
 **Feature :** default-locale-at-root
 **Infix :** ROOTLOCALE
-**Status :** SUBMITTED (2026-11-03, commit 2fbc7be)
+**Status :** DONE (2026-11-05, commit 2fbc7be sur main)
 
 ## Story
 

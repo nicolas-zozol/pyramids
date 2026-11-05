@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-08-02
 **Feature :** content-source
 **Infix :** CONTENTSOURCE
-**Status :** LANDED (2026-08-02, commit 82c154f)
+**Status :** DONE (2026-11-05, commit 82c154f sur main)
 
 ## Story
 

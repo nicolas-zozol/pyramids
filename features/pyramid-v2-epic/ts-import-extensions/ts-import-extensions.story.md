@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-10-31
 **Feature :** ts-import-extensions
 **Infix :** TSIMPORTS
-**Status :** SUBMITTED (2026-10-31, commit 6423560)
+**Status :** DONE (2026-11-05, commit 6423560 sur main)
 
 ## Story
 

@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-04
 **Feature :** glossary-refresh
 **Infix :** GLOSSARY
-**Status :** SUBMITTED (2026-11-04, commit 3ca46f9)
+**Status :** DONE (2026-11-05, commit 3ca46f9 sur main)
 
 ## Story
 

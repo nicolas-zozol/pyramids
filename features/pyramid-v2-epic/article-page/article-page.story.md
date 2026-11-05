@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-08-02
 **Feature :** article-page
 **Infix :** ARTICLEPAGE
-**Status :** LANDED (2026-08-02, commit 3ab28e7)
+**Status :** DONE (2026-11-05, commit 3ab28e7 sur main)
 
 ## Story
 

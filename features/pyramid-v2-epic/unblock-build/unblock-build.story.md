@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-08-02
 **Feature :** unblock-build
 **Infix :** UNBLOCKBUILD
-**Status :** LANDED (2026-07-31, commit d9199ad)
+**Status :** DONE (2026-11-05, commit d9199ad sur main)
 
 ## Story
 
