@@ -39,7 +39,6 @@ seo-excellence et go-live soumises le 2026-11-04 ; reste l'inscription dans la c
 
 Pour la page copy de robusta.build seulement, décidé le 2026-10-31.
 
-6. rb-compound-positioning — refaire `documentation/geo-questions.md` autour de RB Compound, le registre visant aujourd'hui les PME de la région. N'attend plus rien : `RB Compound` est au glossaire depuis glossary-refresh, le 2026-11-04. Décidé le 2026-10-25. Pas de story.
 7. extract-compound-plugin — extraire la version open source de Compound, epicman, storyman et designman, en plugin publié, à la manière de Superpowers ; le publier ajoute un lien à la page copy de la landing page. Relève d'un autre dépôt, non prioritaire. Décidé le 2026-10-26. Pas de story.
 
 ### B4 — Nettoyage

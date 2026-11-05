@@ -223,3 +223,10 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Écart relevé : le client visé cite la page copy mot pour mot, « les équipes et les responsables techniques qui construisent du logiciel avec des agents », là où R-RBCOMPOUND-01 paraphrase « produisent ... avec des agents IA ». AC-RBCOMPOUND-1 veut l'acheteur « tel que le dit la page copy » : la citation fait foi. Confidence: high.
 - `prettier --check` échoue sur le registre (`proseWrap: 'always'` couperait les entrées) ; déjà le cas avant la story. Laissé tel quel, hand-off à Nicolas.
 - Vérifié : test 677/677 (59 fichiers), lint vert, `yarn build:robusta` vert (33 pages, 0 violation).
+
+## D26 : rb-compound-positioning SUBMITTED
+
+- Phase : `storyman submit`, 5 étapes sur 5 ; design IMPLEMENTED (cd83f06), story SUBMITTED, OQ-RBCOMPOUND-7 pliée, item ROADMAP retiré, epic mis à jour (B3 : reste extract-compound-plugin).
+- archiman : date de `robusta-build.archi.md`, paire Design/Requirements content-source ajoutée à l'en-tête de `routing/scheme.ts`.
+- Hand-offs laissés à Nicolas : prettier sur le registre ; webmaster-console encore au ROADMAP (B2) ; JSDoc de `v1-url-map.ts` ; exemple blockchain dans `.claude/skills/geo-article/SKILL.md:49` ; aucun item roadmap pour écrire les articles RB Compound.
+- Fin du run : batch B3 nommé, aucune autre story à coder.

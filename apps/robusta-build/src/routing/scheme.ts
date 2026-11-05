@@ -5,6 +5,8 @@
  * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-24, R-MULTILINGUAL-61, R-MULTILINGUAL-101
  * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
  * Requirements: R-URLSCHEME-2, R-URLSCHEME-7, R-URLSCHEME-11, R-URLSCHEME-12, R-URLSCHEME-14, R-URLSCHEME-15, R-URLSCHEME-22, R-URLSCHEME-25, R-URLSCHEME-26, R-URLSCHEME-27, R-URLSCHEME-28
+ * Design: features/pyramid-v2-epic/__done/content-source/content-source.design.md
+ * Requirements: R-CONTENTSOURCE-09
  * Design: features/pyramid-v2-epic/__done/migrate-learn-content/migrate-learn-content.design.md
  * Requirements: R-MIGRATELEARN-61
  * Design: features/pyramid-v2-epic/__done/default-locale-fr/default-locale-fr.design.md

@@ -3,7 +3,7 @@
 **Last update:** 2026-11-05
 **Feature:** rb-compound-positioning
 **Infix:** RBCOMPOUND
-**Status:** APPROVED (2026-11-05 — validated by boss)
+**Status:** IMPLEMENTED (2026-11-05, commit cd83f06)
 **Sources:** [story](rb-compound-positioning.story.md), [brainstorm](rb-compound-positioning.brainstorm.md), [epic](../pyramid-v2.epic.md)
 
 ## Goal
