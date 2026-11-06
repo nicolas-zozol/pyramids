@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** retire-robusta-design
 **Infix :** RETIREDESIGN
-**Status :** ACTIVE
+**Status :** SUBMITTED (2026-11-06, commit 3331afc)
 
 ## Story
 
@@ -11,22 +11,26 @@ En tant que mainteneur du dépôt, je veux supprimer la maquette v0 de `apps/rob
 
 ## Contexte & objectif
 
-`apps/robusta-design` contient le brief de la refonte (`prompt.md`), une copie du CV v1 (`uploads/resume.html`) et la maquette v0 (`v0/`, neuf fichiers HTML, JSX et CSS). Ce n'est pas un workspace : aucun `package.json`, rien ne l'installe, ne le construit ni ne l'importe. `packages/robusta-design-system` l'a remplacé le 2026-04-29 (packagify-design-system, qui avait déjà sorti cette suppression de son périmètre).
+`apps/robusta-design` n'était pas un workspace : le brief de la refonte, une copie du CV v1 et la maquette v0, dans une direction éditoriale que `packages/robusta-design-system` n'a pas reprise. La maquette est supprimée ; le brief est gardé, seul endroit du dépôt v2 qui porte le parcours de l'auteur, source d'une future page « À propos ».
 
-La v0 suit une direction éditoriale (Newsreader, papier chaud, encre violette) que le design system n'a pas reprise : il est parti sur le style croquis, IBM Plex et Caveat. Elle est supprimée. Le brief, lui, est gardé : rien en v2 ne le remplace. Le parcours (Swaap, BCG, Diool, Nauto), Masala Parser et le Toulouse JUG n'apparaissent nulle part ailleurs, et la landing les exclut exprès (AC-LANDING-3, ses tests interdisent « BCG »). Il passe tel quel, à l'octet près, dans `documentation/author-brief.md`, source d'une future page « À propos » ; un auteur identifiable aide le GEO. `apps/robusta-design` disparaît de git et du disque.
+## Où le contenu est allé
 
-Story indépendante de retire-robusta-v1, qui reste la dernière de B5. Git garde ce qui est supprimé : d58e879 (« add Claude design system »), dernier commit qui modifie le dossier et déjà sur `main`, porte `v0/` et `uploads/` tels qu'ils seront supprimés. Une fusion de l'epic par squash ou rebase ne les perd donc pas.
+- `prompt.md` : déplacé à l'octet près dans `documentation/author-brief.md` ; `git log --follow` remonte jusqu'à d58e879.
+- `uploads/resume.html` et les neuf fichiers de `v0/` : supprimés sans copie. d58e879 (« add Claude design system »), déjà sur `main`, les porte tels qu'ils ont été supprimés : `git show d58e879:apps/robusta-design/<chemin>`.
+- `.DS_Store`, non suivi : supprimé du disque. Le dossier n'existe plus.
 
-Le test de la règle de build Netlify (`netlify-ignore.spec.ts`) prend ce chemin comme exemple de dossier sans manifeste. Il passe sur `apps/intel-demo`, dossier réel sans `package.json` : le dépôt simulé du test copie le vrai, et le verdict testé ne change pas.
+## Livré
 
-## Ce que le dossier contient, et où cela va
+### Requirements
 
-- `prompt.md`, le brief : positionnement, parcours (Swaap, BCG, Diool, Nauto), open source (Masala Parser), communauté (Toulouse JUG, Stack Overflow), contact. Déplacé sans changement dans `documentation/author-brief.md` ; il ne cite aucun fichier du dossier. Son positionnement est dépassé par celui de la landing v2 (rb-compound-positioning), le reste n'existe qu'ici.
-- `uploads/resume.html` : une ancienne copie de `apps/robusta/public/nicolas/resume.html`, qui a divergé depuis. Supprimé.
-- `v0/` : la page prototype, les données `data.jsx`, les illustrations `hero-diagram.jsx`, `post-figures.jsx` et `thumbs.jsx`, dessinées dans la direction éditoriale abandonnée, et `tweaks-panel.jsx`, un outil de réglage de prototype. Le design system n'en a rien repris ; ses huit sections marketing, `FlowDiagram` compris, sont dessinées à neuf. Supprimé.
-- `.DS_Store`, non suivi, ignoré par `.gitignore`. Supprimé du disque.
+- R-RETIREDESIGN-01 : `apps/robusta-design` n'a plus aucun fichier suivi et n'existe plus sur le disque du checkout ; `v0/` et `uploads/` sont supprimés sans copie ailleurs.
+- R-RETIREDESIGN-02 : la livraison ne modifie ni `yarn.lock` ni aucun fichier sous `packages/robusta-design-system` ou `apps/robusta-build/src`, et le green set reste vert (BR-PYRAMID-5).
+- R-RETIREDESIGN-21 : le cas « a directory without manifest » de `netlify-ignore.spec.ts` prend un chemin sous `apps/intel-demo` et garde le verdict `skip` ; le premier test compte toujours 2 dossiers surveillés.
+- R-RETIREDESIGN-41 : `CLAUDE.md` et `root.archi.md` ne nomment plus `apps/robusta-design`, selon le plan « Documentation updates » de la story.
+- R-RETIREDESIGN-42 : `documentation/author-brief.md` naît d'un `git mv` de `apps/robusta-design/prompt.md`, identique à l'octet à `d58e879:apps/robusta-design/prompt.md`, et `git log --follow` sur ce fichier remonte jusqu'à d58e879.
+- R-RETIREDESIGN-43 : la story livrée cite d58e879 comme commit qui porte `v0/` et `uploads/`, relisibles par `git show d58e879:<chemin>`.
 
-## Acceptance Criteria
+### Acceptance Criteria
 
 - AC-RETIREDESIGN-1 : Given le dépôt après la livraison, When on liste les fichiers suivis puis on lance `yarn install --immutable` et `yarn build:robusta`, Then `apps/robusta-design` n'a plus aucun fichier suivi, `v0/` et `uploads/` sont supprimés sans copie ailleurs, l'install réussit sans modifier `yarn.lock` et la build reste verte.
 - AC-RETIREDESIGN-2 : Given la livraison soumise, When on cherche `apps/robusta-design` dans `CLAUDE.md`, `root.archi.md`, les README, `ROADMAP.md`, l'À faire de l'epic et `documentation/author-brief.md`, Then rien ne le nomme ; le journal daté de l'epic, les documents Compound de cette feature et ceux sous `__done/` gardent leurs mentions.
@@ -37,9 +41,15 @@ Le test de la règle de build Netlify (`netlify-ignore.spec.ts`) prend ce chemin
 
 ## Boundaries
 
-Aucune API touchée : le dossier n'est pas un workspace, rien n'en dépend, et le graphe des workspaces yarn ne change pas. `documentation/` n'est lu par aucune build.
+Aucune API touchée : le dossier n'était pas un workspace, rien n'en dépendait, et le graphe des workspaces yarn ne change pas. `documentation/` n'est lu par aucune build. Seul code touché : le dépôt simulé de `apps/robusta-build/scripts/netlify-ignore.spec.ts`, qui prend `apps/intel-demo/front/src/main.ts` comme dossier sans manifeste.
+
+## Décisions
+
+- 2026-11-06 — Le brief est gardé, contre la Proposition de tout supprimer (OQ-RETIREDESIGN-1, tranchée par Nicolas). Pourquoi : le parcours, Masala Parser et le Toulouse JUG n'existent nulle part ailleurs en v2, et la landing les exclut exprès (AC-LANDING-3).
+- 2026-11-06 — Nom `documentation/author-brief.md`, déplacé par `git mv` sans édition (boss). Pourquoi : un renommage exact garde `git log --follow`, même après une fusion par squash.
+- 2026-11-06 — Le test Netlify passe sur `apps/intel-demo`, dossier réel sans `package.json` (OQ-RETIREDESIGN-2, `lgtm (storyman)`). Pourquoi : le dépôt simulé copie le vrai, et le verdict testé ne change pas.
 
 ## Documentation updates
 
-- change la liste « Apps et modules » de `CLAUDE.md` — why: elle décrit `apps/robusta-design`, supprimé.
-- change `root.archi.md` : la liste des apps, la figure du green set et le paragraphe « Hors du set » — why: les trois nomment le dossier supprimé.
+- changed la liste « Apps et modules » de `CLAUDE.md` : la ligne `apps/robusta-design` retirée.
+- changed `root.archi.md` : la liste des apps, la figure du green set et le paragraphe « Hors du set » ne nomment plus le dossier.

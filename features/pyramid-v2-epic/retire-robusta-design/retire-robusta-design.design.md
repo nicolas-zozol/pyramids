@@ -3,7 +3,7 @@
 **Last update:** 2026-11-06
 **Feature:** retire-robusta-design
 **Infix:** RETIREDESIGN
-**Status:** APPROVED (2026-11-06 — validated by boss)
+**Status:** IMPLEMENTED (2026-11-06, commit 3331afc)
 **Sources:** [story](retire-robusta-design.story.md), [brainstorm](retire-robusta-design.brainstorm.md), [epic](../pyramid-v2.epic.md)
 
 ## Goal

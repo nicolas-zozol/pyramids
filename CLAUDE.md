@@ -19,7 +19,6 @@ Documents de référence :
 - `apps/robusta-build` (`@robusta/robusta-build`) : robusta.build v2. TanStack Start sur Vite 8, chaque page prérendue au build, servie par Netlify ; seule la build de production ouvre ses pages indexables, tout le reste est `noindex`. Trois Locales : `en` par défaut, sans préfixe, `fr` et `es` sous le leur. Contenu, routing, commandes et déploiement : son `README.md` et `robusta-build.archi.md`.
 - `apps/robusta` (`@robusta/build`) : robusta.build v1, Next.js sur Vercel. En retrait : n'y rien ajouter, ne pas le refactorer. Son README décrit le routing v1.
 - `apps/dakar` (`@robusta/dakar`) : dakar.surf, Next.js sur Vercel. Hors du périmètre v2.
-- `apps/robusta-design` n'est pas un workspace : le brief et la maquette v0 de la refonte.
 - `packages/robusta-design-system` (`@robusta/pyramids-design-system`) : le design system de robusta.build v2.
 - `packages/helpers`, `themes`, `layouts`, `links`, `ctas` : la base des sites v1 et dakar, sur DaisyUI.
 

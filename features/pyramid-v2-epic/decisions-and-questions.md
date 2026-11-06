@@ -296,3 +296,7 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Brainstorm non mis à jour : il suit l'ancienne Proposition ; document jetable, la story fait foi.
 - `designman update` : Goal, Boundaries, R-RETIREDESIGN-42 (déplacement à l'octet) et nouveau R-RETIREDESIGN-43 (story livrée cite d58e879 pour `v0/` et `uploads/`). Aucune nouvelle entrée. Contrôle boss : AC-RETIREDESIGN-1 à 6 cités mot pour mot, `## Boundaries` rempli. APPROVED, validated by boss.
 - Lock : B3 et B4 ne portent aucune story, comme en D31. Rien ne retient B5. Confidence: high.
+- codeman : `git mv` du brief vers `documentation/author-brief.md` (rename 100 %, `git log --follow` atteint d58e879), `git rm -r` de `v0/` et `uploads/`, `rm -rf` du dossier, fixture de `netlify-ignore.spec.ts` sur `apps/intel-demo/front/src/main.ts`. Commit `3331afc`.
+- Vérifié par boss : test 731/731, lint vert, `yarn.lock` inchangé, `build:robusta` vert (34 pages vérifiées, 33 indexables).
+- `storyman submit` : 5 étapes sur 5. docman (`CLAUDE.md`), archiman (`root.archi.md`), design IMPLEMENTED, story SUBMITTED citant d58e879, item 10 retiré de ROADMAP.md, epicman : retire-robusta-design en Fait, B5 ne garde que retire-robusta-v1. Commit de clôture exécuté par boss.
+- Laissés à Nicolas : versions de Node incohérentes (`CLAUDE.md` 22.12, `README.md` 22.18, `.nvmrc` 22), relevées par docman ; paragraphe Overview de `root.archi.md` lu comme de l'historique, relevé par archiman.

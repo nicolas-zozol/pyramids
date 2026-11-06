@@ -27,7 +27,6 @@ Le projet est en redémarrage v2 (voir `features/pyramid-v2-epic/pyramid-v2.epic
 - apps/robusta (`@robusta/build`) — robusta.build version 1, un site Next.js sur Vercel : blog sous `/learn`, portfolio, éditeur prosemirror. Son README porte le schéma de routing v1, dont le site v2 n'hérite pas. Déclaré thrash par l'epic. Son contenu markdown sous `content/blog` a été copié sur le site v2 le 2026-08-01 et l'arbre est figé depuis ; `retire-robusta-v1` le supprime au lieu de le refusionner.
 - apps/dakar (`@robusta/dakar`) — dakar.surf, le guide de surf. Next.js sur Vercel avec un segment `[locale]`, des pages de spots et des cartes MapLibre, sur `pyramids-layouts`, `pyramids-links` et `pyramids-ctas`. Hors du périmètre v2.
 - apps/intel-demo — démo du SDK scribe-intel, un front Vite et un serveur Express. Pas déployée comme site de contenu.
-- apps/robusta-design — prototype de design v0 (prompt, uploads, HTML). Remplacé par `packages/robusta-design-system`, pas encore supprimé.
 - packages/helpers — utilitaires transverses (style/`twCss`, router, thème, react, temps, tableaux, debug). `pyramids-layouts`, `pyramids-links` et `pyramids-ctas` en dépendent.
 - packages/themes — tokens de design côté JS (`pyramidsColors`, `PyramidsTheme`, surcharges par site). Distinct de la palette DaisyUI/Tailwind de chaque app Next.
 - packages/layouts, packages/links, packages/ctas — les bibliothèques de présentation partagées : primitives de structure, wrappers de `next/link` avec navigateurs serveur et client, widgets d'appel à l'action.
@@ -55,8 +54,7 @@ Le projet est en redémarrage v2 (voir `features/pyramid-v2-epic/pyramid-v2.epic
   app scribe-intel-collector ──library──→ module scribe-intel, used by no site
 
   Also: app robusta (v1) → module themes, directly.
-  Not workspaces, left out: apps/intel-demo, apps/robusta-design,
-  services/scribe-intel-backend.
+  Not workspaces, left out: apps/intel-demo, services/scribe-intel-backend.
 ```
 
 Les modules se construisent dans `dist/`, et les apps consomment les artefacts construits, jamais les sources TS.
@@ -107,7 +105,7 @@ Les apps résolvent les modules par leur `dist/` compilé. Une modification de m
 
 Le green set, ce qui doit se construire depuis un checkout propre, dans cet ordre : `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` (BR-PYRAMID-5). `apps/dakar` produit 23/23 pages statiques et `apps/robusta` 42/42. `apps/robusta-build` écrit 34 fichiers HTML, les 3 landing pages, celle de `en` en `index.html` à la racine, les 30 URL de contenu que dérivent les dix-sept articles et `404.html`, et 69 fichiers de données : un par article, un flux de notes par landing page, un fichier de contreparties par landing page et par URL de contenu, une page de roll par page d'accueil du blog et de Category et une liste de rolls par Locale, plus `sitemap.xml`, `robots.txt` et `_redirects`. Un second `yarn install` laisse `yarn.lock` identique à l'octet.
 
-Dans le set mais installés seulement, jamais construits : `packages/scribe-intel`, `services/scribe-intel-collector`. Hors du set et hors de la vue de yarn : `apps/robusta-design`, `apps/intel-demo` et `services/scribe-intel-backend` n'ont pas de `package.json` à leur racine ; malgré le glob `apps/*`, ce ne sont pas des workspaces, et rien ne les installe ni ne les construit.
+Dans le set mais installés seulement, jamais construits : `packages/scribe-intel`, `services/scribe-intel-collector`. Hors du set et hors de la vue de yarn : `apps/intel-demo` et `services/scribe-intel-backend` n'ont pas de `package.json` à leur racine ; malgré le glob `apps/*`, ce ne sont pas des workspaces, et rien ne les installe ni ne les construit.
 
 ## Dependencies
 
