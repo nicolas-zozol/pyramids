@@ -19,3 +19,9 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - OQ-RETIRESCRIBE-2 (`packageExtensions` gardé, commentaire réécrit) signée `lgtm (storyman)`, ne contredit aucun AC.
 - D2 — atw OQ-RETIRESCRIBE-1 — retire-scribe-intel.story.md — retained: la stack `services/scribe-intel-backend` part dans la même story. Set aside: la garder dans le dépôt. Confidence: high.
 - D3 — atw OQ-RETIRESCRIBE-3 — retire-scribe-intel.story.md — retained: si dakar casse, déclarer ses imports manquants dans `apps/dakar/package.json` aux versions de `yarn.lock`. Set aside: arrêter la story. Confidence: medium.
+
+## D4 : brainstorm
+
+- bsman : tests verts (717 site, 209 design system), `yarn lint` rouge aujourd'hui (64 erreurs, 58 dans `packages/scribe-intel`, 6 dans ctas, helpers, layouts). Après suppression la racine hisse le Vite 6.4.3 du vitest de helpers ; `packageExtensions` reste nécessaire. Les imports non déclarés de dakar ne viennent pas du collecteur : OQ-RETIRESCRIBE-3 (D3) ne devrait pas servir.
+- OQ-RETIRESCRIBE-2 du brainstorm (fixture `apps/no-manifest/src/main.ts`) signée `lgtm (bsman)`, ne contredit aucun AC.
+- D5 — atw Gap-RETIRESCRIBE-1 — retire-scribe-intel.brainstorm.md — retained: AC-RETIRESCRIBE-4 réduit, aucune erreur de lint sous un dossier supprimé et aucune erreur nouvelle ; les 6 erreurs des modules de dakar restent hors périmètre. Set aside: corriger ces 6 erreurs dans la story. Confidence: high.
