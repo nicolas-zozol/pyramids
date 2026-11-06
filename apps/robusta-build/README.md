@@ -2,7 +2,7 @@
 
 The version 2 site of robusta.build, on TanStack Start and Vite 8. Every page is prerendered to HTML at build, then hydrated, and the browser navigates between pages client-side. Netlify serves the build output as files and runs no code on a request. `/`, `/fr` and `/es` are the landing pages of `en`, `fr` and `es`, each published article an article page, and each blog home and category page a roll of its Locale's articles.
 
-The version 1 site lives in `apps/robusta`, whose README documents the v1 route scheme. The v2 scheme is the Routing section below.
+The v1 site's route scheme reads with `git show 6c57bc3:apps/robusta/README.md`. The v1 mapping, under Routing, maps its addresses onto this site.
 
 ## Where the truth of this site lives
 
@@ -51,7 +51,7 @@ Images live beside their article, conventionally in an `images/` directory next 
 
 `public/article-images/` is generated, git-ignored and owned by the `copy:assets` script, which removes it and rewrites it in full before every build and at the start of `yarn dev:robusta`. It publishes only what the published articles reference, 44 files. It is not a watcher: an image added mid-session reaches the site on the next run.
 
-Where a mistake surfaces: `check:translations`, in `build`, and `emit:v1-map`, in `build` and `dev`, read the corpus and fail on a violation, naming the file. `yarn workspace @robusta/robusta-build run test` checks the corpus as it stands: what is published, the Locale split, the categories, the declared originals with no notice, and the byte-for-byte freeze against the v1 tree.
+Where a mistake surfaces: `check:translations`, in `build`, and `emit:v1-map`, in `build` and `dev`, read the corpus and fail on a violation, naming the file. `yarn workspace @robusta/robusta-build run test` checks the corpus as it stands: what is published, the Locale split, the categories, and the declared originals with no notice.
 
 ## Routing
 
@@ -206,7 +206,7 @@ The site's own scripts:
 
 The `.mjs` scripts of `scripts/` import the `.ts` files of `src` directly, through Node's type stripping, which needs Node 22.18 or later. A file they reach uses only syntax Node can strip: no `enum`, no parameter property, and `import type` for a type.
 
-This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` must all complete from a clean checkout (BR-PYRAMID-5).
+This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta` must all complete from a clean checkout (BR-PYRAMID-5).
 
 ## Deployment
 
@@ -217,7 +217,7 @@ Netlify project `robusta-build`, in a team on the Free plan, linked to the repos
 - the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
 - the publish directory, `apps/robusta-build/dist/client`: the build output, `_redirects` included. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
 - the redirect rules: first, forced, `https://robusta-build.netlify.app/*` to `https://www.robusta.build/:splat` in 301; then the two rules from `/en…` to the unprefixed page, see One URL per page. `www`, branch deploys and deploy previews answer under their own host and are not redirected. Netlify reads `dist/client/_redirects`, the v1 rules, before these three, so a v1 address on `robusta-build.netlify.app` takes two 301s.
-- the ignore rule: production always builds. Elsewhere, `scripts/netlify-ignore.mjs` skips the build when no commit of `CACHED_COMMIT_REF..COMMIT_REF` touches the site, a module it depends on, directly or not, through the four dependency fields of the manifests at `COMMIT_REF`, or a root install file: `package.json`, `yarn.lock`, `.yarnrc.yml`, `.yarn/releases`, `.nvmrc`. A push touching only dakar, v1, the base modules or `features/` is skipped. An absent, unknown or equal ref, a cached ref off the first-parent history of `COMMIT_REF`, and any error of the rule build. The deploy log shows one line, `skip: <reason>` or `build: <reason>`.
+- the ignore rule: production always builds. Elsewhere, `scripts/netlify-ignore.mjs` skips the build when no commit of `CACHED_COMMIT_REF..COMMIT_REF` touches the site, a module it depends on, directly or not, through the four dependency fields of the manifests at `COMMIT_REF`, or a root install file: `package.json`, `yarn.lock`, `.yarnrc.yml`, `.yarn/releases`, `.nvmrc`. A push touching only dakar, the base modules or `features/` is skipped. An absent, unknown or equal ref, a cached ref off the first-parent history of `COMMIT_REF`, and any error of the rule build. The deploy log shows one line, `skip: <reason>` or `build: <reason>`.
 - `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 
 The dashboard holds the rest:

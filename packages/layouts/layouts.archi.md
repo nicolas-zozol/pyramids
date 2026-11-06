@@ -1,6 +1,7 @@
 # Architecture: layouts
 
-**Last updated:** 2026-04-28
+**Last updated:** 2026-11-06
+**Kind:** module
 
 ## Parent
 
@@ -14,7 +15,7 @@ _None._
 
 `@robusta/pyramids-layouts` is a tiny React component library of structural
 primitives — columns, cards, a responsive grid, a vertical spacer — used by
-`apps/robusta` and `apps/dakar` to compose pages without re-implementing the
+`apps/dakar` to compose pages without re-implementing the
 same Tailwind containers each time. Components are purely presentational
 (no state, no effects), and depend on `pyramids-helpers` for `twCssAll`.
 The package builds to `dist/` via `tsc`; apps need `yarn build:deps` to see
@@ -39,7 +40,7 @@ changes.
                               │
                               ▼
                 @robusta/pyramids-helpers (twCssAll)
-                @robusta/pyramids-themes  (DaisyUI tokens — peer)
+                @robusta/pyramids-themes  (declared, not imported)
 ```
 
 ## Key Components
@@ -137,13 +138,12 @@ that helper).
 ## Dependencies
 
 - **Depends on:**
-  - `react` (19 RC)
-  - `@robusta/pyramids-themes` (workspace peer — DaisyUI tokens like `badge-primary`)
-  - `@robusta/pyramids-helpers` (workspace peer — `twCssAll`; not declared in `package.json`, resolved via hoisting)
+  - `react` (peer, `^19.1.1`)
+  - `@robusta/pyramids-themes` (declared in the manifest, not imported; `badge-primary` resolves against the host app's DaisyUI theme)
+  - `@robusta/pyramids-helpers` (`twCss`, `twCssAll`)
 - **Used by:**
-  - `apps/robusta` (`@robusta/build`)
-  - `apps/dakar` (`@robusta/dakar`)
-  - `pyramids-ctas` (declares it as a dep though the source doesn't import it directly today)
+  - `apps/dakar` (`@robusta/dakar`): `EmptyLine`, `TwoColumn`, `SimpleGridLayout`, `HighlightableCard`
+  - `pyramids-ctas` (declared in its manifest, not imported)
 - **Build:** `tsc` → `dist/`. Built after `themes` in `yarn build:deps`.
 
 ## Notes / Gotchas
@@ -158,9 +158,6 @@ that helper).
 - All components are written with `React.FC` / `FC` — the project's React rule
   prefers plain functional components without `FC`. Don't refactor unless
   asked (project policy: refactors blow up commit size).
-- `helpers` is *not* declared in `package.json` but is imported by
-  `SimpleCardComponent`. It works through workspace hoisting; declare it
-  explicitly if dependency hygiene matters.
 - Responsive choice is hard-coded to `lg` (≥1024 px) for `TwoColumn`. The
   project convention is `mob:` (mobile-first reverse breakpoint) — kept here
   for backwards compatibility; don't blindly migrate.

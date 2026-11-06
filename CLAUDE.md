@@ -17,10 +17,9 @@ Documents de référence :
 ## Apps et modules
 
 - `apps/robusta-build` (`@robusta/robusta-build`) : robusta.build v2. TanStack Start sur Vite 8, chaque page prérendue au build, servie par Netlify ; seule la build de production ouvre ses pages indexables, tout le reste est `noindex`. Trois Locales : `en` par défaut, sans préfixe, `fr` et `es` sous le leur. Contenu, routing, commandes et déploiement : son `README.md` et `robusta-build.archi.md`.
-- `apps/robusta` (`@robusta/build`) : robusta.build v1, Next.js sur Vercel. En retrait : n'y rien ajouter, ne pas le refactorer. Son README décrit le routing v1.
 - `apps/dakar` (`@robusta/dakar`) : dakar.surf, Next.js sur Vercel. Hors du périmètre v2.
 - `packages/robusta-design-system` (`@robusta/pyramids-design-system`) : le design system de robusta.build v2.
-- `packages/helpers`, `themes`, `layouts`, `links`, `ctas` : la base des sites v1 et dakar, sur DaisyUI.
+- `packages/helpers`, `themes`, `layouts`, `links`, `ctas` : la base de dakar, sur DaisyUI.
 
 Chaque site déclare sa configuration dans `src/seopyramids.config.ts`.
 
@@ -38,19 +37,18 @@ Depuis la racine. Node 22.18 ou plus (`.nvmrc`) et yarn 4.17.1, dont le binaire 
 ```bash
 yarn install
 yarn build:deps        # helpers → themes → design-system → layouts → links → ctas
-yarn build:robusta     # v2
-yarn build:robusta-v1
+yarn build:robusta
 yarn build:dakar
-yarn dev:robusta       # ou dev:robusta-v1, dev:dakar
+yarn dev:robusta       # ou dev:dakar
 yarn lint              # eslint sur packages/**/src
 yarn workspace @robusta/robusta-build run lint
 yarn workspace @robusta/robusta-build run test           # vitest
 yarn workspace @robusta/pyramids-design-system run test  # node --test
 ```
 
-- Un site consomme le `dist/` des modules : quand on modifie un module pendant que le site tourne, garder son watcher (`yarn w:<module>`, ou `yarn dev:dev` pour v1).
+- Un site consomme le `dist/` des modules : quand on modifie un module pendant que le site tourne, garder son watcher (`yarn w:<module>`).
 - Aucun build ne lance eslint : le lint est une étape à part.
-- Pas de `yarn test` à la racine. Vitest est aussi installé, sans script, dans `apps/robusta` et `packages/helpers` : `yarn workspace <nom> exec vitest run`.
+- Pas de `yarn test` à la racine. Vitest est aussi installé, sans script, dans `packages/helpers` : `yarn workspace @robusta/pyramids-helpers exec vitest run`.
 - Prettier : `prettier.config.js`.
 
 ### Netlify CLI
@@ -63,31 +61,31 @@ netlify-cli n'est pas une dépendance du dépôt et `netlify` n'est pas dans le 
 
 Dans `apps/robusta-build` et `packages/robusta-design-system`, un import local, alias `@/` compris, nomme l'extension du fichier importé, `.ts` ou `.tsx`, et un import de dossier son `index.ts`. Un import en `.js`, sans extension ou à extension fausse fait échouer le build du site (`check:source`) ou les tests du design system.
 
-Dans `apps/robusta`, `apps/dakar` et les autres modules de `packages/`, un import local finit par `.js`, même si la source est `.ts` ou `.tsx`. Un import sans `.js` rencontré en passant se signale, il ne se corrige pas en silence.
+Dans `apps/dakar` et les autres modules de `packages/`, un import local finit par `.js`, même si la source est `.ts` ou `.tsx`. Un import sans `.js` rencontré en passant se signale, il ne se corrige pas en silence.
 
 ```ts
 import dotenv from 'dotenv';                            // dépendance : pas d'extension
 import { SiteLink } from '../components/SiteLink.tsx';  // v2 et design system : extension du fichier
-import { getOpenAiKey } from '../api/get-key.js';       // v1, dakar, autres modules : .js
+import { getOpenAiKey } from '../api/get-key.js';       // dakar, autres modules : .js
 ```
 
 ### React et TypeScript
 
 - Composants fonctionnels, jamais `React.FC` : une `interface FooProps` et une fonction.
 - Exports nommés ; le fichier porte le nom du composant en PascalCase ; dossiers en minuscules avec tirets.
-- `apps/robusta-build` n'a aucun composant serveur : `check:source` fait échouer son build sur un `'use client'` ou `'use server'` sous `src`. Sur v1 et dakar, préférer RSC et ISR aux composants client.
+- `apps/robusta-build` n'a aucun composant serveur : `check:source` fait échouer son build sur un `'use client'` ou `'use server'` sous `src`. Sur dakar, préférer RSC et ISR aux composants client.
 - Pas de `any` : `unknown` ou un type précis. Une interface plutôt qu'un `type` pour un objet.
 - Ne pas refactorer du code existant pour le style ou le lint : seulement ce que la tâche demande.
 
 ### Styles
 
 - `apps/robusta-build` : couleurs, typographie, espacements et rayons viennent du design system et de nulle part ailleurs (BR-PYRAMID-6). `src/styles/globals.css` ne contient que des alias vers ses tokens. Composants shadcn sur Tailwind 4, sans DaisyUI ni `pyramids-layouts`, `pyramids-links` ou `pyramids-ctas`.
-- v1 et dakar : tokens sémantiques DaisyUI (`primary`, `secondary`, `accent`, `neutral`, `base-100/200/300`), jamais de couleur Tailwind brute ; un `bg-*` va avec son `text-*-content`. Un composant non trivial expose `extraClasses?: string`, fusionné par `twCss(...)` de `pyramids-helpers`.
+- dakar : tokens sémantiques DaisyUI (`primary`, `secondary`, `accent`, `neutral`, `base-100/200/300`), jamais de couleur Tailwind brute ; un `bg-*` va avec son `text-*-content`. Un composant non trivial expose `extraClasses?: string`, fusionné par `twCss(...)` de `pyramids-helpers`.
 
 ### Images
 
 - `apps/robusta-build` : une couverture d'article est un `<img>` simple qui remplit sa boîte 16:9, sans optimiseur. Le corps d'un article est du markdown rendu par `remark-html`, qui assainit le HTML, injecté par `dangerouslySetInnerHTML` avec un CSS Module. Détail : `features/pyramid-v2-epic/__done/article-page/article-page.design.md`.
-- v1 et dakar : `next/image` avec un `alt` descriptif. `sizes` seulement sur une image `fill` ou responsive. Une image importée porte déjà `width`, `height` et `blurDataURL` : ne pas les réécrire. Les sources restent en PNG ou JPEG, le WebP vient de l'optimiseur.
+- dakar : `next/image` avec un `alt` descriptif. `sizes` seulement sur une image `fill` ou responsive. Une image importée porte déjà `width`, `height` et `blurDataURL` : ne pas les réécrire. Les sources restent en PNG ou JPEG, le WebP vient de l'optimiseur.
 - Une image propre à un composant vit à côté de lui ; `public/` ne contient que de vrais assets publics.
 
 ## Documents Compound

@@ -43,9 +43,7 @@ Sans dépendance, faisable à tout moment : voir Loose ends.
 
 ### B5 — Fin d'epic
 
-9. retire-robusta-v1 — ce que devient `apps/robusta` une fois que le site v2 sert le même contenu. Porte le débranchement des trois packages que la décision shadcn déprécie, `pyramids-layouts`, `pyramids-links` et `pyramids-ctas`, qui rendent des classes DaisyUI et que seuls les sites v1 consomment. Supprime le `apps/robusta/content/blog` figé plutôt que de le refondre, migrate-learn-content l'ayant copié et non déplacé. N'active plus aucune redirection ; le retour des adresses v1 est restore-v1-urls. Dernier item de l'epic.
-
-No Vercel project of this repository needs an environment variable any more. `yarn.lock` is a yarn 4 lockfile and Vercel's bundled yarn 1 cannot read it, which `ENABLE_EXPERIMENTAL_COREPACK=1` used to solve; since 2026-08-01 the Yarn binary is committed at `.yarn/releases/yarn-4.17.1.cjs` with `yarnPath` naming it in `.yarnrc.yml`, and yarn 1 delegates to it. The flag must not be set on the Vercel projects of `apps/robusta` and `apps/dakar`: with `yarnPath` in place, corepack downloads its own `yarn.js` and crashes before anything reads the config.
+No Vercel project of this repository needs an environment variable any more. `yarn.lock` is a yarn 4 lockfile and Vercel's bundled yarn 1 cannot read it, which `ENABLE_EXPERIMENTAL_COREPACK=1` used to solve; since 2026-08-01 the Yarn binary is committed at `.yarn/releases/yarn-4.17.1.cjs` with `yarnPath` naming it in `.yarnrc.yml`, and yarn 1 delegates to it. The flag must not be set on the Vercel project of `apps/dakar`, the only one left: with `yarnPath` in place, corepack downloads its own `yarn.js` and crashes before anything reads the config.
 
 Each project's Node Version must read 22.x, set in the dashboard. `engines.node` does not decide it — verified on 2026-08-01 with both a range and `"22.x"`, the project setting winning each time.
 

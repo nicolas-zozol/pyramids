@@ -1,6 +1,7 @@
 # Architecture: helpers
 
-**Last updated:** 2026-04-28
+**Last updated:** 2026-11-06
+**Kind:** module
 
 ## Parent
 
@@ -13,7 +14,7 @@ _None._
 ## Overview
 
 `@robusta/pyramids-helpers` is the cross-cutting utility belt of the monorepo:
-small, mostly stateless helpers used by every other package and by the apps.
+small, mostly stateless helpers used by `pyramids-layouts`, `pyramids-links`, `pyramids-ctas` and `apps/dakar`.
 It groups seven independent micro-modules — `style`, `router`, `theme`,
 `react`, `time`, `arrays`, `debug` — each behind its own barrel
 (`src/<area>/index.ts`) and re-exported from `src/index.ts`. The defining
@@ -133,21 +134,21 @@ Vitest specs live next to source:
 - `src/arrays/unique-by.spec.ts`
 - `src/style/merge.spec.ts`
 
-Run from this workspace (`yarn workspace @robusta/pyramids-helpers test`).
+Run from this workspace (`yarn workspace @robusta/pyramids-helpers exec vitest run`).
 There is no root-level test target.
 
 ## Dependencies
 
 - **Depends on:**
-  - `react` (19 RC) — used by `useInView`, `TimeDiffered`, `DesignSystem`
+  - `react` (peer, `^19.1.1`) — used by `useInView`, `TimeDiffered`, `DesignSystem`
   - `react-icons` (declared but currently unused in source)
   - `tailwind-merge` — backbone of `twCss`
   - `slugify` (pinned `1.6.6`) — `immutableSlugify`
 - **Used by:**
   - `pyramids-ctas` (`twCss`, `mergeCss`)
   - `pyramids-layouts`, `pyramids-links` (style/router helpers)
-  - both Next.js apps (`apps/robusta`, `apps/dakar`)
-- **Build:** `tsc` → `dist/`. Built first by `yarn build:deps` (every other package transitively imports it).
+  - `apps/dakar` (`immutableSlugify`, imported without being declared in its manifest)
+- **Build:** `tsc` → `dist/`. Built first by `yarn build:deps` (`layouts`, `links` and `ctas` import it).
 
 ## Notes / Gotchas
 

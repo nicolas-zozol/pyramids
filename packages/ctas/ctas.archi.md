@@ -1,6 +1,7 @@
 # Architecture: ctas
 
-**Last updated:** 2026-07-30
+**Last updated:** 2026-11-06
+**Kind:** module
 
 ## Parent
 
@@ -13,8 +14,7 @@ _None._
 ## Overview
 
 `@robusta/pyramids-ctas` is a small React component library exposing reusable
-"call to action" widgets used across the SeoPyramids sites (`apps/robusta`,
-`apps/dakar`, etc.). It bundles three families of CTAs — a fat banner button,
+"call to action" widgets used by `apps/dakar`. It bundles three families of CTAs — a fat banner button,
 an inline link CTA, and a click-to-call phone CTA — styled via DaisyUI tokens
 and merged through `twCss`/`mergeCss` from `pyramids-helpers`. The package
 publishes its compiled artefacts (`dist/index.js`, `dist/index.d.ts`); apps
@@ -111,13 +111,12 @@ export * from './cta-link/index';  // CtaLink
 
 - **Depends on:**
   - `react` (peer, `^19.1.1` — the host site's copy is the one that runs; never a bundled dependency)
-  - `next/link` (peer, `^15.1.8` — host apps are Next.js; the range spans `apps/robusta` on 15.1.8 and `apps/dakar` on 15.5.3. `next` is also a devDependency, `^15.5.3`, which is what this package's own `tsc` resolves that import against — it never reaches a site, which consumes `dist/`)
+  - `next/link` (peer, `^15.1.8` — the host app, `apps/dakar`, is Next.js on `^15.5.3`. `next` is also a devDependency, `^15.5.3`, which is what this package's own `tsc` resolves that import against — it never reaches a site, which consumes `dist/`)
   - `react-icons` (`fa`, `fi` icon sets)
-  - `@robusta/pyramids-themes` (DaisyUI tokens — `bg-accent`, `text-accent-content`, `btn-primary`)
+  - `@robusta/pyramids-themes` and `@robusta/pyramids-layouts` (declared in the manifest, not imported; `bg-accent`, `text-accent-content` and `btn-primary` resolve against the host app's DaisyUI theme)
   - `@robusta/pyramids-helpers` (`twCss`, `mergeCss`)
 - **Used by:**
-  - `apps/robusta` (`@robusta/build`)
-  - `apps/dakar` (`@robusta/dakar`)
+  - `apps/dakar` (`@robusta/dakar`), `SimplePhoneCTA` only
 - **Build:** `tsc` → `dist/`. Triggered transitively by `yarn build:deps` (root) after `themes` and `layouts`.
 
 ## Notes / Gotchas

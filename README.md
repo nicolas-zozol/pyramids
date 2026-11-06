@@ -1,6 +1,6 @@
 # @robusta/pyramids
 
-A yarn-workspaces monorepo that builds several SEO content sites from one shared base, a set of small React modules. `apps/robusta` and `apps/dakar` are Next.js App Router sites on Vercel; the v2 robusta site, `apps/robusta-build`, is TanStack Start, prerendered at build and served as files by Netlify. Each site carries its content and a design system, which several sites may share (BR-PYRAMID-3); what a single site uses lives in that site (BR-PYRAMID-12).
+A yarn-workspaces monorepo that builds several SEO content sites from one shared base, a set of small React modules. `apps/dakar` is a Next.js App Router site on Vercel; the robusta site, `apps/robusta-build`, is TanStack Start, prerendered at build and served as files by Netlify. Each site carries its content and a design system, which several sites may share (BR-PYRAMID-3); what a single site uses lives in that site (BR-PYRAMID-12).
 
 Live sites: robusta.build (`apps/robusta-build`, indexable pages open on the Netlify production build only) and dakar.surf (`apps/dakar`).
 
@@ -32,8 +32,8 @@ yarn build:deps      # helpers → themes → design-system → layouts → link
 yarn dev:robusta     # or dev:dakar
 ```
 
-From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
+From a clean checkout the whole repository builds with `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, in that order and with no manual step. That sequence is what a change to the shared base has to keep green.
 
-A site reads the build output of the shared packages: while one is edited and a site runs, keep its watcher up (`yarn w:<package>`, or `yarn dev:dev` for v1).
+A site reads the build output of the shared packages: while one is edited and a site runs, keep its watcher up (`yarn w:<package>`).
 
 Two things bite newcomers: a local TypeScript import ends with `.js` even though the source is `.ts`, except in `apps/robusta-build` and the design system, where it names the `.ts` or `.tsx` file itself; and no site's build runs eslint: `yarn lint` is a separate step.

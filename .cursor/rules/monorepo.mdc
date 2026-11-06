@@ -3,17 +3,17 @@ description:
 globs: 
 alwaysApply: true
 ---
-I build multiple similar SEO content websites in a monorepo with yarn workspaces. We use typescript over javascript almost everywhere. `apps/robusta` (robusta.build v1) and `apps/dakar` (dakar.surf) are next.js with React Server Components (RSC), deployed on Vercel; `apps/robusta-build` (robusta.build v2) is TanStack Start, prerendered at build and served by Netlify.
+I build multiple similar SEO content websites in a monorepo with yarn workspaces. We use typescript over javascript almost everywhere. `apps/dakar` (dakar.surf) is next.js with React Server Components (RSC), deployed on Vercel; `apps/robusta-build` (robusta.build) is TanStack Start, prerendered at build and served by Netlify.
 
 VERY important, local TypeScript imports:
 
 - In `apps/robusta-build` and `packages/robusta-design-system`, import a local file by its real extension, `.ts` or `.tsx`, and a folder by its `index.ts`. The site's build and the design system's tests fail on a local import in `.js`, without extension or with the wrong extension.
-- In `apps/robusta`, `apps/dakar` and the other modules of `packages/`, always import typescript files using the '.js' extension. If you touch a file that contains a typescript import without '.js', don't add it yourself, but put a warning.
+- In `apps/dakar` and the other modules of `packages/`, always import typescript files using the '.js' extension. If you touch a file that contains a typescript import without '.js', don't add it yourself, but put a warning.
 
 ```ts
 import dotenv from 'dotenv'; // not local
 import { SiteLink } from '../components/SiteLink.tsx'; // apps/robusta-build: real extension
-import { getOpenAiKey } from '../api/get-open-ai-key.js'; // v1, dakar, other modules: .js
+import { getOpenAiKey } from '../api/get-open-ai-key.js'; // dakar, other modules: .js
 ```
 
 Components are made with react, typescript and tailwind.

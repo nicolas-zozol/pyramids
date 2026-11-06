@@ -1,6 +1,7 @@
 # Architecture: themes
 
-**Last updated:** 2026-04-28
+**Last updated:** 2026-11-06
+**Kind:** module
 
 ## Parent
 
@@ -16,10 +17,9 @@ _None._
 named palette (`pyramidsColors`) and a typed `PyramidsTheme` shape with
 per-site overrides. The default `standardPyramidsTheme` defines every
 slot; `robustaTheme` and `dakarTheme` patch a few keys on top via a
-deep-merge `getTheme(site)`. This is **separate from the apps' DaisyUI /
-Tailwind theme** (which lives in each app's `tailwind.config.ts`) — the
-package targets non-Tailwind use cases (inline styles, CSS variables,
-SSR-rendered prosemirror, etc.).
+deep-merge `getTheme(site)`. This is **separate from the DaisyUI /
+Tailwind theme** of `apps/dakar`, in its `tailwind.config.ts`. No app and
+no module imports it.
 
 ## Diagram
 
@@ -44,10 +44,6 @@ SSR-rendered prosemirror, etc.).
 │   └──── colors used by every theme via pyramidsColors        │
 │                                                              │
 └──────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-                    apps/robusta · apps/dakar
-                    (consume PyramidsTheme directly)
 ```
 
 ## Key Components
@@ -132,11 +128,8 @@ entry in `getTheme.ts`. Forgetting it means the override silently no-ops.
 
 ## Dependencies
 
-- **Depends on:** `react` only (declared, but the source has no React imports — it's pure data).
-- **Used by:**
-  - `pyramids-layouts` (declares it as a workspace peer)
-  - `pyramids-ctas` (workspace peer)
-  - `apps/robusta`, `apps/dakar` (consume `PyramidsTheme` and `pyramidsColors`)
+- **Depends on:** `react` only (peer, `^19.1.1`; the source has no React imports, it is pure data).
+- **Used by:** no client code. `pyramids-layouts` and `pyramids-ctas` declare it in their manifest and import nothing from it.
 - **Build:** `tsc` → `dist/`. Built second in `yarn build:deps` (after `helpers`, before `layouts`/`ctas`).
 
 ## Notes / Gotchas
@@ -156,9 +149,8 @@ entry in `getTheme.ts`. Forgetting it means the override silently no-ops.
   consumers can deep-import them depends on the Vercel/Next bundler — keep
   the barrel as the only stable surface.
 - **Disconnected from DaisyUI.** This package's `PyramidsTheme` is **not**
-  the source of truth for the apps' Tailwind/DaisyUI palette (those are
-  hard-coded in each app's `tailwind.config.ts` — Robusta's `primary`
-  `#921514`, etc.). The two systems live in parallel; touching one does
+  the source of truth for the Tailwind/DaisyUI palette of `apps/dakar`
+  (hard-coded in its `tailwind.config.ts`, `primary` `#921514`). The two systems live in parallel; touching one does
   not move the other.
 - **`alpha` returns a string with no validation.** Calling
   `alpha('#01013D', 0.6)` yields `'#01013D99'`. Passing an

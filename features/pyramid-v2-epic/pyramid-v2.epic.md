@@ -51,6 +51,7 @@ SEO excellence runs across the whole epic rather than sitting in one deliverable
 - [rb-compound-positioning](__done/rb-compound-positioning/rb-compound-positioning.story.md) — refaire `documentation/geo-questions.md` autour de l'acheteur de RB Compound et ramener le schéma open source de la page copy à trois agents. Submitted.
 - [restore-v1-urls](__done/restore-v1-urls/restore-v1-urls.story.md) — ramener les adresses v1 en redirections permanentes vers leur page v2, par des règles Netlify statiques générées depuis la v1 map. Archivée.
 - [retire-robusta-design](retire-robusta-design/retire-robusta-design.story.md) — supprimer la maquette v0 de l'ancien dossier du prototype et garder son brief dans `documentation/author-brief.md`. Submitted.
+- [retire-robusta-v1](retire-robusta-v1/retire-robusta-v1.story.md) — supprimer l'app v1 `apps/robusta` (`@robusta/build`), son corpus figé et tout ce qui la nomme. Submitted.
 
 Les items d'À faire sans story le sont par choix : décisions du 2026-07-29, du 2026-10-26 et du 2026-10-31 ci-dessous, celle de seo-excellence pour webmaster-console, et celle de netlify-deploy pour rollback-rehearsal.
 
@@ -112,6 +113,8 @@ Vérifiée le 2026-11-05, au submit de netlify-deploy : rien enregistré ni modi
 
 Vérifiée le 2026-11-06, au submit de restore-v1-urls : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot ; la story cite BR-PYRAMID-7, que ses règles statiques tiennent. Les adresses v1 répondent de nouveau, mais Nicolas écarte toute BR (OQ-RESTOREV1-2) : la règle des adresses publiées validée le 2026-07-30 reste non enregistrée, un article v2 renommé changeant d'URL sans redirection — décision ci-dessous.
 
+Vérifiée le 2026-11-06, au submit de retire-robusta-v1 : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot ; la story cite BR-PYRAMID-5, que tient le green set vert depuis un clean checkout, dakar à 23 pages. Ses décisions disent ce qui quitte le dépôt : elles vont aux décisions ci-dessous.
+
 ## Boundaries
 
 ```
@@ -131,8 +134,12 @@ Vérifiée le 2026-11-06, au submit de restore-v1-urls : rien enregistré ni mod
                                 ts-import-extensions,
                                 drop-section-default-copy,
                                 design-system-lint]
-                         ↑
-                         └──library──  app `@robusta/build`
+
+  app `@robusta/pyramids` (scripts racine)
+  [modified: retire-robusta-v1]
+
+  app `@robusta/build` (v1) : supprimée par retire-robusta-v1,
+  le design system n'a plus d'autre client que robusta-build.
 ```
 
 Depuis multilingual-site, le 2026-10-31, `pyramids-routing` et `pyramids-content` sont les packages `src/routing/url-scheme` et `src/content/corpus-reader` de l'app, leurs workspaces supprimés (BR-PYRAMID-12) : le design system est la seule dépendance workspace du site (BR-PYRAMID-13). Depuis ts-import-extensions, le même jour, le JS de `dist/` ne nomme que des `.js` mais ses `.d.ts` gardent les specifiers `.ts` et `.tsx` de la source (Gap-TSIMPORTS-1).
@@ -162,7 +169,7 @@ Client code : `yarn build:robusta` à la racine et le build Netlify.
 
 ### library API of module `@robusta/pyramids-design-system` — modified
 
-Client code : app `@robusta/robusta-build`, ses packages `landing`, `chrome` et `components` et son token bridge `src/styles/globals.css` ; app `@robusta/build`, `apps/robusta`, qui ne passe aucun composant de lien. Livrée par design-system-responsive le 2026-10-07, robusta-landing-page le 2026-10-15, multilingual-site et ts-import-extensions le 2026-10-31, drop-section-default-copy le 2026-11-04 ; les contrats de référence sont les sections Boundaries de leurs design files.
+Client code : app `@robusta/robusta-build`, ses packages `landing`, `chrome` et `components` et son token bridge `src/styles/globals.css`. L'app `@robusta/build` n'en est plus cliente depuis retire-robusta-v1, le 2026-11-06. Livrée par design-system-responsive le 2026-10-07, robusta-landing-page le 2026-10-15, multilingual-site et ts-import-extensions le 2026-10-31, drop-section-default-copy le 2026-11-04 ; les contrats de référence sont les sections Boundaries de leurs design files.
 
 - `SkButtonProps` · modifié — alias de type sur une union : avec `href`, une ancre, rendue par `linkComponent` s'il est passé ; sans, le bouton
 - `FooterLink` · nouveau — le libellé d'un item de footer et sa destination optionnelle ; sans destination, du texte et aucune ancre
@@ -188,6 +195,12 @@ Client code : `yarn workspace @robusta/pyramids-design-system run test` et `run 
 - ts-import-extensions, livré : `test` sort en 1 quand `src/import-specifiers.spec.ts` trouve sous `src` un import local écrit en `.js`, sans extension ou nommant un fichier absent, avec fichier et ligne · était : aucun contrôle des imports.
 - drop-section-default-copy, livré : `test` sort en 1 quand `src/page-copy.spec.tsx` trouve un texte lisible non passé dans le rendu d'un export de `src/index.ts`, ou un export sans rendu, qu'il nomme · était : aucun contrôle de la page copy.
 - design-system-lint, livré le 2026-11-06 : `lint` lance eslint 8.57.0, déclaré dans les devDependencies du package, et sort en 0 avec 6 avertissements hérités de la config Next racine · était : exit 127, eslint absent.
+
+### CLI API of app `@robusta/pyramids` (scripts racine) — modified
+
+Client code : le mainteneur, les agents, Netlify (`yarn build:robusta`).
+
+- retire-robusta-v1, livré le 2026-11-06 : `build:robusta-v1`, `dev:robusta-v1` et `dev:dev` sont retirés, yarn sortant en erreur sur chacun ; `concurrently` quitte les devDependencies. Green set inchangé, `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`, sortie 0 chacun depuis un clean checkout (BR-PYRAMID-5). Contrat dans la section Boundaries du design file · était : les trois scripts lançaient la v1 et les watchers.
 
 ## Fait
 
@@ -226,6 +239,7 @@ Client code : `yarn workspace @robusta/pyramids-design-system run test` et `run 
 - 2026-11-06 — dedupe-crystal-tux, prémisse fausse : `crystal-tux.png`, un pingouin détaillé en sweat Robusta Build avec une note « debugging mode », et `crystal-tux.svg`, un pingouin plat à antenne, sont deux illustrations distinctes. Les deux restent et la documentation les décrit comme deux illustrations. L'item quitte À faire sans livraison. Pas de story — décision du 2026-11-06 ci-dessous.
 - 2026-11-06 — [restore-v1-urls](__done/restore-v1-urls/restore-v1-urls.story.md) : les adresses v1 reviennent. `scripts/emit-redirects.mjs`, lancé par `build` entre `emit-site-files.mjs` et `check-seo.mjs`, traduit la v1 map en 77 règles statiques de `dist/client/_redirects`, que Netlify lit avant `netlify.toml` : 67 adresses v1 en 301 vers leur page v2 en un saut, 5 Gone en 410 et 5 sans destination sous `/learn` en 404, ces deux groupes avec le corps de `404.html`. Une destination qui n'est pas une page construite fait échouer la build ; aucune fonction (BR-PYRAMID-7). La v1 map passe de 82 à 83 lignes, 67/5/11, la ligne image scindée en ses deux formes v1. Draft deploy `6aedc75fdb5c4d20e5c56dd6` : Netlify Free sert le 410, le repli en 404 n'a pas servi ; les 53 règles 301 sans placeholder mènent en un saut à une page 200 ; aucune adresse v2 ne change de réponse. Reste à `storyman done` R-RESTOREV1-62, le double saut depuis `robusta-build.netlify.app`, constatable en production après le merge. 731 tests du site (717 avant), lint vert, `yarn build:robusta` vert, 34 pages vérifiées dont 33 indexables. Validée par la requête `boss restore-v1-urls` de Nicolas. Commits `bc8b333` (OQ-RESTOREV1-1 à 3), `5a682d5` (design), `467beaa` (implémentation). Détail dans la story et son design file.
 - 2026-11-06 — [retire-robusta-design](retire-robusta-design/retire-robusta-design.story.md) : la maquette v0 `apps/robusta-design`, `v0/` et `uploads/`, est supprimée, relisible dans `d58e879` ; son brief `prompt.md` devient `documentation/author-brief.md` par un `git mv` à l'octet près, que `git log --follow` remonte jusqu'à `d58e879`. `netlify-ignore.spec.ts` prend `apps/intel-demo` comme dossier sans manifeste ; `CLAUDE.md` et `root.archi.md` ne nomment plus le dossier. `yarn.lock` inchangé, 731 tests, build verte. Commit `3331afc`. Détail dans la story et son design file.
+- 2026-11-06 — [retire-robusta-v1](retire-robusta-v1/retire-robusta-v1.story.md) : `apps/robusta` (`@robusta/build`) quitte git, 731 fichiers suivis, et le disque, restes non suivis compris ; `@robusta/build` sort de `yarn.lock`. Les scripts `build:robusta-v1`, `dev:robusta-v1`, `dev:dev` et `concurrently` partent. Corpus, 18 brouillons, CV et routing v1 se relisent par `git show 6c57bc3:apps/robusta/<chemin>`. `corpus-freeze.spec.ts` part avec le gel ; `article-slug.spec.ts` garde ses onze slugs en littéraux. `_redirects`, 77 règles, et v1 map, 83 lignes, identiques à l'octet. 717 tests du site (731 avant), lint vert, `yarn build:robusta` vert à 34 pages, `yarn build:dakar` vert à 23 pages, rien sous `packages/` hors `*.archi.md`. Hors dépôt, Nicolas débranche le projet Vercel de la v1. Reste à `storyman done` le volet deploy preview d'AC-RETIREV1-6, après le push. B5 se vide. Validée par la requête `boss retire-robusta-v1` de Nicolas. Commit `f1fdcca`. Détail dans la story et son design file.
 
 ## À faire
 
@@ -237,9 +251,6 @@ Client code : `yarn workspace @robusta/pyramids-design-system run test` et `run 
     - vectorize-wordmark — `robusta-build-wordmark.png` fait 1603×312 ; une version vectorielle passe à l'échelle et pèse moins. (flag F2)
     - scribe-intel-does-not-compile — `packages/scribe-intel` et `services/scribe-intel-collector` échouent à `tsc` sur des défauts de source antérieurs à unblock-build ; tous deux s'installent et restent hors du green set, si bien que rien n'en dépend. scribe-intel est deprecated depuis le 2026-10-31 : l'item ne répare plus sa compilation, et ce que devient le package n'est pas décidé. (pas de story — décision du 2026-10-31)
     - rollback-rehearsal — Nicolas répète une fois sur www.robusta.build le retour arrière que décrit la section Deployment de `apps/robusta-build/README.md` : publier le déploiement précédent, verrouiller la publication automatique, puis republier le déploiement courant et déverrouiller. Hors dépôt, aucun commit. (pas de story — décision du 2026-11-05 de netlify-deploy)
-
-* Batch B5 — Fin d'epic. restore-v1-urls et retire-robusta-design sorties le 2026-11-06 ; reste retire-robusta-v1.
-    - retire-robusta-v1 — retirer `apps/robusta` une fois que le site v2 sert le même contenu, et le débrancher de `pyramids-layouts`, `pyramids-links` et `pyramids-ctas`. Supprime le `apps/robusta/content/blog` figé plutôt que de le refondre dans le corpus v2, et la vérification de gel part avec lui. N'active aucune redirection : depuis restore-v1-urls, le 2026-11-06, le site v2 sert lui-même les adresses v1 par `_redirects`. Dernier item de l'epic ; supprimer les trois packages est hors de sa portée, décision du 2026-07-31.
 
 ## Décisions structurantes
 
@@ -383,6 +394,8 @@ Client code : `yarn workspace @robusta/pyramids-design-system run test` et `run 
 - 2026-11-06 — `crystal-tux.png` et `crystal-tux.svg` restent tous deux : ce sont deux illustrations distinctes, pas deux formats d'une même. Pourquoi : décision de Nicolas ; la prémisse du flag F3 était fausse. Impact : dedupe-crystal-tux quitte À faire sans livraison.
 - 2026-11-06 — Les adresses v1 reviennent, servies par des règles statiques que la build génère depuis la v1 map dans `dist/client/_redirects`, sans fonction : 301 pour une ligne permanente, 410 pour une ligne Gone, 404 pour une ligne sans destination sous `/learn`. Pourquoi : OQ-RESTOREV1-1 et 3, Nicolas ; la map était écrite et testée, et des règles statiques ne coûtent rien sur l'offre Free. Impact : défait, pour les seules adresses v1, la décision du 2026-10-06 « The v2 site serves no redirect » ; une forme non canonique d'une URL v2 reste sans règle. C'est un rattrapage de v1, pas une règle du site (OQ-RESTOREV1-2) : aucune BR, un article v2 renommé change d'URL sans redirection, et la règle des adresses publiées validée le 2026-07-30 n'est pas enregistrée. Réf : R-RESTOREV1-01 à 05 et 43, `467beaa`.
 - 2026-11-06 — Le brief du prototype v0 est gardé dans `documentation/author-brief.md`, déplacé par `git mv` sans édition ; la maquette part sans copie. Pourquoi : OQ-RETIREDESIGN-1, Nicolas ; le parcours de l'auteur, Masala Parser et le Toulouse JUG n'existent nulle part ailleurs en v2, et la landing page les exclut exprès (AC-LANDING-3). Impact : `documentation/` gagne un fichier qu'aucune build ne lit ; le renommage exact garde `git log --follow`, même après une fusion par squash. Réf : `3331afc`.
+- 2026-11-06 — `apps/robusta` part sans copie dans le dépôt : corpus, 18 brouillons jamais publiés et CV se relisent à `6c57bc3:apps/robusta/<chemin>`, 6c57bc3 étant la tête de `main` ce jour-là. Pourquoi : rien ne les lit, et un brouillon repris en v2 se réécrit au schéma v2. Impact : solde la décision du 2026-07-29 qui retirait la v1 ; la vérification de gel du corpus v1 part avec lui, et `article-slug.spec.ts` garde ses slugs en littéraux lus à 6c57bc3, deux Locales ayant été corrigées dans le corpus v2. Réf : R-RETIREV1-01, 41, 42 et 82, `f1fdcca`.
+- 2026-11-06 — Les manifestes de `apps/dakar` ne bougent pas : ses imports non déclarés, `remark`, `remark-html` et `gray-matter`, restent résolus par les copies que hisse le site v2, et le Vite 5 hissé à la racine est désormais celui de `services/scribe-intel-collector`, `packageExtensions` de `.yarnrc.yml` conservé à l'octet. Pourquoi : hors du périmètre de retire-robusta-v1 ; une casse se verrait dans le green set. Impact : dakar dépend du hoisting de deux autres workspaces, risque accepté. Réf : R-RETIREV1-02 et 23, `f1fdcca`.
 
 ## Open Questions & Gaps
 
