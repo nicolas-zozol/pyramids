@@ -253,3 +253,9 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Vérifié par boss : test 716/716 (60 fichiers), lint vert, `yarn build:robusta` vert (33 pages, indexing closed). Chaîne `ignore` lancée par `sh -c` : production → exit 1 ; branche `e57501b..688d6c0` → skip ; `cd83f06^..cd83f06` → build ; deploy-preview docs seuls → skip ; commit dakar seul (clone jetable) → skip en branche, build en production ; ref inconnue, absente ou égale → build.
 - `storyman submit` : 5 étapes sur 5, design IMPLEMENTED, story SUBMITTED, item ROADMAP retiré, epic mis à jour ; epicman ajoute l'item `rollback-rehearsal` (B4, sans story).
 - Hand-offs laissés à Nicolas : répétition du retour arrière sur www.robusta.build ; libellés du dashboard du README non vérifiés en direct ; date de go-live du README (`6182d17`, 2026-11-04) contre l'ouverture de l'indexation du 2026-11-05 dans la story.
+
+## D30 : restore-v1-urls, `boss new story restore-v1-urls until design`
+
+- Requête : `boss new story restore-v1-urls until design`, branche `epic/robusta-v2`, mode rloq. Nicolas l'a demandée comme `boss prepare restore-v1-urls`, que boss refuse sur une story qui n'existe pas encore : la story est créée par storyman, puis le run s'arrête au design.
+- Arrêt retenu : celui de prepare, design approuvé par boss si aucune entrée `ask` n'est en attente, sinon DRAFT. Écarté : `until design` lu à la lettre, qui laisse toujours le design en DRAFT. Motif : l'intention écrite par l'appelant. Confidence: medium.
+- Lock : non évalué, aucun code dans ce run.
