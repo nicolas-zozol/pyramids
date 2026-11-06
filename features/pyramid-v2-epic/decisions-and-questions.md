@@ -300,3 +300,14 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Vérifié par boss : test 731/731, lint vert, `yarn.lock` inchangé, `build:robusta` vert (34 pages vérifiées, 33 indexables).
 - `storyman submit` : 5 étapes sur 5. docman (`CLAUDE.md`), archiman (`root.archi.md`), design IMPLEMENTED, story SUBMITTED citant d58e879, item 10 retiré de ROADMAP.md, epicman : retire-robusta-design en Fait, B5 ne garde que retire-robusta-v1. Commit de clôture exécuté par boss.
 - Laissés à Nicolas : versions de Node incohérentes (`CLAUDE.md` 22.12, `README.md` 22.18, `.nvmrc` 22), relevées par docman ; paragraphe Overview de `root.archi.md` lu comme de l'historique, relevé par archiman.
+
+## D34 : retire-robusta-v1, `boss new story retire-robusta-v1 until design`
+
+- Requête : `boss new story retire-robusta-v1 until design`, branche `epic/robusta-v2`, mode rloq. Nicolas l'a demandée comme `boss prepare retire-robusta-v1` ; la story n'existait pas, prepare l'aurait refusée.
+- Arrêt retenu : celui de prepare, comme en D32, design approuvé par boss si aucune entrée `ask` n'est en attente, sinon DRAFT. Confidence: high.
+- Lock : non évalué, aucun code dans ce run.
+- Story : storyman, depuis la ligne « story à écrire » de B5. OQ-RETIREV1-1 `ask` (les 18 brouillons jamais publiés supprimés sans copie ou gardés dans `documentation/`), en attente ; OQ-RETIREV1-2 (CV de `public/nicolas` sans copie) et 3 (`dev:dev` et `concurrently` supprimés) signées `lgtm (storyman)`, ne contredisent aucun AC. Commit `d769778`.
+- Brainstorm : bsman. Nombres vérifiés (dakar 23 pages, 77 règles, 83 lignes de v1 map) ; essai d'install sans v1 : la racine hisse le Vite 5 de `services/scribe-intel-collector`, `packageExtensions` reste. OQ-RETIREV1-4 `ask` (projet Vercel v1 supprimé ou détaché avant le merge sur `main`), en attente ; OQ-RETIREV1-5 (imports non déclarés de dakar laissés tels quels) signée `lgtm (bsman)`. Commit `eb7096e`.
+- `storyman update avec brainstorm` : AC-3 à 6 précisés (`dev:robusta-v1`, `design-system.archi.md`, brouillons, Vite 5, deploy preview), OQ-2, 3 et 5 pliées. Commit `3adc8eb`.
+- Design : designman, AC-RETIREV1-1 à 6 cités mot pour mot, `## Boundaries` rempli, 12 R-. OQ-RETIREV1-6 (`article-slug.spec.ts` garde sa table en littéraux lus à 6c57bc3) signée `lgtm (designman)`, pliée par `designman update`. Commit `3cc5888`.
+- Conséquence rloq : OQ-RETIREV1-1 et 4 en attente, le design reste DRAFT. À la réponse de Nicolas, `boss retire-robusta-v1` reprend en Phase 5.

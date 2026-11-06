@@ -30,7 +30,7 @@ Fichiers touchés, internal code :
 - `package.json`, `yarn.lock` — trois scripts et `concurrently` en moins ; lockfile régénéré par yarn, jamais édité à la main.
 - `.yarnrc.yml` — le bloc `packageExtensions` reste à l'octet ; son commentaire nomme le Vite 5 que hisse `services/scribe-intel-collector` au lieu du Vite 6 de `apps/robusta`.
 - `apps/robusta-build/src/content/corpus-freeze.spec.ts` — supprimé.
-- `apps/robusta-build/src/content/corpus-reader/article-slug.spec.ts` — `V1_CORPUS` et la lecture de l'arbre partent. `V1_SLUGS` reste le contrat et porte pour chaque article le `title` et la `locale` lus à `6c57bc3:apps/robusta/content/blog/<chemin>` ; le describe « the slugs of the migrated corpus » dérive chaque slug de ces littéraux (OQ-RETIREV1-6). Les imports qui ne servaient qu'à la lecture (`node:fs`, `node:path`, `node:url`, `gray-matter`) partent.
+- `apps/robusta-build/src/content/corpus-reader/article-slug.spec.ts` — `V1_CORPUS` et la lecture de l'arbre partent. `V1_SLUGS` reste le contrat et porte pour chaque article le `title` et la `locale` lus à `6c57bc3:apps/robusta/content/blog/<chemin>` ; le describe « the slugs of the migrated corpus » dérive chaque slug de ces littéraux. Le corpus v2 ne les fournit pas : deux Locales y ont été corrigées. Les imports qui ne servaient qu'à la lecture (`node:fs`, `node:path`, `node:url`, `gray-matter`) partent.
 - `apps/robusta-build/scripts/netlify-ignore.spec.ts` — `monorepo()` perd `apps/robusta/package.json` et `apps/robusta/src/index.ts` ; le `it.each` perd `['the v1 site', …]`. Le motif `'apps/robusta-*'` du test des workspaces reste : il n'est pas la v1. L'API library `ignoreVerdict` de `netlify-ignore.mjs` ne change pas.
 - Commentaires réécrits en `6c57bc3:apps/robusta/<chemin>`, sans autre changement de texte ni de code :
   - `src/routing/v1-url-map.ts` : `src/logic/categories/robusta-categories.ts` et `src/app/learn/[...path]/page.tsx:59` ;
@@ -85,10 +85,3 @@ Edge cases to test:
 
 - Depends on : restore-v1-urls et retire-robusta-design, livrées le 2026-11-06. Hors dépôt : le projet Vercel de la v1 supprimé ou détaché avant le merge sur `main`.
 - Blocks : la clôture de l'epic, dont c'est le dernier item de B5.
-
-## Open Questions & Gaps
-
-- OQ-RETIREV1-6 : Sans l'arbre v1, la table des slugs de `article-slug.spec.ts` se teste-t-elle sur les titres et Locales v1 recopiés en littéraux, ou part-elle avec la boucle ?
-- Proposition : la garder, chaque ligne portant le titre, la Locale v1 et le slug en littéraux, lus à 6c57bc3.
-- Rationale : la story fait de la table le contrat ; sans entrées, elle ne teste plus rien, et le corpus v2 ne peut pas les fournir, deux Locales y ayant été corrigées.
-- Resolution: lgtm (designman)
