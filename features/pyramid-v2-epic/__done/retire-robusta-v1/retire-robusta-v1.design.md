@@ -4,7 +4,7 @@
 **Feature:** retire-robusta-v1
 **Infix:** RETIREV1
 **Status:** IMPLEMENTED (2026-11-06, commit f1fdcca)
-**Sources:** [story](retire-robusta-v1.story.md), [brainstorm](retire-robusta-v1.brainstorm.md), [epic](../pyramid-v2.epic.md)
+**Sources:** [story](retire-robusta-v1.story.md), [brainstorm](retire-robusta-v1.brainstorm.md), [epic](../../pyramid-v2.epic.md)
 
 ## Goal
 

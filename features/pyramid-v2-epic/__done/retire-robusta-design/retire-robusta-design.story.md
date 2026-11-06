@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** retire-robusta-design
 **Infix :** RETIREDESIGN
-**Status :** SUBMITTED (2026-11-06, commit 3331afc)
+**Status :** DONE (2026-11-06, commit 6c57bc3 sur main)
 
 ## Story
 

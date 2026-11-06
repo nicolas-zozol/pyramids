@@ -17,7 +17,7 @@
  * Requirements: R-SEOEXCELLENCE-04, R-SEOEXCELLENCE-22, R-SEOEXCELLENCE-42, R-SEOEXCELLENCE-44
  * Design: features/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
  * Requirements: R-RESTOREV1-41, R-RESTOREV1-42, R-RESTOREV1-43
- * Design: features/pyramid-v2-epic/retire-robusta-v1/retire-robusta-v1.design.md
+ * Design: features/pyramid-v2-epic/__done/retire-robusta-v1/retire-robusta-v1.design.md
  * Requirements: R-RETIREV1-61
  */
 import type { UrlScheme } from './url-scheme/index.ts';

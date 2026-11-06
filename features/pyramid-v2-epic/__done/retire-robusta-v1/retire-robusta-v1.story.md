@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** retire-robusta-v1
 **Infix :** RETIREV1
-**Status :** SUBMITTED (2026-11-06, commit f1fdcca)
+**Status :** DONE (2026-11-06, commit 5645867 sur main)
 
 ## Story
 
@@ -43,7 +43,9 @@ Relire la v1 : articles, 18 brouillons de `content/blog-unpublished`, CV de `pub
 - AC-RETIREV1-5 : Given un lecteur qui cherche un article, un brouillon jamais publié, le CV ou le routing v1, When il lit la story livrée, Then elle cite 6c57bc3, et `git show 6c57bc3:apps/robusta/<chemin>` rend le fichier.
 - AC-RETIREV1-6 : Given les cas limites, When on les rejoue, Then un reste non suivi de `apps/robusta` (`node_modules`, `.next`, `tsconfig.tsbuildinfo`) ne survit pas, un `git rm -r` seul ne suffisant pas ; la racine hisse le Vite 5 de `services/scribe-intel-collector`, la build v2 ne charge que Vite 8 et le `packageExtensions` de `.yarnrc.yml` est conservé ; un changement sous `apps/dakar` seul donne toujours `skip` à la règle `ignore` de Netlify, tandis que le commit de livraison, qui change `package.json` et `yarn.lock`, donne `build` et son deploy preview sert les mêmes 77 règles.
 
-Vérifié au submit : `yarn install --immutable` vert ; tests du site v2 verts, 60 fichiers et 717 tests (731 avec `corpus-freeze.spec.ts`) ; lint vert ; `yarn build:robusta` vert, 34 pages dont 33 indexables, 77 règles (67 permanentes, 5 gone, 5 not found), `_redirects` et v1 map identiques à l'octet à une build de HEAD d'avant la livraison ; `yarn build:dakar` vert, 23 pages ; la racine hisse Vite 5.4.18, la build v2 ne charge que Vite 8.3.2. Reste à vérifier après le push : le volet deploy preview d'AC-RETIREV1-6 (`build` sur le commit de livraison, mêmes 77 règles).
+Vérifié au submit : `yarn install --immutable` vert ; tests du site v2 verts, 60 fichiers et 717 tests (731 avec `corpus-freeze.spec.ts`) ; lint vert ; `yarn build:robusta` vert, 34 pages dont 33 indexables, 77 règles (67 permanentes, 5 gone, 5 not found), `_redirects` et v1 map identiques à l'octet à une build de HEAD d'avant la livraison ; `yarn build:dakar` vert, 23 pages ; la racine hisse Vite 5.4.18, la build v2 ne charge que Vite 8.3.2.
+
+Vérifié après le push du 2026-11-06 (5645867, `origin/main` = `origin/epic/robusta-v2`), volet Netlify d'AC-RETIREV1-6 : le deploy de branche `epic/robusta-v2` a été construit et le deploy de production sur `main` est prêt. Sur www.robusta.build, `/` et `/articles` rendent 200, `/learn/blockchain/page/2` un 301 vers `/articles/c/blockchain`, `/learn/javascript/s/es6-7.md` un 410, `/learn/page/2` un 404 et `/en` un 301 vers `/`. Le `_redirects` local était identique à l'octet (77 règles) avant le push.
 
 ## Boundaries
 

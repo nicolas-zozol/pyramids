@@ -12,7 +12,7 @@
  * Requirements: R-ARTICLEPAGE-07, R-ARTICLEPAGE-21, R-ARTICLEPAGE-26, R-ARTICLEPAGE-27
  * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-101
- * Design: features/pyramid-v2-epic/retire-robusta-v1/retire-robusta-v1.design.md
+ * Design: features/pyramid-v2-epic/__done/retire-robusta-v1/retire-robusta-v1.design.md
  * Requirements: R-RETIREV1-41, R-RETIREV1-42, R-RETIREV1-61
  */
 export type {

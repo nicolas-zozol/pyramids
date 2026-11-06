@@ -4,7 +4,7 @@
 **Feature:** retire-robusta-design
 **Infix:** RETIREDESIGN
 **Status:** IMPLEMENTED (2026-11-06, commit 3331afc)
-**Sources:** [story](retire-robusta-design.story.md), [brainstorm](retire-robusta-design.brainstorm.md), [epic](../pyramid-v2.epic.md)
+**Sources:** [story](retire-robusta-design.story.md), [brainstorm](retire-robusta-design.brainstorm.md), [epic](../../pyramid-v2.epic.md)
 
 ## Goal
 
