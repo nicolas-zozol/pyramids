@@ -73,7 +73,7 @@ describe('checkTranslations', () => {
 });
 
 describe('the build', () => {
-  it('runs check:translations once, after compile:seams and before emit:v1-map', async () => {
+  it('runs check:translations once, after check:source and before emit:v1-map', async () => {
     const manifest = JSON.parse(
       await readFile(resolve(process.cwd(), 'package.json'), 'utf8'),
     ) as { scripts: Record<string, string> };
@@ -86,7 +86,7 @@ describe('the build', () => {
       steps.filter((step) => step === 'yarn check:translations'),
     ).toHaveLength(1);
     expect(steps.indexOf('yarn check:translations')).toBe(
-      steps.indexOf('yarn compile:seams') + 1,
+      steps.indexOf('yarn check:source') + 1,
     );
     expect(steps.indexOf('yarn emit:v1-map')).toBe(
       steps.indexOf('yarn check:translations') + 1,

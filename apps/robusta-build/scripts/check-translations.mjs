@@ -2,7 +2,7 @@
  * Prints the translation notices of the corpus, once per build: one line per
  * notice, with the value to copy into the declaration, then their count. A
  * notice fails nothing; a corpus violation, thrown by the article index, does.
- * Runs on what `compile:seams` wrote under `.routing-dist`.
+ * Loads the `.ts` seams under `src` through Node type stripping.
  *
  * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-84, R-MULTILINGUAL-85
@@ -52,13 +52,13 @@ function countOf(count) {
 
 async function main() {
   const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-  const compiled = join(app, '.routing-dist');
+  const source = join(app, 'src');
 
   const { getArticleIndex, getTranslationNotices } = await import(
-    join(compiled, 'content/article-index.js')
+    join(source, 'content/article-index.ts')
   );
   const { describeTranslationNotice } = await import(
-    join(compiled, 'content/corpus-reader/index.js')
+    join(source, 'content/corpus-reader/index.ts')
   );
 
   const { exitCode, out, err } = await checkTranslations({

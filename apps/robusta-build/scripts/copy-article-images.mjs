@@ -9,8 +9,8 @@
  *
  * It carries no logic of its own: what to copy and where is the base's, and
  * `src/content/corpus.ts` is where the site says it. Like
- * `scripts/emit-v1-map.mjs`, it reuses the compile `compile:seams` performs, the
- * base included.
+ * `scripts/emit-v1-map.mjs`, it loads the `.ts` seams under `src` through Node
+ * type stripping, the base included.
  *
  * It is not a watcher. An image added during a `vite dev` session reaches the
  * site on the next `yarn copy:assets`, which the dev script runs at startup.
@@ -19,12 +19,12 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const compiled = join(app, '.routing-dist');
+const source = join(app, 'src');
 
 const { copyCorpusAssets } = await import(
-  join(compiled, 'content/corpus-reader/index.js')
+  join(source, 'content/corpus-reader/index.ts')
 );
-const { corpus } = await import(join(compiled, 'content/corpus.js'));
+const { corpus } = await import(join(source, 'content/corpus.ts'));
 
 const copied = await copyCorpusAssets(corpus);
 

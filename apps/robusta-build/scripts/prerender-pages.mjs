@@ -1,9 +1,9 @@
 /**
  * The page list the prerender walks: the landing page of every Locale, `/`
  * first, written as `index.html`, then `/404`, then every URL the corpus
- * derives, built with the scheme's single builder. It reads the seams compiled
- * under `.routing-dist`, and refuses a route tree that does not follow the
- * configured content root.
+ * derives, built with the scheme's single builder. It loads the `.ts` seams
+ * under `src` through Node type stripping, and refuses a route tree that does
+ * not follow the configured content root.
  *
  * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-24
@@ -17,7 +17,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const compiled = join(app, '.routing-dist');
+const source = join(app, 'src');
 
 const LOCALE_SEGMENT = '{-$locale}';
 const LAYOUT_ROUTE = `${LOCALE_SEGMENT}/route.tsx`;
@@ -34,11 +34,11 @@ const CONTENT_SHAPES = [
 /** The landing pages, `/` first, `/404`, then the content URLs; route files checked first. */
 export async function prerenderPages() {
   const { buildUrl, landingPages } = await import(
-    join(compiled, 'routing/url-scheme/index.js')
+    join(source, 'routing/url-scheme/index.ts')
   );
-  const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
+  const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
   const { contentUrls } = await import(
-    join(compiled, 'routing/content-urls.js')
+    join(source, 'routing/content-urls.ts')
   );
 
   assertRouteFilesFollow(join(app, 'src/routes'), urlScheme.contentRoot);

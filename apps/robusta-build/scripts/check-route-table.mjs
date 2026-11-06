@@ -103,15 +103,15 @@ async function filesUnder(directory, extension) {
 
 async function main() {
   const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-  const compiled = join(app, '.routing-dist');
+  const source = join(app, 'src');
   const client = join(app, 'dist/client');
 
   const { buildUrl, landingPages } = await import(
-    join(compiled, 'routing/url-scheme/index.js')
+    join(source, 'routing/url-scheme/index.ts')
   );
-  const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
+  const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
   const { contentUrls } = await import(
-    join(compiled, 'routing/content-urls.js')
+    join(source, 'routing/content-urls.ts')
   );
 
   const landings = landingPages(urlScheme);

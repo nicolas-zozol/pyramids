@@ -5,9 +5,9 @@ import { getArticleIndex, type ArticleIndexEntry } from './article-index.ts';
  * `getArticleIndex`, which is where a corpus violation becomes fatal, so a page
  * is never built from an index the schema refused.
  *
- * The module stays free of React and of the design system: `tsconfig.routing.json`
- * includes `src/content` whole and compiles it with plain `tsc`, with no `jsx`
- * option, so the plain-Node build scripts can run it.
+ * The module stays free of React and of the design system, like the rest of
+ * `src/content`: the plain-Node build scripts load that package through Node
+ * type stripping, which reads no JSX.
  */
 
 /**

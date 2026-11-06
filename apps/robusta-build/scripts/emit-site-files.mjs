@@ -1,7 +1,7 @@
 /**
  * Writes `dist/client/sitemap.xml` and `dist/client/robots.txt`, after
- * `vite build`, which empties that directory. Runs on what `compile:seams`
- * wrote under `.routing-dist`; a corpus or scheme violation, thrown by
+ * `vite build`, which empties that directory. Loads the `.ts` seams under `src`
+ * through Node type stripping; a corpus or scheme violation, thrown by
  * `contentUrls`, fails it.
  *
  * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
@@ -29,20 +29,20 @@ export function siteFiles({ landings, content, articles, seo }) {
 
 async function main() {
   const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-  const compiled = join(app, '.routing-dist');
+  const source = join(app, 'src');
   const client = join(app, 'dist/client');
 
   const { landingPages } = await import(
-    join(compiled, 'routing/url-scheme/index.js')
+    join(source, 'routing/url-scheme/index.ts')
   );
-  const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
+  const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
   const { contentUrls } = await import(
-    join(compiled, 'routing/content-urls.js')
+    join(source, 'routing/content-urls.ts')
   );
   const { getArticleIndex } = await import(
-    join(compiled, 'content/article-index.js')
+    join(source, 'content/article-index.ts')
   );
-  const seo = await import(join(compiled, 'seo/index.js'));
+  const seo = await import(join(source, 'seo/index.ts'));
 
   const { sitemap, robots, summary } = siteFiles({
     landings: landingPages(urlScheme),

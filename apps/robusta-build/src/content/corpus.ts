@@ -4,7 +4,7 @@ import type { CorpusSpec } from './corpus-reader/index.ts';
  * Where this site's articles live, declared as data (R-CONTENTSOURCE-22).
  *
  * A leaf module, for the same reason `src/routing/scheme.ts` is one:
- * the plain-Node build scripts reach the article index through `.routing-dist`,
+ * the plain-Node build scripts load the article index from `src`,
  * and anything reachable from `seopyramids.config.ts` is out of their reach
  * because the site configuration resolves a bundler-only PNG. So the
  * corpus is declared here and `seopyramids.config.ts` reads it, never the other

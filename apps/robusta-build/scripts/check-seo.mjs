@@ -205,13 +205,13 @@ async function filesUnder(directory) {
 
 async function main() {
   const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-  const compiled = join(app, '.routing-dist');
+  const source = join(app, 'src');
   const client = join(app, 'dist/client');
 
   const { INDEXING_OPEN, robotsOf } = await import(
-    join(compiled, 'seo/index.js')
+    join(source, 'seo/index.ts')
   );
-  const { SITE_ORIGIN } = await import(join(compiled, 'routing/scheme.js'));
+  const { SITE_ORIGIN } = await import(join(source, 'routing/scheme.ts'));
 
   const files = await filesUnder(client);
   const pages = await Promise.all(

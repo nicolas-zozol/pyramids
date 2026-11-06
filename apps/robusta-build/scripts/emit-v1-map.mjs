@@ -15,11 +15,11 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const app = resolve(here, '..');
-const compiled = join(app, '.routing-dist');
+const source = join(app, 'src');
 
-const { urlScheme } = await import(join(compiled, 'routing/scheme.js'));
-const { v1UrlMap } = await import(join(compiled, 'routing/v1-url-map.js'));
-const { getArticleIndex } = await import(join(compiled, 'content/article-index.js'));
+const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
+const { v1UrlMap } = await import(join(source, 'routing/v1-url-map.ts'));
+const { getArticleIndex } = await import(join(source, 'content/article-index.ts'));
 
 const rows = v1UrlMap(urlScheme, await getArticleIndex());
 
