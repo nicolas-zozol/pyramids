@@ -15,7 +15,9 @@ En tant que mainteneur du dépôt, je veux supprimer `apps/robusta-design` afin 
 
 La v0 suit une direction éditoriale (Newsreader, papier chaud, encre violette) que le design system n'a pas reprise : il est parti sur le style croquis, IBM Plex et Caveat. Le site v2 a aussi écarté une partie du contenu de la v0. Sa landing ne nomme ni Toptal, ni Oracle, ni un CV, ni une disponibilité datée (AC-LANDING-3).
 
-Story indépendante de retire-robusta-v1, qui reste la dernière de B5. Git garde tout ce qui est supprimé.
+Story indépendante de retire-robusta-v1, qui reste la dernière de B5. Git garde tout ce qui est supprimé : d58e879 (« add Claude design system »), dernier commit qui modifie le dossier et déjà sur `main`, le porte tel qu'il sera supprimé. Une fusion de l'epic par squash ou rebase ne le perd donc pas.
+
+Le test de la règle de build Netlify (`netlify-ignore.spec.ts`) prend ce chemin comme exemple de dossier sans manifeste. Il passe sur `apps/intel-demo`, dossier réel sans `package.json` : le dépôt simulé du test copie le vrai, et le verdict testé ne change pas.
 
 ## Ce que le dossier contient, et où cela vit ailleurs
 
@@ -26,10 +28,12 @@ Story indépendante de retire-robusta-v1, qui reste la dernière de B5. Git gard
 
 ## Acceptance Criteria
 
-- AC-RETIREDESIGN-1 : Given le dépôt après la livraison, When on liste les fichiers suivis, Then `apps/robusta-design` n'existe plus, et `yarn install` puis `yarn build:robusta` restent verts.
-- AC-RETIREDESIGN-2 : Given la documentation en vigueur (`CLAUDE.md`, `root.archi.md`, les README), When on y cherche `apps/robusta-design`, Then aucune ne le nomme ; les documents archivés sous `__done/` gardent leurs mentions, inchangées.
-- AC-RETIREDESIGN-3 : Given un lecteur qui veut relire le brief ou la maquette, When il ouvre la story livrée, Then elle cite le dernier commit qui porte le dossier, et `git show <sha>:apps/robusta-design/prompt.md` rend le brief.
-- AC-RETIREDESIGN-4 : Given les cas limites, When on les rejoue, Then aucun fichier de `packages/robusta-design-system` ni de `apps/robusta-build/src` ne change ; les tests du site restent verts, y compris celui de la règle de build Netlify qui prend ce chemin comme exemple fictif de dossier sans manifeste ; le `.DS_Store` local part avec le dossier.
+- AC-RETIREDESIGN-1 : Given le dépôt après la livraison, When on liste les fichiers suivis puis on lance `yarn install --immutable` et `yarn build:robusta`, Then `apps/robusta-design` n'a plus aucun fichier suivi, l'install réussit sans modifier `yarn.lock` et la build reste verte.
+- AC-RETIREDESIGN-2 : Given la livraison soumise, When on cherche `apps/robusta-design` dans `CLAUDE.md`, `root.archi.md`, les README, `ROADMAP.md` et l'À faire de l'epic, Then rien ne le nomme ; le journal daté de l'epic, les documents Compound de cette feature et ceux sous `__done/` gardent leurs mentions.
+- AC-RETIREDESIGN-3 : Given l'epic fusionnée dans `main`, par squash ou rebase compris, When un lecteur lance depuis `main` `git show d58e879:apps/robusta-design/prompt.md`, Then le brief s'affiche ; la story livrée cite d58e879.
+- AC-RETIREDESIGN-4 : Given le diff de la livraison, When on liste ses fichiers, Then aucun n'est sous `packages/robusta-design-system` ni sous `apps/robusta-build/src` ; le `tweaks-panel.jsx` homonyme du design system reste intact.
+- AC-RETIREDESIGN-5 : Given la suite de tests du site, When on lance `yarn workspace @robusta/robusta-build run test`, Then elle est verte, et un changement sous `apps/intel-demo`, dossier sans manifeste, donne toujours `skip`.
+- AC-RETIREDESIGN-6 : Given le checkout local avec son `.DS_Store` non suivi, When la suppression est faite, Then `apps/robusta-design` n'existe plus sur le disque ; un `git rm -r` seul ne suffit pas.
 
 ## Boundaries
 
@@ -41,11 +45,6 @@ Aucune API touchée : le dossier n'est pas un workspace, rien n'en dépend, et l
 - Proposition : tout supprimer ; la story livrée cite le dernier commit qui porte le brief, qu'on relit avec `git show`.
 - Rationale : le positionnement du brief est dépassé par la landing v2, et le rétablir coûte une commande git. Le garder dans le design system y mettrait du contenu biographique qu'aucun client du module ne lit.
 - Resolution:
-
-- OQ-RETIREDESIGN-2 : Le test de la règle de build Netlify garde-t-il `apps/robusta-design` comme exemple fictif de dossier sans manifeste, ou prend-il `apps/intel-demo`, qui existe ?
-- Proposition : il prend `apps/intel-demo`, dossier réel sans `package.json`.
-- Rationale : le dépôt simulé du test copie le vrai, et un chemin disparu remonterait dans chaque recherche du nom ; le verdict testé ne change pas.
-- Resolution: lgtm (storyman)
 
 ## Documentation updates
 
