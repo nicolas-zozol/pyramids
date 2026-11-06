@@ -3,7 +3,7 @@
 **Date :** 2026-11-05
 **Participants :** bsman (autonomous)
 **Infix :** NETLIFY
-**Source :** `features/pyramid-v2-epic/netlify-deploy/netlify-deploy.story.md`
+**Source :** `features/pyramid-v2-epic/__done/netlify-deploy/netlify-deploy.story.md`
 
 > **Note:** All axes completed autonomously by bsman. Decisions are flagged with **Décision (autonome):** for review.
 

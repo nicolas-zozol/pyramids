@@ -4,7 +4,7 @@
 **Feature:** netlify-deploy
 **Infix:** NETLIFY
 **Status:** IMPLEMENTED (2026-11-05, commit e44ac86)
-**Sources:** [story](netlify-deploy.story.md), [brainstorm](netlify-deploy.brainstorm.md), [epic](../pyramid-v2.epic.md), [FIX-PYRAMID-1](../pyramid-v2.fix.md)
+**Sources:** [story](netlify-deploy.story.md), [brainstorm](netlify-deploy.brainstorm.md), [epic](../../pyramid-v2.epic.md), [FIX-PYRAMID-1](../../pyramid-v2.fix.md)
 
 ## Goal
 

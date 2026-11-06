@@ -3,7 +3,7 @@
  * commit since the cached ref touches the site, a module it reaches, or a root
  * install file. Runs before dependency install: git and `node:` built-ins only.
  *
- * Design: features/pyramid-v2-epic/netlify-deploy/netlify-deploy.design.md
+ * Design: features/pyramid-v2-epic/__done/netlify-deploy/netlify-deploy.design.md
  * Requirements: R-NETLIFY-01, R-NETLIFY-02, R-NETLIFY-03, R-NETLIFY-04, R-NETLIFY-05, R-NETLIFY-06, R-NETLIFY-07
  */
 import { execFileSync } from 'node:child_process';

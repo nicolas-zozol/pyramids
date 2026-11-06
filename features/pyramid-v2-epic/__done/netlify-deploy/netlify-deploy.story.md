@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-05
 **Feature :** netlify-deploy
 **Infix :** NETLIFY
-**Status :** SUBMITTED (2026-11-05, commit e44ac86)
+**Status :** DONE (2026-11-05, commit e44ac86 sur main)
 
 ## Story
 
