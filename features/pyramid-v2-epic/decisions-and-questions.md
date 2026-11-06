@@ -287,3 +287,12 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Brainstorm : bsman, aucune entrée. AC-3 cite d58e879, déjà sur `main` ; AC-4 découpé en trois AC testables. Commit `1c4aebb`. `storyman update avec brainstorm` : AC-RETIREDESIGN-1 à 6, OQ-RETIREDESIGN-2 pliée. Commit `45a0bf0`.
 - Design : designman, aucune entrée ; fold sans objet, le design ne porte aucune Resolution. Contrôle : AC-RETIREDESIGN-1 à 6 cités mot pour mot, `## Boundaries` rempli.
 - Conséquence rloq : OQ-RETIREDESIGN-1 en attente, le design reste DRAFT. À la réponse de Nicolas, `boss retire-robusta-design` reprend en Phase 5.
+
+## D33 : retire-robusta-design, `boss retire-robusta-design`
+
+- Requête : `boss retire-robusta-design`, branche `epic/robusta-v2`, mode rloq. Reprise du run D32, arrêté au design DRAFT sur OQ-RETIREDESIGN-1.
+- Réponse : OQ-RETIREDESIGN-1 résolue par Nicolas contre la Proposition : le brief est gardé. Nom retenu par boss : `documentation/author-brief.md`, contenu identique à l'octet, déplacé par `git mv`. Confidence: high.
+- `storyman update` plie la réponse : titre et Contexte, AC-RETIREDESIGN-1 (`v0/` et `uploads/` supprimés sans copie), 2 (`documentation/author-brief.md` ne nomme pas `apps/robusta-design`) et 3 (brief identique à `d58e879:apps/robusta-design/prompt.md`, `git log --follow` jusqu'à d58e879) réécrits. Aucune nouvelle entrée. Commit `5ce4cef`.
+- Brainstorm non mis à jour : il suit l'ancienne Proposition ; document jetable, la story fait foi.
+- `designman update` : Goal, Boundaries, R-RETIREDESIGN-42 (déplacement à l'octet) et nouveau R-RETIREDESIGN-43 (story livrée cite d58e879 pour `v0/` et `uploads/`). Aucune nouvelle entrée. Contrôle boss : AC-RETIREDESIGN-1 à 6 cités mot pour mot, `## Boundaries` rempli. APPROVED, validated by boss.
+- Lock : B3 et B4 ne portent aucune story, comme en D31. Rien ne retient B5. Confidence: high.
