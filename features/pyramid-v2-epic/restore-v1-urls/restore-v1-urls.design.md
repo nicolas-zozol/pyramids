@@ -3,7 +3,7 @@
 **Last update:** 2026-11-06
 **Feature:** restore-v1-urls
 **Infix:** RESTOREV1
-**Status:** APPROVED (2026-11-06 — validated by boss)
+**Status:** IMPLEMENTED (2026-11-06, commit 467beaa)
 **Sources:** [story](restore-v1-urls.story.md), [brainstorm](restore-v1-urls.brainstorm.md), [epic](../pyramid-v2.epic.md), [seo-url-scheme](../__done/seo-url-scheme/seo-url-scheme.design.md), [tanstack-start-migration](../__done/tanstack-start-migration/tanstack-start-migration.design.md)
 
 ## Goal

@@ -101,15 +101,21 @@ The site builds the canonical form of each page and nothing else. Beside the hos
 - A trailing slash, `/fr/` included: 301 to the canonical form. `/` is a file and gets none.
 - An uppercase letter: 301 to the lowercase form when that file exists, 404 otherwise. A file under `/article-images` answers at its exact case, `M87.jpg` included.
 - The canonical path plus `.html`: 200, the same document.
-- Any other path: `404.html`, with status 404. The not-found document loads no client script, so it stays on screen.
+- Any other path outside `/learn`: `404.html`, with status 404. The not-found document loads no client script, so it stays on screen.
 
 ### The v1 mapping
 
-`src/routing/v1-url-map.ts` maps the v1 address space onto this one as a rule per class of v1 URL applied to the article index, not as a hand-kept table: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 82 rows over the real corpus, 67 permanent, 5 gone, 10 none.
+`src/routing/v1-url-map.ts` maps the v1 address space onto this one, a rule per class of v1 URL applied to the article index: when an article changes category, the rows that mention it change without an edit. Its output, `src/routing/v1-url-map.generated.json`, is committed and reviewable: 83 rows over the real corpus, 67 permanent, 5 gone, 11 none.
 
 The v1 addresses follow v1's locales, frozen in `V1_LOCALES`: `en` unmarked, `fr` under `/learn/fr`. Only the destinations read this site's scheme, each a page in the language of the v1 page: `/learn/fr/blockchain` leads to `/fr/articles/c/blockchain`, `/learn` to `/articles`, and a tag row to an English page. A French article of v1 contributes two permanent rows, its v1 path with no locale segment and the `/learn/fr` form, both leading to its address under `/fr`. An article v1 did not publish, absent from `V1_ARTICLE_SLUGS`, has no row.
 
-Nothing serves the mapping and nothing in the build reads it. A v1 address, any `/learn` path included, answers 404 with the not-found page. Whether the old addresses come back is the restore-v1-urls item of `ROADMAP.md`.
+`scripts/emit-redirects.mjs`, a `build` step after `vite build`, computes the same map and writes it as `dist/client/_redirects`, one rule per row in the map's order, see Deployment for how Netlify reads it:
+
+- a permanent row: 301 to its page, in one redirect, the query string kept.
+- a gone row: 410 with the body of `404.html`. The last rule, `/learn/*`, is one: any `/learn` path no row above claims answers 410.
+- a row without destination under `/learn`, the v1 roll pages and image folders: 404 with the body of `404.html`. A row without destination outside `/learn`, `/` or `/portfolio`, gets no rule.
+
+A v1 address answers at the case v1 published and at no other: `/learn/tag/DeFi` redirects, `/learn/tag/defi` answers 410. No rule is forced: every page the site builds keeps its answer. The build fails, writing no file, on a permanent destination that is not a built page (`<from>: destination <to> is not a built page`), on a source with a `*` before its end, and when `404.html` is missing. It prints `redirects: 77 rules (67 permanent, 5 gone, 5 not found) → dist/client/_redirects`.
 
 ## SEO
 
@@ -188,8 +194,8 @@ yarn dev:robusta       # the site's dev
 
 The site's own scripts:
 
-- `build` — `check:types`, `check:source`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`, `scripts/emit-site-files.mjs` and `scripts/check-seo.mjs`.
-- `dev` — `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the page-data functions run on each call and read the corpus. `netlify.toml` does not apply there: `/en` and `/en/…` answer the not-found page instead of a 301.
+- `build` — `check:types`, `check:source`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`, `scripts/emit-site-files.mjs`, `scripts/emit-redirects.mjs` and `scripts/check-seo.mjs`.
+- `dev` — `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the page-data functions run on each call and read the corpus. Neither `netlify.toml` nor `_redirects` applies there: `/en…` and the v1 addresses answer the not-found page.
 - `check:types` — `tsc -p tsconfig.json --noEmit`.
 - `check:source` — fails on a `'use client'` or `'use server'` directive, or on a local import, `vi.mock` paths included, that does not name its `.ts` or `.tsx` file exactly, anywhere under `src`, the generated route tree included. Each offence names the file, the line and, when the file exists, the expected specifier. An asset or a `.mjs` keeps its extension.
 - `check:translations` — prints the translation notices, see Articles.
@@ -209,8 +215,8 @@ Netlify project `robusta-build`, in a team on the Free plan, linked to the repos
 `netlify.toml`, beside this README, holds what the repository can say:
 
 - the build command, `yarn build:robusta` at the repository root, preceded by `node --version`, `yarn --version` and `yarn config get yarnPath` so the log shows what the build ran with
-- the publish directory, `apps/robusta-build/dist/client`: the prerendered output and nothing else. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
-- the redirect rules: first, forced, `https://robusta-build.netlify.app/*` to `https://www.robusta.build/:splat` in 301; then the two rules from `/en…` to the unprefixed page, see One URL per page. `www`, branch deploys and deploy previews answer under their own host and are not redirected.
+- the publish directory, `apps/robusta-build/dist/client`: the build output, `_redirects` included. No function, no header rule, no plugin; `@netlify/vite-plugin-tanstack-start` is not a dependency.
+- the redirect rules: first, forced, `https://robusta-build.netlify.app/*` to `https://www.robusta.build/:splat` in 301; then the two rules from `/en…` to the unprefixed page, see One URL per page. `www`, branch deploys and deploy previews answer under their own host and are not redirected. Netlify reads `dist/client/_redirects`, the v1 rules, before these three, so a v1 address on `robusta-build.netlify.app` takes two 301s.
 - the ignore rule: production always builds. Elsewhere, `scripts/netlify-ignore.mjs` skips the build when no commit of `CACHED_COMMIT_REF..COMMIT_REF` touches the site, a module it depends on, directly or not, through the four dependency fields of the manifests at `COMMIT_REF`, or a root install file: `package.json`, `yarn.lock`, `.yarnrc.yml`, `.yarn/releases`, `.nvmrc`. A push touching only dakar, v1, the base modules or `features/` is skipped. An absent, unknown or equal ref, a cached ref off the first-parent history of `COMMIT_REF`, and any error of the rule build. The deploy log shows one line, `skip: <reason>` or `build: <reason>`.
 - `YARN_FLAGS = "--immutable"`. Netlify's default, `--ignore-optional`, is an unknown option to yarn 4.
 

@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** restore-v1-urls
 **Infix :** RESTOREV1
-**Status :** ACTIVE
+**Status :** SUBMITTED (2026-11-06, commit 467beaa)
 
 ## Story
 
@@ -11,29 +11,33 @@
 
 ## Contexte & objectif
 
-tanstack-start-migration a abandonné les adresses v1 le 2026-10-06 : tout `/learn…` répond 404 depuis. Nicolas : « on peut abandonner ces vieilles URL. On verra à la fin si on peut les ramener par un autre format. » La fin de l'epic est là, et le site est indexé sur www.robusta.build depuis le 2026-11-05.
+tanstack-start-migration avait abandonné les adresses v1 le 2026-10-06 : tout `/learn…` répondait 404. La build traduit désormais la v1 map en règles Netlify statiques, écrites dans `dist/client/_redirects` après `vite build`, sur l'offre Free, sans fonction.
 
-La v1 map (`apps/robusta-build/src/routing/v1-url-map.ts`, R-URLSCHEME-14 et 28) est toujours calculée depuis l'index des articles et régénérée à chaque build dans `v1-url-map.generated.json`. Rien ne la sert. La story la sert, sur l'offre Free de Netlify, sans fonction : la build traduit la map en règles de redirection statiques, dans un fichier `_redirects` qu'elle écrit dans `dist/client` après `vite build`. Netlify lit ce fichier avant `netlify.toml`, qui garde ses trois règles écrites à la main.
+## Livré
 
-Nicolas a tranché le 2026-11-06 : les adresses v1 reviennent. C'est un rattrapage de v1, pas une règle du site : aucune BR n'est enregistrée, et un article v2 dont le titre change change toujours d'URL, sans redirection.
+### Requirements
 
-## Ce que la v1 map sert
+- R-RESTOREV1-01 : `scripts/emit-redirects.mjs` calcule `v1UrlMap(urlScheme, await getArticleIndex())` et écrit `dist/client/_redirects` ; le script `build` de `package.json` le lance après `emit-site-files.mjs` et avant `check-seo.mjs`.
+- R-RESTOREV1-02 : une règle par ligne servie, dans l'ordre de la map : toutes les lignes `permanent` et `gone`, et les lignes `none` situées sous `/learn` ; la règle de `/learn/:path*` est la dernière du fichier.
+- R-RESTOREV1-03 : `permanent` donne un 301 vers `to`, `gone` un 410 vers `/404.html`, `none` sous `/learn` un 404 vers `/404.html` ; aucune règle forcée.
+- R-RESTOREV1-04 : `from` est recopié dans sa casse ; un `/:name*` final devient `/*`, les autres placeholders restent.
+- R-RESTOREV1-05 : `netlify.toml` garde ses trois règles ; son commentaire d'en-tête nomme `_redirects`, que la build écrit et que Netlify lit avant lui. `dev` ne change pas.
+- R-RESTOREV1-21 : une destination `permanent` qui n'est pas une page construite de `dist/client` fait sortir le script en 1, une ligne par ligne fautive, sans écrire `_redirects` (AC-RESTOREV1-4).
+- R-RESTOREV1-22 : une source qu'aucune forme Netlify n'exprime, et l'absence de `404.html`, sont des défauts du même format.
+- R-RESTOREV1-23 : sans défaut, le script écrit sur stdout sa ligne de compte : 77 règles, 67 permanentes, 5 Gone, 5 not found sur le corpus réel.
+- R-RESTOREV1-41 : `imageRows()` rend deux lignes, `/learn/images/:file` et `/learn/:category/s/images/:file`, les deux formes des dossiers d'images de v1 ; `V1_INVENTORY` et les comptes de `v1-url-map.spec.ts` passent à 83 lignes, 67/5/11 ; `v1-url-map.generated.json` est régénéré.
+- R-RESTOREV1-42 : la `note` de la ligne `/learn/:path*` dit qu'elle est servie par la dernière règle de `_redirects` ; l'en-tête de `emit-v1-map.mjs` ne dit plus que rien ne sert la map.
+- R-RESTOREV1-43 : `v1UrlMap`, `V1MappingRow` et `V1Destination` gardent leur forme ; aucune redirection n'est écrite pour un article v2 renommé.
+- R-RESTOREV1-61 : avant le merge, un draft deploy est éprouvé par une passe manuelle de `curl -I` sur une adresse de chaque classe des edge cases : statut, `Location`, puis 200 sur la destination.
+- R-RESTOREV1-62 : après le merge, le double saut depuis `robusta-build.netlify.app` est constaté en production, à `storyman done`.
 
-83 lignes, dans l'ordre de la map, qui est l'ordre de priorité des règles :
-
-- 67 permanentes, en 301 vers leur page v2 : 30 accueils et categories du blog, 14 articles, 14 tags, 9 fichiers markdown bruts
-- 11 sans destination. Les cinq situées sous `/learn` deviennent des règles 404 vers la page introuvable, placées avant la règle Gone : les trois pages de roll que v1 n'a jamais générées, et les images v1. La ligne des images se scinde en ses deux formes v1, `/learn/images/:file` et `/learn/:category/s/images/:file`, parce que Netlify n'accepte pas de joker au milieu d'un chemin ; la map passe de 82 à 83 lignes. Les six hors de `/learn` (`/`, `/portfolio`, `/fr/portfolio`, les restes de développement) n'ont pas de règle : elles répondent déjà par leur page v2 ou 404.
-- 5 Gone, en 410 avec la page introuvable : quatre fichiers markdown dont le contenu n'existe plus dans le corpus, puis tout autre `/learn/…`, en dernier
-
-Netlify ne documente pas le 410 pour une règle statique. Les règles Gone sont écrites en 410, et le statut servi se constate sur un draft deploy : si Netlify Free sert 404, ces adresses restent en 404, sans fonction ni page dédiée.
-
-## Acceptance Criteria
+### Acceptance Criteria
 
 - AC-RESTOREV1-1 : Given une adresse v1 que la map mène à une page v2, When un visiteur ou un robot la demande sur www.robusta.build, Then il reçoit une redirection permanente vers cette page, en un seul saut, et la page répond 200.
-- AC-RESTOREV1-2 : Given une adresse v1 marquée Gone par la map, un fichier markdown retiré ou une adresse `/learn/…` qu'aucune ligne ne réclame, When on la demande, Then elle répond 410 avec la page introuvable, ou 404 si Netlify Free ne sert pas le 410 ; Given une adresse v1 sans destination, image v1 et page de roll v1 sous `/learn` comprises, Then elle répond 404 avec la page introuvable, comme aujourd'hui, et non 410.
+- AC-RESTOREV1-2 : Given une adresse v1 marquée Gone par la map, un fichier markdown retiré ou une adresse `/learn/…` qu'aucune ligne ne réclame, When on la demande, Then elle répond 410 avec la page introuvable ; Given une adresse v1 sans destination, image v1 et page de roll v1 sous `/learn` comprises, Then elle répond 404 avec la page introuvable, et non 410.
 - AC-RESTOREV1-3 : Given les pages v2 et les redirections `/en…` existantes, When les redirections v1 sont servies, Then aucune adresse v2 ne change de réponse.
 - AC-RESTOREV1-4 : Given un article qui change de category ou un nouvel article, When le site est construit, Then les redirections servies suivent la map sans édition à la main ; une redirection dont la destination n'est pas une page construite fait échouer la build.
-- AC-RESTOREV1-5 : Given les cas limites, When on les demande, Then un article français que v1 publiait sans marqueur de Locale mène à sa page française ; `/learn/fr/blockchain/`, avec sa barre finale, mène à la même page que sans ; `/learn/tag/DeFi`, avec sa casse v1, a sa destination, et `/learn/tag/defi`, que v1 n'a jamais publié, répond comme une adresse Gone ; un fichier markdown brut v1 mène à la page de son article ; un article v1 dépublié ou dont le titre change laisse la build aboutir, et son adresse v1 comme son fichier markdown brut répondent comme une adresse Gone, sans redirection vers un nouveau slug ; une adresse v1 demandée sur `robusta-build.netlify.app` aboutit en 200 à sa page sur www.robusta.build, en deux redirections permanentes.
+- AC-RESTOREV1-5 : Given les cas limites, When on les demande, Then un article français que v1 publiait sans marqueur de Locale mène à sa page française ; `/learn/fr/blockchain/`, avec sa barre finale, mène à la même page que sans ; `/learn/tag/DeFi` a sa destination, `/learn/tag/defi` répond comme une adresse Gone ; un fichier markdown brut v1 mène à la page de son article ; un article v1 dépublié ou renommé laisse la build aboutir, et ses adresses v1 répondent comme une adresse Gone ; une adresse v1 demandée sur `robusta-build.netlify.app` aboutit en 200 à sa page sur www.robusta.build, en deux redirections permanentes.
 
 ## Boundaries
 
@@ -41,7 +45,7 @@ Netlify ne documente pas le 410 pour une règle statique. Les règles Gone sont 
   Flèche = dépend de, du code client vers l'API qu'il utilise.
   Packages de l'app `@robusta/robusta-build`.
 
-  build ──CLI──→ package `scripts` [modified]
+  build ──CLI──→ package `scripts` [modified: emit-redirects.mjs]
                    │ library
                    ↓
                  package `routing` [modified: lignes images de la v1 map]
@@ -63,24 +67,37 @@ GET robusta-build.netlify.app/<v1>    → 301 sur cet hôte, puis 301 vers www
 GET <toute adresse v2>, /en…          → inchangé
 ```
 
-Servi par l'hébergeur seul, depuis `dist/client/_redirects` : aucune fonction, aucune lecture du corpus à la requête (BR-PYRAMID-7). La query string suit le 301. Les lignes en 410 répondent 404 si Netlify Free ne sert pas le 410. Sous `vite dev`, aucune règle : une adresse v1 répond par la page 404.
+Servi par l'hébergeur seul, depuis `dist/client/_redirects` : aucune fonction, aucune lecture du corpus à la requête (BR-PYRAMID-7). La query string suit le 301. Sous `vite dev`, aucune règle : une adresse v1 répond par la page 404.
 
-### CLI API of package `scripts` — new step of `build`
+### CLI API of package `scripts` — new step of `build`: `emit-redirects.mjs`
 
 ```
-lancé par `yarn build` après `vite build`
+lancé par `yarn build`, après emit-site-files.mjs, avant check-seo.mjs
   lit      la v1 map, les pages de dist/client
   écrit    dist/client/_redirects, une règle par ligne servie, dans l'ordre de la map
-  exit 1   une ligne par défaut : <from>: destination <to> is not a built page
+  stdout   redirects: <n> rules (<p> permanent, <g> gone, <x> not found) → dist/client/_redirects
+  exit 1   <from>: destination <to> is not a built page
+           <from>: no Netlify form for this source
+           404.html: not built, the gone and not-found rules have no page
 ```
+
+## Décisions
+
+- 2026-11-06 — Les adresses v1 reviennent, 67 en 301 et 5 Gone en 410, par des règles statiques générées depuis la map (OQ-RESTOREV1-1, Nicolas). Pourquoi : la map est écrite et testée, et des règles statiques ne coûtent rien sur l'offre Free.
+- 2026-11-06 — Rattrapage de v1, pas une règle du site : aucune BR, un article v2 renommé change d'URL sans redirection (OQ-RESTOREV1-2). Pourquoi : personne n'a demandé de redirection à chaque renommage.
+- 2026-11-06 — La ligne image de la map se scinde en `/learn/images/:file` et `/learn/:category/s/images/:file` : 82 → 83 lignes. Pourquoi : Netlify n'accepte pas de joker au milieu d'un chemin.
+- 2026-11-06 — Le 410 est servi par Netlify Free, constaté sur le draft deploy `6aedc75fdb5c4d20e5c56dd6` (OQ-RESTOREV1-3) : le repli en 404 n'a pas servi. Pourquoi : Netlify ne documente pas le 410 pour une règle statique.
+- 2026-11-06 — R-RESTOREV1-62 en attente, pas en échec : le double saut depuis `robusta-build.netlify.app` ne se constate qu'en production, après le merge sur `main`, à `storyman done`. Aujourd'hui la production répond 301 vers www puis 404, comme attendu avant le merge.
 
 ## Documentation updates
 
-- change la section « The v1 mapping » in `apps/robusta-build/README.md` — why: elle dit que rien ne sert la map et que toute adresse v1 répond 404, et compte 82 lignes dont 10 sans destination.
-- change la ligne `build` de la section « Commands » in `apps/robusta-build/README.md` — why: une étape nouvelle écrit `dist/client/_redirects` après `vite build`.
-- change le publish directory et les règles de redirection de la section « Deployment » in `apps/robusta-build/README.md` — why: `dist/client` porte aussi `_redirects`, que Netlify lit avant les trois règles de `netlify.toml`.
-- change la présentation in `apps/robusta-build/robusta-build.archi.md` — why: elle dit « trois règles de redirection » et « le site ne sert pas les adresses v1 ».
-- change la description de `v1UrlMap` dans le package `routing` in `apps/robusta-build/robusta-build.archi.md` — why: la map n'est plus « lue par rien ».
-- change le package `scripts`, la commande `build` et la description de `emit:v1-map` in `apps/robusta-build/robusta-build.archi.md` — why: une étape de build écrit les règles depuis la map et échoue sur une destination non construite.
-- change la ligne « tout autre GET : adresses v1… » de la HTTP API in `apps/robusta-build/robusta-build.archi.md` — why: les adresses v1 répondent 301, 410 ou 404 selon leur ligne.
-- change la ligne Hébergement in `apps/robusta-build/robusta-build.archi.md` — why: Netlify publie aussi les règles v1 de `_redirects`.
+- changed la section « The v1 mapping » in `apps/robusta-build/README.md` : 83 lignes, 67/5/11, et les règles servies par `emit-redirects.mjs`
+- changed la ligne `build` de la section « Commands » in `apps/robusta-build/README.md`
+- changed le publish directory et les règles de redirection de la section « Deployment » in `apps/robusta-build/README.md`
+- changed le dernier point de « One URL per page » in `apps/robusta-build/README.md`
+- changed la présentation in `apps/robusta-build/robusta-build.archi.md`
+- changed la description de `v1UrlMap` dans le package `routing` in `apps/robusta-build/robusta-build.archi.md`
+- changed le package `scripts`, les commandes `build` et `dev` in `apps/robusta-build/robusta-build.archi.md`
+- changed la HTTP API in `apps/robusta-build/robusta-build.archi.md` : une ligne pour les adresses v1
+- changed la ligne Hébergement in `apps/robusta-build/robusta-build.archi.md`
+- changed la ligne robusta-build, le schéma de build et le green set in `root.archi.md` : les règles v1 de `_redirects`

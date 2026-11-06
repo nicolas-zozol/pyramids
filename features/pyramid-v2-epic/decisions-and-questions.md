@@ -264,3 +264,16 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Conséquence rloq : trois `ask` en attente, la story s'arrête au design DRAFT.
 - Design : designman, `scripts/emit-redirects.mjs` écrit `dist/client/_redirects` (77 règles, aucune forcée) ; map scindée sur la ligne image, 83 lignes. OQ-RESTOREV1-6 signée `lgtm (designman)`, pliée par `designman update`. Contrôle boss : AC-RESTOREV1-1 à 5 cités mot pour mot, `## Boundaries` rempli. Design laissé en DRAFT : OQ-RESTOREV1-1, 2 et 3 en attente.
 - Écart relevé, non bloquant : le plan Documentation updates de la story place la liste des étapes de `build` dans la section « Deployment » du README, qui la porte dans « Commands ». À corriger au submit.
+
+## D31 : restore-v1-urls, `boss restore-v1-urls`
+
+- Requête : `boss restore-v1-urls`, branche `epic/robusta-v2`, mode rloq. Reprise du run D30, arrêté au design DRAFT sur trois `ask`.
+- Réponses : OQ-RESTOREV1-1, 2 et 3 signées `lgtm (Nicolas, 2026-11-06)`. `storyman update avec brainstorm` les plie (AC-RESTOREV1-2 et 5 gagnent le repli 404 si Netlify Free ne sert pas le 410) et corrige le plan Documentation updates : étapes de `build` dans « Commands » du README. `designman update` recopie les AC, retire la dépendance à OQ-RESTOREV1-1. Aucune nouvelle entrée. Commit `bc8b333`.
+- Lock : restore-v1-urls est en B5 ; B3 et B4 ne portent aucune story (« pas de story » ou corvées), comme en D30 pour netlify-deploy. Rien ne la retient. Confidence: high.
+- Design : AC-RESTOREV1-1 à 5 cités mot pour mot, `## Boundaries` rempli, aucun `ask` en attente. APPROVED, validated by boss. Commit `5a682d5`.
+- tddman (LFG fast) : `scripts/emit-redirects.mjs` et sa spec (12 tests), étape de `build` entre emit-site-files et check-seo, ligne image de la v1 map scindée (83 lignes, 67/5/11), en-tête de `netlify.toml`. Hors liste du design : le filtre de `migrated-corpus.spec.ts` exclut la nouvelle ligne `/learn/:category/s/images/:file`. Commit `467beaa`.
+- Vérifié par boss : test 731/731, lint vert, `build:deps` et `build:robusta` verts, `redirects: 77 rules (67 permanent, 5 gone, 5 not found)`.
+- Draft deploy `6aedc75fdb5c4d20e5c56dd6`, https://dev--robusta-build.netlify.app, `--no-build`, jamais `--prod` : Netlify Free sert le 410, corps identique à `404.html` ; le repli 404 d'OQ-RESTOREV1-3 ne sert pas. Les 53 règles 301 sans placeholder : un saut, destination 200. 404 pour les pages de roll et les images v1. `/learn/tag/DeFi` 301, `/learn/tag/defi` 410. Pages v2 et `/en…` inchangées. Aucun résultat ne contredit un AC.
+- Double saut depuis `robusta-build.netlify.app` : constatable en production seulement, après merge (R-RESTOREV1-62, à `storyman done`).
+- `storyman submit` : 5 étapes sur 5. docman (README : « Commands » et « Deployment »), archiman (`robusta-build.archi.md`, en-tête de `scheme.ts`, `archiman root`), design IMPLEMENTED, story SUBMITTED (AC-RESTOREV1-2 et 5 sans le repli 404, réglé par le draft deploy), item 8 retiré de ROADMAP.md, epicman : restore-v1-urls en Fait, liée sous « Stories de l'epic ». Commit de clôture exécuté par boss.
+- Laissés à Nicolas : termes UL « V1 map » et « Gone » proposés par docman, non écrits ; en-tête de `emit-v1-map.mjs` sans ligne Design: et `V1_RAW_MARKDOWN_URLS` sans commentaire, relevés par archiman, antérieurs à la story.
