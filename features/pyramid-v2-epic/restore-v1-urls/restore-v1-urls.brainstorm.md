@@ -272,11 +272,6 @@ node scripts/emit-redirects.mjs     run by `yarn build` after `vite build`
 
 ## Open Questions & Gaps
 
-- OQ-RESTOREV1-3 : Si Netlify Free sert en 404 la règle 410 des adresses v1 retirées, ces adresses restent-elles en 404, sans fonction ni page dédiée ?
-- Proposition : oui. La règle Gone vise `/404.html` avec le statut 410 ; le draft deploy constate le statut servi. Si c'est 404, les cinq adresses Gone répondent 404 et le critère des adresses retirées dit 404.
-- Rationale : Netlify ne documente pas le 410 et le forum rapporte les deux issues ; la seule alternative sur l'hôte est une fonction, que le site exclut, pour un gain faible, un moteur retirant aussi une adresse en 404.
-- Resolution:
-
 ---
 
 ## Next Steps

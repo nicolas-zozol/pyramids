@@ -10,7 +10,7 @@
 
 Une nouvelle étape de `build`, `scripts/emit-redirects.mjs`, traduit la v1 map en règles Netlify et les écrit dans `dist/client/_redirects` après `vite build` : 67 permanentes en 301, 5 Gone en 410 et 5 sans destination sous `/learn` en 404, les deux derniers groupes servant `/404.html`. Elle échoue quand une destination n'est pas une page construite. Dans le package `routing`, la ligne image de la map se scinde en ses deux formes v1. Le pourquoi : [story](restore-v1-urls.story.md).
 
-Ce design suit les Propositions encore ouvertes d'OQ-RESTOREV1-1 et OQ-RESTOREV1-2 de la story (les adresses v1 reviennent, en rattrapage de v1 seulement) et d'OQ-RESTOREV1-3 du brainstorm (règle Gone en 410 vers `/404.html`, statut servi constaté sur un draft deploy).
+Les adresses v1 reviennent en rattrapage de v1 seulement : aucune BR, et un article v2 renommé change d'URL sans redirection. Les règles Gone sont écrites en 410 ; si le draft deploy montre que Netlify Free sert 404, ces adresses restent en 404, sans fonction ni page dédiée.
 
 ## Boundaries
 
@@ -51,7 +51,7 @@ GET <toute adresse v2>, /en…          → inchangé
 
 - Servi par Netlify seul, depuis `dist/client/_redirects` : aucune fonction, aucune lecture du corpus à la requête (BR-PYRAMID-7).
 - Une adresse v1 répond dans la casse que v1 a publiée, et dans aucune autre : `/learn/tag/DeFi` a sa destination, `/learn/tag/defi` tombe sur `/learn/*`.
-- Si le draft deploy montre que Netlify sert 404 là où la règle dit 410, les adresses Gone répondent 404 et la règle reste écrite en 410 (OQ-RESTOREV1-3 du brainstorm).
+- Si le draft deploy montre que Netlify sert 404 là où la règle dit 410, les adresses Gone répondent 404 et la règle reste écrite en 410.
 - Sous `vite dev`, aucune règle : une adresse v1 répond par la page 404.
 
 ### CLI API of package `scripts` — new step of `build`: `emit-redirects.mjs`
@@ -147,34 +147,30 @@ Seules les lignes changent : `/learn/:path*/images/:file` devient `/learn/images
 
 - R-RESTOREV1-41 : `imageRows()` rend deux lignes, `/learn/images/:file` et `/learn/:category/s/images/:file`, les deux formes des dossiers d'images de v1 ; `V1_INVENTORY` et les comptes de `v1-url-map.spec.ts` passent à 83 lignes, 67/5/11 ; `v1-url-map.generated.json` est régénéré.
 - R-RESTOREV1-42 : la `note` de la ligne `/learn/:path*` dit qu'elle est servie par la dernière règle de `_redirects` ; l'en-tête de `emit-v1-map.mjs` ne dit plus que rien ne sert la map.
-- R-RESTOREV1-43 : `v1UrlMap`, `V1MappingRow` et `V1Destination` gardent leur forme ; aucune redirection n'est écrite pour un article v2 renommé (OQ-RESTOREV1-2 de la story).
+- R-RESTOREV1-43 : `v1UrlMap`, `V1MappingRow` et `V1Destination` gardent leur forme ; aucune redirection n'est écrite pour un article v2 renommé.
 
 ### Constat sur l'hôte
 
-- R-RESTOREV1-61 : avant le merge, un draft deploy est éprouvé par une passe manuelle de `curl -I` sur une adresse de chaque classe des edge cases ci-dessous : statut, `Location`, puis 200 sur la destination. Aucun script de constat n'est commité : les règles ne changent pas d'un deploy à l'autre et la spec de `emit-redirects.mjs` couvre le fichier. Le statut servi par la règle Gone décide de la branche d'OQ-RESTOREV1-3 du brainstorm.
+- R-RESTOREV1-61 : avant le merge, un draft deploy est éprouvé par une passe manuelle de `curl -I` sur une adresse de chaque classe des edge cases ci-dessous : statut, `Location`, puis 200 sur la destination. Aucun script de constat n'est commité : les règles ne changent pas d'un deploy à l'autre et la spec de `emit-redirects.mjs` couvre le fichier. Il constate le statut servi par la règle Gone : 410, ou 404 sans fonction ni page dédiée si Netlify Free ne sert pas le 410.
 - R-RESTOREV1-62 : après le merge, le double saut depuis `robusta-build.netlify.app` est constaté en production, à `storyman done`.
 
 ## Acceptance Criteria
 
 - AC-RESTOREV1-1 : Given une adresse v1 que la map mène à une page v2, When un visiteur ou un robot la demande sur www.robusta.build, Then il reçoit une redirection permanente vers cette page, en un seul saut, et la page répond 200.
-- AC-RESTOREV1-2 : Given une adresse v1 marquée Gone par la map, un fichier markdown retiré ou une adresse `/learn/…` qu'aucune ligne ne réclame, When on la demande, Then elle répond 410 avec la page introuvable (OQ-RESTOREV1-3 du brainstorm) ; Given une adresse v1 sans destination, image v1 et page de roll v1 sous `/learn` comprises, Then elle répond 404 avec la page introuvable, comme aujourd'hui, et non 410.
+- AC-RESTOREV1-2 : Given une adresse v1 marquée Gone par la map, un fichier markdown retiré ou une adresse `/learn/…` qu'aucune ligne ne réclame, When on la demande, Then elle répond 410 avec la page introuvable, ou 404 si Netlify Free ne sert pas le 410 ; Given une adresse v1 sans destination, image v1 et page de roll v1 sous `/learn` comprises, Then elle répond 404 avec la page introuvable, comme aujourd'hui, et non 410.
 - AC-RESTOREV1-3 : Given les pages v2 et les redirections `/en…` existantes, When les redirections v1 sont servies, Then aucune adresse v2 ne change de réponse.
 - AC-RESTOREV1-4 : Given un article qui change de category ou un nouvel article, When le site est construit, Then les redirections servies suivent la map sans édition à la main ; une redirection dont la destination n'est pas une page construite fait échouer la build.
-- AC-RESTOREV1-5 : Given les cas limites, When on les demande, Then un article français que v1 publiait sans marqueur de Locale mène à sa page française ; `/learn/fr/blockchain/`, avec sa barre finale, mène à la même page que sans ; `/learn/tag/DeFi`, avec sa casse v1, a sa destination, et `/learn/tag/defi`, que v1 n'a jamais publié, répond 410 ; un fichier markdown brut v1 mène à la page de son article ; un article v1 dépublié ou dont le titre change laisse la build aboutir, et son adresse v1 comme son fichier markdown brut répondent 410, sans redirection vers un nouveau slug ; une adresse v1 demandée sur `robusta-build.netlify.app` aboutit en 200 à sa page sur www.robusta.build, en deux redirections permanentes.
+- AC-RESTOREV1-5 : Given les cas limites, When on les demande, Then un article français que v1 publiait sans marqueur de Locale mène à sa page française ; `/learn/fr/blockchain/`, avec sa barre finale, mène à la même page que sans ; `/learn/tag/DeFi`, avec sa casse v1, a sa destination, et `/learn/tag/defi`, que v1 n'a jamais publié, répond comme une adresse Gone ; un fichier markdown brut v1 mène à la page de son article ; un article v1 dépublié ou dont le titre change laisse la build aboutir, et son adresse v1 comme son fichier markdown brut répondent comme une adresse Gone, sans redirection vers un nouveau slug ; une adresse v1 demandée sur `robusta-build.netlify.app` aboutit en 200 à sa page sur www.robusta.build, en deux redirections permanentes.
 
-Edge cases to test:
+Edge cases to test, où Gone se lit 410, ou 404 si Netlify Free ne sert pas le 410 :
 
 - `/learn/blockchain/s/provenance-des-rendements-du-yield-farming-dans-la-blockchain`, article français publié par v1 sans marqueur : 301 vers sa page sous `/fr/articles/…`.
 - `/learn/fr/blockchain` et `/learn/fr/blockchain/` : même `Location`, `/fr/articles/c/blockchain`, un seul saut.
-- `/learn/tag/DeFi` : 301 ; `/learn/tag/defi` : 410.
-- `/learn/blockchain/s/ledger-versus-metamask.md` : 301 vers la page de l'article ; `/learn/javascript/s/es6-7.md` : 410.
-- `/learn/n-importe-quoi` : 410 ; `/learn/page/2`, `/learn/tag/web/page/2`, `/learn/images/{fichier}`, `/learn/blockchain/s/images/{fichier}` : 404, jamais 410.
-- Sur fixture, un article v1 absent de l'index, dépublié ou renommé : build verte, aucune ligne d'article, sa ligne markdown en `gone`, donc 410.
+- `/learn/tag/DeFi` : 301 ; `/learn/tag/defi` : Gone.
+- `/learn/blockchain/s/ledger-versus-metamask.md` : 301 vers la page de l'article ; `/learn/javascript/s/es6-7.md` : Gone.
+- `/learn/n-importe-quoi` : Gone ; `/learn/page/2`, `/learn/tag/web/page/2`, `/learn/images/{fichier}`, `/learn/blockchain/s/images/{fichier}` : 404, jamais 410.
+- Sur fixture, un article v1 absent de l'index, dépublié ou renommé : build verte, aucune ligne d'article, sa ligne markdown en `gone`, donc Gone.
 - Sur fixture, un `dist/client` privé d'une page destination : exit 1, la ligne nomme la source et la destination, aucun `_redirects`.
 - `/learn/blockchain?utm_source=x` : la query string suit le 301.
 - `/`, `/articles`, `/fr/articles/c/blockchain`, `/en/articles` : réponse inchangée.
 - `https://robusta-build.netlify.app/learn/blockchain` : 301 sur cet hôte, 301 vers www, 200.
-
-## Dependencies
-
-- Depends on : l'arbitrage d'OQ-RESTOREV1-1 de la story ; un refus fait de la story un nettoyage et rend ce design caduc.
