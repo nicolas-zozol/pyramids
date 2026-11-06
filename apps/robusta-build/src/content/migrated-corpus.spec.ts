@@ -29,7 +29,7 @@ import { corpus } from './corpus.ts';
  * The site's corpus, read through the site's own declaration.
  *
  * This spec came from `packages/pyramids-content/src`, where it reached across
- * two workspace boundaries into `apps/robusta/content/blog` to hold the reader
+ * two workspace boundaries into `6c57bc3:apps/robusta/content/blog` to hold the reader
  * against real content. Here it reads the corpus the site actually serves, which
  * is both shorter and stricter: a change to `corpus.ts` now moves the test
  * (R-MIGRATELEARN-82). `process.cwd()` is the app directory under vitest exactly

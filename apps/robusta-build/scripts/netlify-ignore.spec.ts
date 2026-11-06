@@ -93,8 +93,6 @@ function monorepo(): { repo: string; base: string } {
         dependencies: { '@robusta/pyramids-helpers': 'workspace:*' },
       }),
       'apps/dakar/src/index.ts': 'export {};\n',
-      'apps/robusta/package.json': manifest('@robusta/build'),
-      'apps/robusta/src/index.ts': 'export {};\n',
       'apps/intel-demo/front/src/main.ts': '// Not a workspace\n',
       'packages/robusta-design-system/package.json': manifest(
         '@robusta/pyramids-design-system',
@@ -128,7 +126,6 @@ describe('ignoreVerdict, watched paths', () => {
   it.each([
     ['a base module', 'packages/helpers/src/index.ts'],
     ['dakar', 'apps/dakar/src/index.ts'],
-    ['the v1 site', 'apps/robusta/src/index.ts'],
     ['a directory without manifest', 'apps/intel-demo/front/src/main.ts'],
   ])('skips a range that only touches %s', (_, path) => {
     const { repo, base } = monorepo();

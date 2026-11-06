@@ -4,7 +4,7 @@
 // this function produces, and the eleven migrated articles are addressed by
 // them (R-CONTENTSOURCE-45). slugify stays at 1.6.6, `lower` and `strict`, and
 // the locale is folded to lowercase before it reaches the charmap, which is what
-// the v1 reader does at `apps/robusta/src/logic/posts.ts`.
+// the v1 reader does at `6c57bc3:apps/robusta/src/logic/posts.ts`.
 import slugify from 'slugify';
 
 /** The URL segment of an article, derived from its title exactly as v1 derived it. */

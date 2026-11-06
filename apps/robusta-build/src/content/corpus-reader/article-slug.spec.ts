@@ -1,7 +1,3 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
 import { articleSlug } from './article-slug.ts';
 
@@ -12,38 +8,73 @@ import { articleSlug } from './article-slug.ts';
  * so a slug that moves turns an indexed URL into a 404.
  *
  * The expectations are literals rather than a second derivation, so this test
- * fails when the derivation changes instead of following it.
+ * fails when the derivation changes instead of following it. Each `title` and
+ * `locale` is the v1 frontmatter at `6c57bc3:apps/robusta/content/blog/<path>`,
+ * not the v2 corpus, where two locales were corrected since.
  */
-const V1_SLUGS: Readonly<Record<string, string>> = {
-  'blockchain/ledger-versus-metamask.md': 'ledger-versus-metamask',
-  'blockchain/start-coding-blockchain.md': 'tooling-for-solidity-coders',
-  'blockchain/yield-farming-fr.md':
-    'provenance-des-rendements-du-yield-farming-dans-la-blockchain',
-  'blockchain/yield-farming.md': 'the-source-of-yield-farming-profits',
-  'javascript/pourquoi-migration-gatsby-next-js.md':
-    'pourquoi-jai-migre-de-gatsby-vers-nextjs',
-  'javascript/styled-components.md':
-    'applying-correctly-classname-with-styled-components',
-  'javascript/typescript/completes-with.md':
-    'completing-a-rxjs-observable-with-another',
-  'javascript/why-migration-gatsby-next.md':
-    'why-i-made-the-migration-from-gatsby-toward-nextjs',
-  'privacy/leaving-gmail.md': 'leaving-gmail',
-  'theory/quel-second-langage.md':
-    'quel-langage-pour-progresser-dans-sa-carriere',
-  'web/easy-automation-with-sonoff.md':
-    'easy-automation-with-sonoff-and-javascript',
-};
+interface V1Article {
+  title: string;
+  locale: string;
+  slug: string;
+}
 
-/**
- * The v1 corpus of record, read where it still lives. `retire-robusta-v1`
- * deletes this tree; the day it does, the loop below goes and the table above
- * stays, because the table is the contract and the tree is only the witness.
- */
-const V1_CORPUS = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  '../../../../../apps/robusta/content/blog',
-);
+const V1_SLUGS: Readonly<Record<string, V1Article>> = {
+  'blockchain/ledger-versus-metamask.md': {
+    title: 'Ledger versus Metamask',
+    locale: 'en',
+    slug: 'ledger-versus-metamask',
+  },
+  'blockchain/start-coding-blockchain.md': {
+    title: 'Tooling for Solidity coders',
+    locale: 'en',
+    slug: 'tooling-for-solidity-coders',
+  },
+  'blockchain/yield-farming-fr.md': {
+    title: 'Provenance des rendements du Yield Farming dans la blockchain',
+    locale: 'fr',
+    slug: 'provenance-des-rendements-du-yield-farming-dans-la-blockchain',
+  },
+  'blockchain/yield-farming.md': {
+    title: 'The source of Yield Farming profits',
+    locale: 'fr',
+    slug: 'the-source-of-yield-farming-profits',
+  },
+  'javascript/pourquoi-migration-gatsby-next-js.md': {
+    title: "Pourquoi j'ai migré de Gatsby vers NextJS",
+    locale: 'fr',
+    slug: 'pourquoi-jai-migre-de-gatsby-vers-nextjs',
+  },
+  'javascript/styled-components.md': {
+    title: 'Applying correctly className with Styled components',
+    locale: 'en',
+    slug: 'applying-correctly-classname-with-styled-components',
+  },
+  'javascript/typescript/completes-with.md': {
+    title: 'Completing a RxJs Observable with another',
+    locale: 'en',
+    slug: 'completing-a-rxjs-observable-with-another',
+  },
+  'javascript/why-migration-gatsby-next.md': {
+    title: 'Why I made the migration from Gatsby toward NextJS',
+    locale: 'fr',
+    slug: 'why-i-made-the-migration-from-gatsby-toward-nextjs',
+  },
+  'privacy/leaving-gmail.md': {
+    title: 'Leaving Gmail',
+    locale: 'en',
+    slug: 'leaving-gmail',
+  },
+  'theory/quel-second-langage.md': {
+    title: 'Quel langage pour progresser dans sa carrière ?',
+    locale: 'fr',
+    slug: 'quel-langage-pour-progresser-dans-sa-carriere',
+  },
+  'web/easy-automation-with-sonoff.md': {
+    title: 'Easy automation with Sonoff and Javascript',
+    locale: 'en',
+    slug: 'easy-automation-with-sonoff-and-javascript',
+  },
+};
 
 describe('articleSlug', () => {
   it('derives from the title, lowercase and strict', () => {
@@ -75,19 +106,13 @@ describe('articleSlug', () => {
 });
 
 describe('the slugs of the migrated corpus', () => {
-  const files = readdirSync(V1_CORPUS, { recursive: true })
-    .map(String)
-    .filter((path) => path.endsWith('.md'))
-    .sort();
-
   it('is the eleven articles the migration carries', () => {
-    expect(files).toEqual(Object.keys(V1_SLUGS));
+    expect(Object.keys(V1_SLUGS)).toHaveLength(11);
   });
 
-  for (const [path, slug] of Object.entries(V1_SLUGS)) {
-    it(`derives '${slug}' from ${path}, exactly as v1 does today`, () => {
-      const { data } = matter(readFileSync(join(V1_CORPUS, path), 'utf8'));
-      expect(articleSlug(String(data.title), String(data.locale))).toBe(slug);
+  for (const [path, { title, locale, slug }] of Object.entries(V1_SLUGS)) {
+    it(`derives '${slug}' from ${path}, exactly as v1 did`, () => {
+      expect(articleSlug(title, locale)).toBe(slug);
     });
   }
 });

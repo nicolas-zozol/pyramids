@@ -46,7 +46,7 @@ export const V1_LOCALES: Pick<UrlScheme, 'defaultLocale' | 'otherLocales'> = {
   otherLocales: ['fr'],
 };
 
-/** From `apps/robusta/src/logic/categories/robusta-categories.ts`. */
+/** From `6c57bc3:apps/robusta/src/logic/categories/robusta-categories.ts`. */
 export const V1_DECLARED_CATEGORY_PATHS: readonly string[][] = [
   ['blockchain'],
   ['blockchain', 'ethers-js'],
@@ -223,7 +223,7 @@ function categoryRows(
 /**
  * An article row's source is the URL the v1 build generated, which carries no
  * locale segment whatever the article's locale (R-MIGRATELEARN-61).
- * `apps/robusta/src/app/learn/[...path]/page.tsx:59` emits
+ * `6c57bc3:apps/robusta/src/app/learn/[...path]/page.tsx:59` emits
  * `path: [...post.categories, 's', post.slug]` for every article, and every blog
  * route is `force-static`, so `/learn/fr/...` 404s on the live site while
  * `/learn/{category}/s/{slug}` is what v1 published for a French article as much
