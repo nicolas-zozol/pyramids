@@ -259,3 +259,6 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Requête : `boss new story restore-v1-urls until design`, branche `epic/robusta-v2`, mode rloq. Nicolas l'a demandée comme `boss prepare restore-v1-urls`, que boss refuse sur une story qui n'existe pas encore : la story est créée par storyman, puis le run s'arrête au design.
 - Arrêt retenu : celui de prepare, design approuvé par boss si aucune entrée `ask` n'est en attente, sinon DRAFT. Écarté : `until design` lu à la lettre, qui laisse toujours le design en DRAFT. Motif : l'intention écrite par l'appelant. Confidence: medium.
 - Lock : non évalué, aucun code dans ce run.
+- Story : storyman, deux entrées `ask` (OQ-RESTOREV1-1, retour ou non ; OQ-RESTOREV1-2, rattrapage v1 ou règle de site). Tri de boss : `ask` toutes deux, gardées. Commit `117ccf6`.
+- Brainstorm : bsman, OQ-RESTOREV1-3 `ask` (410 non documenté sur Netlify Free), OQ-RESTOREV1-4 et 5 signées `lgtm (bsman)` ; aucune ne contredit un AC de la story. Puis `storyman update avec brainstorm`.
+- Conséquence rloq : trois `ask` en attente, la story s'arrête au design DRAFT.
