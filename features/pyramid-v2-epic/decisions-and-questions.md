@@ -262,3 +262,5 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Story : storyman, deux entrées `ask` (OQ-RESTOREV1-1, retour ou non ; OQ-RESTOREV1-2, rattrapage v1 ou règle de site). Tri de boss : `ask` toutes deux, gardées. Commit `117ccf6`.
 - Brainstorm : bsman, OQ-RESTOREV1-3 `ask` (410 non documenté sur Netlify Free), OQ-RESTOREV1-4 et 5 signées `lgtm (bsman)` ; aucune ne contredit un AC de la story. Puis `storyman update avec brainstorm`.
 - Conséquence rloq : trois `ask` en attente, la story s'arrête au design DRAFT.
+- Design : designman, `scripts/emit-redirects.mjs` écrit `dist/client/_redirects` (77 règles, aucune forcée) ; map scindée sur la ligne image, 83 lignes. OQ-RESTOREV1-6 signée `lgtm (designman)`, pliée par `designman update`. Contrôle boss : AC-RESTOREV1-1 à 5 cités mot pour mot, `## Boundaries` rempli. Design laissé en DRAFT : OQ-RESTOREV1-1, 2 et 3 en attente.
+- Écart relevé, non bloquant : le plan Documentation updates de la story place la liste des étapes de `build` dans la section « Deployment » du README, qui la porte dans « Commands ». À corriger au submit.
