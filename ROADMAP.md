@@ -26,6 +26,9 @@ Bootstrapped on 2026-07-29 by `/start` from the epic and from the flags left by 
 - go-live — robusta.build s'ouvre à l'indexation sur la seule build de production de Netlify, `NETLIFY=true` et `CONTEXT=production` : chaque page que seo-excellence déclare indexable déclare `index, follow`, toute autre page et toute autre build gardent `noindex, nofollow`. `INDEXING_OPEN` est figé au build par le `define` de Vite, le head recalculé dans le navigateur dit la même chose que le HTML prérendu. `robusta-build.netlify.app` répond 301 vers `https://www.robusta.build`. 677 tests du site v2, 33 pages `index, follow` égales au sitemap sur la build de production. Rien ne s'ouvre avant le merge sur `main`. Soumise le 2026-11-04 avec `6182d17`.
 - restore-v1-urls — les adresses v1 reviennent : la build traduit la v1 map en 77 règles statiques de `dist/client/_redirects`, que Netlify lit avant `netlify.toml`, 67 en 301 vers leur page v2 en un saut, 5 Gone en 410 et 5 sans destination sous `/learn` en 404, ces deux derniers groupes avec le corps de `404.html` ; une destination qui n'est pas une page construite fait échouer la build. Rattrapage de v1, aucune BR. La map passe à 83 lignes, la ligne image scindée en ses deux formes v1. 410 servi par Netlify Free, constaté sur un draft deploy ; le double saut depuis `robusta-build.netlify.app` constaté en production le 2026-11-06 : deux 301, puis 200. 731 tests du site v2. Soumise le 2026-11-06 avec `467beaa`.
 - retire-robusta-design — la maquette v0 de la refonte, dossier sans manifeste, est supprimée, relisible dans d58e879 ; son brief, seul endroit qui porte le parcours de l'auteur, passe à l'octet près dans `documentation/author-brief.md`, `git log --follow` compris. Le test de la règle `ignore` de Netlify prend `apps/intel-demo` comme dossier sans manifeste. `yarn.lock` inchangé, 731 tests du site v2. Soumise le 2026-11-06 avec `3331afc`.
+- font-stack-readme — le README du design system nomme les trois polices que son CSS importe, IBM Plex Sans, IBM Plex Mono et Caveat. Livré avec `75d7fff`, validé le 2026-11-06.
+- vectorize-wordmark — `robusta-build-wordmark.svg` (1597×273) remplace le PNG, supprimé ; `BrandLogo` prend son ratio et garde la taille des lettres. Livré le 2026-11-06 avec `9efb99b`.
+- rollback-rehearsal — le retour arrière de la section Deployment de `apps/robusta-build/README.md` répété sur www.robusta.build le 2026-11-06 : `main@6c57bc3` publié, verrou posé, `main@5645867` republié, verrou levé. La procédure tient telle quelle.
 
 ## Next
 
@@ -37,10 +40,6 @@ Pour la page copy de robusta.build seulement, décidé le 2026-10-31.
 
 7. extract-compound-plugin — extraire la version open source de Compound, epicman, storyman et designman, en plugin publié, à la manière de Superpowers ; le publier ajoute un lien à la page copy de la landing page. Relève d'un autre dépôt, non prioritaire. Décidé le 2026-10-26. Pas de story.
 
-### B4 — Nettoyage
-
-Sans dépendance, faisable à tout moment : voir Loose ends.
-
 ### B5 — Fin d'epic
 
 No Vercel project of this repository needs an environment variable any more. `yarn.lock` is a yarn 4 lockfile and Vercel's bundled yarn 1 cannot read it, which `ENABLE_EXPERIMENTAL_COREPACK=1` used to solve; since 2026-08-01 the Yarn binary is committed at `.yarn/releases/yarn-4.17.1.cjs` with `yarnPath` naming it in `.yarnrc.yml`, and yarn 1 delegates to it. The flag must not be set on the Vercel project of `apps/dakar`, the only one left: with `yarnPath` in place, corepack downloads its own `yarn.js` and crashes before anything reads the config.
@@ -49,11 +48,6 @@ Each project's Node Version must read 22.x, set in the dashboard. `engines.node`
 
 Why the binary is in git, since 2.9 MB deserves a reason: the v2 site failed six deployments in a row and none of them reproduced locally. Corepack caches yarn inside the repository, at `.vercel/cache/corepack/`, where the root manifest's `"type": "module"` reaches it and makes Node load yarn's CommonJS bundle as an ES module, killing the install before it starts. A `.cjs` file is CommonJS whatever any manifest says. Detail and the tested non-fixes in `apps/robusta-build/README.md`.
 
-## Loose ends
+## Hors epic
 
-Le batch B4 « Nettoyage » de l'epic pyramid-v2 : sans dépendance, faisable à tout moment.
-
-- font-stack-readme — le README du design system nommait Caveat / Kalam / Architects Daughter / JetBrains Mono alors que son CSS importe IBM Plex Sans / Plex Mono / Caveat ; l'epic a tranché le 2026-07-29, le README cède. Implémenté dans `75d7fff`, en attente de validation.
-- vectorize-wordmark — `robusta-build-wordmark.png` fait 1603×312 ; une version vectorielle passerait à l'échelle et pèserait moins.
-- scribe-intel-does-not-compile — `packages/scribe-intel` et `services/scribe-intel-collector` échouent à `tsc` sur des défauts de source antérieurs à unblock-build, hors du green set. scribe-intel est deprecated depuis le 2026-10-31 : l'item ne répare plus sa compilation, et ce que devient le package n'est pas décidé.
-- rollback-rehearsal — répéter une fois sur www.robusta.build le retour arrière que décrit la section Deployment de `apps/robusta-build/README.md` : publier le déploiement précédent, verrouiller la publication automatique, puis republier et déverrouiller. À Nicolas, hors dépôt. Décidé le 2026-11-05 par netlify-deploy. Pas de story.
+- retire-scribe-intel — supprimer `packages/scribe-intel`, `services/scribe-intel-collector` et `apps/intel-demo`, deprecated et hors du green set ; décidé par Nicolas le 2026-11-06, par une story de suppression hors de l'epic pyramid-v2. Le Vite hissé à la racine et le `packageExtensions` de `.yarnrc.yml` dépendent de scribe-intel-collector, et la fixture de `netlify-ignore.spec` utilise `apps/intel-demo/front/src/main.ts`. Pas encore de story.
