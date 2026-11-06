@@ -3,11 +3,13 @@
  *
  * The output is committed so the mapping stays written down and reviewable
  * (R-URLSCHEME-14): a diff shows the map changing when the corpus does. Nothing
- * in the build reads it and no redirect is served from it; restore-v1-urls is
- * the item that will.
+ * in the build reads this file: `scripts/emit-redirects.mjs` computes the same
+ * map and serves it as `dist/client/_redirects`.
  *
  * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-09
+ * Design: features/pyramid-v2-epic/restore-v1-urls/restore-v1-urls.design.md
+ * Requirements: R-RESTOREV1-42
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';

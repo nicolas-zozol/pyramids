@@ -119,7 +119,8 @@ const V1_INVENTORY: readonly (readonly [
   ['/learn/javascript/s/javascript-build.md', 'gone'],
   ['/learn/javascript/s/redux-en.md', 'gone'],
   ['/learn/theory/solid-principles.md', 'gone'],
-  ['/learn/:path*/images/:file', 'none'],
+  ['/learn/images/:file', 'none'],
+  ['/learn/:category/s/images/:file', 'none'],
   ['/portfolio', 'none'],
   ['/fr/portfolio', 'none'],
   ['/', 'none'],
@@ -141,7 +142,7 @@ describe('V1_LOCALES', () => {
 });
 
 describe('v1UrlMap over the site’s corpus', () => {
-  it('lists the same eighty-two v1 addresses in the same order, the French raw markdown of completes-with now redirected', async () => {
+  it('lists the same eighty-three v1 addresses in the same order, the French raw markdown of completes-with now redirected', async () => {
     const rows = await mapOfTheSite();
 
     expect(rows.map((row) => [row.from, row.destination.kind])).toEqual(
@@ -149,12 +150,12 @@ describe('v1UrlMap over the site’s corpus', () => {
     );
   });
 
-  it('counts sixty-seven permanent rows, five gone and ten without destination', async () => {
+  it('counts sixty-seven permanent rows, five gone and eleven without destination', async () => {
     const kinds = (await mapOfTheSite()).map((row) => row.destination.kind);
 
     expect(kinds.filter((kind) => kind === 'permanent')).toHaveLength(67);
     expect(kinds.filter((kind) => kind === 'gone')).toHaveLength(5);
-    expect(kinds.filter((kind) => kind === 'none')).toHaveLength(10);
+    expect(kinds.filter((kind) => kind === 'none')).toHaveLength(11);
   });
 
   it('computes its sources from the v1 Locales, whatever Locales the scheme declares', async () => {
@@ -204,6 +205,25 @@ describe('v1UrlMap over the site’s corpus', () => {
       kind: 'permanent',
       to: '/articles/c/web',
     });
+  });
+
+  it('splits the v1 image folders into their two forms, both without destination', async () => {
+    const rows = await mapOfTheSite();
+    const why =
+      'where the images end up on v2 is migrate-learn-content’s deliverable, so they fall through to 404 rather than being declared retired';
+
+    expect(destinationOf(rows, '/learn/images/:file')).toEqual({ kind: 'none', why });
+    expect(destinationOf(rows, '/learn/:category/s/images/:file')).toEqual({
+      kind: 'none',
+      why,
+    });
+  });
+
+  it('says the namespace row is served by the last rule of _redirects', async () => {
+    const rows = await mapOfTheSite();
+
+    expect(rows.at(-1)?.from).toBe('/learn/:path*');
+    expect(rows.at(-1)?.note).toContain('last rule of _redirects');
   });
 
   it('leaves the v1 site root without destination, the v2 site serving its English landing page there', async () => {

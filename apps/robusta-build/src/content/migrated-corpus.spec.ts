@@ -464,10 +464,13 @@ describe('what the corpus lights up', () => {
 
   it('lists every article v1 published at its unmarked source, and only the French ones twice', async () => {
     const rows = v1UrlMap(urlScheme, await getArticleIndex());
-    // The raw markdown rows share the `/s/` discriminant and are a class of
-    // their own: they end in `.md`, an article row ends in a slug.
+    // The raw markdown rows and the image folder of a category share the `/s/`
+    // discriminant and are classes of their own: an article row ends in a slug.
     const articleRows = rows.filter(
-      (row) => row.from.includes('/s/') && !row.from.endsWith('.md'),
+      (row) =>
+        row.from.includes('/s/') &&
+        !row.from.endsWith('.md') &&
+        !row.from.endsWith('/images/:file'),
     );
 
     expect(articleRows).toHaveLength(14);

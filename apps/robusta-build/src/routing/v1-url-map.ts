@@ -25,6 +25,8 @@ import type { ArticleIndexEntry } from '../content/article-index.ts';
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
  * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-81
+ * Design: features/pyramid-v2-epic/restore-v1-urls/restore-v1-urls.design.md
+ * Requirements: R-RESTOREV1-41, R-RESTOREV1-42, R-RESTOREV1-43
  */
 
 export type V1Destination =
@@ -342,14 +344,13 @@ function rawMarkdownRows(
 }
 
 function imageRows(): V1MappingRow[] {
+  const destination = {
+    kind: 'none' as const,
+    why: 'where the images end up on v2 is migrate-learn-content’s deliverable, so they fall through to 404 rather than being declared retired',
+  };
   return [
-    {
-      from: `${V1_HOME}/:path*/images/:file`,
-      destination: {
-        kind: 'none',
-        why: 'where the images end up on v2 is migrate-learn-content’s deliverable, so they fall through to 404 rather than being declared retired',
-      },
-    },
+    { from: `${V1_HOME}/images/:file`, destination },
+    { from: `${V1_HOME}/:category/${V1_ARTICLE_DISCRIMINANT}/images/:file`, destination },
   ];
 }
 
@@ -381,7 +382,7 @@ function namespaceRows(): V1MappingRow[] {
     {
       from: `${V1_HOME}/:path*`,
       destination: { kind: 'gone' },
-      note: 'the namespace rule, served by the /learn route handler rather than by a redirect: it answers for every document URL no row above claimed',
+      note: 'the namespace rule, served by the last rule of _redirects: it answers for every document URL no row above claimed',
     },
   ];
 }

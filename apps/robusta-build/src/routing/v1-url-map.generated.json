@@ -7,10 +7,10 @@
     "es"
   ],
   "counts": {
-    "total": 82,
+    "total": 83,
     "permanent": 67,
     "gone": 5,
-    "none": 10
+    "none": 11
   },
   "rows": [
     {
@@ -557,7 +557,14 @@
       "note": "no article carries the slug 'solid-principles': the content travels nowhere"
     },
     {
-      "from": "/learn/:path*/images/:file",
+      "from": "/learn/images/:file",
+      "destination": {
+        "kind": "none",
+        "why": "where the images end up on v2 is migrate-learn-content’s deliverable, so they fall through to 404 rather than being declared retired"
+      }
+    },
+    {
+      "from": "/learn/:category/s/images/:file",
       "destination": {
         "kind": "none",
         "why": "where the images end up on v2 is migrate-learn-content’s deliverable, so they fall through to 404 rather than being declared retired"
@@ -611,7 +618,7 @@
       "destination": {
         "kind": "gone"
       },
-      "note": "the namespace rule, served by the /learn route handler rather than by a redirect: it answers for every document URL no row above claimed"
+      "note": "the namespace rule, served by the last rule of _redirects: it answers for every document URL no row above claimed"
     }
   ]
 }

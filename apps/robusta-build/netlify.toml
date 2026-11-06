@@ -13,6 +13,11 @@
 # default Locale permanently to the same page unmarked: `/en` to `/`, `/en/{rest}`
 # to `/{rest}`. Without `force`, and no file existing under `en`, they always
 # apply; a target the site does not build answers 404.
+#
+# The build also writes dist/client/_redirects, the v1 addresses of the v1 map
+# (scripts/emit-redirects.mjs). Netlify reads it before the rules below, so a v1
+# address on robusta-build.netlify.app takes two redirects. None of its rules is
+# forced: every page the site builds keeps its answer.
 
 [build]
   command = "node --version && yarn --version && yarn config get yarnPath && yarn build:robusta"
