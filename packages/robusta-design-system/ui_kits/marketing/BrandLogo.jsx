@@ -1,15 +1,15 @@
 // BrandLogo.jsx — 💪 🏗 + hand-drawn "Robusta Build" wordmark image.
 // size: 'compact' (nav), 'full' (with tagline), 'mark' (just the icons)
 //
-// The wordmark is a scanned napkin sketch (assets/robusta-build-wordmark.png),
-// 1603×312 with white knocked out and the blue marker underline baked in.
+// The wordmark is a vectorized napkin sketch (assets/robusta-build-wordmark.svg),
+// viewBox 1597×273, ink strokes and the blue marker underline as two paths.
 // We size it by height and let width scale; the height is tuned to sit a touch
 // taller than the cap-height of the emoji so the marks read as one lockup.
 // Path is resolved relative to the HOST HTML page, not this JSX file. Each
 // host page sets `window.ROBUSTA_WORDMARK_SRC` before loading this script;
 // fallback assumes the page lives one level deep (e.g. preview/*.html).
-const ROBUSTA_WORDMARK_SRC = window.ROBUSTA_WORDMARK_SRC || '../assets/robusta-build-wordmark.png';
-const ROBUSTA_WORDMARK_RATIO = 1603 / 312; // ≈ 5.14
+const ROBUSTA_WORDMARK_SRC = window.ROBUSTA_WORDMARK_SRC || '../assets/robusta-build-wordmark.svg';
+const ROBUSTA_WORDMARK_RATIO = 1597 / 273; // ≈ 5.85
 
 function BrandLogo({ size = 'compact', style = {} }) {
   const emojiStyle = (h) => ({
@@ -27,9 +27,9 @@ function BrandLogo({ size = 'compact', style = {} }) {
   }
 
   // Heights tuned so the wordmark optically matches the emoji cap-height.
-  // Wordmark image includes the underline + descenders, so it's ~1.4× cap height.
+  // Wordmark image includes the underline, so it's ~1.3× cap height.
   const emojiH = size === 'full' ? 56 : 36;
-  const wordmarkH = size === 'full' ? 76 : 50;
+  const wordmarkH = size === 'full' ? 66 : 44;
   const wordmarkW = wordmarkH * ROBUSTA_WORDMARK_RATIO;
   const gap = size === 'full' ? 16 : 10;
 
@@ -46,7 +46,7 @@ function BrandLogo({ size = 'compact', style = {} }) {
           style={{
             display: 'block',
             // Nudge up slightly so the wordmark's optical baseline aligns with emoji.
-            marginTop: size === 'full' ? -4 : -3,
+            marginTop: size === 'full' ? 0 : -1,
             marginLeft: size === 'full' ? 4 : 2,
             // Crisp scaling for the inked stroke.
             imageRendering: 'auto'

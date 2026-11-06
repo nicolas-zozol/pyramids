@@ -18,7 +18,7 @@
 - `colors_and_type.css` — les Design tokens dans `:root` et les styles d'élément, de `html` à `pre`. Aucune police chargée.
 - `sketch.css` — les classes `.sk-*` des primitives, la mise en page des huit sections, puis la section responsive.
 - `fonts.css` — IBM Plex Sans, IBM Plex Mono et Caveat depuis Google Fonts, pour un consommateur sans build ; le site robusta ne le charge pas.
-- `assets/` — Crystal Tux en quatre poses SVG, la pose de base aussi en PNG, et le wordmark `robusta-build-wordmark.png`, 1603×312.
+- `assets/` — Crystal Tux en quatre poses SVG, la pose de base aussi en PNG, et le wordmark `robusta-build-wordmark.svg`, 1597×273.
 - `preview/` — les planches HTML du système, dont `marketing-page.html`, les huit sections en une page à redimensionner depuis 320 px ; `ui_kits/marketing/`, le prototype JSX des sections ; `uploads/`, les images sources ; `SKILL.md`, le skill de la marque. Aucun n'est livré : `package.json#files` s'arrête à `dist`, `*.css`, `assets` et `README.md`.
 - `src/test-support/` — le rendu statique et `readableText`, le texte qu'un lecteur en reçoit, puis la lecture des fichiers livrés et celle des sources de `src/`, pour les specs ; hors build.
 
@@ -54,7 +54,7 @@ Client code : les packages `landing`, `chrome`, `components`, `page-data`, `arti
 
 Composants, depuis `.` :
 
-- `BrandLogo` — le lockup ; `size` vaut `compact`, `full` ou `mark`, `tagline` n'est rendue que par `full`, et seulement passée. `wordmarkSrc` est à passer : son défaut, `/_next/static/media/robusta-build-wordmark.png`, ne résout nulle part, et le module n'importe aucun de ses propres assets.
+- `BrandLogo` — le lockup ; `size` vaut `compact`, `full` ou `mark`, `tagline` n'est rendue que par `full`, et seulement passée. `wordmarkSrc` est à passer : son défaut, `/_next/static/media/robusta-build-wordmark.svg`, ne résout nulle part, et le module n'importe aucun de ses propres assets.
 - `SkButton` — une ancre `.sk-btn` avec `href`, rendue par `linkComponent` s'il est passé, un `<button>` sans gestionnaire sinon ; `SkButtonProps` est une union de types, pas une `interface`, dont la branche bouton refuse `linkComponent`.
 - `SkCallout`, `SkTag`, `SkInput`, `SkArrowRight` — une classe `.sk-*` chacune ; `SkTag` prend `tone`, `default`, `pink`, `blue` ou `green`.
 - `Hero`, `SiteHeader`, `SiteFooter`, `ServicesGrid`, `FlowDiagram`, `PrinciplesList`, `NotesPreview`, `CTA` — chaque texte rendu, texte alternatif et placeholder compris, est une prop sans défaut ; seule la marque est fixe, le texte alternatif du wordmark et les glyphes 💪 🏗. Absente, `null` ou `''`, une prop de texte ne rend pas son élément ; une liste absente ne rend aucun item, son conteneur restant rendu ; `mascotAlt` absent écrit `alt=""`, la mascotte décorative. Aucune erreur levée, quelles que soient les props absentes. Chaque call to action est une ancre vers `primaryCtaHref`, `secondaryCtaHref` ou `ctaHref`. Le champ e-mail de `CTA` n'envoie rien : le site branche l'envoi dans un composant à lui.
@@ -69,7 +69,7 @@ Feuilles de style, sous-chemins de `exports`, chargées une fois par site dans c
 - `colors_and_type.css` — papier et encre ; les rampes `--brand-primary`, `--brand-secondary`, `--brand-accent` et `--brand-error`, chacune en base, `-soft` et `-deep` ; les familles `--font-sans`, `--font-script` et `--font-mono` ; l'échelle `--t-*`, dix pas en `clamp()` de 320 à 1536 px ; `--lh-*`, `--sp-1` à `--sp-9`, `--r-*`, `--measure` à 68ch ; les surligneurs `.highlight-*`. Chaque famille lit `--font-ibm-plex-sans`, `--font-ibm-plex-mono` ou `--font-caveat`, puis le nom de la face, puis une pile système ; le site robusta ne pose aucune de ces propriétés et auto-héberge les faces sous ces noms.
 - `sketch.css` — les classes `.sk-*` ; la mise en page des sections sous `.sk-<section>`, `.sk-<section>__<part>` et `--<modifier>`, en spécificité d'une classe et sans `!important`, qu'un sélecteur du site portant une classe de plus surcharge quel que soit l'ordre de chargement ; 40, 48, 64, 80 et 96rem, chacune dans un seul `@media (min-width)`, la base étant la mise en page étroite.
 
-Assets, sous `./assets/` : `crystal-tux.svg` et `crystal-tux.png`, deux illustrations distinctes sous le même nom, `crystal-tux-head.svg`, `crystal-tux-waving.svg`, `crystal-tux-thinking.svg`, `robusta-build-wordmark.png`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
+Assets, sous `./assets/` : `crystal-tux.svg` et `crystal-tux.png`, deux illustrations distinctes sous le même nom, `crystal-tux-head.svg`, `crystal-tux-waving.svg`, `crystal-tux-thinking.svg`, `robusta-build-wordmark.svg`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
 
 ## Dependencies
 

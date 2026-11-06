@@ -11,7 +11,7 @@ export interface NavLink {
 }
 
 export interface SiteHeaderProps {
-  /** Path/URL string for the wordmark PNG used by the embedded `<BrandLogo>`. */
+  /** Path/URL string for the wordmark SVG used by the embedded `<BrandLogo>`. */
   wordmarkSrc?: string;
   /** The wordmark's target, `/` when absent. */
   homeHref?: string;

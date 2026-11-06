@@ -16,7 +16,7 @@ export interface FooterColumn {
 }
 
 export interface SiteFooterProps {
-  /** Path/URL for the wordmark PNG used by the embedded `<BrandLogo>`. */
+  /** Path/URL for the wordmark SVG used by the embedded `<BrandLogo>`. */
   wordmarkSrc?: string;
   /** Free-text tagline rendered next to the logo. */
   tagline?: string;

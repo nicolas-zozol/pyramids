@@ -39,7 +39,7 @@ The robusta site links them from the head of its root route, `apps/robusta-build
 Each asset is exposed at `assets/<filename>` as a subpath export, and the consuming bundler resolves the import to a hashed URL at build time. Under Vite, the import is that URL as a string.
 
 ```ts
-import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
 import tuxSvg   from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
 import headSvg  from '@robusta/pyramids-design-system/assets/crystal-tux-head.svg';
 ```
@@ -50,7 +50,7 @@ Available assets:
 - `crystal-tux-head.svg` — head only, for inline annotations
 - `crystal-tux-waving.svg` — waving with "hi there!" speech bubble
 - `crystal-tux-thinking.svg` — thinking pose
-- `robusta-build-wordmark.png` — scanned napkin wordmark (1603×312)
+- `robusta-build-wordmark.svg` — the napkin wordmark, vectorized (1597×273)
 
 ## Import — components
 
@@ -58,7 +58,7 @@ The package exports six primitives, `BrandLogo`, `SkButton`, `SkCallout`, `SkTag
 
 ```tsx
 import { SiteHeader, type SkLinkProps } from '@robusta/pyramids-design-system';
-import wordmarkSrc from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+import wordmarkSrc from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
 import { Link } from '@tanstack/react-router';
 
 function RouterLink({ href, ...anchor }: SkLinkProps) {

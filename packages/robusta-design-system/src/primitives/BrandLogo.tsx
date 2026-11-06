@@ -11,13 +11,12 @@ export interface BrandLogoProps {
   /** Rendered by the `full` variant alone. Empty: no tagline line. */
   tagline?: string;
   /**
-   * Path or imported module URL for the wordmark PNG. Defaults to the
-   * subpath import string `@robusta/pyramids-design-system/assets/robusta-build-wordmark.png`,
-   * which works in any Next.js / Vite / Webpack consumer. For the best
-   * Next.js asset optimization, pass an imported StaticImageData URL:
+   * URL of the wordmark SVG, as the consumer's bundler publishes it. The
+   * default is a hardcoded `/_next/static/media/…` path, so pass the URL the
+   * subpath import resolves to:
    *
-   *   import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
-   *   <BrandLogo wordmarkSrc={typeof wordmark === 'string' ? wordmark : wordmark.src} />
+   *   import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
+   *   <BrandLogo wordmarkSrc={wordmark} />
    */
   wordmarkSrc?: string;
   /** Inline style escape hatch for tiny per-page nudges. */
@@ -25,9 +24,9 @@ export interface BrandLogoProps {
   className?: string;
 }
 
-const WORDMARK_RATIO = 1603 / 312; // ≈ 5.14
+const WORDMARK_RATIO = 1597 / 273; // ≈ 5.85, the SVG's viewBox
 const DEFAULT_WORDMARK_SRC =
-  '/_next/static/media/robusta-build-wordmark.png'; // overridden in practice — see prop docs
+  '/_next/static/media/robusta-build-wordmark.svg'; // overridden in practice — see prop docs
 
 const emojiStyle = (h: number): CSSProperties => ({
   fontSize: h,
@@ -64,9 +63,9 @@ export function BrandLogo({
   }
 
   // Heights tuned so the wordmark optically matches the emoji cap-height.
-  // Wordmark image includes the underline + descenders, so it's ~1.4× cap height.
+  // Wordmark image includes the underline, so it's ~1.3× cap height.
   const emojiH = size === 'full' ? 56 : 36;
-  const wordmarkH = size === 'full' ? 76 : 50;
+  const wordmarkH = size === 'full' ? 66 : 44;
   const wordmarkW = wordmarkH * WORDMARK_RATIO;
   const gap = size === 'full' ? 16 : 10;
 
@@ -95,7 +94,7 @@ export function BrandLogo({
           style={{
             display: 'block',
             // Nudge up slightly so the wordmark's optical baseline aligns with emoji.
-            marginTop: size === 'full' ? -4 : -3,
+            marginTop: size === 'full' ? 0 : -1,
             marginLeft: size === 'full' ? 4 : 2,
             imageRendering: 'auto',
           }}

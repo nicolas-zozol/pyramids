@@ -264,7 +264,7 @@
    lockup has to be able to shrink, or the wordmark alone is wider than a
    320px viewport. The emoji glyph sizes and the tagline's indent stay
    inline: they are dimensions of the mark, tuned against the wordmark's
-   1603×312 ratio, and not type. */
+   1597×273 ratio, and not type. */
 .sk-brand-logo        { max-width: 100%; }
 .sk-brand-logo__lockup   { min-width: 0; max-width: 100%; }
 .sk-brand-logo__wordmark { min-width: 0; max-width: 100%; height: auto; }

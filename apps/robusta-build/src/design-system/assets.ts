@@ -10,7 +10,7 @@
  */
 import heroMascot from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
 import ctaMascot from '@robusta/pyramids-design-system/assets/crystal-tux-waving.svg';
-import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.png';
+import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
 
 /**
  * The design system's wordmark, at the URL the bundler published it under.

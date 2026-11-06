@@ -17,7 +17,7 @@
     "./assets/crystal-tux-head.svg": "./assets/crystal-tux-head.svg",
     "./assets/crystal-tux-waving.svg": "./assets/crystal-tux-waving.svg",
     "./assets/crystal-tux-thinking.svg": "./assets/crystal-tux-thinking.svg",
-    "./assets/robusta-build-wordmark.png": "./assets/robusta-build-wordmark.png"
+    "./assets/robusta-build-wordmark.svg": "./assets/robusta-build-wordmark.svg"
   },
   "files": [
     "dist",

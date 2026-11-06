@@ -29,7 +29,7 @@ import {
 
 const BRAND = ['💪', '🏗', 'Robusta Build'];
 const MASCOT = '/assets/crystal-tux.svg';
-const WORDMARK = '/assets/robusta-build-wordmark.png';
+const WORDMARK = '/assets/robusta-build-wordmark.svg';
 
 interface ExportRenders {
   /** No text prop, but the props that make each element appear: sources and destinations. */
