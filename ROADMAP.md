@@ -47,7 +47,3 @@ No Vercel project of this repository needs an environment variable any more. `ya
 Each project's Node Version must read 22.x, set in the dashboard. `engines.node` does not decide it — verified on 2026-08-01 with both a range and `"22.x"`, the project setting winning each time.
 
 Why the binary is in git, since 2.9 MB deserves a reason: the v2 site failed six deployments in a row and none of them reproduced locally. Corepack caches yarn inside the repository, at `.vercel/cache/corepack/`, where the root manifest's `"type": "module"` reaches it and makes Node load yarn's CommonJS bundle as an ES module, killing the install before it starts. A `.cjs` file is CommonJS whatever any manifest says. Detail and the tested non-fixes in `apps/robusta-build/README.md`.
-
-## Hors epic
-
-- retire-scribe-intel — supprimer `packages/scribe-intel`, `services/scribe-intel-collector` et `apps/intel-demo`, deprecated et hors du green set ; décidé par Nicolas le 2026-11-06, par une story de suppression hors de l'epic pyramid-v2. Le Vite hissé à la racine et le `packageExtensions` de `.yarnrc.yml` dépendent de scribe-intel-collector, et la fixture de `netlify-ignore.spec` utilise `apps/intel-demo/front/src/main.ts`. Pas encore de story.

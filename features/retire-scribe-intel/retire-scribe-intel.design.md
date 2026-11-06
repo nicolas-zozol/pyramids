@@ -3,7 +3,7 @@
 **Last update:** 2026-11-06
 **Feature:** retire-scribe-intel
 **Infix:** RETIRESCRIBE
-**Status:** APPROVED (2026-11-06 — validated by boss atw)
+**Status:** IMPLEMENTED (2026-11-06, commit d4ddbb3)
 **Sources:** [story](retire-scribe-intel.story.md), [brainstorm](retire-scribe-intel.brainstorm.md)
 
 ## Goal

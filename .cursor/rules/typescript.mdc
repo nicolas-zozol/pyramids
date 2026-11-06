@@ -79,49 +79,6 @@ const merged = merge({ name: 'Alice' }, { age: 30 });
 console.log(merged);
 ```
 
-## Open telemetry
-
-I have added a personal Telemtery wrapper in /src/libs/telemetry
-
-Add some consistent logs, warnings and errors with Open Telemetry
-
-Create a component at the start of a page, react component, function...
-
-const component = Telemetry.component(...)
-
-```ts
-export class Telemetry {
-  // Logging methods
-  /**
-   * Log an informational message
-   * @param message - The main log message
-   * @param component - Source component (e.g., "Component: LoginForm")
-   * @param data - Optional additional data to include in the log
-   */
-  static log(
-    message: string,
-    component: string,
-    data?: Record<string, any>
-  ): void {
-    Logger.log(message, component, data);
-  }
-
-  /**
-   * Log an error message
-   * @param message - The main error message
-   * @param component - Source component (e.g., "API: /user/me")
-   * @param error - Optional Error object to extract message and stack from
-   */
-  static error(
-    message: string,
-    component: string,
-    error?: Error | unknown
-  ): void {
-    Logger.error(message, component, error);
-  }
-}
-```
-
-### MongoDB
+## MongoDB
 
 Never write methods for Mongoose models. We will use separate Domain Objects.

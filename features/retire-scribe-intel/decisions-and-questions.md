@@ -32,3 +32,14 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - D7 — atw Gap-RETIRESCRIBE-1 — retire-scribe-intel.design.md — retained: l'entrée Done de retire-robusta-design dans `ROADMAP.md` reste telle quelle, la section Done de `ROADMAP.md` devient une exception de la recherche d'AC-RETIRESCRIBE-5. Set aside: réécrire ce bilan daté. Confidence: high.
 - `storyman update` : AC-RETIRESCRIBE-5 exclut la section Done de `ROADMAP.md` ; note de `root.archi.md` ajoutée au plan. `designman update` plie Gap-RETIRESCRIBE-1, recopie AC-5. Aucune nouvelle entrée.
 - Contrôle boss : AC-RETIRESCRIBE-1 à 6 cités mot pour mot, `## Boundaries` rempli, aucune entrée en attente. APPROVED, validated by boss atw.
+
+## D8 : implémentation
+
+- codeman, choisi plutôt que tddman : suppression pure, une fixture renommée. 56 fichiers suivis supprimés et leurs restes non suivis, `services/` et son glob retirés, `yarn.lock` −156 entrées, commentaire de `packageExtensions` seul réécrit (Vite 6.4.3 hissé par le vitest 3 de helpers), fixture `apps/no-manifest/src/main.ts`. Repli de dakar non appliqué. Confidence: high.
+- Par codeman : `build:deps`, `build:robusta` (33 pages, Vite 8.3.2 seul), `build:dakar` verts ; design system 209/209 ; lint 6 erreurs, identiques à la référence moins scribe-intel (référence mesurée 63/57, le design dit 64/58) ; workspaces identiques avec les restes sur disque.
+- Vérifié par boss : `yarn install --immutable` vert, tests du site 717/717.
+
+## D9 : submit
+
+- `storyman submit` : 4 étapes sur 4, epicman sans objet (story hors epic). docman (`README.md`, `.cursor/rules/typescript.mdc`), archiman (`root.archi.md`, `robusta-build.archi.md`), design IMPLEMENTED, story SUBMITTED, item et section « Hors epic » retirés de ROADMAP.md. Recherche d'AC-RETIRESCRIBE-5 : seule l'entrée Done de retire-robusta-design reste, exclue (D7). Commit de clôture exécuté par boss.
+- Laissés à Nicolas : volet Netlify et Vercel d'AC-RETIRESCRIBE-6 après le push ; `protobufjs` encore nommé dans `root.archi.md` (Toolchain) et le commentaire `enableScripts` de `.yarnrc.yml`, hors plan de la story ; écarts antérieurs relevés par archiman.

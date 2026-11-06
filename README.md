@@ -8,9 +8,8 @@ The v2 epic, `features/pyramid-v2-epic/pyramid-v2.epic.md`, rebuilds the robusta
 
 ## Where things are
 
-- `apps/*` — deployable sites and the standalone demos
+- `apps/*` — deployable sites
 - `packages/*` — shared libraries, built to `dist/` and consumed as build output, never as sources
-- `services/*` — the telemetry collector and its docker-compose observability stack
 - `features/*` — the Compound working documents: epics, stories, designs
 - `documentation/*` — long-form notes that outlive a feature
 

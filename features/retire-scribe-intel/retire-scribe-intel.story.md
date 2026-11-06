@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** retire-scribe-intel
 **Infix :** RETIRESCRIBE
-**Status :** ACTIVE
+**Status :** SUBMITTED (2026-11-06, commit d4ddbb3)
 
 ## Story
 
@@ -11,23 +11,23 @@ En tant que mainteneur du dépôt, je veux supprimer le SDK de télémétrie scr
 
 ## Contexte & objectif
 
-`packages/scribe-intel` est deprecated depuis le 2026-10-31 ; il ne compile pas, et `services/scribe-intel-collector`, son seul client, non plus. Aucun site n'en dépend : le site v2 par règle (BR-PYRAMID-2), dakar par fait. Nicolas a décidé la suppression le 2026-11-06, par une story hors de l'epic pyramid-v2 (décisions du 2026-07-29, du 2026-10-31 et du 2026-11-06 de `features/pyramid-v2-epic/pyramid-v2.epic.md`, item « Hors epic » du `ROADMAP.md`).
+`packages/scribe-intel`, deprecated depuis le 2026-10-31, ne compilait plus, pas plus que son seul client `services/scribe-intel-collector` ; aucun site n'en dépendait (BR-PYRAMID-2 pour le site v2). Nicolas a décidé la suppression le 2026-11-06, par une story hors de l'epic pyramid-v2. Le code reste relisible dans l'historique git, au parent de d4ddbb3.
 
-Le code supprimé reste relisible dans l'historique git. Le risque tient à l'install. La racine hisse aujourd'hui le Vite 5.4.18 du collecteur ; après la suppression, elle hisse le Vite 6.4.3 du `vitest` 3 de `packages/helpers`, et le Vite 8 du site reste sous `apps/robusta-build/node_modules`. `packageExtensions` de `.yarnrc.yml` reste nécessaire : sans lui, `@tanstack/start-plugin-core` est hissé à la racine et lie ce Vite 6.
+## Livré
 
-dakar importe sans les déclarer `remark`, `remark-html` et `gray-matter`. Leur copie racine vient d'`apps/robusta-build`, que la suppression ne touche pas : ils restent hissés, et cette dette reste hors de la story (risque accepté le 2026-11-06).
+### Requirements
 
-## Ce qui part
+- R-RETIRESCRIBE-01 : `packages/scribe-intel`, `services/scribe-intel-collector`, `services/scribe-intel-backend` et `apps/intel-demo` n'ont plus aucun fichier suivi par git ; leur contenu se relit au commit parent par `git show`.
+- R-RETIRESCRIBE-02 : `workspaces` du manifeste racine ne porte plus `services/*` ; `apps/*`, `packages/*`, les scripts et les `devDependencies` ne changent pas.
+- R-RETIRESCRIBE-03 : aucun fichier suivi n'est supprimé hors des quatre dossiers, et aucun manifeste du green set ne change, sauf le repli d'AC-RETIRESCRIBE-6 sur `apps/dakar/package.json`.
+- R-RETIRESCRIBE-21 : `yarn.lock`, régénéré par yarn, ne porte plus `@robusta/scribe-intel` ni `@robusta/scribe-intel-collector`, et `yarn install --immutable` passe depuis un clean checkout.
+- R-RETIRESCRIBE-22 : le bloc `packageExtensions` de `.yarnrc.yml` reste à l'octet ; son commentaire nomme le Vite 6.4.3 hissé par le `vitest` 3 de `packages/helpers` et ne cite plus le collecteur.
+- R-RETIRESCRIBE-23 : `yarn build:deps`, `yarn build:robusta` et `yarn build:dakar` passent depuis un clean checkout (BR-PYRAMID-5) ; la build du site v2 ne charge que son Vite 8.
+- R-RETIRESCRIBE-41 : `netlify-ignore.spec.ts` couvre « a directory without manifest » avec `apps/no-manifest/src/main.ts` à ses deux occurrences ; chaque cas garde son verdict, le premier compte toujours 2 dossiers surveillés.
+- R-RETIRESCRIBE-42 : les tests du site v2 (717) et du design system (209) passent ; `yarn lint` ne rapporte plus que les 6 erreurs de `packages/ctas`, `packages/helpers` et `packages/layouts`.
+- R-RETIRESCRIBE-61 : hors de `features/`, de la section Done de `ROADMAP.md`, de `yarn.lock` et de `.yarn/releases`, plus rien ne décrit scribe-intel, son collecteur, sa stack, sa démo ni la télémétrie comme présents ni ne les prescrit, selon le plan « Documentation updates » de la story ; BR-PYRAMID-2 ne change pas.
 
-- `packages/scribe-intel` : le module, son `scribe-intel.archi.md` et son `cursor_rule/`.
-- `services/scribe-intel-collector` : le workspace qui dépend du module.
-- `services/scribe-intel-backend` : la stack docker-compose Loki, Tempo et Prometheus que le collecteur alimente, sans `package.json`.
-- `apps/intel-demo` : la démo, qui n'est pas un workspace.
-- `services/` ne contient alors plus rien : le dossier et le glob `services/*` du manifeste racine partent avec.
-- La fixture « un dossier sans manifeste » de `apps/robusta-build/scripts/netlify-ignore.spec.ts` devient `apps/no-manifest/src/main.ts`, à ses deux occurrences (fixture de base et `it.each`), contenu inchangé.
-- Les documents de `features/` et la section Done de `ROADMAP.md` qui citent ces dossiers restent tels quels, à l'octet : ce sont des archives.
-
-## Acceptance Criteria
+### Acceptance Criteria
 
 - AC-RETIRESCRIBE-1 : Given le dépôt après la story, When on liste les workspaces yarn et les fichiers suivis par git, Then ni `@robusta/scribe-intel` ni `@robusta/scribe-intel-collector` n'apparaissent dans `yarn workspaces list`, `git ls-files` ne liste plus rien sous les quatre dossiers de « Ce qui part », et `git show <parent>:packages/scribe-intel/package.json` montre encore le module.
 - AC-RETIRESCRIBE-2 : Given un clean checkout, When on lance `yarn install` puis `yarn install --immutable`, Then les deux passent, `yarn.lock` ne porte plus d'entrée pour les workspaces supprimés, et `packageExtensions` reste dans `.yarnrc.yml`, avec un commentaire qui ne cite plus le collecteur.
@@ -40,14 +40,23 @@ dakar importe sans les déclarer `remark`, `remark-html` et `gray-matter`. Leur 
 
 ### library API of module `@robusta/scribe-intel` — supprimée
 
-Client code : app `@robusta/scribe-intel-collector`, supprimée dans la même story, dont l'HTTP API (`POST /api/logs`, `/api/metrics`) part avec son seul client, ce module. Aucune app ni aucun module du green set n'en est client. Aucune API conservée n'est modifiée ; seule la liste des workspaces du manifeste racine change.
+Client code : app `@robusta/scribe-intel-collector` et app `apps/intel-demo/front`, supprimées dans la même story ; l'HTTP API du collecteur (`POST /api/logs`, `/api/metrics`) part avec son seul client, ce module. Aucune app ni aucun module du green set n'en était client. Aucune API conservée n'est modifiée ; seule la liste des workspaces du manifeste racine change.
+
+## Décisions
+
+- 2026-11-06 — `services/scribe-intel-backend` (Loki, Tempo, Prometheus) part dans la même story. Pourquoi : il n'alimentait que le collecteur.
+- 2026-11-06 — `packageExtensions` reste dans `.yarnrc.yml`, seul son commentaire change. Pourquoi : sans lui, `@tanstack/start-plugin-core` serait hissé et lierait le Vite 6.4.3 de la racine.
+- 2026-11-06 — Les 6 erreurs de lint de `packages/ctas`, `packages/helpers` et `packages/layouts` restent hors périmètre. Pourquoi : elles précèdent la story et ne touchent pas scribe-intel.
+- 2026-11-06 — La section Done de `ROADMAP.md` et les documents de `features/` restent à l'octet, exclus de la recherche d'AC-RETIRESCRIBE-5. Pourquoi : ce sont des archives.
+- 2026-11-06 — Repli dakar d'AC-RETIRESCRIBE-6 non appliqué : `build:dakar` passe sans déclaration nouvelle. Les imports non déclarés de dakar (`remark`, `remark-html`, `gray-matter`) restent une dette acceptée.
+- 2026-11-06 — Le volet Netlify et Vercel d'AC-RETIRESCRIBE-6 se constate au push du commit de suppression.
 
 ## Documentation updates
 
-- change the Children list (`scribe-intel` link, « les autres apps et les services »), the Overview sentence on the demo app, the module list, the dependency figure, the green set paragraph, the compile failure note and the OpenTelemetry line in `root.archi.md` — why: ces parties décrivent des workspaces supprimés.
-- change the import declaration rule note in `root.archi.md` (Notes / Gotchas) — why: elle cite encore `packages/scribe-intel` et son import de `@opentelemetry/api` comme exemple.
-- change the Vite paragraph in `root.archi.md` — why: la racine hisse désormais le Vite 6.4.3 du `vitest` 3 de `packages/helpers`, plus le Vite 5 du collecteur.
-- change the Vite line and the « Hors dépendances » line in `apps/robusta-build/robusta-build.archi.md` — why: le Vite hissé à la racine est le 6.4.3 du `vitest` de `packages/helpers`, et `@robusta/scribe-intel` n'existe plus.
-- change the `services/*` line and the « standalone demos » of the `apps/*` line in `README.md` — why: le dossier et la démo n'existent plus.
-- change the `packageExtensions` comment in `.yarnrc.yml` — why: il explique le besoin par le Vite du collecteur ; c'est maintenant le Vite 6.4.3 du `vitest` 3 de `packages/helpers`.
-- remove the « Open telemetry » section of `.cursor/rules/typescript.mdc` — why: elle prescrit un wrapper de télémétrie qui n'existe nulle part dans le dépôt.
+- changed the Children list, the Overview, the module list, the dependency figure, the green set paragraph, the compile failure note and the OpenTelemetry line in `root.archi.md`
+- changed the import declaration rule note in `root.archi.md` (Notes / Gotchas)
+- changed the Vite paragraph in `root.archi.md`
+- changed the Vite line and the « Hors dépendances » line in `apps/robusta-build/robusta-build.archi.md`
+- changed the `services/*` line and the « standalone demos » of the `apps/*` line in `README.md`
+- changed the `packageExtensions` comment in `.yarnrc.yml`
+- removed the « Open telemetry » section of `.cursor/rules/typescript.mdc`
