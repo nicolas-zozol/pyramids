@@ -24,7 +24,7 @@ The v2 epic, `features/pyramid-v2-epic/pyramid-v2.epic.md`, rebuilds the robusta
 
 ## Getting started
 
-Node 22 (`.nvmrc`), 22.12 or later, and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml`: any yarn on your PATH delegates to it. Corepack is not needed, and a corepack cache inside the repository breaks the install: see Yarn on a build agent in `apps/robusta-build/README.md`.
+Node 22 (`.nvmrc`), 22.18 or later, and yarn 4.17.1, whose binary is committed at `.yarn/releases/yarn-4.17.1.cjs` and named by `yarnPath` in `.yarnrc.yml`: any yarn on your PATH delegates to it. Corepack is not needed, and a corepack cache inside the repository breaks the install: see Yarn on a build agent in `apps/robusta-build/README.md`.
 
 ```bash
 yarn install

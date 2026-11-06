@@ -45,7 +45,8 @@ import headSvg  from '@robusta/pyramids-design-system/assets/crystal-tux-head.sv
 ```
 
 Available assets:
-- `crystal-tux.svg` / `crystal-tux.png` — full-body mascot
+- `crystal-tux.svg` — full-body mascot, a flat penguin with an antenna
+- `crystal-tux.png` — a second illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
 - `crystal-tux-head.svg` — head only, for inline annotations
 - `crystal-tux-waving.svg` — waving with "hi there!" speech bubble
 - `crystal-tux-thinking.svg` — thinking pose

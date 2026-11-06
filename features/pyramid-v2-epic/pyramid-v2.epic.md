@@ -1,6 +1,6 @@
 # Epic : Pyramid v2
 
-**Dernière mise à jour :** 2026-11-05
+**Dernière mise à jour :** 2026-11-06
 **Epic :** pyramid-v2-epic
 **Infix :** PYRAMID
 
@@ -39,7 +39,7 @@ SEO excellence runs across the whole epic rather than sitting in one deliverable
 - [seo-excellence](__done/seo-excellence/seo-excellence.story.md) — traduire l'intention SEO de l'epic en critères vérifiables : métadonnées, sitemap, données structurées, maillage interne. Submitted.
 - [design-system-responsive](__done/design-system-responsive/design-system-responsive.story.md) — faire tenir les sections du design system sur un téléphone et faire de ses calls to action de vrais liens, avec une échelle typographique fluide et une rampe d'erreur. Archivée.
 - [tanstack-start-migration](__done/tanstack-start-migration/tanstack-start-migration.story.md) — replacer `apps/robusta-build` sur TanStack Start et Netlify, sous les mêmes canonical URLs et sans redirection, prouvé par un déploiement Netlify. Archivée.
-- [netlify-deploy](__done/netlify-deploy/netlify-deploy.story.md) — relier le projet Netlify `robusta-build` au dépôt et le piloter en ligne de commande : clé et CLI, règle d'ignore qui suit le graphe des workspaces, retour arrière. Submitted.
+- [netlify-deploy](__done/netlify-deploy/netlify-deploy.story.md) — relier le projet Netlify `robusta-build` au dépôt et le piloter en ligne de commande : clé et CLI, règle d'ignore qui suit le graphe des workspaces, retour arrière. Archivée.
 - [default-locale-fr](__done/default-locale-fr/default-locale-fr.story.md) — faire de `fr` la Locale par défaut de robusta.build, sans marqueur dans l'URL, et de `en` la seule autre. Landed.
 - [multilingual-site](__done/multilingual-site/multilingual-site.story.md) — servir robusta.build en `en`, `fr` et `es`, chaque page sous le préfixe de sa Locale, après avoir fait de `pyramids-routing` et `pyramids-content` des packages du site. Landed.
 - [ts-import-extensions](__done/ts-import-extensions/ts-import-extensions.story.md) — écrire les imports locaux du site v2 et du design system à l'extension du fichier qu'ils désignent, `.ts` ou `.tsx`, sans changement de comportement. Landed.
@@ -50,7 +50,7 @@ SEO excellence runs across the whole epic rather than sitting in one deliverable
 - [go-live](__done/go-live/go-live.story.md) — ouvrir robusta.build à l'indexation sur la build de production seule : chaque page que seo-excellence déclare indexable s'ouvre, la racine gardant `noindex`. Submitted.
 - [rb-compound-positioning](__done/rb-compound-positioning/rb-compound-positioning.story.md) — refaire `documentation/geo-questions.md` autour de l'acheteur de RB Compound et ramener le schéma open source de la page copy à trois agents. Submitted.
 
-Les items d'À faire sans story le sont par choix : décisions du 2026-07-29, du 2026-10-06, du 2026-10-26 et du 2026-10-31 ci-dessous, celles de ts-import-extensions pour drop-compile-seams et design-system-lint, celle de seo-excellence pour webmaster-console, et celle de netlify-deploy pour rollback-rehearsal.
+Les items d'À faire sans story le sont par choix : décisions du 2026-07-29, du 2026-10-06, du 2026-10-26 et du 2026-10-31 ci-dessous, celle de seo-excellence pour webmaster-console, et celle de netlify-deploy pour rollback-rehearsal.
 
 ## Business Rules
 
@@ -118,14 +118,15 @@ Vérifiée le 2026-11-05, au submit de netlify-deploy : rien enregistré ni modi
   [modified: multilingual-site, ts-import-extensions,
              default-locale-at-root, blog-rolls,
              seo-excellence, go-live, netlify-deploy,
-             restore-v1-urls]
+             drop-compile-seams, restore-v1-urls]
       │
       └──library──→  module `@robusta/pyramids-design-system`
                      [modified: design-system-responsive,
                                 robusta-landing-page,
                                 multilingual-site,
                                 ts-import-extensions,
-                                drop-section-default-copy]
+                                drop-section-default-copy,
+                                design-system-lint]
                          ↑
                          └──library──  app `@robusta/build`
 ```
@@ -152,6 +153,7 @@ Client code : `yarn build:robusta` à la racine et le build Netlify.
 - seo-excellence, livré : `build` enchaîne `emit-site-files.mjs`, qui écrit `sitemap.xml` et `robots.txt` dans `dist/client`, puis `check-seo.mjs`, qui sort en 1, une ligne `{url}: {défaut}` par défaut, sur un titre ou une description absent ou répété dans sa Locale, une canonical URL absente du sitemap ou une entrée du sitemap qu'aucune page ne déclare, un lien interne cassé, un `alternate` sans lien retour, un nombre de `h1` autre que un, ou un `robots` qui diffère de `robotsOf`.
 - go-live, livré : `yarn build:robusta` lit `NETLIFY` et `CONTEXT`, figés au build par le `define` de Vite ; seuls `NETLIFY=true` et `CONTEXT=production` ensemble ouvrent les pages indexables, une build du CLI Netlify comprise dans le reste. `check-seo.mjs` écrit `indexing open` ou `indexing closed` ; codes de sortie inchangés.
 - netlify-deploy, livré le 2026-11-05 : sur une build hors production, `[build] ignore` de `netlify.toml` appelle `node apps/robusta-build/scripts/netlify-ignore.mjs @robusta/robusta-build`, qui lit `CACHED_COMMIT_REF` et `COMMIT_REF` ; exit 0, aucun commit de la plage ne touche le site, un module qu'il atteint par ses dépendances ou un fichier racine de l'installation, et Netlify saute la build ; exit 1 sinon, et sur une ref absente, inconnue, égale ou hors de l'historique de premier parent, ou une erreur. Une ligne `skip: <raison>` ou `build: <raison>`. La production construit toujours. Contrat dans la section Boundaries de la story · était : `git diff --quiet` sur une liste de chemins écrite à la main.
+- drop-compile-seams, livré le 2026-11-06 : `build` s'ouvre sur `check:types`, `tsc --noEmit` sur tout le site, qui sort en 1 sur une erreur de type ; les sept scripts de `scripts/` qui lisaient `.routing-dist` chargent les seams `.ts` par le type stripping de Node, d'où Node 22.18 au minimum · était : `compile:seams` compilait les seams vers `.routing-dist` par `tsconfig.routing.json`, seul contrôle de types de la build.
 
 ### library API of module `@robusta/pyramids-design-system` — modified
 
@@ -176,10 +178,11 @@ Depuis drop-section-default-copy, le 2026-11-04, le design system ne fournit auc
 
 ### CLI API of module `@robusta/pyramids-design-system` — modified
 
-Client code : `yarn workspace @robusta/pyramids-design-system run test`.
+Client code : `yarn workspace @robusta/pyramids-design-system run test` et `run lint`.
 
 - ts-import-extensions, livré : `test` sort en 1 quand `src/import-specifiers.spec.ts` trouve sous `src` un import local écrit en `.js`, sans extension ou nommant un fichier absent, avec fichier et ligne · était : aucun contrôle des imports.
 - drop-section-default-copy, livré : `test` sort en 1 quand `src/page-copy.spec.tsx` trouve un texte lisible non passé dans le rendu d'un export de `src/index.ts`, ou un export sans rendu, qu'il nomme · était : aucun contrôle de la page copy.
+- design-system-lint, livré le 2026-11-06 : `lint` lance eslint 8.57.0, déclaré dans les devDependencies du package, et sort en 0 avec 6 avertissements hérités de la config Next racine · était : exit 127, eslint absent.
 
 ## Fait
 
@@ -212,19 +215,19 @@ Client code : `yarn workspace @robusta/pyramids-design-system run test`.
 - 2026-11-05 — webmaster-console : Nicolas inscrit robusta.build dans Google Search Console, propriété déjà vérifiée par un enregistrement TXT Google chez Hover, et y soumet le sitemap ; la console découvre 33 pages. Solde la dernière phrase d'AC-SEOEXCELLENCE-6 et AC-GOLIVE-4. La production de www.robusta.build, vérifiée le même jour, sert `/`, `/articles`, `/fr/articles`, une Category et un article en `index, follow`, chacun sous sa canonical URL ; `robots.txt` autorise `/` et nomme le sitemap de 33 URL, `/en` répond 301 vers `/`, et `robusta-build.netlify.app/*` 301 vers www (AC-GOLIVE-7). B2 se vide. Hors dépôt, aucun commit. Pas de story — décision du 2026-11-04 de seo-excellence.
 - 2026-11-05 — [rb-compound-positioning](__done/rb-compound-positioning/rb-compound-positioning.story.md) : `documentation/geo-questions.md` vise l'acheteur de RB Compound, tel que le dit la page copy. 14 entrées : 12 RB Compound, six questions en anglais puis en français, les cinq types, toutes `aucun — à écrire`, la question de guide tests-first sous Claude Code attendant extract-compound-plugin ; 2 PME, le brouillon agence-web et Gmail, couverte par `privacy/quitter-gmail.md`, à auditer. 8 articles publiés sans question, Contrôle mensuel vide, ni Toulouse ni Haute-Garonne. Le schéma open source de la landing page compte trois agents, epicman, storyman et designman, dans les trois Locales, l'étape 5 `code` tenue par l'agent de code du lecteur. 677 tests du site, lint vert, 33 pages. Validée par la requête `boss atw pyramid-v2-epic batch B3` de Nicolas. Commit `cd83f06`. Détail dans la story et son design file.
 - 2026-11-05 — [netlify-deploy](__done/netlify-deploy/netlify-deploy.story.md) : les builds Netlify hors production de robusta.build suivent le graphe des modules de `@robusta/robusta-build` au lieu d'une liste de chemins écrite à la main, où manquait `.yarn/releases`. `apps/robusta-build/scripts/netlify-ignore.mjs`, appelé par `[build] ignore`, ne lit que git et construit au moindre doute ; la production construit toujours. La section Deployment de `apps/robusta-build/README.md` gagne le retour arrière de production, `git merge --no-ff main` et la relance d'un aperçu périmé. 716 tests du site (39 pour la règle), lint vert, `yarn build:robusta` vert. Reste la répétition du retour arrière, rollback-rehearsal en B4. Validée par la requête `boss atw netlify-deploy` de Nicolas. Commit `e44ac86`. Détail dans la story et son design file.
+- 2026-11-06 — drop-compile-seams : `compile:seams`, `tsconfig.routing.json` et `.routing-dist` disparaissent de `apps/robusta-build`. Sept scripts de `scripts/`, et non cinq comme l'annonçait l'item, chargent les seams `.ts` par le type stripping de Node, ce qui relève le plancher Node de 22.12 à 22.18 ; `check:types` ouvre désormais la build. 716 tests du site, 209 du design system, lint vert, `build:deps` et `build:robusta` verts, v1 map générée inchangée. Validée par Nicolas. Pas de commit à l'écriture : le working tree est commité juste après. Pas de story — décision du 2026-10-31 de ts-import-extensions.
+- 2026-11-06 — design-system-lint : eslint 8.57.0 entre dans les devDependencies de `@robusta/pyramids-design-system`, dont le `lint` sort en 0 avec 6 avertissements hérités de la config Next racine. Validée par Nicolas, même commit à venir. Pas de story — décision du 2026-10-31 de ts-import-extensions.
+- 2026-11-06 — validate-articles-nul-byte : l'octet NUL littéral de `validate-articles.ts` devient `\u0000`, chaîne d'exécution inchangée ; git en montre de nouveau le diff. Validée par Nicolas, même commit à venir. Pas de story — décision du 2026-10-31.
+- 2026-11-06 — dedupe-crystal-tux, prémisse fausse : `crystal-tux.png`, un pingouin détaillé en sweat Robusta Build avec une note « debugging mode », et `crystal-tux.svg`, un pingouin plat à antenne, sont deux illustrations distinctes. Les deux restent et la documentation les décrit comme deux illustrations. L'item quitte À faire sans livraison. Pas de story — décision du 2026-11-06 ci-dessous.
 
 ## À faire
 
 * Batch B3 — RB Compound, pour la page copy de robusta.build seulement (décision du 2026-10-31). rb-compound-positioning livrée le 2026-11-05 ; reste extract-compound-plugin.
     - extract-compound-plugin — extraire la version open source de Compound, epicman, storyman et designman, en plugin publié, présenté à la manière de Superpowers. Relève d'un autre dépôt. Tant qu'il ne l'est pas, la landing page ne lie aucun dépôt ; le publier ajoute ce lien à sa page copy et débloque les deux entrées de la question de guide tests-first de `documentation/geo-questions.md`. Non prioritaire : « on fera ça plus tard ». (pas de story — décision du 2026-10-26)
 
-* Batch B4 — Nettoyage : sans dépendance, faisable à tout moment. Des corvées sans story ; seul design-system-lint touche le lockfile.
-    - drop-compile-seams — retirer `compile:seams` et `.routing-dist` de `apps/robusta-build` : les scripts `.mjs` de `scripts/` chargeraient les seams `.ts` directement par le type stripping de Node 22.18, possible depuis que les imports du site nomment leur `.ts`. À vérifier avant : la syntaxe que le type stripping refuse (enums, parameter properties, imports de types sans `type`) et les cinq scripts qui lisent `.routing-dist`. (pas de story — décision du 2026-10-31 de ts-import-extensions, OQ-TSIMPORTS-1)
-    - design-system-lint — le script `lint` de `@robusta/pyramids-design-system` sort en 127, eslint absent de ses devDependencies. Défaut antérieur à ts-import-extensions, relevé à son submit le 2026-10-31. (pas de story — décision du 2026-10-31 de ts-import-extensions)
-    - validate-articles-nul-byte — la ligne 48 de `apps/robusta-build/src/routing/url-scheme/validate-articles.ts` porte un octet NUL littéral, séparateur de sa clé d'adresse : git traite le fichier comme binaire et n'en montre aucun diff. Même défaut que celui de `read-corpus.ts`, que multilingual-site a corrigé par l'échappement `\u0000`, même chaîne. (pas de story — décision du 2026-10-31)
+* Batch B4 — Nettoyage : sans dépendance, faisable à tout moment. Des corvées sans story ; drop-compile-seams, design-system-lint, validate-articles-nul-byte et dedupe-crystal-tux sortis le 2026-11-06.
     - font-stack-readme — le README du design system nommait Caveat / Kalam / Architects Daughter / JetBrains Mono là où `colors_and_type.css` importe IBM Plex Sans, IBM Plex Mono et Caveat ; le README cède, pas le CSS, décision du 2026-07-29. (implémenté : le README nomme les trois polices du CSS depuis `75d7fff` ; en attente de validation)
     - vectorize-wordmark — `robusta-build-wordmark.png` fait 1603×312 ; une version vectorielle passe à l'échelle et pèse moins. (flag F2)
-    - dedupe-crystal-tux — `crystal-tux.png` et `crystal-tux.svg` sont deux fois la même illustration ; le SVG devrait faire foi. (flag F3)
     - scribe-intel-does-not-compile — `packages/scribe-intel` et `services/scribe-intel-collector` échouent à `tsc` sur des défauts de source antérieurs à unblock-build ; tous deux s'installent et restent hors du green set, si bien que rien n'en dépend. scribe-intel est deprecated depuis le 2026-10-31 : l'item ne répare plus sa compilation, et ce que devient le package n'est pas décidé. (pas de story — décision du 2026-10-31)
     - rollback-rehearsal — Nicolas répète une fois sur www.robusta.build le retour arrière que décrit la section Deployment de `apps/robusta-build/README.md` : publier le déploiement précédent, verrouiller la publication automatique, puis republier le déploiement courant et déverrouiller. Hors dépôt, aucun commit. (pas de story — décision du 2026-11-05 de netlify-deploy)
 
@@ -370,6 +373,9 @@ Client code : `yarn workspace @robusta/pyramids-design-system run test`.
 - 2026-11-05 — Le schéma open source de la landing page compte trois agents, epicman, storyman et designman, dans les trois Locales, et son étape 5 `code` est tenue par l'agent de code du lecteur, sans agent Compound nommé. Pourquoi : la décision du 2026-10-26 fait foi, OQ-RBCOMPOUND-8 tranchée par Nicolas. Impact : corrige le schéma à quatre agents, tddman compris, livré par multilingual-site. Réf : R-RBCOMPOUND-101 à 104, `cd83f06`.
 - 2026-11-05 — Une build Netlify hors production de robusta.build ne se lance que si un commit de `CACHED_COMMIT_REF..COMMIT_REF` touche le site, un module qu'il atteint par ses quatre champs de dépendances ou un fichier racine de l'installation ; une ref douteuse ou une erreur fait construire, la production construit toujours. La règle ne lit que git, sans API Netlify ni jeton, et `yarn build:robusta` garde `build:deps`. Pourquoi : la liste écrite à la main oubliait déjà `.yarn/releases` ; `CACHED_COMMIT_REF` ne permet pas de juger une production (OQ-NETLIFY-3) ; l'API demanderait un jeton dans la build (Gap-NETLIFY-1 du design, `lgtm (boss atw)`). Impact : un module ajouté au site est surveillé sans retouche ; un commit sur les seuls modules de base est sauté ; exception acceptée, une branche qui prend `main` en fast-forward puis un commit sans code garde un aperçu périmé, d'où `git merge --no-ff main`. Réf : R-NETLIFY-02 à 06 et 21, `e44ac86`.
 - 2026-11-05 — Le retour arrière de production se fait au dashboard Netlify, sans rebuild : publier le déploiement précédent, verrouiller la publication automatique, puis republier le déploiement corrigé et déverrouiller. Il est livré par la section Deployment de `apps/robusta-build/README.md` seule ; la répétition sur www.robusta.build reste à Nicolas. Pourquoi : une répétition change la production (OQ-NETLIFY-3 du brainstorm, `lgtm (boss atw)`). Impact : revenir à un déploiement d'avant go-live referme l'indexation ; au-delà de 30 jours, le retour passe par un revert sur `main`. Réf : AC-NETLIFY-5, R-NETLIFY-41, `e44ac86`.
+- 2026-11-06 — La build de `apps/robusta-build` s'ouvre sur `check:types`, `tsc --noEmit` sur tout le site. Pourquoi : décision de Nicolas ; `compile:seams`, que drop-compile-seams retire, était le seul contrôle de types de la build. Impact : une erreur de type n'importe où sous le site fait échouer `yarn build:robusta`, et non plus dans les seules seams compilées.
+- 2026-11-06 — Le plancher Node du dépôt passe de 22.12 à 22.18 : sept scripts `.mjs` de `apps/robusta-build/scripts/` chargent les seams `.ts` par le type stripping de Node, sans étape de compilation. Pourquoi : décision du 2026-10-31 de ts-import-extensions (OQ-TSIMPORTS-1), réalisée par drop-compile-seams, possible depuis que les imports du site nomment leur `.ts`. Impact : toute machine et tout agent qui construit le site tourne en Node 22.18 ou plus ; une seam ne porte aucune syntaxe que le type stripping refuse, enums, parameter properties ou import de type sans `type`.
+- 2026-11-06 — `crystal-tux.png` et `crystal-tux.svg` restent tous deux : ce sont deux illustrations distinctes, pas deux formats d'une même. Pourquoi : décision de Nicolas ; la prémisse du flag F3 était fausse. Impact : dedupe-crystal-tux quitte À faire sans livraison.
 
 ## Open Questions & Gaps
 

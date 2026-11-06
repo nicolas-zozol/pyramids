@@ -1,6 +1,6 @@
 # Architecture: design-system
 
-**Last updated:** 2026-11-04
+**Last updated:** 2026-11-06
 **Kind:** module
 
 ## Parent
@@ -69,11 +69,12 @@ Feuilles de style, sous-chemins de `exports`, chargées une fois par site dans c
 - `colors_and_type.css` — papier et encre ; les rampes `--brand-primary`, `--brand-secondary`, `--brand-accent` et `--brand-error`, chacune en base, `-soft` et `-deep` ; les familles `--font-sans`, `--font-script` et `--font-mono` ; l'échelle `--t-*`, dix pas en `clamp()` de 320 à 1536 px ; `--lh-*`, `--sp-1` à `--sp-9`, `--r-*`, `--measure` à 68ch ; les surligneurs `.highlight-*`. Chaque famille lit `--font-ibm-plex-sans`, `--font-ibm-plex-mono` ou `--font-caveat`, puis le nom de la face, puis une pile système ; le site robusta ne pose aucune de ces propriétés et auto-héberge les faces sous ces noms.
 - `sketch.css` — les classes `.sk-*` ; la mise en page des sections sous `.sk-<section>`, `.sk-<section>__<part>` et `--<modifier>`, en spécificité d'une classe et sans `!important`, qu'un sélecteur du site portant une classe de plus surcharge quel que soit l'ordre de chargement ; 40, 48, 64, 80 et 96rem, chacune dans un seul `@media (min-width)`, la base étant la mise en page étroite.
 
-Assets, sous `./assets/` : `crystal-tux.svg`, `crystal-tux.png`, `crystal-tux-head.svg`, `crystal-tux-waving.svg`, `crystal-tux-thinking.svg`, `robusta-build-wordmark.png`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
+Assets, sous `./assets/` : `crystal-tux.svg` et `crystal-tux.png`, deux illustrations distinctes sous le même nom, `crystal-tux-head.svg`, `crystal-tux-waving.svg`, `crystal-tux-thinking.svg`, `robusta-build-wordmark.png`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
 
 ## Dependencies
 
 - Depends on : `react` seul, en peer `^19.1.1` ; aucun autre module du dépôt, aucune dépendance runtime.
 - Used by : l'app `@robusta/robusta-build` — `Hero`, `FlowDiagram`, `PrinciplesList`, `CTA`, `NotesPreview` et `NotePost` dans `landing`, `SiteHeader`, `NavLink` et `SiteFooter` dans `chrome`, `SkLinkProps` dans `components`, dont `SiteLink` est le composant de lien du site, `NotePost` dans `page-data`, `Principle` et `FlowStep` dans la Site configuration, `SkTag` dans `article`, les deux feuilles de style liées par `src/routes/__root.tsx`, le wordmark, `crystal-tux.svg` et `crystal-tux-waving.svg` dans `design-system` ; l'app `@robusta/build`, par sa page `_design-test` seule. `apps/dakar` ne l'importe pas.
+- Lint : le script `lint`, eslint sur `src`, avec eslint 8.57.0 dans ses devDependencies, la version de la racine.
 - Build : `tsc` compile `src/` vers `dist/`, troisième étape de `yarn build:deps`, entre `pyramids-themes` et `pyramids-layouts` ; `yarn w:design-system` ne surveille que le TypeScript. Un import local de `src/` nomme le `.ts` ou le `.tsx` qu'il importe ; `tsc` le réécrit en `.js` dans le JS émis (`rewriteRelativeImportExtensions`), les `.d.ts` de `dist/` gardent l'extension de la source. Les feuilles de style et les assets sont servis depuis la racine du module par la map `exports`, sans copie : un serveur de dev voit une modification CSS sans rebuild.
 - Tests : 209 tests `node:test` dans quatorze specs à côté des sources, par `yarn workspace @robusta/pyramids-design-system run test`, qui les compile avec `tsconfig.test.json` vers `.test-build/` puis lance `node --test`. Les specs rendent les composants en arbre d'éléments avec `react` seul et lisent les feuilles de style livrées ; `src/package-contract.spec.tsx` échoue sur un composant exporté en plus, une taille de police inline hors glyphes du lockup, une directive, une lecture du viewport, un import de router ou un contexte React, un composant qui lit `--brand-error`, ou une dépendance autre que `react` en peer ; `src/page-copy.spec.tsx`, sur un export de `src/index.ts` sans rendu dans le spec, ou qui rend un texte lisible que le spec ne lui passe pas, la marque exceptée, en nommant l'export et le texte ; `src/import-specifiers.spec.ts`, sur un specifier relatif qui ne nomme pas le `.ts` ou le `.tsx` présent, avec le fichier et la ligne.

@@ -1,6 +1,6 @@
 # Architecture: corpus-reader
 
-**Last updated:** 2026-11-04
+**Last updated:** 2026-11-06
 **Kind:** package
 
 ## Parent
@@ -15,7 +15,7 @@ Le package `corpus-reader`, dans le package `content` de l'app `@robusta/robusta
 
 ### library API of package `corpus-reader` in package `content`
 
-Client code : `content` (`corpus.ts` pour le type `CorpusSpec`, `article-index.ts`), `scripts/copy-article-images.mjs` et `scripts/check-translations.mjs`, sur sa copie compilée sous `.routing-dist`.
+Client code : `content` (`corpus.ts` pour le type `CorpusSpec`, `article-index.ts`), `scripts/copy-article-images.mjs` et `scripts/check-translations.mjs`, qui chargent ses sources `.ts` par le type stripping de Node.
 
 ```ts
 type CorpusSpec;          // root, localeFrom, exclude?, assets?
@@ -68,4 +68,4 @@ function describeTranslationNotice(notice: TranslationNotice): string;
 
 - Depends on : `gray-matter` (frontmatter et excerpt), `remark` et `remark-html` (le corps), `unist-util-visit` (les références d'image d'un corps), `slugify` épinglé à 1.6.6 (le slug figé), `node:crypto` (l'empreinte), `node:fs` et `node:path`. Ni React, ni framework. Les versions sont déclarées dans le manifeste de l'app.
 - Used by : `content`, et les scripts `copy-article-images.mjs` et `check-translations.mjs`.
-- Build : compilé avec le site par Vite, pour le prérendu, et par `compile:seams` sous `.routing-dist` pour les scripts.
+- Build : compilé avec le site par Vite, pour le prérendu ; les scripts lisent ses sources `.ts` sans compilation.

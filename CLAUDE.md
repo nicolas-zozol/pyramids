@@ -34,7 +34,7 @@ Chaque site déclare sa configuration dans `src/seopyramids.config.ts`.
 
 ## Commandes
 
-Depuis la racine. Node 22.12 ou plus (`.nvmrc`) et yarn 4.17.1, dont le binaire est commité (`yarnPath` dans `.yarnrc.yml`). Corepack est inutile, et un cache corepack dans le dépôt casse l'install : voir « Yarn on a build agent » dans `apps/robusta-build/README.md`.
+Depuis la racine. Node 22.18 ou plus (`.nvmrc`) et yarn 4.17.1, dont le binaire est commité (`yarnPath` dans `.yarnrc.yml`). Corepack est inutile, et un cache corepack dans le dépôt casse l'install : voir « Yarn on a build agent » dans `apps/robusta-build/README.md`.
 
 ```bash
 yarn install

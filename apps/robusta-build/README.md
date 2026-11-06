@@ -113,7 +113,7 @@ Nothing serves the mapping and nothing in the build reads it. A v1 address, any 
 
 ## SEO
 
-`src/seo` holds what a page declares of itself to a search engine: `pageHead`, the only producer of the SEO tags of a head, the indexability rule, the structured data, the sitemap and `robots.txt`. It imports no React and no value of `src/seopyramids.config.ts`, and the build scripts read it from `.routing-dist`. The landing, listing and article routes get their head from `landingHead`, `listingHead` and `articleHead`, which call `pageHead`. The root route sets the default head: the `head` title and description of the page copy and `robots` `noindex, nofollow`.
+`src/seo` holds what a page declares of itself to a search engine: `pageHead`, the only producer of the SEO tags of a head, the indexability rule, the structured data, the sitemap and `robots.txt`. It imports no React and no value of `src/seopyramids.config.ts`, and the build scripts import it from `src`. The landing, listing and article routes get their head from `landingHead`, `listingHead` and `articleHead`, which call `pageHead`. The root route sets the default head: the `head` title and description of the page copy and `robots` `noindex, nofollow`.
 
 An indexable page declares, in this order:
 
@@ -187,15 +187,17 @@ yarn dev:robusta       # the site's dev
 
 The site's own scripts:
 
-- `build` — `check:source`, `compile:seams`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`, `scripts/emit-site-files.mjs` and `scripts/check-seo.mjs`.
-- `dev` — `compile:seams`, `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the page-data functions run on each call and read the corpus. `netlify.toml` does not apply there: `/en` and `/en/…` answer the not-found page instead of a 301.
+- `build` — `check:types`, `check:source`, `check:translations`, `emit:v1-map`, `copy:assets`, `vite build` with the prerender, then `scripts/check-route-table.mjs`, `scripts/emit-site-files.mjs` and `scripts/check-seo.mjs`.
+- `dev` — `emit:v1-map`, `copy:assets`, then `vite dev`. On the dev server the page-data functions run on each call and read the corpus. `netlify.toml` does not apply there: `/en` and `/en/…` answer the not-found page instead of a 301.
+- `check:types` — `tsc -p tsconfig.json --noEmit`.
 - `check:source` — fails on a `'use client'` or `'use server'` directive, or on a local import, `vi.mock` paths included, that does not name its `.ts` or `.tsx` file exactly, anywhere under `src`, the generated route tree included. Each offence names the file, the line and, when the file exists, the expected specifier. An asset or a `.mjs` keeps its extension.
-- `compile:seams` — `tsc -p tsconfig.routing.json` compiles `src/content`, `src/seo` and the routing files the plain-Node scripts import to `.routing-dist/`, git-ignored.
 - `check:translations` — prints the translation notices, see Articles.
 - `emit:v1-map` — writes `src/routing/v1-url-map.generated.json`.
 - `copy:assets` — rewrites `public/article-images/`.
 - `test` — `vitest run`.
 - `lint` — eslint over `src`. No build runs it.
+
+The `.mjs` scripts of `scripts/` import the `.ts` files of `src` directly, through Node's type stripping, which needs Node 22.18 or later. A file they reach uses only syntax Node can strip: no `enum`, no parameter property, and `import type` for a type.
 
 This site is part of the green set: `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta-v1`, `yarn build:robusta` must all complete from a clean checkout (BR-PYRAMID-5).
 
