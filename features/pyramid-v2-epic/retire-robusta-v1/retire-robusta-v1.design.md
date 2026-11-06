@@ -26,7 +26,7 @@ Client code : le mainteneur, les agents, Netlify (`yarn build:robusta`).
 
 Fichiers touchés, internal code :
 
-- `apps/robusta/` — supprimé en entier, 731 fichiers suivis et les restes non suivis, sans copie : corpus, 18 brouillons, CV (OQ-RETIREV1-1 de la story, sur sa Proposition).
+- `apps/robusta/` — supprimé en entier, 731 fichiers suivis et les restes non suivis, sans copie : corpus, 18 brouillons, CV (brouillons : décidé le 2026-11-06, voir la [story](retire-robusta-v1.story.md)).
 - `package.json`, `yarn.lock` — trois scripts et `concurrently` en moins ; lockfile régénéré par yarn, jamais édité à la main.
 - `.yarnrc.yml` — le bloc `packageExtensions` reste à l'octet ; son commentaire nomme le Vite 5 que hisse `services/scribe-intel-collector` au lieu du Vite 6 de `apps/robusta`.
 - `apps/robusta-build/src/content/corpus-freeze.spec.ts` — supprimé.
@@ -49,7 +49,7 @@ Hors du diff : tout `packages/` sauf ses `*.archi.md`, les manifestes de `apps/d
 - `INSTALL_FILES` de `netlify-ignore.mjs` contient `package.json` et `yarn.lock` : le commit de livraison donne `build` sur un branch deploy. Un changement sous `apps/dakar` seul reste `skip`.
 - `emit:v1-map` ne lit rien sous `apps/robusta` : `_redirects` et `v1-url-map.generated.json` sortent de la v1 map du site v2. Comparaison à l'octet contre une build de 6c57bc3.
 - 6c57bc3 est la tête de `main` et d'`origin/main` : les références `6c57bc3:apps/robusta/…` ne dépendent d'aucune branche de travail.
-- Le projet Vercel de `apps/robusta` est supprimé ou détaché par Nicolas avant le merge sur `main` (OQ-RETIREV1-4 du brainstorm, sur sa Proposition). Hors dépôt, aucun R- ne le porte.
+- Le projet Vercel de `apps/robusta` est débranché ou supprimé depuis le 2026-11-06, avant le merge sur `main` : aucun push ne lance de build sur un dossier absent. Celui de `apps/dakar` reste branché. Hors dépôt, aucun R- ne le porte.
 
 ## Requirements
 
@@ -83,5 +83,5 @@ Edge cases to test:
 
 ## Dependencies
 
-- Depends on : restore-v1-urls et retire-robusta-design, livrées le 2026-11-06. Hors dépôt : le projet Vercel de la v1 supprimé ou détaché avant le merge sur `main`.
+- Depends on : restore-v1-urls et retire-robusta-design, livrées le 2026-11-06. Hors dépôt, fait le 2026-11-06 : le projet Vercel de la v1 débranché ou supprimé.
 - Blocks : la clôture de l'epic, dont c'est le dernier item de B5.

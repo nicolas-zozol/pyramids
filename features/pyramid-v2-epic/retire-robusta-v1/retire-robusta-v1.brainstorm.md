@@ -223,11 +223,6 @@ Les modules `pyramids-layouts`, `-links`, `-ctas`, `-themes` et `-design-system`
 
 ## Open Questions & Gaps
 
-- OQ-RETIREV1-4 : Le projet Vercel de la v1 : le supprimer avant le merge sur `main`, pour qu'aucun push ne lance une build sur un dossier absent, ou après, comme prévu ?
-- Proposition : le supprimer, ou le détacher du dépôt, avant le merge ; celui de dakar ne bouge pas.
-- Rationale : www.robusta.build pointe sur Netlify depuis le 2026-11-05 ; seul Nicolas sait si ce projet existe encore et sert une autre adresse.
-- Resolution:
-
 ---
 
 ## Next Steps

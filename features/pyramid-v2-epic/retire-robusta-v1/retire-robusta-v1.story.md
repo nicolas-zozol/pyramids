@@ -17,11 +17,11 @@ Le corpus `apps/robusta/content/blog` a été copié et non déplacé par migrat
 
 ## Ce qui part, ce qui change, ce qui reste
 
-- Part : tout `apps/robusta`, sur git et sur le disque, avec son entrée de `yarn.lock` et les dépendances qu'il était seul à tirer. Le corpus, les 18 brouillons de `content/blog-unpublished` et le CV de `public/nicolas` partent sans copie. Partent aussi les scripts racine `build:robusta-v1`, `dev:robusta-v1` et `dev:dev`, avec `concurrently`, son seul utilisateur ; les watchers `w:*` restent lançables un par un. Côté tests : `corpus-freeze.spec.ts` ; dans `article-slug.spec.ts`, la boucle qui lit l'arbre v1, la table des slugs restant le contrat ; le cas « the v1 site » du dépôt simulé de `netlify-ignore.spec.ts` et ses fichiers `apps/robusta/*`.
+- Part : tout `apps/robusta`, sur git et sur le disque, avec son entrée de `yarn.lock` et les dépendances qu'il était seul à tirer. Le corpus, les 18 brouillons de `content/blog-unpublished` et le CV de `public/nicolas` partent sans copie (décidé le 2026-11-06 pour les brouillons : rien ne les lit, et un brouillon repris en v2 se réécrit au schéma v2). Partent aussi les scripts racine `build:robusta-v1`, `dev:robusta-v1` et `dev:dev`, avec `concurrently`, son seul utilisateur ; les watchers `w:*` restent lançables un par un. Côté tests : `corpus-freeze.spec.ts` ; dans `article-slug.spec.ts`, la boucle qui lit l'arbre v1, la table des slugs restant le contrat ; le cas « the v1 site » du dépôt simulé de `netlify-ignore.spec.ts` et ses fichiers `apps/robusta/*`.
 - Change : les commentaires du code v2 qui nomment un fichier v1 (`v1-url-map.ts`, `article-slug.ts`, `migrated-corpus.spec.ts`) le citent au commit 6c57bc3. Sans la v1, la racine hisse le Vite 5 de `services/scribe-intel-collector` au lieu du Vite 6 de la v1 : le `packageExtensions` de `.yarnrc.yml` reste, seul son commentaire, qui nomme `apps/robusta`, est réécrit.
 - Reste : `build:deps` construit toujours les trois packages DaisyUI pour dakar ; la v1 map et le `_redirects`, inchangés. Les manifestes de `apps/dakar` ne bougent pas : ses imports non déclarés de `remark`, `remark-html` et `gray-matter` restent résolus par les copies que déclare le site v2, et une casse future se verrait dans le green set.
 - Relisible : tout le contenu supprimé, par `git show 6c57bc3:apps/robusta/<chemin>`, 6c57bc3 étant la tête de `main` au 2026-11-06. Le routing v1 du README v1 ne déménage pas : la section « The v1 mapping » de `apps/robusta-build/README.md` décrit déjà l'espace d'adresses v1, et pointe vers ce commit pour le reste.
-- Hors dépôt, pour Nicolas : supprimer ou détacher du dépôt le projet Vercel de `apps/robusta` s'il existe encore, avant le merge sur `main`, pour qu'aucun push ne lance une build sur un dossier absent (`OQ-RETIREV1-4` dans `retire-robusta-v1.brainstorm.md`). Le projet Vercel de `apps/dakar` ne change pas. Aucun AC ne porte cette action.
+- Hors dépôt, fait : Nicolas a débranché ou supprimé le projet Vercel de `apps/robusta` le 2026-11-06, avant le merge sur `main` ; aucun push ne lance donc de build sur un dossier absent. Le projet Vercel de `apps/dakar` reste branché. Aucun AC ne porte cette action.
 
 ## Acceptance Criteria
 
@@ -41,13 +41,6 @@ Le corpus `apps/robusta/content/blog` a été copié et non déplacé par migrat
 - Green set : `yarn install`, `yarn build:deps`, `yarn build:dakar`, `yarn build:robusta`.
 
 Aucune API de module ne change : `pyramids-layouts`, `-links`, `-ctas`, `-themes` et `-design-system` perdent un client, et rien ne dépendait de l'app `@robusta/build`.
-
-## Open Questions & Gaps
-
-- OQ-RETIREV1-1 : Les 18 brouillons d'articles jamais publiés de la v1 : les supprimer sans copie, ou les garder dans `documentation/` pour les publier un jour en v2 ?
-- Proposition : les supprimer sans copie ; ils restent relisibles par `git show 6c57bc3:apps/robusta/content/blog-unpublished/<chemin>`.
-- Rationale : rien ne les lit, ils pèsent 7 Mo avec leurs images, et un brouillon repris en v2 se réécrit au schéma v2 de toute façon.
-- Resolution:
 
 ## Documentation updates
 
