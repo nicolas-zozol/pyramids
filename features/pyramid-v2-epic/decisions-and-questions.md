@@ -277,3 +277,13 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Double saut depuis `robusta-build.netlify.app` : constatable en production seulement, après merge (R-RESTOREV1-62, à `storyman done`).
 - `storyman submit` : 5 étapes sur 5. docman (README : « Commands » et « Deployment »), archiman (`robusta-build.archi.md`, en-tête de `scheme.ts`, `archiman root`), design IMPLEMENTED, story SUBMITTED (AC-RESTOREV1-2 et 5 sans le repli 404, réglé par le draft deploy), item 8 retiré de ROADMAP.md, epicman : restore-v1-urls en Fait, liée sous « Stories de l'epic ». Commit de clôture exécuté par boss.
 - Laissés à Nicolas : termes UL « V1 map » et « Gone » proposés par docman, non écrits ; en-tête de `emit-v1-map.mjs` sans ligne Design: et `V1_RAW_MARKDOWN_URLS` sans commentaire, relevés par archiman, antérieurs à la story.
+
+## D32 : retire-robusta-design, `boss new story retire-robusta-design until design`
+
+- Requête : `boss new story retire-robusta-design until design`, branche `epic/robusta-v2`, mode rloq. Nicolas l'a demandée comme `boss prepare retire-robusta-design` ; la story n'existait pas, prepare l'aurait refusée.
+- Arrêt retenu : celui de prepare, comme en D30, design approuvé par boss si aucune entrée `ask` n'est en attente, sinon DRAFT. Confidence: high.
+- Lock : non évalué, aucun code dans ce run.
+- Story : storyman, depuis la ligne « story à écrire » de B5. OQ-RETIREDESIGN-1 `ask` (tout supprimer ou garder le brief `prompt.md`), gardée en attente ; OQ-RETIREDESIGN-2 signée `lgtm (storyman)` (la fixture de `netlify-ignore.spec.ts` passe sur `apps/intel-demo`), ne contredit aucun AC. Commit `6571829`.
+- Brainstorm : bsman, aucune entrée. AC-3 cite d58e879, déjà sur `main` ; AC-4 découpé en trois AC testables. Commit `1c4aebb`. `storyman update avec brainstorm` : AC-RETIREDESIGN-1 à 6, OQ-RETIREDESIGN-2 pliée. Commit `45a0bf0`.
+- Design : designman, aucune entrée ; fold sans objet, le design ne porte aucune Resolution. Contrôle : AC-RETIREDESIGN-1 à 6 cités mot pour mot, `## Boundaries` rempli.
+- Conséquence rloq : OQ-RETIREDESIGN-1 en attente, le design reste DRAFT. À la réponse de Nicolas, `boss retire-robusta-design` reprend en Phase 5.
