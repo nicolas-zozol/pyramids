@@ -26,7 +26,6 @@
   },
   "workspaces": [
     "apps/*",
-    "services/*",
     "packages/*"
   ],
   "devDependencies": {
