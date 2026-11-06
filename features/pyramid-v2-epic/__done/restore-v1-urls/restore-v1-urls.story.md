@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** restore-v1-urls
 **Infix :** RESTOREV1
-**Status :** SUBMITTED (2026-11-06, commit 467beaa)
+**Status :** DONE (2026-11-06, commit 624f3cc sur main)
 
 ## Story
 
@@ -87,7 +87,7 @@ lancé par `yarn build`, après emit-site-files.mjs, avant check-seo.mjs
 - 2026-11-06 — Rattrapage de v1, pas une règle du site : aucune BR, un article v2 renommé change d'URL sans redirection (OQ-RESTOREV1-2). Pourquoi : personne n'a demandé de redirection à chaque renommage.
 - 2026-11-06 — La ligne image de la map se scinde en `/learn/images/:file` et `/learn/:category/s/images/:file` : 82 → 83 lignes. Pourquoi : Netlify n'accepte pas de joker au milieu d'un chemin.
 - 2026-11-06 — Le 410 est servi par Netlify Free, constaté sur le draft deploy `6aedc75fdb5c4d20e5c56dd6` (OQ-RESTOREV1-3) : le repli en 404 n'a pas servi. Pourquoi : Netlify ne documente pas le 410 pour une règle statique.
-- 2026-11-06 — R-RESTOREV1-62 en attente, pas en échec : le double saut depuis `robusta-build.netlify.app` ne se constate qu'en production, après le merge sur `main`, à `storyman done`. Aujourd'hui la production répond 301 vers www puis 404, comme attendu avant le merge.
+- 2026-11-06 — R-RESTOREV1-62 constaté en production, sur le deploy Netlify de 624f3cc : `https://robusta-build.netlify.app/learn/blockchain/page/2` fait deux redirections et aboutit en 200 sur `https://www.robusta.build/articles/c/blockchain`. Même passe : `/learn/blockchain/page/2`, `/learn/fr/blockchain`, `/learn/blockchain/s/ledger-versus-metamask.md`, `/learn/tag/DeFi` et `/en` en 301 vers leur page, `/learn/javascript/s/es6-7.md` en 410, `/learn/page/2` en 404, `/articles` en 200.
 
 ## Documentation updates
 

@@ -25,7 +25,7 @@ import type { ArticleIndexEntry } from '../content/article-index.ts';
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
  * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-81
- * Design: features/pyramid-v2-epic/restore-v1-urls/restore-v1-urls.design.md
+ * Design: features/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
  * Requirements: R-RESTOREV1-41, R-RESTOREV1-42, R-RESTOREV1-43
  */
 

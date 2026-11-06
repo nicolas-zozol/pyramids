@@ -4,7 +4,7 @@
 **Feature:** restore-v1-urls
 **Infix:** RESTOREV1
 **Status:** IMPLEMENTED (2026-11-06, commit 467beaa)
-**Sources:** [story](restore-v1-urls.story.md), [brainstorm](restore-v1-urls.brainstorm.md), [epic](../pyramid-v2.epic.md), [seo-url-scheme](../__done/seo-url-scheme/seo-url-scheme.design.md), [tanstack-start-migration](../__done/tanstack-start-migration/tanstack-start-migration.design.md)
+**Sources:** [story](restore-v1-urls.story.md), [brainstorm](restore-v1-urls.brainstorm.md), [epic](../../pyramid-v2.epic.md), [seo-url-scheme](../seo-url-scheme/seo-url-scheme.design.md), [tanstack-start-migration](../tanstack-start-migration/tanstack-start-migration.design.md)
 
 ## Goal
 
@@ -121,7 +121,7 @@ Seules les lignes changent : `/learn/:path*/images/:file` devient `/learn/images
 
 ## Technical Constraints
 
-- Netlify, offre Free, publication de `dist/client` : `_redirects` à la racine publiée est lu avant les `[[redirects]]` de `netlify.toml` ; la première règle qui correspond gagne ; une règle sans `force` cède au fichier existant au chemin demandé, ce qui protège toute page v2 (AC-RESTOREV1-3) et garantit le saut unique, chaque destination étant un fichier construit. Les placeholders `:name` valent un segment, le splat `*` n'existe qu'en fin de chemin : d'où la scission de la ligne image. Une règle correspond avec ou sans barre finale. Les chemins sont sensibles à la casse ; la redirection en minuscules de l'hôte ne joue que si le fichier en minuscules existe, jamais sous `/learn`. Statuts documentés : 200, 301, 302, 404 ; le 410 ne l'est pas. Netlify transmet la query string à la destination d'un 301. Sources : le brainstorm §9 et [tanstack-start-migration](../__done/tanstack-start-migration/tanstack-start-migration.design.md), Technical Constraints.
+- Netlify, offre Free, publication de `dist/client` : `_redirects` à la racine publiée est lu avant les `[[redirects]]` de `netlify.toml` ; la première règle qui correspond gagne ; une règle sans `force` cède au fichier existant au chemin demandé, ce qui protège toute page v2 (AC-RESTOREV1-3) et garantit le saut unique, chaque destination étant un fichier construit. Les placeholders `:name` valent un segment, le splat `*` n'existe qu'en fin de chemin : d'où la scission de la ligne image. Une règle correspond avec ou sans barre finale. Les chemins sont sensibles à la casse ; la redirection en minuscules de l'hôte ne joue que si le fichier en minuscules existe, jamais sous `/learn`. Statuts documentés : 200, 301, 302, 404 ; le 410 ne l'est pas. Netlify transmet la query string à la destination d'un 301. Sources : le brainstorm §9 et [tanstack-start-migration](../tanstack-start-migration/tanstack-start-migration.design.md), Technical Constraints.
 - `vite build` vide `dist/client` : l'étape ne peut tourner qu'après lui. Aucun `public/_redirects` : Vite le copierait, et la build l'écraserait.
 - `emit-redirects.mjs` charge les seams `.ts` de `src` par le type stripping de Node, comme `emit-site-files.mjs` (Node 22.18 au minimum).
 - Le draft deploy du CLI (`npx netlify-cli deploy`, jamais `--prod`) sert les mêmes règles sous `<id>--robusta-build.netlify.app`, que la règle d'hôte ne vise pas. Les deux sauts depuis `robusta-build.netlify.app` ne se constatent qu'en production.
