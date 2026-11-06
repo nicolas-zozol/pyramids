@@ -148,6 +148,7 @@ An article page ends on its Related articles, `findRelated(article, 3)`: publish
 - an `alternate` that leads to a page not built, or whose page does not link back
 - a page without exactly one `<h1>`
 - a `robots` other than `robotsOf` applied to the presence of a canonical link
+- a raw NUL byte, which the HTML parser reads as U+FFFD
 
 It prints `seo: 34 pages checked, 33 indexable and all in the sitemap; indexing closed`, `indexing open` on the production build.
 

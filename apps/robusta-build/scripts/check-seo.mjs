@@ -1,13 +1,16 @@
 /**
  * The audit of AC-SEOEXCELLENCE-6 on the pages the prerender wrote under
- * `dist/client` and the sitemap beside them: one line per defect, naming the
- * page, and exit 1 on any. Reads the markup by tag patterns, as
- * `check-route-table.mjs` does. Runs after `emit-site-files.mjs`.
+ * `dist/client` and the sitemap beside them, and of the raw NUL bytes in
+ * those pages: one line per defect, naming the page, and exit 1 on any. Reads
+ * the markup by tag patterns, as `check-route-table.mjs` does. Runs after
+ * `emit-site-files.mjs`.
  *
  * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-141, R-SEOEXCELLENCE-142, R-SEOEXCELLENCE-143
  * Design: features/pyramid-v2-epic/__done/go-live/go-live.design.md
  * Requirements: R-GOLIVE-03
+ * Design: features/pyramid-v2-epic/pyramid-v2.fix.md
+ * Requirements: FIX-PYRAMID-2
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
@@ -49,6 +52,11 @@ export function seoReport({
         ? []
         : [`${page.url}: ${page.h1Count} h1 headings, one expected`]),
       ...robotsDefects(page, robotsOf),
+      ...(page.nulBytes === 0
+        ? []
+        : [
+            `${page.url}: ${page.nulBytes} raw NUL bytes, read as U+FFFD by the HTML parser`,
+          ]),
     ]),
     ...sitemapLocs
       .filter((loc) => !read.some((page) => page.canonical === loc))
@@ -93,6 +101,7 @@ function readPage(url, html) {
       ...links.map((attrs) => attrs.href),
     ].filter((href) => href !== undefined),
     h1Count: [...html.matchAll(/<h1[\s>]/g)].length,
+    nulBytes: html.split('\0').length - 1,
   };
 }
 

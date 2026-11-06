@@ -241,4 +241,20 @@ describe('seoReport', () => {
       "/: robots 'index, follow', expected 'noindex, nofollow'",
     ]);
   });
+
+  it('names a page carrying raw NUL bytes, and accepts the escaped form', () => {
+    const build = healthy();
+    build.pages[0].html = build.pages[0].html.replace(
+      '</body>',
+      '<script>m={i:"__root__\0",j:"\0x\0"}</script></body>',
+    );
+    build.pages[1].html = build.pages[1].html.replace(
+      '</body>',
+      '<script>m={i:"__root__\\u0000"}</script></body>',
+    );
+
+    expect(seoReport(build).defects).toEqual([
+      '/: 3 raw NUL bytes, read as U+FFFD by the HTML parser',
+    ]);
+  });
 });

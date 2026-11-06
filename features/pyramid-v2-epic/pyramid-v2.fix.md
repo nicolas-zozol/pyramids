@@ -1,6 +1,6 @@
 # Fix : Pyramid v2
 
-**Dernière mise à jour :** 2026-11-05
+**Dernière mise à jour :** 2026-11-06
 **Owner :** pyramid-v2.epic.md
 **Infix :** PYRAMID
 **Status :** OPEN
@@ -40,3 +40,39 @@ En production, la décision de sauter la build ne se fonde plus sur la dernière
 
 - Resolution: lgtm (Nicolas, 2026-11-05) — en production, ne jamais sauter ; les branches gardent le diff.
 - Fixed: 2026-11-05 — `netlify.toml` : `[ "$CONTEXT" = production ] && exit 1;` avant le diff. Production → exit 1, branche sur `e57501b..688d6c0` → exit 0 ; 677 tests du site verts.
+
+## FIX-PYRAMID-2 — Octet NUL brut dans l'id de match du HTML prérendu (P3)
+
+### Problem
+
+Le HTML prérendu de robusta.build v2 ne devrait contenir aucun octet nul. L'id de match `__root__` du script de déshydratation inline porte un NUL (0x00) brut au lieu d'un échappement.
+
+### Context
+
+    $ curl -s https://www.robusta.build/articles | grep -a -c $'\x00'
+    1
+    matches:$R[11]=[$R[12]={i:"__root__\x00",u:…,s:"success",…
+
+    routeur : id de match "__root__" + NUL
+       │
+       ▼
+    sérialiseur seroval : octet écrit brut, non échappé ─► script inline du HTML prérendu
+                                                               │
+                                                               ▼
+    hydratation client : id lu ≠ id écrit ? ◄─ parseur HTML : U+0000 remplacé par U+FFFD
+
+Dans la trace, `\x00` note l'octet brut. Même résultat sur `/fr/articles`, et déjà sur la production précédente de `5a5f23d` : les chores B4 du 2026-11-06 n'en sont pas la cause. `grep` lit la page comme binaire. Le site s'affiche et reste indexé ; non mesuré : mismatch d'hydratation, loader rejoué, rejet par un crawler ou un validateur strict.
+
+### Intended fix
+
+Le HTML prérendu ne contient plus aucun octet nul brut, et la build échoue si un octet nul y réapparaît.
+
+### Resolution proposal
+
+- À instruire d'abord : trouver l'origine du NUL (format de l'id de match de TanStack Router ou Start, ou seroval) et vérifier si une montée des paquets `@tanstack` l'échappe déjà.
+- À défaut : une étape après le prérendu, dans `scripts/prerender-pages.mjs` ou `check-seo.mjs`, qui fait échouer la build sur un NUL brut.
+- Contrainte : un échappement n'est sûr qu'à l'intérieur d'une chaîne JS ; le vérifier avant de réécrire l'octet.
+- Contrainte : mesurer dans le navigateur si un mismatch d'hydratation se produit réellement avant de choisir.
+
+- Resolution: lgtm (Nicolas, 2026-11-06) — enquête d'abord : origine, version récente de @tanstack, mesure de l'hydratation, puis correction proposée.
+- Fixed: 2026-11-06 — `@tanstack/router-core` 1.171.35 (react-router 1.170.42, react-start 1.168.61, start-static-server-functions 1.167.40) encode le `/` des ids de match en `#` : 0 NUL sur les 34 pages. `check-seo.mjs` fait échouer la build sur un NUL brut. Mesuré dans Chromium avant et après : aucune divergence d'hydratation. 717 tests du site verts.
