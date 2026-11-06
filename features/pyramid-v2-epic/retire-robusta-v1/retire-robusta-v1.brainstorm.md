@@ -228,11 +228,6 @@ Les modules `pyramids-layouts`, `-links`, `-ctas`, `-themes` et `-design-system`
 - Rationale : www.robusta.build pointe sur Netlify depuis le 2026-11-05 ; seul Nicolas sait si ce projet existe encore et sert une autre adresse.
 - Resolution:
 
-- OQ-RETIREV1-5 : dakar importe `remark`, `remark-html` et `gray-matter` sans les déclarer : les ajouter à son manifeste, ou le laisser résoudre les copies que déclare le site v2 ?
-- Proposition : ne pas toucher dakar ; AC-RETIREV1-2 vérifie que sa build tient.
-- Rationale : l'epic a décidé le 2026-07-31 de ne pas toucher dakar, et une casse future apparaît dans le green set, pas en production.
-- Resolution: lgtm (bsman)
-
 ---
 
 ## Next Steps
