@@ -25,3 +25,10 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - bsman : tests verts (717 site, 209 design system), `yarn lint` rouge aujourd'hui (64 erreurs, 58 dans `packages/scribe-intel`, 6 dans ctas, helpers, layouts). Après suppression la racine hisse le Vite 6.4.3 du vitest de helpers ; `packageExtensions` reste nécessaire. Les imports non déclarés de dakar ne viennent pas du collecteur : OQ-RETIRESCRIBE-3 (D3) ne devrait pas servir.
 - OQ-RETIRESCRIBE-2 du brainstorm (fixture `apps/no-manifest/src/main.ts`) signée `lgtm (bsman)`, ne contredit aucun AC.
 - D5 — atw Gap-RETIRESCRIBE-1 — retire-scribe-intel.brainstorm.md — retained: AC-RETIRESCRIBE-4 réduit, aucune erreur de lint sous un dossier supprimé et aucune erreur nouvelle ; les 6 erreurs des modules de dakar restent hors périmètre. Set aside: corriger ces 6 erreurs dans la story. Confidence: high.
+
+## D6 : design
+
+- designman : DRAFT, 9 R-, AC-RETIRESCRIBE-1 à 6 cités, `## Boundaries` rempli. Relève aussi `root.archi.md` (paragraphe de la règle de déclaration des imports, qui cite `@opentelemetry/api` de `packages/scribe-intel`) absent du plan de documentation : ajouté par `storyman update`.
+- D7 — atw Gap-RETIRESCRIBE-1 — retire-scribe-intel.design.md — retained: l'entrée Done de retire-robusta-design dans `ROADMAP.md` reste telle quelle, la section Done de `ROADMAP.md` devient une exception de la recherche d'AC-RETIRESCRIBE-5. Set aside: réécrire ce bilan daté. Confidence: high.
+- `storyman update` : AC-RETIRESCRIBE-5 exclut la section Done de `ROADMAP.md` ; note de `root.archi.md` ajoutée au plan. `designman update` plie Gap-RETIRESCRIBE-1, recopie AC-5. Aucune nouvelle entrée.
+- Contrôle boss : AC-RETIRESCRIBE-1 à 6 cités mot pour mot, `## Boundaries` rempli, aucune entrée en attente. APPROVED, validated by boss atw.

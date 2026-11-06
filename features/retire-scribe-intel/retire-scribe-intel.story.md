@@ -25,7 +25,7 @@ dakar importe sans les déclarer `remark`, `remark-html` et `gray-matter`. Leur 
 - `apps/intel-demo` : la démo, qui n'est pas un workspace.
 - `services/` ne contient alors plus rien : le dossier et le glob `services/*` du manifeste racine partent avec.
 - La fixture « un dossier sans manifeste » de `apps/robusta-build/scripts/netlify-ignore.spec.ts` devient `apps/no-manifest/src/main.ts`, à ses deux occurrences (fixture de base et `it.each`), contenu inchangé.
-- Les documents de `features/` qui citent ces dossiers restent tels quels : ce sont des archives.
+- Les documents de `features/` et la section Done de `ROADMAP.md` qui citent ces dossiers restent tels quels, à l'octet : ce sont des archives.
 
 ## Acceptance Criteria
 
@@ -33,7 +33,7 @@ dakar importe sans les déclarer `remark`, `remark-html` et `gray-matter`. Leur 
 - AC-RETIRESCRIBE-2 : Given un clean checkout, When on lance `yarn install` puis `yarn install --immutable`, Then les deux passent, `yarn.lock` ne porte plus d'entrée pour les workspaces supprimés, et `packageExtensions` reste dans `.yarnrc.yml`, avec un commentaire qui ne cite plus le collecteur.
 - AC-RETIRESCRIBE-3 : Given le green set, When on lance `yarn build:deps`, `yarn build:robusta` et `yarn build:dakar`, Then les trois passent : dakar trouve toujours `remark`, `remark-html` et `gray-matter`, et le site v2 se construit sur son propre Vite 8.
 - AC-RETIRESCRIBE-4 : Given les suites de tests et le lint, When on lance les tests du site, ceux du design system et `yarn lint`, Then les deux suites sont vertes, et le test de la règle `ignore` de Netlify couvre toujours « un dossier sans manifeste » avec la fixture `apps/no-manifest/src/main.ts` ; `yarn lint` ne signale plus aucune erreur sous un dossier supprimé et n'en ajoute aucune, les 6 erreurs de `packages/ctas`, `packages/helpers` et `packages/layouts` restant hors périmètre.
-- AC-RETIRESCRIBE-5 : Given le dépôt après la story, When on lance `git grep -iE "scribe-intel|intel-demo|opentelemetry|telemetry|télémétrie"` hors de `features/`, `yarn.lock` et `.yarn/releases`, Then plus rien ne décrit ces dossiers ni la télémétrie comme présents ni ne les prescrit, seul l'item `ROADMAP.md` de cette story restant jusqu'à son retrait par `storyman submit` ; BR-PYRAMID-2 reste inchangée.
+- AC-RETIRESCRIBE-5 : Given le dépôt après la story, When on lance `git grep -iE "scribe-intel|intel-demo|opentelemetry|telemetry|télémétrie"` hors de `features/`, de la section Done de `ROADMAP.md`, de `yarn.lock` et de `.yarn/releases`, Then plus rien ne décrit ces dossiers ni la télémétrie comme présents ni ne les prescrit, seul l'item `ROADMAP.md` de cette story restant jusqu'à son retrait par `storyman submit` ; BR-PYRAMID-2 reste inchangée.
 - AC-RETIRESCRIBE-6 : Given les cas limites, When on les rejoue, Then le poste qui a fait la suppression, relancé en `yarn install` sans nettoyer les sorties ignorées par git (`dist/`, `node_modules/`, `yarn-error.log`), liste les mêmes workspaces qu'un clean checkout ; au push du commit de suppression, Netlify construit le site v2 au lieu de sauter la build, parce que le commit touche `package.json` et `yarn.lock`, et ce déploiement passe ; Vercel reconstruit dakar sur une install propre et la build passe sans déclaration nouvelle dans `apps/dakar/package.json` ; si elle casse malgré tout, ses imports manquants y sont déclarés, aux versions que résout déjà `yarn.lock`.
 
 ## Boundaries
@@ -45,6 +45,7 @@ Client code : app `@robusta/scribe-intel-collector`, supprimée dans la même st
 ## Documentation updates
 
 - change the Children list (`scribe-intel` link, « les autres apps et les services »), the Overview sentence on the demo app, the module list, the dependency figure, the green set paragraph, the compile failure note and the OpenTelemetry line in `root.archi.md` — why: ces parties décrivent des workspaces supprimés.
+- change the import declaration rule note in `root.archi.md` (Notes / Gotchas) — why: elle cite encore `packages/scribe-intel` et son import de `@opentelemetry/api` comme exemple.
 - change the Vite paragraph in `root.archi.md` — why: la racine hisse désormais le Vite 6.4.3 du `vitest` 3 de `packages/helpers`, plus le Vite 5 du collecteur.
 - change the Vite line and the « Hors dépendances » line in `apps/robusta-build/robusta-build.archi.md` — why: le Vite hissé à la racine est le 6.4.3 du `vitest` de `packages/helpers`, et `@robusta/scribe-intel` n'existe plus.
 - change the `services/*` line and the « standalone demos » of the `apps/*` line in `README.md` — why: le dossier et la démo n'existent plus.
