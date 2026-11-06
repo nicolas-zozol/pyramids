@@ -3,7 +3,7 @@
 **Last update:** 2026-11-06
 **Feature:** retire-robusta-v1
 **Infix:** RETIREV1
-**Status:** DRAFT
+**Status:** APPROVED (2026-11-06 — validated by boss)
 **Sources:** [story](retire-robusta-v1.story.md), [brainstorm](retire-robusta-v1.brainstorm.md), [epic](../pyramid-v2.epic.md)
 
 ## Goal

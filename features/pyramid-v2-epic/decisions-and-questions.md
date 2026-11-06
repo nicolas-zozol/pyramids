@@ -311,3 +311,11 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - `storyman update avec brainstorm` : AC-3 à 6 précisés (`dev:robusta-v1`, `design-system.archi.md`, brouillons, Vite 5, deploy preview), OQ-2, 3 et 5 pliées. Commit `3adc8eb`.
 - Design : designman, AC-RETIREV1-1 à 6 cités mot pour mot, `## Boundaries` rempli, 12 R-. OQ-RETIREV1-6 (`article-slug.spec.ts` garde sa table en littéraux lus à 6c57bc3) signée `lgtm (designman)`, pliée par `designman update`. Commit `3cc5888`.
 - Conséquence rloq : OQ-RETIREV1-1 et 4 en attente, le design reste DRAFT. À la réponse de Nicolas, `boss retire-robusta-v1` reprend en Phase 5.
+
+## D35 : retire-robusta-v1, `boss retire-robusta-v1`
+
+- Requête : `boss retire-robusta-v1`, branche `epic/robusta-v2`, mode rloq. Reprise du run D34, arrêté au design DRAFT sur OQ-RETIREV1-1 et 4.
+- Réponses de Nicolas, sur les Propositions : OQ-RETIREV1-1, les 18 brouillons v1 supprimés sans copie ; OQ-RETIREV1-4, projet Vercel v1 débranché ou supprimé avant le merge, fait le 2026-11-06, celui de dakar reste branché.
+- `storyman update avec brainstorm` plie les deux réponses, entrées retirées, AC inchangés ; `designman update` passe les deux mentions au passé, aucun contrat ne change. Aucune nouvelle entrée. Commit `f186e29`.
+- Contrôle boss : AC-RETIREV1-1 à 6 cités mot pour mot, `## Boundaries` rempli, aucune entrée `ask` en attente. APPROVED, validated by boss.
+- Lock : retire-robusta-v1 est la seule story restante de B5, B3 et B4 ne portent aucune story à coder dans ce run. Confidence: high.
