@@ -6,7 +6,7 @@
  * not a built page. Loads the `.ts` seams under `src` through Node type
  * stripping.
  *
- * Design: features/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
  * Requirements: R-RESTOREV1-01, R-RESTOREV1-02, R-RESTOREV1-03, R-RESTOREV1-04, R-RESTOREV1-21, R-RESTOREV1-22, R-RESTOREV1-23
  */
 import { existsSync } from 'node:fs';

@@ -3,7 +3,7 @@
 **Date :** 2026-10-25
 **Participants :** bsman (autonome)
 **Infix :** MULTILINGUAL
-**Source :** `features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.story.md`
+**Source :** `features/__done/pyramid-v2-epic/__done/multilingual-site/multilingual-site.story.md`
 
 > **Note:** All axes completed autonomously by bsman. Decisions are flagged with **Décision (autonome):** for review.
 

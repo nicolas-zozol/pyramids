@@ -14,6 +14,7 @@
 - BR-PYRAMID-12 — Un module doit pouvoir servir à plusieurs sites construits sur la pyramid ; ce qu'un seul site utilise appartient à ce site.
 - BR-PYRAMID-13 — Le design system d'un site peut rester un module même quand ce site est le seul à l'utiliser.
 - BR-PYRAMID-14 — Un site doit servir les pages de sa Locale par défaut sans marqueur de Locale dans leur URL.
+- BR-PYRAMID-15 — Un site doit publier une stale translation qui se déclare publiée.
 
 BR-PYRAMID-4 est retiré : cet identifiant n'est jamais réutilisé.
 

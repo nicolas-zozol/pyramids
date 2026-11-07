@@ -4,7 +4,7 @@
  * notice fails nothing; a corpus violation, thrown by the article index, does.
  * Loads the `.ts` seams under `src` through Node type stripping.
  *
- * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-84, R-MULTILINGUAL-85
  */
 import { dirname, join, resolve } from 'node:path';

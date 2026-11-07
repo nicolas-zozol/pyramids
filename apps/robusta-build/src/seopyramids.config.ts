@@ -1,13 +1,13 @@
 /**
  * Site configuration — the site's domain, Locales, contact and the page copy of each Locale, read through getPageCopy and getCategoryLabel.
  *
- * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-41, R-MULTILINGUAL-42, R-MULTILINGUAL-43, R-MULTILINGUAL-44, R-MULTILINGUAL-48, R-MULTILINGUAL-49
- * Design: features/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-41, R-BLOGROLLS-42
- * Design: features/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/seo-excellence/seo-excellence.design.md
  * Requirements: R-SEOEXCELLENCE-44, R-SEOEXCELLENCE-121, R-SEOEXCELLENCE-122
- * Design: features/pyramid-v2-epic/__done/rb-compound-positioning/rb-compound-positioning.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/rb-compound-positioning/rb-compound-positioning.design.md
  * Requirements: R-RBCOMPOUND-101, R-RBCOMPOUND-102, R-RBCOMPOUND-103
  */
 import type { FlowStep, Principle } from '@robusta/pyramids-design-system';

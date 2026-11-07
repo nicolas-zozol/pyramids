@@ -54,4 +54,4 @@ Ce fichier journalise les décisions prises seul par boss. À relire après coup
 - Question : `ubiquitous-language.md` et `business-rules.md` portent une réécriture française non commitée d'une autre session (le registre y perd BR-PYRAMID-1, 2, 7 et 11). epicman ne peut pas y ajouter `Breakpoint` et la règle sur les breakpoints sans mêler son ajout à cette réécriture. Que faire de la réécriture avant l'item 8 ?
 - Proposition : Nicolas commite ou écarte d'abord la réécriture (celle du registre semble à reprendre : elle retire quatre règles en vigueur), puis `epicman update pyramid-v2-epic : item 8 breakpoint-glossary` écrit le terme et la règle ; le land de la landing vient après.
 - Rationale : l'epic fixe déjà cette condition aux items 7 et 8 (« une fois ces modifications commitées ») ; le land de la landing cite le terme et doit le trouver au glossaire.
-- Resolution :
+- Resolution : Close sans suite, périmée à l'archivage de l'epic pyramid-v2 (Nicolas, 2026-11-08)

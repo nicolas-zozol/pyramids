@@ -17,15 +17,15 @@ import type { ArticleIndexEntry } from '../content/article-index.ts';
  * This module imports nothing from React on purpose: it is executed by
  * `scripts/emit-v1-map.mjs` in plain Node.
  *
- * Design: features/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/seo-url-scheme/seo-url-scheme.design.md
  * Requirements: R-URLSCHEME-14, R-URLSCHEME-15, R-URLSCHEME-25, R-URLSCHEME-26, R-URLSCHEME-27, R-URLSCHEME-28
- * Design: features/pyramid-v2-epic/__done/migrate-learn-content/migrate-learn-content.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/migrate-learn-content/migrate-learn-content.design.md
  * Requirements: R-MIGRATELEARN-61
- * Design: features/pyramid-v2-epic/__done/default-locale-fr/default-locale-fr.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/default-locale-fr/default-locale-fr.design.md
  * Requirements: R-DEFAULTLOCALE-21, R-DEFAULTLOCALE-22
- * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-81
- * Design: features/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
  * Requirements: R-RESTOREV1-41, R-RESTOREV1-42, R-RESTOREV1-43
  */
 

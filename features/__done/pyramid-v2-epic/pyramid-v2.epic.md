@@ -1,6 +1,6 @@
 # Epic : Pyramid v2
 
-**Dernière mise à jour :** 2026-11-06
+**Dernière mise à jour :** 2026-11-08
 **Epic :** pyramid-v2-epic
 **Infix :** PYRAMID
 
@@ -53,7 +53,7 @@ SEO excellence runs across the whole epic rather than sitting in one deliverable
 - [retire-robusta-design](__done/retire-robusta-design/retire-robusta-design.story.md) — supprimer la maquette v0 de l'ancien dossier du prototype et garder son brief dans `documentation/author-brief.md`. Archivée.
 - [retire-robusta-v1](__done/retire-robusta-v1/retire-robusta-v1.story.md) — supprimer l'app v1 `apps/robusta` (`@robusta/build`), son corpus figé et tout ce qui la nomme. Archivée.
 
-Le seul item d'À faire, extract-compound-plugin, est sans story par choix : décision du 2026-10-26 ci-dessous.
+À faire est vide depuis que extract-compound-plugin est sorti de l'epic, le 2026-11-07 : décision ci-dessous.
 
 ## Business Rules
 
@@ -69,6 +69,7 @@ Le seul item d'À faire, extract-compound-plugin, est sans story par choix : dé
 - BR-PYRAMID-12 — Un module doit pouvoir servir à plusieurs sites construits sur la pyramid ; ce qu'un seul site utilise appartient à ce site.
 - BR-PYRAMID-13 — Le design system d'un site peut rester un module même quand ce site est le seul à l'utiliser.
 - BR-PYRAMID-14 — Un site doit servir les pages de sa Locale par défaut sans marqueur de Locale dans leur URL.
+- BR-PYRAMID-15 — Un site doit publier une stale translation qui se déclare publiée.
 - BR-ROBUSTA-1 — robusta.build doit servir ses pages dans plusieurs locales, l'anglais étant sa locale par défaut.
 
 Verified entry by entry against `business-rules.md` on 2026-07-31, three times: the two lists match. The first two passes recorded and modified nothing; the third recorded BR-PYRAMID-10 and is traced below. BR-PYRAMID-4 is retired and never reused: the identifier carried two different meanings in two days. Two rules raised by the epic's stories are validated by the human but not recorded — "an indexable page must carry content of its own", which the registered glossary definition now restates, and "a site must keep serving an article at every address under which it has published it", still waiting on a glossary term for a published address. Both are traced in the decisions below. BR-PYRAMID-9 was recorded by `bulkman resolve` as delegated registrar; the vocabulary gap BR-PYRAMID-5 carried is closed by the glossary entries for clean checkout and green set. BR-PYRAMID-10 was recorded by epicman as registrar, once `Published article` existed in `ubiquitous-language.md`.
@@ -103,7 +104,7 @@ Vérifiée le 2026-11-04, au submit de drop-section-default-copy : rien enregist
 
 Vérifiée le 2026-11-04, au submit de blog-rolls : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot. La story cite BR-PYRAMID-6, 7, 8, 9, 10 et 14, que ses R-BLOGROLLS réalisent ; ses décisions décrivent un comportement du site : elles vont aux décisions ci-dessous.
 
-Vérifiée le 2026-11-04, au submit de glossary-refresh : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot. La règle « Un site doit publier une stale translation qui se déclare publiée », validée par OQ-GLOSSARY-3, n'est pas enregistrée : l'entrée `Stale translation` la rend invérifiable, décision ci-dessous et Gap-PYRAMID-5.
+Vérifiée le 2026-11-04, au submit de glossary-refresh : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot. La règle « Un site doit publier une stale translation qui se déclare publiée », validée par OQ-GLOSSARY-3, n'est pas enregistrée : l'entrée `Stale translation` la rend invérifiable, décision ci-dessous et Gap-PYRAMID-5, tranché le 2026-11-08.
 
 Vérifiée le 2026-11-04, au submit de seo-excellence : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot. La story cite BR-PYRAMID-2, 6, 7, 8, 10 et 14 et BR-ROBUSTA-1, que ses R-SEOEXCELLENCE réalisent ; ses décisions décrivent ce que les pages déclarent : elles vont aux décisions ci-dessous.
 
@@ -114,6 +115,8 @@ Vérifiée le 2026-11-05, au submit de netlify-deploy : rien enregistré ni modi
 Vérifiée le 2026-11-06, au submit de restore-v1-urls : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot ; la story cite BR-PYRAMID-7, que ses règles statiques tiennent. Les adresses v1 répondent de nouveau, mais Nicolas écarte toute BR (OQ-RESTOREV1-2) : la règle des adresses publiées validée le 2026-07-30 reste non enregistrée, un article v2 renommé changeant d'URL sans redirection — décision ci-dessous.
 
 Vérifiée le 2026-11-06, au submit de retire-robusta-v1 : rien enregistré ni modifié. Les treize entrées reprennent le registre mot pour mot ; la story cite BR-PYRAMID-5, que tient le green set vert depuis un clean checkout, dakar à 23 pages. Ses décisions disent ce qui quitte le dépôt : elles vont aux décisions ci-dessous.
+
+Le 2026-11-08 : BR-PYRAMID-15 enregistrée (Gap-PYRAMID-5), décision ci-dessous. Les quatorze entrées PYRAMID reprennent le registre mot pour mot ; 16 est le prochain identifiant libre sous PYRAMID. Le site la satisfait déjà.
 
 ## Boundaries
 
@@ -248,8 +251,7 @@ Client code : le mainteneur, les agents, Netlify (`yarn build:robusta`).
 
 ## À faire
 
-* Batch B3 — RB Compound, pour la page copy de robusta.build seulement (décision du 2026-10-31). rb-compound-positioning livrée le 2026-11-05 ; reste extract-compound-plugin.
-    - extract-compound-plugin — extraire la version open source de Compound, epicman, storyman et designman, en plugin publié, présenté à la manière de Superpowers. Relève d'un autre dépôt. Tant qu'il ne l'est pas, la landing page ne lie aucun dépôt ; le publier ajoute ce lien à sa page copy et débloque les deux entrées de la question de guide tests-first de `documentation/geo-questions.md`. Non prioritaire : « on fera ça plus tard ». (pas de story — décision du 2026-10-26)
+Vide. B3 s'est vidé le 2026-11-07, extract-compound-plugin sortant de l'epic (décision ci-dessous) ; B1, B2, B4 et B5 étaient déjà vides.
 
 ## Décisions structurantes
 
@@ -377,7 +379,7 @@ Client code : le mainteneur, les agents, Netlify (`yarn build:robusta`).
 - 2026-11-04 — Sur une page de listing, blog-rolls possède ce que le lecteur voit et toute la page copy, titre et description du head compris ; seo-excellence possède ce que la page déclare, canonical URL, hreflang, indexabilité, sitemap, données structurées, et le fil d'Ariane, absent de l'accueil du blog. Pourquoi : section « Partage avec seo-excellence » de la story blog-rolls. Impact : seo-excellence ne réécrit pas les modèles de head de `ListingCopy`.
 - 2026-11-04 — Une page de listing n'existe que si son roll a un article publié, sauf l'accueil du blog de la Locale par défaut, construit même vide : `/es/articles` et `/articles/c/theory` répondent 404, et une Category perd sa page avec son dernier article publié. Le premier article d'une Locale crée son accueil du blog, et un libellé de Category manquant fait échouer la build par `check-route-table`. Pourquoi : AC-BLOGROLLS-6. Impact : le sitemap de seo-excellence et la colonne du pied de page suivent le même jeu de pages. Réf : R-BLOGROLLS-05, 06 et 62.
 - 2026-11-04 — `Workspace` est l'ensemble du code et de la documentation du projet, `Green set` l'ensemble nommé des apps et des modules qui doivent se construire depuis un clean checkout, sans service, et `Build chain` admet qu'un site lise d'un module ce que son manifeste exporte, construit ou non. Pourquoi : Gap-GLOSSARY-4 et 5 de glossary-refresh, Propositions retenues par Nicolas ; les anciennes entrées contredisaient `Module`. Impact : BR-PYRAMID-5 se lit sur ces termes ; un service, scribe-intel-collector compris, n'est jamais dans le green set.
-- 2026-11-04 — Passe du greffier : la règle « Un site doit publier une stale translation qui se déclare publiée » n'est pas enregistrée, malgré OQ-GLOSSARY-3, lgtm. Pourquoi : l'éditeur en décide, elle dit ce qui vaut et reste seule sur son thème, mais elle échoue sur le vocabulaire : `Stale translation` se définit comme « une traduction publiée » et ajoute « Elle reste publiée ». Une traduction que le site retirerait cesserait d'être une stale translation, si bien qu'aucune citation de la règle ne peut échouer ; c'est le motif du refus du 2026-07-30 pour la règle des pages indexables. La tolérance elle-même relève du registre, pas du glossaire : l'éditeur pourrait décider de retirer une traduction en retard. Le site la tient déjà, une empreinte différente ne produisant qu'une notice `stale-translation` sans exclure l'article (`translation-notices.ts`). Impact : la règle revient au greffier si l'entrée du glossaire est reformulée, Gap-PYRAMID-5 ; 15 reste le prochain identifiant libre sous PYRAMID.
+- 2026-11-04 — Passe du greffier : la règle « Un site doit publier une stale translation qui se déclare publiée » n'est pas enregistrée, malgré OQ-GLOSSARY-3, lgtm. Pourquoi : l'éditeur en décide, elle dit ce qui vaut et reste seule sur son thème, mais elle échoue sur le vocabulaire : `Stale translation` se définit comme « une traduction publiée » et ajoute « Elle reste publiée ». Une traduction que le site retirerait cesserait d'être une stale translation, si bien qu'aucune citation de la règle ne peut échouer ; c'est le motif du refus du 2026-07-30 pour la règle des pages indexables. La tolérance elle-même relève du registre, pas du glossaire : l'éditeur pourrait décider de retirer une traduction en retard. Le site la tient déjà, une empreinte différente ne produisant qu'une notice `stale-translation` sans exclure l'article (`translation-notices.ts`). Impact : la règle revient au greffier si l'entrée du glossaire est reformulée, Gap-PYRAMID-5 ; 15 reste le prochain identifiant libre sous PYRAMID. Levé le 2026-11-08 : décision ci-dessous.
 - 2026-11-04 — Le package `seo` de `apps/robusta-build` est le seul producteur des balises SEO du head, par `pageHead`, et porte la règle d'indexabilité, `isIndexable` : landing page et page article indexables, page de roll quand elle liste un article, page de tag jamais, la 404 sans déclaration. L'ouverture tient en une constante, `INDEXING_OPEN`, écrite une fois dans `src/seo/indexing.ts` et à `false` : chaque page sort `noindex, nofollow`. Pourquoi : la décision du 2026-10-06, racine en `noindex` et chaque page indexable qui se déclare. Impact : go-live ne change que la valeur d'`INDEXING_OPEN` ; `check-seo.mjs` fait échouer la build sur un `robots` qui diffère de `robotsOf`. Réf : R-SEOEXCELLENCE-01, 21 à 25 et 142, `93f6770`.
 - 2026-11-04 — Chaque landing page déclare Robusta Build en `Organization` ; aucune page ne déclare de `LocalBusiness`, d'adresse ni de zone, et la fiche Google Business Profile reste hors du site. Pourquoi : OQ-SEOEXCELLENCE-21 ; les landing pages mettent RB Compound en avant et ne montrent aucune zone, décisions du 2026-10-25. Impact : périme la `LocalBusiness` sur `/` de l'AC-SEOEXCELLENCE-4 d'origine. Réf : R-SEOEXCELLENCE-64, `93f6770`.
 - 2026-11-04 — Le x-default d'une page désigne sa version `en`, sans préfixe, et une page sans version `en` n'en déclare pas ; le jumeau `.html` reste servi et déclare la canonical URL de sa page ; la page `n` d'un roll a pour versions la page `n` du même roll dans les autres Locales. Pourquoi : `/` ne traite pas le même sujet qu'une page sans version `en` ; supprimer le jumeau est un réglage d'hébergeur pour tout le site (Gap-ROOTLOCALE-3) ; la réciprocité des hreflang échouerait dès qu'une page 2 existe. Impact : solde le canonical link que la décision du 2026-11-03 laissait à seo-excellence. Réf : R-SEOEXCELLENCE-03, 04 et 22, `93f6770`.
@@ -396,13 +398,8 @@ Client code : le mainteneur, les agents, Netlify (`yarn build:robusta`).
 - 2026-11-06 — `apps/robusta` part sans copie dans le dépôt : corpus, 18 brouillons jamais publiés et CV se relisent à `6c57bc3:apps/robusta/<chemin>`, 6c57bc3 étant la tête de `main` ce jour-là. Pourquoi : rien ne les lit, et un brouillon repris en v2 se réécrit au schéma v2. Impact : solde la décision du 2026-07-29 qui retirait la v1 ; la vérification de gel du corpus v1 part avec lui, et `article-slug.spec.ts` garde ses slugs en littéraux lus à 6c57bc3, deux Locales ayant été corrigées dans le corpus v2. Réf : R-RETIREV1-01, 41, 42 et 82, `f1fdcca`.
 - 2026-11-06 — Les manifestes de `apps/dakar` ne bougent pas : ses imports non déclarés, `remark`, `remark-html` et `gray-matter`, restent résolus par les copies que hisse le site v2, et le Vite 5 hissé à la racine est désormais celui de `services/scribe-intel-collector`, `packageExtensions` de `.yarnrc.yml` conservé à l'octet. Pourquoi : hors du périmètre de retire-robusta-v1 ; une casse se verrait dans le green set. Impact : dakar dépend du hoisting de deux autres workspaces, risque accepté. Réf : R-RETIREV1-02 et 23, `f1fdcca`.
 - 2026-11-06 — `packages/scribe-intel`, `services/scribe-intel-collector` et `apps/intel-demo` sont supprimés, par une story de suppression hors de l'epic pyramid-v2. Pourquoi : décision de Nicolas. Impact : précise la décision du 2026-07-29, qui remettait le retrait au lancement de robusta.build, et celle du 2026-10-31, qui laissait le sort du package ouvert ; scribe-intel-does-not-compile quitte À faire sans livraison. Pour la future story : le Vite 5 hissé à la racine et le `packageExtensions` de `.yarnrc.yml` dépendent de scribe-intel-collector (décision du 2026-11-06 ci-dessus), et la fixture de `netlify-ignore.spec` utilise `apps/intel-demo/front/src/main.ts`.
-
-## Open Questions & Gaps
-
-- Gap-PYRAMID-5 : la définition de `Stale translation` dit déjà qu'elle est publiée et le reste, ce qui rend invérifiable la règle validée : reformuler l'entrée pour l'enregistrer ?
-- Proposition : oui. L'entrée devient « Une traduction qui se déclare publiée dont l'original a changé de titre, d'excerpt ou de corps depuis qu'elle a été déclarée à jour », sa phrase « Elle reste publiée » laisse place à la citation de la nouvelle règle, et epicman enregistre BR-PYRAMID-15 dans la formulation validée, comme `Published article` cite BR-PYRAMID-10.
-- Rationale : la tolérance est une décision de l'éditeur, que seul le registre peut porter ; écrite dans une définition, elle ne contraint rien.
-- Resolution:
+- 2026-11-07 — extract-compound-plugin sort de l'epic pyramid-v2 : publier la version open source de Compound en plugin appartient à `compound-plugins-epic`, dans le dépôt `~/.claude` (`/Users/nicolaszozol/.claude/features/compound-plugins-epic/`). Pourquoi : décision de Nicolas. Impact : précise les décisions du 2026-10-26 et du 2026-10-31 ; B3 se vide et À faire avec lui. Quand le plugin sortira, le lien de la landing page vers son dépôt et les deux entrées de la question de guide tests-first de `documentation/geo-questions.md` entreront au ROADMAP de pyramids comme un nouvel item ; rien n'est créé d'ici là.
+- 2026-11-08 — Passe du greffier : BR-PYRAMID-15 enregistrée — « Un site doit publier une stale translation qui se déclare publiée. » L'entrée `Stale translation` devient « Une traduction qui se déclare publiée dont l'original a changé de titre, d'excerpt ou de corps depuis qu'elle a été déclarée à jour » et cite la règle à la place de « Elle reste publiée », comme `Published article` cite BR-PYRAMID-10. Pourquoi : Gap-PYRAMID-5, lgtm de Nicolas ; la tolérance est une décision de l'éditeur, que seul le registre peut porter. Les quatre tests passent : l'éditeur en décide, la définition ne disant plus qu'elle reste publiée, la règle peut échouer ; elle tient sur `Stale translation` et `Site`, dit ce qui vaut et reste seule sur son thème. Cohérente avec BR-PYRAMID-10 : une traduction non publiée n'est pas une stale translation. Impact : solde le refus du 2026-11-04 et OQ-GLOSSARY-3 ; le site la tient déjà (`translation-notices.ts`), rien à livrer. 16 est le prochain identifiant libre sous PYRAMID ; 4 et 11 restent retirés.
 
 ## Hors scope
 
@@ -413,3 +410,4 @@ Client code : le mainteneur, les agents, Netlify (`yarn build:robusta`).
 - Storybook for the design system.
 - Removing `pyramids-layouts`, `pyramids-links` and `pyramids-ctas` from the repository: `apps/dakar` still imports them and is out of scope.
 - Moving `apps/robusta` or `apps/dakar` off Next.js and Vercel: the decision of 2026-10-06 re-platforms the v2 site alone.
+- Publier la version open source de Compound en plugin : `compound-plugins-epic`, dépôt `~/.claude` (décision du 2026-11-07).

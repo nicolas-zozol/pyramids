@@ -4,7 +4,7 @@
 **Feature:** design-system-responsive
 **Infix:** RESPONSIVE
 **Status:** IMPLEMENTED (2026-10-07, commit 2848cb7)
-**Sources:** [story](design-system-responsive.story.md), [epic](../../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../../packages/robusta-design-system/design-system.archi.md), [robusta-landing-page story](../robusta-landing-page/robusta-landing-page.story.md)
+**Sources:** [story](design-system-responsive.story.md), [epic](../../pyramid-v2.epic.md), [article-page design](../article-page/article-page.design.md), [design-system archi](../../../../../packages/robusta-design-system/design-system.archi.md), [robusta-landing-page story](../robusta-landing-page/robusta-landing-page.story.md)
 
 ## Goal
 

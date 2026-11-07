@@ -4,7 +4,7 @@
 **Feature:** content-source
 **Infix:** CONTENTSOURCE
 **Status:** IMPLEMENTED (2026-08-02, commit 82c154f)
-**Sources:** [story](content-source.story.md) · [brainstorm](content-source.brainstorm.md) · [epic](../../pyramid-v2.epic.md) · [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md) · [root.archi.md](../../../../root.archi.md) · [business-rules.md](../../../../business-rules.md) · [ubiquitous-language.md](../../../../ubiquitous-language.md)
+**Sources:** [story](content-source.story.md) · [brainstorm](content-source.brainstorm.md) · [epic](../../pyramid-v2.epic.md) · [seo-url-scheme design](../seo-url-scheme/seo-url-scheme.design.md) · [root.archi.md](../../../../../root.archi.md) · [business-rules.md](../../../../../business-rules.md) · [ubiquitous-language.md](../../../../../ubiquitous-language.md)
 
 ## Goal
 

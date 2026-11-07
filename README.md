@@ -4,7 +4,7 @@ A yarn-workspaces monorepo that builds several SEO content sites from one shared
 
 Live sites: robusta.build (`apps/robusta-build`, indexable pages open on the Netlify production build only) and dakar.surf (`apps/dakar`).
 
-The v2 epic, `features/pyramid-v2-epic/pyramid-v2.epic.md`, rebuilds the robusta site on a simplified URL scheme and a design system.
+The v2 epic, `features/__done/pyramid-v2-epic/pyramid-v2.epic.md`, rebuilds the robusta site on a simplified URL scheme and a design system.
 
 ## Where things are
 

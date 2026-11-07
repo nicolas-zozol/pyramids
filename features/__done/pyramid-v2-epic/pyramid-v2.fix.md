@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Owner :** pyramid-v2.epic.md
 **Infix :** PYRAMID
-**Status :** OPEN
+**Status :** CLOSED
 **Grain :** BATCH
 
 ## FIX-PYRAMID-1 — Règle `ignore` : production comparée à la dernière build de branche (P0)

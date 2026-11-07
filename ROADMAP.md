@@ -1,6 +1,6 @@
 # Roadmap
 
-Priority-ordered list of what is left to build. The epic `features/pyramid-v2-epic/pyramid-v2.epic.md` holds the reasoning; this file holds the order. An item becomes a story under `features/pyramid-v2-epic/<feature>/` when work starts on it.
+Priority-ordered list of what is left to build. An item becomes a story under `features/<feature>/` when work starts on it. The pyramid-v2 epic, archived on 2026-11-08, keeps the reasoning of robusta.build v2: `features/__done/pyramid-v2-epic/pyramid-v2.epic.md`.
 
 Bootstrapped on 2026-07-29 by `/start` from the epic and from the flags left by the packagify-design-system work.
 
@@ -32,15 +32,9 @@ Bootstrapped on 2026-07-29 by `/start` from the epic and from the flags left by 
 
 ## Next
 
-Les batches de l'epic pyramid-v2, dans l'ordre de priorité décidé le 2026-10-31 ; le raisonnement est dans la section À faire de `features/pyramid-v2-epic/pyramid-v2.epic.md`.
+Aucun item. extract-compound-plugin est sorti de l'epic pyramid-v2 le 2026-11-07 : il relève de `compound-plugins-epic`, dans `~/.claude`. Quand le plugin sera publié, le lien de la landing page vers son dépôt et les deux entrées de la question tests-first de `documentation/geo-questions.md` entreront ici.
 
-### B3 — RB Compound
-
-Pour la page copy de robusta.build seulement, décidé le 2026-10-31.
-
-7. extract-compound-plugin — extraire la version open source de Compound, epicman, storyman et designman, en plugin publié, à la manière de Superpowers ; le publier ajoute un lien à la page copy de la landing page. Relève d'un autre dépôt, non prioritaire. Décidé le 2026-10-26. Pas de story.
-
-### B5 — Fin d'epic
+## Vercel (dakar)
 
 No Vercel project of this repository needs an environment variable any more. `yarn.lock` is a yarn 4 lockfile and Vercel's bundled yarn 1 cannot read it, which `ENABLE_EXPERIMENTAL_COREPACK=1` used to solve; since 2026-08-01 the Yarn binary is committed at `.yarn/releases/yarn-4.17.1.cjs` with `yarnPath` naming it in `.yarnrc.yml`, and yarn 1 delegates to it. The flag must not be set on the Vercel project of `apps/dakar`, the only one left: with `yarnPath` in place, corepack downloads its own `yarn.js` and crashes before anything reads the config.
 

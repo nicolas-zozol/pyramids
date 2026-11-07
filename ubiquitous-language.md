@@ -44,7 +44,7 @@ Translation identifier : La valeur durable que partagent les versions d'un même
 
 Original : La version publiée d'un article dont une autre version est la traduction. Un article qui ne se déclare la traduction d'aucun autre est son propre original, y compris quand deux versions partagent un translation identifier sans original déclaré. Une traduction dont l'original n'est pas publié reste servie, sans lien vers lui.
 
-Stale translation : Une traduction publiée dont l'original a changé de titre, d'excerpt ou de corps depuis qu'elle a été déclarée à jour. Elle reste publiée, et la build la signale. Un changement de category, de tags, de date, de couverture ou de blancs seuls n'en fait pas une, une traduction non publiée non plus (BR-PYRAMID-10).
+Stale translation : Une traduction qui se déclare publiée dont l'original a changé de titre, d'excerpt ou de corps depuis qu'elle a été déclarée à jour. Un site la publie (BR-PYRAMID-15), et la build la signale. Un changement de category, de tags, de date, de couverture ou de blancs seuls n'en fait pas une, une traduction non publiée non plus (BR-PYRAMID-10).
 
 Content source : L'origine des articles d'un site : une arborescence de fichiers markdown que le site déclare et lit. Elle est lue pendant la build d'un site, une fois par processus de build, et jamais pendant qu'un site sert une requête (BR-PYRAMID-7).
 

@@ -3,7 +3,7 @@
 **Last update:** 2026-07-31
 **Feature:** bootstrap-robusta-build
 **Infix:** BOOTSTRAP
-**Status:** APPROVED
+**Status:** IMPLEMENTED (2026-07-31, commit 84c3587)
 **Sources:** [story](bootstrap-robusta-build.story.md) · [brainstorm](bootstrap-robusta-build.brainstorm.md) · [epic](../pyramid-v2.epic.md) · [root.archi.md](../../../root.archi.md) · [business-rules.md](../../../business-rules.md) · [ubiquitous-language.md](../../../ubiquitous-language.md)
 
 ## Goal

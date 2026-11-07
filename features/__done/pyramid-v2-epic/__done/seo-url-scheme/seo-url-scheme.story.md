@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-07-31
 **Feature :** seo-url-scheme
 **Infix :** URLSCHEME
-**Status :** LANDED (2026-07-31, commit acfbc0a)
+**Status :** DONE (2026-11-08, commit acfbc0a)
 
 ## Story
 

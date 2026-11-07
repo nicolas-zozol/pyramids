@@ -7,13 +7,13 @@
  * No page was written around a render that threw. Run after `vite build`, on
  * what the prerender wrote under `dist/client`.
  *
- * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-26
- * Design: features/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/multilingual-site/multilingual-site.design.md
  * Requirements: R-MULTILINGUAL-04, R-MULTILINGUAL-27, R-MULTILINGUAL-43
- * Design: features/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/default-locale-at-root/default-locale-at-root.design.md
  * Requirements: R-ROOTLOCALE-25
- * Design: features/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/blog-rolls/blog-rolls.design.md
  * Requirements: R-BLOGROLLS-81
  */
 import { existsSync } from 'node:fs';

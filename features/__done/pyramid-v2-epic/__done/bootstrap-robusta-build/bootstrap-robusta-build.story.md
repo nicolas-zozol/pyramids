@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-07-31
 **Feature :** bootstrap-robusta-build
 **Infix :** BOOTSTRAP
-**Status :** LANDED (2026-07-31, commit 84c3587)
+**Status :** DONE (2026-11-08, commit 84c3587)
 
 ## Story
 

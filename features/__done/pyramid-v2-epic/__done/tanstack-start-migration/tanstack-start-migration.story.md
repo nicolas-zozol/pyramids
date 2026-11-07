@@ -116,12 +116,12 @@ Les library APIs des packages `page-data`, `routes`, `article`, `landing` et `co
 - Gap-TANSTACK-14 : R-TANSTACK-84 promet un seul chargement complet quand le chunk de route d'une navigation client manque. Livré, un chunk manquant pour de bon provoque deux rechargements complets avant l'état d'erreur : celui que `lazyRouteComponent` de TanStack Router fait de lui-même, puis celui de `NavigationFailure`. Un vrai déploiement se résout au premier.
 - Proposition : accepter l'écart sans correctif et le consigner en Décision.
 - Rationale : le lecteur d'un onglet ouvert avant un déploiement atteint sa page au premier rechargement ; le second ne touche qu'un chunk réellement absent, donc un défaut.
-- Resolution:
+- Resolution: Close sans suite, périmée à l'archivage de l'epic pyramid-v2 (Nicolas, 2026-11-08)
 
 - Gap-TANSTACK-15 : R-CONTENTSOURCE-03 (un processus lit un corpus au plus une fois) ne tient plus sous `vite build`, qui charge deux copies de `@robusta/pyramids-content` dans le même processus, donc deux lectures. BR-PYRAMID-7 n'est pas touchée : les deux lectures ont lieu au build.
 - Proposition : amender R-CONTENTSOURCE-03 en « au plus une fois par copie chargée du module », comme le dit déjà `content.archi.md`.
 - Rationale : la règle protégeait le temps de build, et une lecture de plus sur onze articles ne le menace pas.
-- Resolution:
+- Resolution: Close sans suite, périmée à l'archivage de l'epic pyramid-v2 (Nicolas, 2026-11-08)
 
 ## Documentation updates
 

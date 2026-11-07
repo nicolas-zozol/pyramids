@@ -6,9 +6,9 @@
  * in the build reads this file: `scripts/emit-redirects.mjs` computes the same
  * map and serves it as `dist/client/_redirects`.
  *
- * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-09
- * Design: features/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/restore-v1-urls/restore-v1-urls.design.md
  * Requirements: R-RESTOREV1-42
  */
 import { mkdirSync, writeFileSync } from 'node:fs';

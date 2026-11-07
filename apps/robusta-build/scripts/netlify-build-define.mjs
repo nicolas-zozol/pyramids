@@ -3,7 +3,7 @@
  * bundle as literals, so the browser, which has no `process`, reads the same
  * `INDEXING_OPEN` as the prerender.
  *
- * Design: features/pyramid-v2-epic/__done/go-live/go-live.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/go-live/go-live.design.md
  * Requirements: R-GOLIVE-02
  */
 

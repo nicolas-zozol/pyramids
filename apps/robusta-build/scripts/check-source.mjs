@@ -3,9 +3,9 @@
  * local import that names no TypeScript source of `src`, anywhere under `src`,
  * the generated route tree included.
  *
- * Design: features/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-11
- * Design: features/pyramid-v2-epic/__done/ts-import-extensions/ts-import-extensions.design.md
+ * Design: features/__done/pyramid-v2-epic/__done/ts-import-extensions/ts-import-extensions.design.md
  * Requirements: R-TSIMPORTS-41, R-TSIMPORTS-42, R-TSIMPORTS-43
  */
 import { readdir, readFile } from 'node:fs/promises';

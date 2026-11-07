@@ -18,7 +18,7 @@
 
 Pyramids est un monorepo yarn workspaces qui construit plusieurs sites de contenu SEO sur une base commune, au lieu de réécrire un site à chaque fois. La base commune est un ensemble de petits modules, et ce qu'un seul site utilise appartient à ce site (BR-PYRAMID-12). `apps/dakar` est un site Next.js App Router, en React Server Components et ISR, déployé sur Vercel ; `apps/robusta-build`, le site robusta v2, est TanStack Start sur Vite, prérendu au build et servi en fichiers par Netlify. Chaque site porte son contenu et un design system, que plusieurs sites peuvent partager (BR-PYRAMID-3). Deux sites sont en ligne, robusta.build, servi par `apps/robusta-build` et ouvert à l'indexation sur sa seule build de production, et dakar.surf.
 
-Le site robusta est la v2 de `features/pyramid-v2-epic/pyramid-v2.epic.md` : reconstruit de zéro, il reprend le contenu markdown du site v1, un schéma d'URL SEO simplifié et un design system généré avec Claude Design. Le site v1 se relit au commit 6c57bc3, par `git show 6c57bc3:apps/robusta/<chemin>`, son schéma de routing dans `6c57bc3:apps/robusta/README.md`. Seul le site robusta est dans le périmètre de la v2.
+Le site robusta est la v2 de `features/__done/pyramid-v2-epic/pyramid-v2.epic.md` : reconstruit de zéro, il reprend le contenu markdown du site v1, un schéma d'URL SEO simplifié et un design system généré avec Claude Design. Le site v1 se relit au commit 6c57bc3, par `git show 6c57bc3:apps/robusta/<chemin>`, son schéma de routing dans `6c57bc3:apps/robusta/README.md`. Seul le site robusta est dans le périmètre de la v2.
 
 ## Apps, modules, packages
 
