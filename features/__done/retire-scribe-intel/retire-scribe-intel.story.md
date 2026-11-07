@@ -3,7 +3,7 @@
 **Dernière mise à jour :** 2026-11-06
 **Feature :** retire-scribe-intel
 **Infix :** RETIRESCRIBE
-**Status :** SUBMITTED (2026-11-06, commit d4ddbb3)
+**Status :** DONE (2026-11-07, commit 6c30ea6 sur main)
 
 ## Story
 
@@ -50,6 +50,7 @@ Client code : app `@robusta/scribe-intel-collector` et app `apps/intel-demo/fron
 - 2026-11-06 — La section Done de `ROADMAP.md` et les documents de `features/` restent à l'octet, exclus de la recherche d'AC-RETIRESCRIBE-5. Pourquoi : ce sont des archives.
 - 2026-11-06 — Repli dakar d'AC-RETIRESCRIBE-6 non appliqué : `build:dakar` passe sans déclaration nouvelle. Les imports non déclarés de dakar (`remark`, `remark-html`, `gray-matter`) restent une dette acceptée.
 - 2026-11-06 — Le volet Netlify et Vercel d'AC-RETIRESCRIBE-6 se constate au push du commit de suppression.
+- 2026-11-07 — Volet Netlify d'AC-RETIRESCRIBE-6 constaté : 6c30ea6 construit et publié en production. Volet Vercel non vérifié, reporté par Nicolas : la reconstruction de dakar sur une install propre reste à constater.
 
 ## Documentation updates
 
