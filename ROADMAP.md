@@ -32,7 +32,12 @@ Bootstrapped on 2026-07-29 by `/start` from the epic and from the flags left by 
 
 ## Next
 
-Aucun item. extract-compound-plugin est sorti de l'epic pyramid-v2 le 2026-11-07 : il relève de `compound-plugins-epic`, dans `~/.claude`. Quand le plugin sera publié, le lien de la landing page vers son dépôt et les deux entrées de la question tests-first de `documentation/geo-questions.md` entreront ici.
+### robusta-v3-redesign
+- version: v3
+- brief: documentation/mockups-brief.md
+- Les maquettes de robusta.build v3 sur le design system existant, thème Robusta Station : l'accueil avec le bloc « now building », les pages products et resume, le blog et l'article, les séparateurs et fonds de panel. Le brief est le prompt de Claude Design ; les maquettes décident ensuite les stories, dont les nouvelles sections du design system.
+
+extract-compound-plugin est sorti de l'epic pyramid-v2 le 2026-11-07 : il relève de `compound-plugins-epic`, dans `~/.claude`. Quand le plugin sera publié, le lien de la landing page vers son dépôt et les deux entrées de la question tests-first de `documentation/geo-questions.md` entreront ici.
 
 ## Vercel (dakar)
 
