@@ -8,8 +8,8 @@
  * Design: features/__done/pyramid-v2-epic/__done/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-82
  */
-import heroMascot from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
-import ctaMascot from '@robusta/pyramids-design-system/assets/niktux-presentation.webp';
+import heroMascot from '@robusta/pyramids-design-system/assets/niktux-presentation.webp';
+import ctaMascot from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
 
 /**
@@ -19,8 +19,8 @@ import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordm
  */
 export const wordmarkSrc: string = wordmark;
 
-/** `niktux-thinks.webp`, the hero's mascot, at the URL the bundler published it under. */
+/** `niktux-presentation.webp`, the hero's mascot, at the URL the bundler published it under. */
 export const heroMascotSrc: string = heroMascot;
 
-/** `niktux-presentation.webp`, the closing block's mascot, at the URL the bundler published it under. */
+/** `niktux-thinks.webp`, the closing block's mascot, at the URL the bundler published it under. */
 export const ctaMascotSrc: string = ctaMascot;

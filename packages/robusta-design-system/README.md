@@ -46,7 +46,7 @@ import thinks   from '@robusta/pyramids-design-system/assets/niktux-thinks.webp'
 Available assets:
 - Niktux, the mascot, in six WebP illustrations:
   - `niktux-thinks.webp` — thinking, 720×720
-  - `niktux-presentation.webp` — giving a presentation, 720×720
+  - `niktux-presentation.webp` — Nicolas as Niktux, with handwritten notes around him, 720×720
   - `niktux-working-hard.webp` — working hard, 720×720
   - `niktux-throw-money.webp` — throwing money, 720×720
   - `niktux-furious-at-computer.webp` — furious at the computer, 720×600

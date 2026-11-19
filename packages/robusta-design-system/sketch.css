@@ -454,9 +454,9 @@
   font-size: var(--t-small);
   color: var(--ink-mute);
 }
-.sk-hero__figure { position: relative; text-align: center; min-width: 0; }
-/* the mascot is ink on white: multiply turns its white into the paper under it */
-.sk-hero__mascot { height: 240px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.sk-hero__figure { position: relative; justify-self: center; width: fit-content; max-width: 100%; text-align: center; }
+/* the mascot is ink on near-white: brightness lifts that to pure white, which multiply turns into the paper under it */
+.sk-hero__mascot { height: 240px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.02); }
 .sk-hero__annotation {
   font-family: var(--font-sans);
   font-size: var(--t-small);
@@ -464,7 +464,7 @@
   transform: rotate(4deg);
   margin-top: var(--sp-4);
 }
-/* the little pointing squiggle: it aims at the mascot from a fixed offset,
+/* the little pointing squiggle: it aims at the mascot from the caption,
    which only means anything once the figure sits in its own column. */
 .sk-hero__doodle { display: none; }
 
@@ -610,7 +610,7 @@
   gap: var(--sp-4);
   margin-top: var(--sp-6);
 }
-.sk-flow-diagram__mascot { height: 96px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.sk-flow-diagram__mascot { height: 96px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.02); }
 .sk-flow-diagram__bubble { max-width: 320px; }
 .sk-flow-diagram__caveat-text {
   font-family: var(--font-sans);
@@ -739,7 +739,7 @@
   height: 110px;
   max-width: 100%;
   object-fit: contain;
-  mix-blend-mode: multiply;
+  mix-blend-mode: multiply; filter: brightness(1.02);
   margin-bottom: var(--sp-2);
 }
 .sk-cta__title {
@@ -897,11 +897,13 @@
   .sk-site-header__nav       { gap: var(--sp-6); }
 }
 
-/* -------- xl — the hero annotation returns to the margin it points from -------- */
+/* -------- xl — the caption leaves the flow for the mascot's top-right corner.
+   The figure is exactly the mascot's box, so every offset below is a share of
+   the mascot: the caption and its squiggle follow it at any screen width -------- */
 @media (min-width: 80rem) {
   .sk-hero__grid       { gap: var(--sp-7); }
-  .sk-hero__annotation { position: absolute; top: 30px; right: 0; margin-top: 0; }
-  .sk-hero__doodle     { display: block; position: absolute; top: 60px; right: 50px; width: 80px; height: 60px; }
+  .sk-hero__annotation { position: absolute; top: 2%; left: 92%; width: max-content; max-width: 11em; margin-top: 0; text-align: left; }
+  .sk-hero__doodle     { display: block; position: absolute; top: 14%; left: 86%; width: 22%; height: auto; aspect-ratio: 4 / 3; }
 }
 
 /* -------- 2xl — the sections reach the proportions they render at their

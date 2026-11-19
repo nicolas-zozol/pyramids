@@ -190,7 +190,7 @@ const en: PageCopy = {
         'I’m Nicolas Zozol, twenty years in software. RB Compound is how I build software with AI agents: each feature gets a story and a design, you approve the design, and only then do the agents write the code, tests first. I work with teams and technical leads who build software with agents.',
       emailLabel: 'write me an email',
       linkedInLabel: 'see my LinkedIn profile',
-      mascotAlt: 'Niktux, the penguin mascot of Robusta Build',
+      mascotAlt: 'Nicolas drawn as Niktux, a penguin in a Robusta Build hoodie: 25 years of coding, sees the big picture, flexible frontend, solid foundations',
       annotation: 'this is niktux, watching over the code.',
     },
     openSource: {
@@ -320,7 +320,7 @@ const fr: PageCopy = {
         'Je suis Nicolas Zozol, vingt ans de logiciel. RB Compound est ma façon de construire du logiciel avec des agents IA : chaque feature a sa story et son design, vous approuvez le design, et seulement ensuite les agents écrivent le code, tests d’abord. Je travaille avec les équipes et les responsables techniques qui construisent du logiciel avec des agents.',
       emailLabel: 'm’écrire un e-mail',
       linkedInLabel: 'voir mon profil LinkedIn',
-      mascotAlt: 'Niktux, le manchot mascotte de Robusta Build',
+      mascotAlt: 'Nicolas dessiné en Niktux, un manchot en sweat Robusta Build : 25 ans de code, la vue d’ensemble, un frontend souple, des fondations solides',
       annotation: 'voici niktux, qui veille sur le code.',
     },
     openSource: {
@@ -452,7 +452,7 @@ const es: PageCopy = {
         'Soy Nicolas Zozol, veinte años en el software. RB Compound es mi forma de construir software con agentes de IA: cada feature tiene su story y su design, tú apruebas el design, y solo entonces los agentes escriben el código, con los tests primero. Trabajo con equipos y responsables técnicos que construyen software con agentes.',
       emailLabel: 'escribirme un e-mail',
       linkedInLabel: 'ver mi perfil de LinkedIn',
-      mascotAlt: 'Niktux, el pingüino mascota de Robusta Build',
+      mascotAlt: 'Nicolas dibujado como Niktux, un pingüino con sudadera de Robusta Build: 25 años programando, visión de conjunto, frontend flexible, bases sólidas',
       annotation: 'aquí está niktux, que vigila el código.',
     },
     openSource: {
