@@ -40,16 +40,18 @@ Each asset is exposed at `assets/<filename>` as a subpath export, and the consum
 
 ```ts
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
-import tuxSvg   from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
-import headSvg  from '@robusta/pyramids-design-system/assets/crystal-tux-head.svg';
+import thinks   from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
 ```
 
 Available assets:
-- `crystal-tux.svg` — full-body mascot, a flat penguin with an antenna
-- `crystal-tux.png` — a second illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
-- `crystal-tux-head.svg` — head only, for inline annotations
-- `crystal-tux-waving.svg` — waving with "hi there!" speech bubble
-- `crystal-tux-thinking.svg` — thinking pose
+- Niktux, the mascot, in six WebP illustrations:
+  - `niktux-thinks.webp` — thinking, 720×720
+  - `niktux-presentation.webp` — giving a presentation, 720×720
+  - `niktux-working-hard.webp` — working hard, 720×720
+  - `niktux-throw-money.webp` — throwing money, 720×720
+  - `niktux-furious-at-computer.webp` — furious at the computer, 720×600
+  - `niktux-pack-ice.webp` — on the pack ice, 1600×533
+- `crystal-tux.png` — an earlier illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
 - `robusta-build-wordmark.svg` — the napkin wordmark, vectorized (1597×273)
 
 ## Import — components
@@ -259,7 +261,7 @@ Each width is written once, in one `@media (min-width: …)` block at the end of
 
 - no photography by default. if used, it should be **black-and-white, high-grain, half-tone** — dithered or screen-printed feel. never warm consumer photography.
 - prefer hand-drawn diagrams over screenshots.
-- the only "character" in the system is **Crystal Tux**, used sparingly.
+- the only "character" in the system is **Niktux**, used sparingly.
 
 ### transparency & blur
 
@@ -279,7 +281,7 @@ This system **avoids icon fonts** — they look too geometric and clean. Icons s
 3. **Unicode characters** are acceptable for terminal-style accents: `→ ← ↗ ✓ ✗ ~ //`.
 4. **No emoji** in the product itself, with one exception: the brand logo uses 💪 + 🏗 as its mark (see `BrandLogo.jsx`). They break tone everywhere else.
 
-**Crystal Tux** is the one exception — a recurring mascot, not a generic icon. Use sparingly: hero areas, empty states, footer, occasional inline annotation. Never decorative on every screen.
+**Niktux** is the one exception — a recurring mascot, not a generic icon. Use sparingly: hero areas, empty states, footer, occasional inline annotation. Never decorative on every screen.
 
 ---
 

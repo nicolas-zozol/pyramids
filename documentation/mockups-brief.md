@@ -4,7 +4,7 @@
 
 Mockups of robusta.build, the personal site of Nicolas Zozol, as a set of pages built with the existing Robusta Build design system described below. Not a new identity: the hand-drawn sketchnote language stays, the pages and the content change. For each page, one desktop frame at 1280 and one mobile frame at 360, plus a components inventory, see Deliverables.
 
-The attached files are the real design system: `colors_and_type.css` holds the tokens, `sketch.css` the primitives and the layout of the current sections, `marketing-page.html` the current home page, `robusta-build-wordmark.svg` and `crystal-tux.svg` the brand assets. Start from them.
+The attached files are the real design system: `colors_and_type.css` holds the tokens, `sketch.css` the primitives and the layout of the current sections, `marketing-page.html` the current home page, `robusta-build-wordmark.svg` and the six `niktux-*.webp` the brand assets. Start from them.
 
 The site runs on Pyramids, a static site generator of mine: every page is prerendered at build, nothing runs on a request, and every text is a slot the site fills in three languages. The constraints that follow are listed under Hard constraints. They decide whether a mockup can be coded, so treat them as part of the brief.
 
@@ -43,7 +43,7 @@ Header and footer on every page.
 - Footer: tagline, link columns, pages, products, articles by category, elsewhere (GitHub, LinkedIn, Stack Overflow), then the copyright. No newsletter.
 
 1. Home, `/`
-   - Hero: who, what, available. Primary call to action the email, secondary LinkedIn. Crystal Tux once, with a handwritten annotation.
+   - Hero: who, what, available. Primary call to action the email, secondary LinkedIn. Niktux once, with a handwritten annotation.
    - Now building: three to five dated latest moves across products, like a lab notebook page. The liveliest block of the site.
    - RB Compound: the two flow diagrams on dotted paper, condensed. Open source: epic → story → design → validation → code. Complete: story → brainstorm → design → code → docs.
    - Products: the cards, compact, linking to the products page.
@@ -81,7 +81,7 @@ Voice: lowercase by default, proper nouns and acronyms keep their case, first pe
 - Motifs: wobbly SVG-path borders instead of CSS borders; stickers, a solid black offset 4px down-right, no drop shadow anywhere; speech-bubble callouts; hand-drawn arrows; a pink under-squiggle on an emphasized word; wavy dividers; dotted bullet-journal grid behind diagrams; tags; cards tilted ±0.4–0.6°, a few pixels of jitter between siblings. Radii 3–10px.
 - Existing sections to reuse: SiteHeader, Hero, ServicesGrid, FlowDiagram, PrinciplesList, NotesPreview, CTA, SiteFooter. Existing primitives: BrandLogo, SkButton (primary and ghost), SkCallout, SkTag, SkInput, SkArrowRight.
 - Don't: gradients, glassmorphism, blur, 3D, photo backgrounds, rounded cards with a colored left border, the SaaS hero with a screenshot on the right, an icon for every label, icon fonts. Icons are inline hand-drawn SVG, stroke 1.8, round caps.
-- Crystal Tux and the cast of The theme below: one scene per page, in the margins, dividers, empty states and diagram props. Never a full-color illustration competing with the copy.
+- Niktux and the cast of The theme below: one scene per page, in the margins, dividers, empty states and diagram props. Never a full-color illustration competing with the copy.
 
 ## The theme: Robusta Station, the wrong hemisphere club
 
@@ -89,7 +89,7 @@ The set is the Antarctic ice: paper is snow, ink is the line, the two washes are
 
 The cast, each with a fixed role so it means the same thing on every page:
 
-- Crystal Tux, the penguin with the antenna: the host. Hero, 404, footer.
+- Niktux, the penguin: the host. Hero, 404, footer.
 - The penguin colony: the RB Compound agents, one prop each. A clipboard for storyman, a T-square for designman, an APPROVED stamp for the validation, a whistle for boss, a lantern for docman, a broom for doneman, a magnifying glass for fixman.
 - The polar bear tourist: the client. Arrived from the wrong hemisphere with a suitcase full of legacy, map upside down, a cardboard sign reading `wrong hemisphere`. In "what I take on" and at the mailbox of the closing call to action.
 - The green oak on the ice: the open source that has grown since 2013, Masala Parser. A notice board nailed to the trunk for the articles.

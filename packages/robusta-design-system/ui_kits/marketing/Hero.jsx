@@ -40,7 +40,7 @@ function Hero() {
         </div>
 
         <div style={{ position: 'relative', textAlign: 'center' }}>
-          <img src="../../assets/crystal-tux.svg" style={{ height: 360 }} alt="crystal tux"/>
+          <img src="../../assets/niktux-thinks.webp" style={{ height: 360 }} alt="niktux"/>
           {/* annotation arrows pointing at tux */}
           <div style={{
             position: 'absolute', top: 30, right: 0,

@@ -2,7 +2,7 @@
 function CTA() {
   return (
     <section style={{ padding: '80px 48px', textAlign: 'center', position: 'relative' }}>
-      <img src="../../assets/crystal-tux-waving.svg" style={{ height: 140, marginBottom: 8 }}/>
+      <img src="../../assets/niktux-presentation.webp" style={{ height: 140, marginBottom: 8 }}/>
       <h2 style={{ fontFamily: "'IBM Plex Sans', system-ui, sans-serif", fontSize: 76, margin: '12px 0 8px', lineHeight: 1 }}>
         ok, ready when you are.
       </h2>

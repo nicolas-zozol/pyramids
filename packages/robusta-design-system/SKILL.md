@@ -6,14 +6,14 @@ user-invocable: true
 
 # Robusta Build Design Skill
 
-Robusta Build is an independent senior engineering practice. Its identity is a **hand-drawn sketchnote** — like an engineer explaining a hard system on a napkin. Lowercase handwriting on warm off-white paper, ink strokes, three small accent colors (blue, green, pink), and a recurring penguin mascot called Crystal Tux.
+Robusta Build is an independent senior engineering practice. Its identity is a **hand-drawn sketchnote** — like an engineer explaining a hard system on a napkin. Lowercase handwriting on warm off-white paper, ink strokes, three small accent colors (blue, green, pink), and a recurring penguin mascot called Niktux.
 
 ## Where things live
 
 - `README.md` — full system reference: tone, content rules, visual foundations, iconography, don'ts.
 - `colors_and_type.css` — CSS vars for color, type scale, semantic styles, and paper textures.
 - `sketch.css` — hand-drawn primitives: rough boxes, callouts, buttons, inputs, tags, arrows, dividers, scribbles.
-- `assets/` — logo (3 variants), Crystal Tux mascot (4 poses).
+- `assets/` — logo (3 variants), Niktux mascot (6 WebP illustrations).
 - `preview/*.html` — design-system specimen cards.
 - `ui_kits/marketing/` — full marketing site recreation, factored into JSX components.
 
@@ -28,11 +28,11 @@ Robusta Build is an independent senior engineering practice. Its identity is a *
 3. **Compose with the `.sk-*` primitives** instead of inventing borders or shadows. The wobble is what the brand is.
 4. **Use lowercase** for headlines and most UI labels. Proper nouns and acronyms keep their casing.
 5. **Use color sparingly** — accents only, never as background fills. Highlighter washes (`.highlight-blue/green/pink/yellow`) for emphasis.
-6. **Use Crystal Tux sparingly.** Hero, empty state, footer, occasional inline annotation. Not on every screen.
+6. **Use Niktux sparingly.** Hero, empty state, footer, occasional inline annotation. Not on every screen.
 
 ## When invoked
 
-If the user invokes this skill without other guidance: ask what they want to build, ask 4–6 clarifying questions (audience, section, tone level, needs Crystal Tux?, single page or flow?), then act as an expert designer. Output static HTML artifacts unless they explicitly want production code.
+If the user invokes this skill without other guidance: ask what they want to build, ask 4–6 clarifying questions (audience, section, tone level, needs Niktux?, single page or flow?), then act as an expert designer. Output static HTML artifacts unless they explicitly want production code.
 
 ## Caveats
 

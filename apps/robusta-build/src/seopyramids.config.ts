@@ -190,7 +190,7 @@ const en: PageCopy = {
         'I’m Nicolas Zozol, twenty years in software. RB Compound is how I build software with AI agents: each feature gets a story and a design, you approve the design, and only then do the agents write the code, tests first. I work with teams and technical leads who build software with agents.',
       emailLabel: 'write me an email',
       linkedInLabel: 'see my LinkedIn profile',
-      mascotAlt: 'Crystal Tux, the penguin mascot of Robusta Build',
+      mascotAlt: 'Niktux, the penguin mascot of Robusta Build',
       annotation: 'this is crystal tux. she watches over the code.',
     },
     openSource: {
@@ -320,7 +320,7 @@ const fr: PageCopy = {
         'Je suis Nicolas Zozol, vingt ans de logiciel. RB Compound est ma façon de construire du logiciel avec des agents IA : chaque feature a sa story et son design, vous approuvez le design, et seulement ensuite les agents écrivent le code, tests d’abord. Je travaille avec les équipes et les responsables techniques qui construisent du logiciel avec des agents.',
       emailLabel: 'm’écrire un e-mail',
       linkedInLabel: 'voir mon profil LinkedIn',
-      mascotAlt: 'Crystal Tux, le manchot mascotte de Robusta Build',
+      mascotAlt: 'Niktux, le manchot mascotte de Robusta Build',
       annotation: 'voici crystal tux. elle veille sur le code.',
     },
     openSource: {
@@ -452,7 +452,7 @@ const es: PageCopy = {
         'Soy Nicolas Zozol, veinte años en el software. RB Compound es mi forma de construir software con agentes de IA: cada feature tiene su story y su design, tú apruebas el design, y solo entonces los agentes escriben el código, con los tests primero. Trabajo con equipos y responsables técnicos que construyen software con agentes.',
       emailLabel: 'escribirme un e-mail',
       linkedInLabel: 'ver mi perfil de LinkedIn',
-      mascotAlt: 'Crystal Tux, el pingüino mascota de Robusta Build',
+      mascotAlt: 'Niktux, el pingüino mascota de Robusta Build',
       annotation: 'esta es crystal tux. vigila el código.',
     },
     openSource: {

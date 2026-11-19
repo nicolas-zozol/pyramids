@@ -38,7 +38,7 @@ function FlowDiagram() {
       <div style={{
         marginTop: 36, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16
       }}>
-        <img src="../../assets/crystal-tux-thinking.svg" style={{ height: 110 }}/>
+        <img src="../../assets/niktux-thinks.webp" style={{ height: 110 }}/>
         <div className="sk-callout" style={{ maxWidth: 320 }}>
           <div style={{ fontFamily: "'IBM Plex Sans', system-ui, sans-serif", fontSize: 15 }}>
             we'll say no if your problem isn't a fit. honestly, that happens about 1 in 3 calls.
