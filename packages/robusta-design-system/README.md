@@ -53,6 +53,7 @@ Available assets:
   - `niktux-pack-ice.webp` — on the pack ice, 1600×533
 - `crystal-tux.png` — an earlier illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
 - `robusta-build-wordmark.svg` — the napkin wordmark, vectorized (1597×273)
+- `decor/*.svg` — the pack-ice decor, 17 drawings for dividers and panel feet, exported as `assets/decor/<name>.svg`: penguins, a polar bear, an oak, igloos, a snowman, towers, houses, phone booths, a rainbow. Each sits in a 160×160 box on the same ground line (y = 148), so they line up in a frieze; ink outline 3, details 2, fills from the brand hues and their nuances, plus a green for the oak. Gallery: `preview/decor.html`
 
 ## Import — components
 
@@ -239,7 +240,7 @@ Each width is written once, in one `@media (min-width: …)` block at the end of
 ### borders & "shadows"
 
 - borders are **wobbly SVG paths**, not `border:`. See `.sk-box`, `.sk-callout`, `.sk-btn` in `sketch.css`.
-- there are **no drop shadows** in this system. depth is conveyed by **offset stamps** — a solid black duplicate sitting 4px down-and-right behind a card. See `.sk-sticker` and the `::after` pattern on `.sk-btn`.
+- there are **no drop shadows** in this system. depth is conveyed by **offset stamps** — a solid black duplicate sitting 4px down-and-right behind a card. See `.sk-sticker` and `.sk-btn`: each is its own stacking context, `::after` the ink stamp under `::before`, which carries the fill and the outline, so the stamp shows on any background and never covers the label.
 - corner radii are tiny (3–10px) because the wobbly stroke does the softening.
 
 ### animation
@@ -292,11 +293,12 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 - **rough boxes** — `.sk-box` — wobbly SVG-path rectangles for cards, panels, sections.
 - **stickers** — `.sk-sticker` — boxes with a 4px solid offset behind, conveying weight without shadow.
 - **callouts** — `.sk-callout` — speech-bubble framing for emphasized notes.
-- **arrows** — `.sk-arrow-right` — hand-drawn arrows for flow diagrams and "go here next" UI.
+- **arrows** — `.sk-arrow-right` — the light pen arrow for copy (`request → queue → worker`).
+- **flows** — `.sk-flow` lays out `.sk-flow-item` columns joined by `.sk-flow-arrow`, a bold marker arrow; `.sk-step` is a numbered disk on the ink stamp, `--primary`, `--secondary` or `--accent` for its fill; `--sk-step` on the row sizes the steps.
 - **scribbles** — `.sk-scribble` — pink under-squiggle for emphasized words.
 - **separators** — `.sk-divider` — wavy section breaks.
 - **highlighter washes** — `.highlight-blue/green/pink/yellow` on text spans.
-- **circles** — `.sk-circle` — for diagram nodes, step indicators.
+- **circles** — `.sk-circle` — a plain ring around a number or a word, for annotations.
 - **tags** — `.sk-tag` — small inline labels.
 - **buttons** — `.sk-btn`, `.sk-btn--primary`, `.sk-btn--ghost`.
 - **inputs** — `.sk-input` inside `.sk-input-wrap`.

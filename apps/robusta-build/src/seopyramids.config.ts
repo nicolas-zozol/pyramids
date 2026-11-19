@@ -191,7 +191,7 @@ const en: PageCopy = {
       emailLabel: 'write me an email',
       linkedInLabel: 'see my LinkedIn profile',
       mascotAlt: 'Niktux, the penguin mascot of Robusta Build',
-      annotation: 'this is crystal tux. she watches over the code.',
+      annotation: 'this is niktux, watching over the code.',
     },
     openSource: {
       eyebrow: '// open source version',
@@ -321,7 +321,7 @@ const fr: PageCopy = {
       emailLabel: 'm’écrire un e-mail',
       linkedInLabel: 'voir mon profil LinkedIn',
       mascotAlt: 'Niktux, le manchot mascotte de Robusta Build',
-      annotation: 'voici crystal tux. elle veille sur le code.',
+      annotation: 'voici niktux, qui veille sur le code.',
     },
     openSource: {
       eyebrow: '// version open source',
@@ -453,7 +453,7 @@ const es: PageCopy = {
       emailLabel: 'escribirme un e-mail',
       linkedInLabel: 'ver mi perfil de LinkedIn',
       mascotAlt: 'Niktux, el pingüino mascota de Robusta Build',
-      annotation: 'esta es crystal tux. vigila el código.',
+      annotation: 'aquí está niktux, que vigila el código.',
     },
     openSource: {
       eyebrow: '// versión open source',

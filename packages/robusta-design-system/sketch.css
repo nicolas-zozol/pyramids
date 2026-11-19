@@ -5,7 +5,7 @@
    ========================================================= */
 
 /* ---------- rough box ----------
-   wobbly border drawn with svg + a tiny offset stamp behind. */
+   wobbly border drawn with svg. add .sk-sticker for the offset stamp behind. */
 .sk-box {
   position: relative;
   background: var(--paper);
@@ -18,23 +18,34 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M2,3 Q15,1.5 30,2.2 T60,2.5 Q80,1.8 98,3 Q97.5,20 97.8,40 Q98.2,60 97.5,80 Q98,90 97,98 Q80,97.5 60,98 T20,97.5 Q8,98 2.5,97.5 Q3,80 2.2,60 T2.5,30 Q1.8,15 2,3 Z' fill='none' stroke='%231a1a1a' stroke-width='0.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M2,3 Q15,1.5 30,2.2 T60,2.5 Q80,1.8 98,3 Q97.5,20 97.8,40 Q98.2,60 97.5,80 Q98,90 97,98 Q80,97.5 60,98 T20,97.5 Q8,98 2.5,97.5 Q3,80 2.2,60 T2.5,30 Q1.8,15 2,3 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>");
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 
-/* sticker — offset stamp underneath gives 3d feel without shadow */
+/* sticker — offset stamp underneath gives 3d feel without shadow.
+   the sticker is its own stacking context: the stamp (::after) sits under the fill (::before),
+   and shows on any background. with .sk-box, ::before carries the outline as well. */
 .sk-sticker {
   position: relative;
+  z-index: 0;
   background: var(--paper);
   padding: var(--sp-4) var(--sp-5);
+}
+.sk-sticker::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: inherit; /* the sticker's fill, laid above the stamp */
+  z-index: -1;
 }
 .sk-sticker::after {
   content: "";
   position: absolute;
   inset: 4px -4px -4px 4px;
   background: var(--ink);
-  z-index: -1;
+  z-index: -2; /* the stamp, under the fill */
 }
 .sk-sticker > * { position: relative; z-index: 1; }
 
@@ -56,7 +67,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'><path d='M5,8 Q40,3 100,5 T195,8 Q197,30 196,55 Q197,75 195,92 Q140,97 100,95 T20,95 Q6,96 5,92 Q3,70 4,50 T5,8 Z' fill='none' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'><path d='M5,8 Q40,3 100,5 T195,8 Q197,30 196,55 Q197,75 195,92 Q140,97 100,95 T20,95 Q6,96 5,92 Q3,70 4,50 T5,8 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
@@ -66,21 +77,22 @@
   display: block;
   width: 100%;
   height: 14px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M2,7 Q15,3 30,7 T60,7 T90,8 T120,6 T150,7 T180,7 T198,7' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M2,7 Q15,3 30,7 T60,7 T90,8 T120,6 T150,7 T180,7 T198,7' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 
 .sk-divider--dashed {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 4' preserveAspectRatio='none'><path d='M2,2 L198,2' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-dasharray='5 4'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 4' preserveAspectRatio='none'><path d='M2,2 L198,2' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-dasharray='12 10' vector-effect='non-scaling-stroke'/></svg>");
   height: 4px;
 }
 
-/* ---------- arrow ---------- */
+/* ---------- arrow ----------
+   the light arrow for copy: a nearly straight pen line. flows use .sk-flow-arrow. */
 .sk-arrow-right {
   display: inline-block;
   width: 80px; height: 24px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 24'><path d='M3,12 Q20,9 40,13 T70,12' fill='none' stroke='%231a1a1a' stroke-width='1.8' stroke-linecap='round'/><path d='M64,5 L72,12 L64,19' fill='none' stroke='%231a1a1a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 24'><path d='M3,12.5 Q37,11 71,12' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/><path d='M63,6 L71.5,12 L63,18' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>");
   background-repeat: no-repeat;
   vertical-align: middle;
 }
@@ -89,8 +101,9 @@
 .sk-check {
   display: inline-block;
   width: 22px; height: 22px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3,12 Q6,15 9,18 Q14,8 19,4' fill='none' stroke='%232e9c5e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat: no-repeat;
+  background-color: var(--brand-primary); /* the mark's colour is a token; the svg is only its shape */
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3,12 Q6,15 9,18 Q14,8 19,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3,12 Q6,15 9,18 Q14,8 19,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
   vertical-align: middle;
 }
 
@@ -109,40 +122,41 @@
   cursor: pointer;
   position: relative;
   text-decoration: none;
-  transition: transform 90ms ease;
-  z-index: 0; /* button paints above its drop shadow */
+  transition: transform 120ms ease-out;
+  z-index: 0; /* its own stacking context: the stamp shows on any background */
 }
 .sk-btn::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-color: inherit; /* the button's fill, laid above the stamp */
+  z-index: -1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 .sk-btn::after {
   content: "";
   position: absolute;
-  inset: 3px -3px -3px 3px;
+  inset: 4px -4px -4px 4px; /* the same ink stamp as a sticker */
   background: var(--ink);
-  z-index: -1;
-  transition: inset 90ms ease;
+  z-index: -2; /* the stamp, under the fill */
+  transition: inset 120ms ease-out, opacity 120ms ease-out;
 }
-.sk-btn:hover::after { inset: 5px -5px -5px 5px; }
-.sk-btn:active        { transform: translate(3px,3px); }
+.sk-btn:hover::after { inset: 6px -6px -6px 6px; } /* the sticker lifts: 4px → 6px */
+.sk-btn:active        { transform: translate(2px,2px); }
 .sk-btn:active::after { inset: 0; opacity: 0; } /* shadow tucked away during press */
+.sk-btn:focus-visible { outline: var(--stroke) dashed var(--brand-accent); outline-offset: 4px; }
 
 /* primary: brand purple fill, paper text — wobbly white outline */
 .sk-btn--primary { background: var(--brand-primary); color: var(--paper); }
 .sk-btn--primary::before {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%23fafaf7' stroke-width='1.2' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%23fafaf7' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
 }
-.sk-btn--primary::after { background: var(--brand-primary-deep); }
 
 /* secondary: brand gold fill, ink text — for warmer secondary CTAs */
 .sk-btn--secondary { background: var(--brand-secondary); color: var(--ink); }
-.sk-btn--secondary::after { background: var(--brand-secondary-deep); }
 
 .sk-btn--ghost { background: transparent; }
 .sk-btn--ghost::after { display:none; }
@@ -168,10 +182,11 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'><path d='M3,5 Q50,3 100,4 T197,5 Q198,25 197,46 Q140,48 100,47 T5,46 Q2,25 3,5 Z' fill='none' stroke='%231a1a1a' stroke-width='1.3' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'><path d='M3,5 Q50,3 100,4 T197,5 Q198,25 197,46 Q140,48 100,47 T5,46 Q2,25 3,5 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
+.sk-input-wrap:focus-within { outline: var(--stroke) dashed var(--brand-accent); outline-offset: 4px; }
 
 /* ---------- badge / tag ---------- */
 .sk-tag {
@@ -189,7 +204,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'><path d='M3,4 Q25,1 50,2.5 T97,4 Q98,15 97,26 Q60,28 50,27 T4,26 Q2,15 3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'><path d='M3,4 Q25,1 50,2.5 T97,4 Q98,15 97,26 Q60,28 50,27 T4,26 Q2,15 3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>");
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
@@ -197,7 +212,7 @@
 .sk-tag--green { background: var(--accent-green-soft); }
 .sk-tag--pink  { background: var(--accent-pink-soft); }
 
-/* ---------- circle (for diagrams) ---------- */
+/* ---------- circle — a plain ring around a number or a word, for annotations ---------- */
 .sk-circle {
   display: inline-flex;
   align-items: center;
@@ -205,8 +220,94 @@
   width: 56px; height: 56px;
   position: relative;
   font-family: var(--font-annot);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><path d='M30,3 Q45,4 54,15 Q58,30 53,45 Q42,57 28,56 Q13,55 6,42 Q2,28 9,14 Q19,3 30,3 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><path d='M30,3 Q45,4 54,15 Q58,30 53,45 Q42,57 28,56 Q13,55 6,42 Q2,28 9,14 Q19,3 30,3 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' vector-effect='non-scaling-stroke'/></svg>");
   background-size: 100% 100%;
+}
+
+/* ---------- flow: numbered steps joined by bold arrows ----------
+   a step is a sticker cut round: a filled disk with the pen outline, on the ink stamp.
+   the arrow is the marker line: straight, stroke-bold thick, with a solid head.
+   --sk-step sizes the steps and keeps each arrow on their centres. */
+.sk-flow {
+  --sk-step: 64px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+.sk-flow-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  text-align: center;
+  min-width: 0;
+}
+.sk-step {
+  position: relative;
+  z-index: 0; /* its own stacking context: the stamp shows on any background */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--sk-step, 64px);
+  height: var(--sk-step, 64px);
+  margin-bottom: var(--sp-2);
+  border-radius: 52% 48% 50% 50% / 48% 52% 50% 50%; /* round, by hand */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--t-h3);
+  line-height: 1;
+}
+.sk-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: inherit; /* the step's fill, laid above the stamp */
+  border: var(--stroke-thin) solid var(--ink);
+  z-index: -1;
+}
+.sk-step::after {
+  content: "";
+  position: absolute;
+  inset: 4px -4px -4px 4px; /* the same ink stamp as a sticker */
+  border-radius: inherit;
+  background: var(--ink);
+  z-index: -2;
+}
+.sk-step--primary   { background: var(--brand-primary);   color: var(--paper); }
+.sk-step--secondary { background: var(--brand-secondary); color: var(--ink); }
+.sk-step--accent    { background: var(--brand-accent);    color: var(--paper); }
+.sk-flow-arrow {
+  position: relative;
+  flex: 1 1 32px;
+  min-width: 32px;
+  height: var(--sk-step, 64px);
+  color: var(--ink); /* set color to recolor shaft and head together */
+}
+.sk-flow-arrow::before { /* the shaft */
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 12px;
+  top: 50%;
+  height: var(--stroke-bold);
+  margin-top: calc(var(--stroke-bold) / -2);
+  border-radius: var(--stroke-bold);
+  background: currentColor;
+}
+.sk-flow-arrow::after { /* the head */
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 16px;
+  height: 18px;
+  margin-top: -9px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 22% 50%);
 }
 
 /* ---------- "scribble" emphasis ---------- */
@@ -219,9 +320,9 @@
   position: absolute;
   left: -4px; right: -4px;
   bottom: -4px; height: 12px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,5 Q25,2 50,6 T100,5 T150,7 T198,4' fill='none' stroke='%23e94e8a' stroke-width='2.5' stroke-linecap='round'/></svg>");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background-color: var(--brand-primary); /* the mark's colour is a token; the svg is only its shape */
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,5 Q25,2 50,6 T100,5 T150,7 T198,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>") no-repeat center / 100% 100%;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,5 Q25,2 50,6 T100,5 T150,7 T198,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>") no-repeat center / 100% 100%;
 }
 
 /* slight tape effect for stickers */
@@ -234,7 +335,7 @@
   top: -8px; left: 50%;
   transform: translateX(-50%) rotate(-2deg);
   width: 60px; height: 18px;
-  background: rgba(255, 240, 130, 0.55);
+  background: color-mix(in srgb, var(--accent-yellow-soft) 85%, transparent);
   border-left: 1px dashed rgba(0,0,0,0.15);
   border-right: 1px dashed rgba(0,0,0,0.15);
 }
@@ -354,7 +455,8 @@
   color: var(--ink-mute);
 }
 .sk-hero__figure { position: relative; text-align: center; min-width: 0; }
-.sk-hero__mascot { height: 240px; max-width: 100%; object-fit: contain; }
+/* the mascot is ink on white: multiply turns its white into the paper under it */
+.sk-hero__mascot { height: 240px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
 .sk-hero__annotation {
   font-family: var(--font-sans);
   font-size: var(--t-small);
@@ -476,6 +578,7 @@
   overflow-wrap: break-word;
 }
 .sk-flow-diagram__steps {
+  --sk-step: 64px;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -483,18 +586,12 @@
   gap: var(--sp-5) var(--sp-4);
 }
 .sk-flow-diagram__step { text-align: center; min-width: 96px; }
-.sk-flow-diagram__badge {
-  width: 64px;
-  height: 64px;
-  font-family: var(--font-sans);
-  font-size: var(--t-h3);
-}
 .sk-flow-diagram__label {
   font-family: var(--font-sans);
   font-size: var(--t-h3);
+  font-weight: 600;
   line-height: 1;
   color: var(--ink);
-  margin-top: var(--sp-2);
 }
 .sk-flow-diagram__sub {
   font-family: var(--font-sans);
@@ -513,7 +610,7 @@
   gap: var(--sp-4);
   margin-top: var(--sp-6);
 }
-.sk-flow-diagram__mascot { height: 96px; max-width: 100%; object-fit: contain; }
+.sk-flow-diagram__mascot { height: 96px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
 .sk-flow-diagram__bubble { max-width: 320px; }
 .sk-flow-diagram__caveat-text {
   font-family: var(--font-sans);
@@ -642,6 +739,7 @@
   height: 110px;
   max-width: 100%;
   object-fit: contain;
+  mix-blend-mode: multiply;
   margin-bottom: var(--sp-2);
 }
 .sk-cta__title {
@@ -789,8 +887,8 @@
    below this the row wants 800px against less paper than that, so it wraps
    and the arrows stay hidden -------- */
 @media (min-width: 64rem) {
-  .sk-flow-diagram__steps    { flex-wrap: nowrap; justify-content: space-between; gap: var(--sp-2); }
-  .sk-flow-diagram__arrow    { display: inline-block; }
+  .sk-flow-diagram__steps    { --sk-step: 76px; flex-wrap: nowrap; justify-content: space-between; gap: var(--sp-3); }
+  .sk-flow-diagram__arrow    { display: block; }
   .sk-hero__grid             { grid-template-columns: 1.3fr minmax(0, 1fr); gap: var(--sp-6); }
   .sk-hero__mascot           { height: 300px; }
   .sk-services-grid__list    { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }

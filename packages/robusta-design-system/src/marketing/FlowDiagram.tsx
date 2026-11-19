@@ -1,5 +1,4 @@
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
-import { SkArrowRight } from '../primitives/SkArrowRight.tsx';
 import { SkCallout } from '../primitives/SkCallout.tsx';
 
 export interface FlowStep {
@@ -28,9 +27,12 @@ export interface FlowDiagramProps {
   style?: CSSProperties;
 }
 
+const STEP_TONES = ['primary', 'secondary', 'accent'] as const;
+
 /**
  * "How an engagement runs" flow diagram on dotted-grid paper. Each step is a
- * numbered circle + label + sub.
+ * numbered disk on the ink stamp, purple, gold and blue in turn, then its
+ * label and sub; bold marker arrows join the steps.
  *
  * The connecting arrows read left-to-right, which is only true once the steps
  * fit on one row: below `lg` they wrap and `sketch.css` hides the arrows, an
@@ -56,18 +58,18 @@ export function FlowDiagram({
         ) : null}
         {title ? <h2 className="sk-flow-diagram__title">{title}</h2> : null}
       </div>
-      <div className="sk-flow-diagram__steps">
+      <div className="sk-flow sk-flow-diagram__steps">
         {steps.map((s, i) => (
           <Fragment key={s.n}>
-            <div className="sk-flow-diagram__step">
-              <span className="sk-circle sk-flow-diagram__badge">{s.n}</span>
+            <div className="sk-flow-item sk-flow-diagram__step">
+              <span className={`sk-step sk-step--${STEP_TONES[i % STEP_TONES.length]}`}>
+                {s.n}
+              </span>
               <div className="sk-flow-diagram__label">{s.label}</div>
               <div className="sk-flow-diagram__sub">{s.sub}</div>
             </div>
             {i < steps.length - 1 && (
-              <span className="sk-flow-diagram__arrow">
-                <SkArrowRight width={64} />
-              </span>
+              <span className="sk-flow-arrow sk-flow-diagram__arrow" />
             )}
           </Fragment>
         ))}
