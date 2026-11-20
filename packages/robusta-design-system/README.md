@@ -40,17 +40,21 @@ Each asset is exposed at `assets/<filename>` as a subpath export, and the consum
 
 ```ts
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
-import tuxSvg   from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
-import headSvg  from '@robusta/pyramids-design-system/assets/crystal-tux-head.svg';
+import thinks   from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
 ```
 
 Available assets:
-- `crystal-tux.svg` — full-body mascot, a flat penguin with an antenna
-- `crystal-tux.png` — a second illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
-- `crystal-tux-head.svg` — head only, for inline annotations
-- `crystal-tux-waving.svg` — waving with "hi there!" speech bubble
-- `crystal-tux-thinking.svg` — thinking pose
+- Niktux, the mascot, in six WebP illustrations:
+  - `niktux-thinks.webp` — thinking, 720×720
+  - `niktux-presentation.webp` — Nicolas as Niktux, with handwritten notes around him, 720×720
+  - `niktux-working-hard.webp` — working hard, 720×720
+  - `rooftop-batches.webp`, `rooftop-stories.webp` — two screenshots of Rooftop, for its door on the home page
+  - `niktux-throw-money.webp` — throwing money, 720×720
+  - `niktux-furious-at-computer.webp` — furious at the computer, 720×600
+  - `niktux-pack-ice.webp` — on the pack ice, 1600×533
+- `crystal-tux.png` — an earlier illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
 - `robusta-build-wordmark.svg` — the napkin wordmark, vectorized (1597×273)
+- `decor/*.svg` — the pack-ice decor, 17 drawings for dividers and panel feet, exported as `assets/decor/<name>.svg`: penguins, a polar bear, an oak, igloos, a snowman, towers, houses, phone booths, a rainbow. Each sits in a 160×160 box on the same ground line (y = 148), so they line up in a frieze; ink outline 3, details 2, fills from the brand hues and their nuances, plus a green for the oak. Gallery: `preview/decor.html`
 
 ## Import — components
 
@@ -237,7 +241,7 @@ Each width is written once, in one `@media (min-width: …)` block at the end of
 ### borders & "shadows"
 
 - borders are **wobbly SVG paths**, not `border:`. See `.sk-box`, `.sk-callout`, `.sk-btn` in `sketch.css`.
-- there are **no drop shadows** in this system. depth is conveyed by **offset stamps** — a solid black duplicate sitting 4px down-and-right behind a card. See `.sk-sticker` and the `::after` pattern on `.sk-btn`.
+- there are **no drop shadows** in this system. depth is conveyed by **offset stamps** — a solid black duplicate sitting 4px down-and-right behind a card. See `.sk-sticker` and `.sk-btn`: each is its own stacking context, `::after` the ink stamp under `::before`, which carries the fill and the outline, so the stamp shows on any background and never covers the label.
 - corner radii are tiny (3–10px) because the wobbly stroke does the softening.
 
 ### animation
@@ -259,7 +263,7 @@ Each width is written once, in one `@media (min-width: …)` block at the end of
 
 - no photography by default. if used, it should be **black-and-white, high-grain, half-tone** — dithered or screen-printed feel. never warm consumer photography.
 - prefer hand-drawn diagrams over screenshots.
-- the only "character" in the system is **Crystal Tux**, used sparingly.
+- the only "character" in the system is **Niktux**, used sparingly.
 
 ### transparency & blur
 
@@ -279,7 +283,7 @@ This system **avoids icon fonts** — they look too geometric and clean. Icons s
 3. **Unicode characters** are acceptable for terminal-style accents: `→ ← ↗ ✓ ✗ ~ //`.
 4. **No emoji** in the product itself, with one exception: the brand logo uses 💪 + 🏗 as its mark (see `BrandLogo.jsx`). They break tone everywhere else.
 
-**Crystal Tux** is the one exception — a recurring mascot, not a generic icon. Use sparingly: hero areas, empty states, footer, occasional inline annotation. Never decorative on every screen.
+**Niktux** is the one exception — a recurring mascot, not a generic icon. Use sparingly: hero areas, empty states, footer, occasional inline annotation. Never decorative on every screen.
 
 ---
 
@@ -290,16 +294,18 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 - **rough boxes** — `.sk-box` — wobbly SVG-path rectangles for cards, panels, sections.
 - **stickers** — `.sk-sticker` — boxes with a 4px solid offset behind, conveying weight without shadow.
 - **callouts** — `.sk-callout` — speech-bubble framing for emphasized notes.
-- **arrows** — `.sk-arrow-right` — hand-drawn arrows for flow diagrams and "go here next" UI.
+- **arrows** — `.sk-arrow-right` — the light pen arrow for copy (`request → queue → worker`).
+- **flows** — `.sk-flow` lays out `.sk-flow-item` columns joined by `.sk-flow-arrow`, a bold marker arrow; `.sk-step` is a numbered disk on the ink stamp, `--primary`, `--secondary` or `--accent` for its fill; `--sk-step` on the row sizes the steps.
+- **console** — `.sk-console` on an `ol` or a `pre` — code on `--night`, the one dark surface: a hand-cut night sticker on the ink stamp. `.sk-console-line` per command, `.sk-console-cmd` on its `code` after a `›` prompt, `.sk-console-agent` in gold on the agent's `strong`, `.sk-console-note` beside it, under it below 560px of console. Only code goes dark: never a section, a card or a page.
 - **scribbles** — `.sk-scribble` — pink under-squiggle for emphasized words.
 - **separators** — `.sk-divider` — wavy section breaks.
 - **highlighter washes** — `.highlight-blue/green/pink/yellow` on text spans.
-- **circles** — `.sk-circle` — for diagram nodes, step indicators.
+- **circles** — `.sk-circle` — a plain ring around a number or a word, for annotations.
 - **tags** — `.sk-tag` — small inline labels.
 - **buttons** — `.sk-btn`, `.sk-btn--primary`, `.sk-btn--ghost`.
 - **inputs** — `.sk-input` inside `.sk-input-wrap`.
 
-The marketing sections carry their layout as classes of `sketch.css`, one block per section named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, and `.sk-brand-logo` for the logo. A part is `.sk-<section>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
+The marketing sections carry their layout as classes of `sketch.css`, one block per section named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-questions-list`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, the home page's `.sk-home-hero` (the building, one floor per product), `.sk-product-doors`, `.sk-library-showcase` and `.sk-workshop`, and `.sk-brand-logo` for the logo. A part is `.sk-<section>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
 
 These class names are what a site overrides in the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A section root takes `className` and `style`, `style` applied last; no section takes a prop per part.
 

@@ -1,6 +1,7 @@
-import type { NotePost } from '@robusta/pyramids-design-system';
+import type { NoteDateParts, NotePost } from '@robusta/pyramids-design-system';
 import {
   getArticleIndex,
+  getExcerptText,
   type ArticleIndexEntry,
 } from '../content/article-index.ts';
 import { articleUrl } from './article-url.ts';
@@ -34,6 +35,32 @@ function notePost(article: ArticleIndexEntry): NotePost {
     href: articleUrl(article),
     ...(article.category === undefined ? {} : { tag: article.category }),
     date: shortDate(article.date, article.locale),
+    dateParts: dateParts(article.date, article.locale),
+    summary: summaryOf(getExcerptText(article)),
+  };
+}
+
+/** About two lines of a note card. */
+const SUMMARY_LENGTH = 140;
+
+/** The excerpt cut at the last word before SUMMARY_LENGTH characters, an ellipsis marking the cut. */
+function summaryOf(excerpt: string): string {
+  if (excerpt.length <= SUMMARY_LENGTH) return excerpt;
+  const cut = excerpt.slice(0, SUMMARY_LENGTH);
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,;:.]+$/, '')}…`;
+}
+
+/** The month, the day and the year, each written as that locale writes it on its own. */
+function dateParts(date: string, locale: string): NoteDateParts {
+  const day = new Date(`${date}T00:00:00Z`);
+  const part = (options: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(
+      day,
+    );
+  return {
+    month: part({ month: 'short' }),
+    day: part({ day: 'numeric' }),
+    year: part({ year: 'numeric' }),
   };
 }
 

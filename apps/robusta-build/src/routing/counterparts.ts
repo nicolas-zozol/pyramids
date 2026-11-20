@@ -13,6 +13,8 @@ export function counterpartsOf(
   switch (page.kind) {
     case 'landing':
       return others.map((locale) => ({ kind: 'landing', locale }));
+    case 'product':
+      return others.map((locale) => ({ ...page, locale }));
     case 'blog-home':
       return within(
         urls,
@@ -82,6 +84,7 @@ export function versionsOf(
 
   switch (page.kind) {
     case 'landing':
+    case 'product':
     case 'tag':
     case 'article':
       return counterpartsOf(page, urls, articles);

@@ -8,6 +8,8 @@ export interface NavLink {
   href: string;
   /** The language of the page the link leads to, written as its `lang` and `hrefLang`. */
   locale?: string;
+  /** Set in bold: the name of a product. */
+  emphasis?: boolean;
 }
 
 export interface SiteHeaderProps {
@@ -15,7 +17,9 @@ export interface SiteHeaderProps {
   wordmarkSrc?: string;
   /** The wordmark's target, `/` when absent. */
   homeHref?: string;
-  /** Nav links rendered between the logo and the CTA. */
+  /** The site's own pages, first in the nav; a link with `emphasis` is set in bold. */
+  sections?: NavLink[];
+  /** Nav links rendered between the sections and the CTA: the other languages. */
   links?: NavLink[];
   /** Right-aligned CTA button label. Set to empty string to hide the button. */
   ctaLabel?: string;
@@ -38,6 +42,7 @@ export interface SiteHeaderProps {
 export function SiteHeader({
   wordmarkSrc,
   homeHref = '/',
+  sections = [],
   links = [],
   ctaLabel,
   ctaHref = '#book',
@@ -53,6 +58,19 @@ export function SiteHeader({
         <BrandLogo size="compact" wordmarkSrc={wordmarkSrc} />
       </Link>
       <nav className="sk-site-header__nav">
+        {sections.map((s) => (
+          <Link
+            key={s.href}
+            href={s.href}
+            className={
+              s.emphasis
+                ? 'sk-site-header__section sk-site-header__section--product'
+                : 'sk-site-header__section'
+            }
+          >
+            {s.label}
+          </Link>
+        ))}
         {links.map((l) => (
           <Link
             key={l.href}

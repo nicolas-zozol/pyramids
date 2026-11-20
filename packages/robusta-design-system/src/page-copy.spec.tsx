@@ -7,8 +7,12 @@ import {
   CTA,
   FlowDiagram,
   Hero,
+  HomeHero,
+  LibraryShowcase,
   NotesPreview,
   PrinciplesList,
+  ProductDoors,
+  QuestionsList,
   ServicesGrid,
   SiteFooter,
   SiteHeader,
@@ -17,6 +21,7 @@ import {
   SkCallout,
   SkInput,
   SkTag,
+  Workshop,
 } from './index.ts';
 import {
   byClass,
@@ -28,6 +33,7 @@ import {
 } from './test-support/render-static.ts';
 
 const BRAND = ['💪', '🏗', 'Robusta Build'];
+const NO_LABELS = { proposition: '', rationale: '', resolution: '' };
 const MASCOT = '/assets/crystal-tux.svg';
 const WORDMARK = '/assets/robusta-build-wordmark.svg';
 
@@ -138,6 +144,112 @@ const RENDERS: Record<string, ExportRenders> = {
       />
     ),
     passed: ['1', '2'],
+  },
+  QuestionsList: {
+    withoutText: <QuestionsList labels={NO_LABELS} />,
+    withEmptyItems: (
+      <QuestionsList
+        labels={NO_LABELS}
+        entries={[
+          {
+            key: 'OQ-A-1',
+            question: '',
+            proposition: '',
+            rationale: '',
+            resolution: '',
+          },
+        ]}
+      />
+    ),
+    passed: ['OQ-A-1'],
+  },
+  HomeHero: {
+    withoutText: (
+      <HomeHero
+        mascotSrc={MASCOT}
+        floors={[{ level: 'roof', href: '/rooftop' }, { level: 'ground' }]}
+      />
+    ),
+    withEmptyItems: (
+      <HomeHero
+        title=""
+        eyebrow=""
+        lede={['']}
+        primaryCta={{ label: '', href: '/contact' }}
+        secondaryCta={{ label: '', href: '/linkedin' }}
+        mascotSrc={MASCOT}
+        mascotAlt=""
+        annotation=""
+        floors={[
+          {
+            level: 'roof',
+            name: '',
+            kind: '',
+            say: '',
+            href: '/rooftop',
+            pathLabel: '',
+          },
+          { level: 'ground', name: '', kind: '', say: '' },
+        ]}
+      />
+    ),
+  },
+  ProductDoors: {
+    withoutText: <ProductDoors doors={[{ tone: 'blue' }]} />,
+    withEmptyItems: (
+      <ProductDoors
+        title=""
+        eyebrow=""
+        doors={[
+          {
+            id: 'rooftop',
+            tone: 'green',
+            where: '',
+            name: '',
+            soon: '',
+            say: '',
+            shots: [{ src: '/shot.png', alt: '' }],
+            steps: [''],
+            action: { label: '', href: '/rb-compound' },
+            path: { label: '', href: '/rb-compound' },
+          },
+        ]}
+      />
+    ),
+    passed: ['1'],
+  },
+  LibraryShowcase: {
+    withoutText: <LibraryShowcase />,
+    withEmptyItems: (
+      <LibraryShowcase
+        title=""
+        eyebrow=""
+        lede=""
+        ticks={['']}
+        recipes={[{ caption: '', lines: [{ runs: [''] }], result: '' }]}
+        wordsLead=""
+        words={[{ term: '', meaning: '', tone: 'primary' }]}
+        install={{ tool: '', args: '', note: '' }}
+        links={[{ label: '', href: '/github' }]}
+      />
+    ),
+  },
+  Workshop: {
+    withoutText: <Workshop mascotSrc={MASCOT} />,
+    withEmptyItems: (
+      <Workshop
+        title=""
+        eyebrow=""
+        lede=""
+        facts={[{ strong: '', say: '', tone: 'yellow' }]}
+        primaryCta={{ label: '', href: '/contact' }}
+        secondaryCta={{ label: '', href: '/linkedin' }}
+        fine=""
+        mascotSrc={MASCOT}
+        mascotAlt=""
+        greeting=""
+      />
+    ),
   },
   PrinciplesList: {
     withoutText: <PrinciplesList />,
@@ -357,10 +469,34 @@ const LISTS: {
     item: 'sk-flow-diagram__step',
   },
   {
+    name: 'QuestionsList entries',
+    section: <QuestionsList labels={NO_LABELS} />,
+    container: 'sk-questions-list__entries',
+    item: 'sk-questions-list__entry',
+  },
+  {
     name: 'PrinciplesList principles',
     section: <PrinciplesList />,
     container: 'sk-principles-list__items',
     item: 'sk-principles-list__item',
+  },
+  {
+    name: 'ProductDoors doors',
+    section: <ProductDoors />,
+    container: 'sk-product-doors__list',
+    item: 'sk-product-doors__door',
+  },
+  {
+    name: 'LibraryShowcase recipes',
+    section: <LibraryShowcase />,
+    container: 'sk-library-showcase__recipes',
+    item: 'sk-library-showcase__recipe',
+  },
+  {
+    name: 'Workshop facts',
+    section: <Workshop />,
+    container: 'sk-workshop__facts',
+    item: 'sk-workshop__fact',
   },
   {
     name: 'NotesPreview posts',
@@ -385,7 +521,15 @@ describe('the containers of a section rendered without text', () => {
     [<Hero key="hero" />, 'sk-hero__actions'],
     [<ServicesGrid key="services" />, 'sk-services-grid__head'],
     [<FlowDiagram key="flow" />, 'sk-flow-diagram__head'],
+    [
+      <QuestionsList key="questions" labels={NO_LABELS} />,
+      'sk-questions-list__head',
+    ],
     [<PrinciplesList key="principles" />, 'sk-principles-list__head'],
+    [<HomeHero key="home-hero" />, 'sk-home-hero__actions'],
+    [<ProductDoors key="doors" />, 'sk-product-doors__head'],
+    [<LibraryShowcase key="library" />, 'sk-library-showcase__intro'],
+    [<Workshop key="workshop" />, 'sk-workshop__actions'],
     [<NotesPreview key="notes" />, 'sk-notes-preview__head'],
     [<CTA key="cta" />, 'sk-cta__form'],
     [<SiteFooter key="footer" />, 'sk-site-footer__bottom'],

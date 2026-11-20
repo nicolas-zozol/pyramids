@@ -8,9 +8,11 @@
  * Design: features/__done/pyramid-v2-epic/__done/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-82
  */
-import heroMascot from '@robusta/pyramids-design-system/assets/crystal-tux.svg';
-import ctaMascot from '@robusta/pyramids-design-system/assets/crystal-tux-waving.svg';
+import heroMascot from '@robusta/pyramids-design-system/assets/niktux-presentation.webp';
+import ctaMascot from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
+import rooftopBatches from '@robusta/pyramids-design-system/assets/rooftop-batches.webp';
+import rooftopStories from '@robusta/pyramids-design-system/assets/rooftop-stories.webp';
 
 /**
  * The design system's wordmark, at the URL the bundler published it under.
@@ -19,8 +21,14 @@ import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordm
  */
 export const wordmarkSrc: string = wordmark;
 
-/** `crystal-tux.svg`, the hero's mascot, at the URL the bundler published it under. */
+/** `niktux-presentation.webp`, the hero's mascot, at the URL the bundler published it under. */
 export const heroMascotSrc: string = heroMascot;
 
-/** `crystal-tux-waving.svg`, the closing block's mascot, at the URL the bundler published it under. */
+/** `niktux-thinks.webp`, the closing block's mascot, at the URL the bundler published it under. */
 export const ctaMascotSrc: string = ctaMascot;
+
+/** The two screenshots of Rooftop, the batches of a module then the stories of its first batch, at the URLs the bundler published them under. */
+export const rooftopShotSrcs: [string, string] = [
+  rooftopBatches,
+  rooftopStories,
+];

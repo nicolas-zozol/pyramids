@@ -31,20 +31,18 @@ const CONTENT_SHAPES = [
   'c/$category/$slug.tsx',
 ];
 
-/** The landing pages, `/` first, `/404`, then the content URLs; route files checked first. */
+/** The landing pages, `/` first, the product pages, `/404`, then the content URLs; route files checked first. */
 export async function prerenderPages() {
-  const { buildUrl, landingPages } = await import(
+  const { buildUrl, landingPages, productPages } = await import(
     join(source, 'routing/url-scheme/index.ts')
   );
   const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
-  const { contentUrls } = await import(
-    join(source, 'routing/content-urls.ts')
-  );
+  const { contentUrls } = await import(join(source, 'routing/content-urls.ts'));
 
   assertRouteFilesFollow(join(app, 'src/routes'), urlScheme.contentRoot);
 
-  const landings = landingPages(urlScheme).map((page) =>
-    buildUrl(urlScheme, page),
+  const landings = [...landingPages(urlScheme), ...productPages(urlScheme)].map(
+    (page) => buildUrl(urlScheme, page),
   );
   const content = (await contentUrls()).map((page) =>
     buildUrl(urlScheme, page),

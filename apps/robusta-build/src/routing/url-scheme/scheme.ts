@@ -4,10 +4,13 @@ export interface UrlScheme {
   otherLocales: readonly string[];
   /** The site supplies its constant; the parameter keeps the derivation testable at any value. */
   rollSize: number;
+  /** The products the site gives a page of their own, each the one segment under the root of every Locale; none when absent. */
+  products?: readonly string[];
 }
 
 export type PageUrl =
   | { kind: 'landing'; locale: string }
+  | { kind: 'product'; locale: string; product: string }
   | { kind: 'blog-home'; locale: string; page: number }
   | { kind: 'category'; locale: string; category: string; page: number }
   | { kind: 'tag'; locale: string; tag: string; page: number }

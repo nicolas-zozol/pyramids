@@ -12,12 +12,17 @@
     "./sketch.css": "./sketch.css",
     "./colors_and_type.css": "./colors_and_type.css",
     "./fonts.css": "./fonts.css",
-    "./assets/crystal-tux.svg": "./assets/crystal-tux.svg",
     "./assets/crystal-tux.png": "./assets/crystal-tux.png",
-    "./assets/crystal-tux-head.svg": "./assets/crystal-tux-head.svg",
-    "./assets/crystal-tux-waving.svg": "./assets/crystal-tux-waving.svg",
-    "./assets/crystal-tux-thinking.svg": "./assets/crystal-tux-thinking.svg",
-    "./assets/robusta-build-wordmark.svg": "./assets/robusta-build-wordmark.svg"
+    "./assets/niktux-furious-at-computer.webp": "./assets/niktux-furious-at-computer.webp",
+    "./assets/niktux-pack-ice.webp": "./assets/niktux-pack-ice.webp",
+    "./assets/niktux-presentation.webp": "./assets/niktux-presentation.webp",
+    "./assets/niktux-thinks.webp": "./assets/niktux-thinks.webp",
+    "./assets/niktux-throw-money.webp": "./assets/niktux-throw-money.webp",
+    "./assets/niktux-working-hard.webp": "./assets/niktux-working-hard.webp",
+    "./assets/rooftop-batches.webp": "./assets/rooftop-batches.webp",
+    "./assets/rooftop-stories.webp": "./assets/rooftop-stories.webp",
+    "./assets/robusta-build-wordmark.svg": "./assets/robusta-build-wordmark.svg",
+    "./assets/decor/*": "./assets/decor/*"
   },
   "files": [
     "dist",

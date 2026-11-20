@@ -18,15 +18,16 @@ import {
 
 const AGENT_WORDS =
   /\b(epicman|storyman|bsman|designman|tddman|codeman|docman|archiman|boss|rloq|DRAFT|APPROVED)\b/g;
-const DIAGRAMS = ['openSource', 'complete'] as const;
+const DIAGRAMS = ['agents', 'boss'] as const;
 
 describe('the scheme of the site', () => {
-  it('declares en by default, then fr and es, under the content root articles and a roll of twelve', () => {
+  it('declares en by default, then fr and es, under the content root articles and a roll of twelve, and the page of RB Compound', () => {
     expect(urlScheme).toEqual({
       contentRoot: 'articles',
       defaultLocale: 'en',
       otherLocales: ['fr', 'es'],
       rollSize: 12,
+      products: ['rb-compound'],
     });
   });
 
@@ -219,7 +220,7 @@ describe('the page copy of the Site configuration', () => {
   });
 });
 
-describe('the landing copy of every Locale', () => {
+describe('the copy of the landing page and of the page of RB Compound in every Locale', () => {
   it('speaks to teams building software with AI agents, no copy for the SMEs of Toulouse left', () => {
     const copy = getSeoPyramidsConfig().pageCopy;
 
@@ -227,18 +228,20 @@ describe('the landing copy of every Locale', () => {
       /PME|Haute-Garonne|sur place|Renault|BCG|startups?/i,
     );
     for (const locale of LOCALES)
-      expect(getPageCopy(locale).landing.hero, locale).not.toHaveProperty(
-        'note',
-      );
+      for (const page of [
+        getPageCopy(locale).landing,
+        getPageCopy(locale).rbCompound,
+      ])
+        expect(page.hero, locale).not.toHaveProperty('note');
   });
 
-  it('draws each diagram in five steps at most, numbered from one', () => {
+  it('draws each diagram in six steps at most, numbered from one', () => {
     for (const locale of LOCALES)
       for (const diagram of DIAGRAMS) {
-        const { steps } = getPageCopy(locale).landing[diagram];
+        const { steps } = getPageCopy(locale).rbCompound[diagram];
 
         expect(steps.length).toBeGreaterThan(0);
-        expect(steps.length).toBeLessThanOrEqual(5);
+        expect(steps.length).toBeLessThanOrEqual(6);
         expect(steps.map((step) => step.n)).toEqual(
           steps.map((_, index) => index + 1),
         );
@@ -246,53 +249,124 @@ describe('the landing copy of every Locale', () => {
   });
 
   it('keeps the agent names, DRAFT, APPROVED and rloq as they are, in the same places, in the three Locales', () => {
-    const reference = getPageCopy(urlScheme.defaultLocale).landing;
+    const reference = getPageCopy(urlScheme.defaultLocale).rbCompound;
 
     for (const locale of LOCALES)
       for (const diagram of DIAGRAMS)
         expect(
-          agentWords(getPageCopy(locale).landing[diagram]),
+          agentWords(getPageCopy(locale).rbCompound[diagram]),
           locale,
         ).toEqual(agentWords(reference[diagram]));
   });
 
-  it('shows the open source version as three agents for the epic, the story and the design, its validation, then the code by the reader’s own coding agent', () => {
-    const { openSource } = getPageCopy('en').landing;
-
-    expect(openSource.title).toMatch(/^three agents\b/);
-    expect(agentWords(openSource)).toEqual([
+  it('presents the six agents of RB Compound, one step each, then runs them on an example epic', () => {
+    const { agents } = getPageCopy('en').rbCompound;
+    const six = [
       'epicman',
-      'storyman',
-      'designman',
-      'DRAFT',
-      'APPROVED',
-    ]);
-    expect(openSource.caveat).toMatch(/\bfree\b/);
-    expect(openSource.caveat).toMatch(/not published yet/);
-  });
-
-  it('shows the complete version from the story to the documentation, chained by boss under rloq, with a paid accompaniment only', () => {
-    const { complete } = getPageCopy('en').landing;
-
-    expect(agentWords({ ...complete, caveat: '' })).toEqual([
       'storyman',
       'bsman',
       'designman',
-      'APPROVED',
       'tddman',
-      'codeman',
       'docman',
-      'archiman',
+    ];
+
+    expect(agents.title).toMatch(/^six agents\b/);
+    expect(agents.steps.map((step) => step.label)).toEqual(six);
+    expect(agents.intro).toMatch(/^RB Compound\b/);
+    expect(agents.example?.lines.map((line) => line.agent)).toEqual([
+      'epicman',
+      'bsman',
+      'storyman',
+      'designman',
+      'tddman',
+      'docman',
+      'storyman',
     ]);
-    expect(complete.caveat.match(AGENT_WORDS)).toEqual(['boss', 'rloq']);
-    expect(complete.caveat).toMatch(/\bpaid\b/);
-    expect(complete.caveat).toMatch(/accompaniment/);
+    expect(agentWords(agents)).not.toContain('boss');
+    expect(agents.caveat).toMatch(/PolyForm Noncommercial 1\.0\.0/);
+    expect(agents.caveat).not.toMatch(/open source/);
+    expect(agents.caveatLink?.href).toBe(
+      'https://github.com/robusta-build/rb-compound',
+    );
+  });
+
+  it('frames the six agents with boss, runs the example epic in two commands, and comes with a paid accompaniment only', () => {
+    const { agents, boss } = getPageCopy('en').rbCompound;
+
+    expect(boss.conductor).toBe('boss');
+    expect(boss.steps.map((step) => step.label)).toEqual(
+      agents.steps.map((step) => step.label),
+    );
+    expect(boss.example?.lines.map((line) => line.agent)).toEqual([
+      'epicman',
+      'boss',
+    ]);
+    expect(boss.caveat).toMatch(/\bpaid\b/);
+    expect(boss.caveat).toMatch(/accompaniment/);
+  });
+
+  it('shows two open questions in every Locale, one taken with lgtm and one answered in the reader’s words', () => {
+    for (const locale of LOCALES) {
+      const { entries, labels } = getPageCopy(locale).rbCompound.openQuestions;
+
+      expect(labels, locale).toEqual({
+        proposition: 'Proposition:',
+        rationale: 'Rationale:',
+        resolution: 'Resolution:',
+      });
+      expect(
+        entries.map((entry) => entry.key),
+        locale,
+      ).toEqual(['OQ-BENCH-2', 'OQ-BENCH-3']);
+      expect(entries[0]?.resolution, locale).toBe('lgtm');
+      expect(entries[1]?.resolution, locale).not.toBe('lgtm');
+    }
+  });
+
+  it('presents the two products, Masala Parser and the workshop on the landing page, and says open source of Masala Parser alone', () => {
+    for (const locale of LOCALES) {
+      const { landing, rbCompound } = getPageCopy(locale);
+
+      expect(landing.products.rooftop.name, locale).toBe('Rooftop');
+      expect(landing.products.rbCompound.name, locale).toBe('RB Compound');
+      expect(landing.hero.lede, locale).toContainEqual({
+        strong: 'RB Compound',
+      });
+      expect(landing.hero.lede, locale).toContainEqual({ strong: 'Rooftop' });
+      expect(Object.keys(landing.masala.meanings), locale).toEqual([
+        'C',
+        'N',
+        'F',
+        'then',
+        'or',
+        'rep',
+        'opt',
+        'map',
+      ]);
+      expect(landing.masala.eyebrow, locale).toMatch(/open source/);
+      expect(
+        strings({ ...landing, masala: {} }).join('\n') +
+          strings(rbCompound).join('\n'),
+        locale,
+      ).not.toMatch(/open source/i);
+    }
+  });
+
+  it('gives the page of RB Compound a title and a description apart from those of the landing page', () => {
+    for (const locale of LOCALES) {
+      const { landing, rbCompound } = getPageCopy(locale);
+
+      expect(rbCompound.head.title, locale).not.toBe(landing.head.title);
+      expect(rbCompound.head.description, locale).not.toBe(
+        landing.head.description,
+      );
+    }
   });
 
   it('states the same four rules of the workflow in every Locale', () => {
     for (const locale of LOCALES)
       expect(
-        getPageCopy(locale).landing.principles.principles,
+        getPageCopy(locale).rbCompound.principles.principles,
         locale,
       ).toHaveLength(4);
   });

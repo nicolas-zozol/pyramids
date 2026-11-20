@@ -10,6 +10,15 @@ export function landingPages(scheme: UrlScheme): PageUrl[] {
   return knownLocales(scheme).map((locale) => ({ kind: 'landing', locale }));
 }
 
+/** The page of each product in every known locale, locale by locale, the default one first. */
+export function productPages(scheme: UrlScheme): PageUrl[] {
+  return knownLocales(scheme).flatMap((locale) =>
+    (scheme.products ?? []).map(
+      (product): PageUrl => ({ kind: 'product', locale, product }),
+    ),
+  );
+}
+
 /**
  * The single derivation of the URL set (R-URLSCHEME-22): every route's
  * pregeneration reads this list and no second list accepts or rejects a URL at

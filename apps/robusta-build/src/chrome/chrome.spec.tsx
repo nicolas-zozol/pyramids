@@ -79,7 +79,7 @@ describe('Header', () => {
     }
   });
 
-  it('carries one link per other Locale, named in its own language by its page copy, then the contact call to action of its Locale', async () => {
+  it('carries the links to Rooftop, RB Compound and Masala Parser, one link per other Locale, named in its own language by its page copy, then the contact call to action of its Locale', async () => {
     for (const locale of LOCALES) {
       const others = LOCALES.filter((other) => other !== locale);
       const html = await renderInRouter(
@@ -96,6 +96,13 @@ describe('Header', () => {
       );
       expect(hrefs(html)).toEqual([
         landingOf(locale),
+        `${landingOf(locale)}#rooftop`,
+        buildUrl(urlScheme, {
+          kind: 'product',
+          locale,
+          product: 'rb-compound',
+        }),
+        `${landingOf(locale)}#masala`,
         ...others.map(landingOf),
         `mailto:${contact.email}`,
       ]);

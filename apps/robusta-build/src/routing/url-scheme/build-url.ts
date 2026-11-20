@@ -18,6 +18,9 @@ export function buildUrl(scheme: UrlScheme, page: PageUrl): string {
   if (page.kind === 'landing') {
     return prefix === '' ? '/' : prefix;
   }
+  if (page.kind === 'product') {
+    return `${prefix}/${page.product}`;
+  }
 
   const root = `${prefix}/${scheme.contentRoot}`;
 

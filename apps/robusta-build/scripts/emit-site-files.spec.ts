@@ -47,7 +47,7 @@ describe('siteFiles', () => {
 
   it('counts the indexable pages by kind in its summary line', () => {
     expect(files.summary).toBe(
-      'site files: sitemap.xml lists 11 indexable pages (3 landing pages, 5 listing pages, 3 articles), robots.txt names it',
+      'site files: sitemap.xml lists 11 indexable pages (3 landing pages, 0 product pages, 5 listing pages, 3 articles), robots.txt names it',
     );
   });
 });

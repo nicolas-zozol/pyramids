@@ -126,7 +126,12 @@ describe('layout overrides', () => {
     'sk-services-grid',
     'sk-flow-diagram',
     'sk-principles-list',
+    'sk-questions-list',
     'sk-notes-preview',
+    'sk-home-hero',
+    'sk-product-doors',
+    'sk-library-showcase',
+    'sk-workshop',
     'sk-cta',
     'sk-brand-logo',
   ];

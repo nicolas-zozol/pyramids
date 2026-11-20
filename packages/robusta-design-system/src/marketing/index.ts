@@ -1,5 +1,5 @@
 /**
- * Package marketing — the eight sections of a marketing page, composed of the primitives and laid out by `sketch.css`.
+ * Package marketing — the thirteen sections of a marketing page, composed of the primitives and laid out by `sketch.css`.
  *
  * Design: features/__done/pyramid-v2-epic/__done/design-system-responsive/design-system-responsive.design.md
  * Requirements: R-RESPONSIVE-03, R-RESPONSIVE-22, R-RESPONSIVE-24, R-RESPONSIVE-42, R-RESPONSIVE-43, R-RESPONSIVE-45, R-RESPONSIVE-63, R-RESPONSIVE-82, R-RESPONSIVE-83, R-RESPONSIVE-101, R-RESPONSIVE-102, R-RESPONSIVE-103, R-RESPONSIVE-104
@@ -11,6 +11,29 @@
  * Requirements: R-SECTIONCOPY-01, R-SECTIONCOPY-02, R-SECTIONCOPY-03, R-SECTIONCOPY-04, R-SECTIONCOPY-05
  */
 export { Hero, type HeroProps } from './Hero.tsx';
+export {
+  HomeHero,
+  type ActionLink,
+  type HomeFloor,
+  type HomeHeroProps,
+  type TextRun,
+} from './HomeHero.tsx';
+export {
+  ProductDoors,
+  type ProductDoor,
+  type ProductDoorsProps,
+  type ProductShot,
+} from './ProductDoors.tsx';
+export {
+  LibraryShowcase,
+  type CodeLine,
+  type CodeRun,
+  type LibraryInstall,
+  type LibraryRecipe,
+  type LibraryShowcaseProps,
+  type LibraryWord,
+} from './LibraryShowcase.tsx';
+export { Workshop, type WorkshopFact, type WorkshopProps } from './Workshop.tsx';
 export { SiteHeader, type SiteHeaderProps, type NavLink } from './SiteHeader.tsx';
 export {
   SiteFooter,
@@ -19,7 +42,25 @@ export {
   type FooterLink,
 } from './SiteFooter.tsx';
 export { ServicesGrid, type ServicesGridProps, type ServiceItem } from './ServicesGrid.tsx';
-export { FlowDiagram, type FlowDiagramProps, type FlowStep } from './FlowDiagram.tsx';
+export {
+  FlowDiagram,
+  type FlowDiagramProps,
+  type FlowExample,
+  type FlowExampleLine,
+  type FlowLink,
+  type FlowStep,
+} from './FlowDiagram.tsx';
+export {
+  QuestionsList,
+  type QuestionEntry,
+  type QuestionLabels,
+  type QuestionsListProps,
+} from './QuestionsList.tsx';
 export { PrinciplesList, type PrinciplesListProps, type Principle } from './PrinciplesList.tsx';
-export { NotesPreview, type NotesPreviewProps, type NotePost } from './NotesPreview.tsx';
+export {
+  NotesPreview,
+  type NoteDateParts,
+  type NotesPreviewProps,
+  type NotePost,
+} from './NotesPreview.tsx';
 export { CTA, type CTAProps } from './CTA.tsx';
