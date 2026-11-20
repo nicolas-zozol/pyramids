@@ -12,6 +12,7 @@ import {
   NotesPreview,
   PrinciplesList,
   ProductDoors,
+  ProductHero,
   QuestionsList,
   ServicesGrid,
   SiteFooter,
@@ -217,6 +218,34 @@ const RENDERS: Record<string, ExportRenders> = {
       />
     ),
     passed: ['1'],
+  },
+  ProductHero: {
+    withoutText: (
+      <ProductHero
+        cascade={[
+          { kind: 'sheet' },
+          { kind: 'gate' },
+          { kind: 'command', agent: 'tddman' },
+        ]}
+      />
+    ),
+    withEmptyItems: (
+      <ProductHero
+        kicker=""
+        title=""
+        lede=""
+        primaryCta={{ label: '', href: '/github' }}
+        secondaryCta={{ label: '', href: '#agents' }}
+        note=""
+        cascadeLabel=""
+        cascade={[
+          { kind: 'sheet', name: '', who: '' },
+          { kind: 'gate', label: '', say: '' },
+          { kind: 'command', agent: 'tddman' },
+        ]}
+      />
+    ),
+    passed: ['1', '2', 'tddman'],
   },
   LibraryShowcase: {
     withoutText: <LibraryShowcase />,
@@ -530,6 +559,7 @@ describe('the containers of a section rendered without text', () => {
     [<ProductDoors key="doors" />, 'sk-product-doors__head'],
     [<LibraryShowcase key="library" />, 'sk-library-showcase__intro'],
     [<Workshop key="workshop" />, 'sk-workshop__actions'],
+    [<ProductHero key="product-hero" />, 'sk-product-hero__cascade'],
     [<NotesPreview key="notes" />, 'sk-notes-preview__head'],
     [<CTA key="cta" />, 'sk-cta__form'],
     [<SiteFooter key="footer" />, 'sk-site-footer__bottom'],

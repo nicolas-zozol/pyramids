@@ -130,6 +130,7 @@ describe('layout overrides', () => {
     'sk-notes-preview',
     'sk-home-hero',
     'sk-product-doors',
+    'sk-product-hero',
     'sk-library-showcase',
     'sk-workshop',
     'sk-cta',

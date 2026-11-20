@@ -48,7 +48,7 @@ const EVERY_COMPONENT: ReactNode[] = [
 ];
 
 describe('the package', () => {
-  it('exports the six primitives and the thirteen sections, and no other component', () => {
+  it('exports the six primitives and the fourteen sections, and no other component', () => {
     assert.deepEqual(Object.keys(designSystem).sort(), [
       'BrandLogo',
       'CTA',
@@ -59,6 +59,7 @@ describe('the package', () => {
       'NotesPreview',
       'PrinciplesList',
       'ProductDoors',
+      'ProductHero',
       'QuestionsList',
       'ServicesGrid',
       'SiteFooter',

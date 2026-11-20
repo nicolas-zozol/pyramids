@@ -1,40 +1,53 @@
 import {
   CTA,
   FlowDiagram,
-  Hero,
   PrinciplesList,
+  ProductHero,
   QuestionsList,
 } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.tsx';
-import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
+import { ctaMascotSrc } from '../design-system/assets.ts';
 import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { rbCompoundUrl } from './rb-compound-head.ts';
 
 export interface RbCompoundPageProps {
   /** The page's Locale, whose page copy the page reads. */
   locale: string;
 }
 
-/** The page of RB Compound in a Locale: Hero, the agents, their open questions, boss, PrinciplesList and CTA, every text from its page copy. */
+/** The page of RB Compound in a Locale: ProductHero, the agents, their open questions, boss, PrinciplesList and CTA, every text from its page copy. */
 export function RbCompoundPage({ locale }: RbCompoundPageProps) {
   const { contact } = getSeoPyramidsConfig();
   const { hero, agents, openQuestions, boss, principles, cta } =
     getPageCopy(locale).rbCompound;
   const mailto = `mailto:${contact.email}`;
+  const [epic, stories, questions, design, docs] = hero.documents;
+  const [epicman, storyman, bsman, designman, tddman, docman] =
+    agents.steps.map((step) => step.label);
+  const codeHref = agents.caveatLink?.href ?? '';
 
   return (
     <main>
-      <Hero
-        eyebrow={hero.eyebrow}
+      <ProductHero
+        kicker={hero.kicker}
         title={hero.title}
-        subtitle={hero.subtitle}
-        primaryCtaLabel={hero.emailLabel}
-        primaryCtaHref={mailto}
-        secondaryCtaLabel={hero.linkedInLabel}
-        secondaryCtaHref={contact.linkedIn}
-        footnote=""
-        mascotSrc={heroMascotSrc}
-        mascotAlt={hero.mascotAlt}
-        annotation={hero.annotation}
+        lede={hero.lede}
+        primaryCta={{ label: hero.codeLabel, href: codeHref }}
+        secondaryCta={{
+          label: hero.agentsLabel,
+          href: `${rbCompoundUrl(locale)}#agents`,
+        }}
+        note={hero.license}
+        cascadeLabel={hero.cascadeLabel}
+        cascade={[
+          { kind: 'sheet', name: epic, who: epicman },
+          { kind: 'sheet', name: stories, who: storyman },
+          { kind: 'sheet', name: questions, who: bsman },
+          { kind: 'sheet', name: design, who: designman },
+          { kind: 'gate', ...hero.gate },
+          { kind: 'command', agent: tddman },
+          { kind: 'sheet', name: docs, who: docman },
+        ]}
         linkComponent={SiteLink}
       />
       <FlowDiagram id="agents" {...agents} />

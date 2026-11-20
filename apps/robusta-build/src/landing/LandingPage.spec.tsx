@@ -373,6 +373,26 @@ describe('every link of the three landing pages', () => {
     }
   });
 
+  it('leads the tag of each note to the page of its Category, apart from the link of the note', async () => {
+    for (const locale of WITH_NOTES) {
+      const feed = await notesFeed({ locale, limit: 4 });
+      const notes = sectionOf(pages[locale], 'class="sk-notes-preview"');
+
+      for (const post of feed) {
+        const category = post.tagHref ?? '';
+        expect(category, post.title).toMatch(/\/articles\/c\/[a-z-]+$/);
+        expect(
+          anchorsTo(notes, category).every((tag) =>
+            tag.includes('class="sk-notes-preview__tag-link"'),
+          ),
+        ).toBe(true);
+        expect(anchorsTo(notes, post.href ?? '')).toEqual([
+          `<a class="sk-cover-link sk-notes-preview__post-title" href="${htmlText(post.href ?? '')}">`,
+        ]);
+      }
+    }
+  });
+
   it('includes "all articles" pointing at the blog home of its Locale and the notes at their pages', async () => {
     for (const locale of WITH_NOTES) {
       const feed = await notesFeed({ locale, limit: 4 });
