@@ -36,7 +36,7 @@ describe('landingHead', () => {
     ]);
   });
 
-  it('declares Robusta Build as an Organization, with the contact the page shows, and no local business', () => {
+  it('declares Robusta Build as an Organization, with its LinkedIn profile, no email and no local business', () => {
     const { siteName, contact } = getSeoPyramidsConfig();
     const data = landingHead('fr').scripts.map((script) =>
       JSON.parse(script.children),
@@ -48,7 +48,6 @@ describe('landingHead', () => {
         '@type': 'Organization',
         name: siteName,
         url: `${ORIGIN}/fr`,
-        email: contact.email,
         sameAs: [contact.linkedIn],
       },
     ]);

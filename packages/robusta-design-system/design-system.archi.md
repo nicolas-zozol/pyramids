@@ -18,7 +18,7 @@
 - `colors_and_type.css` — les Design tokens dans `:root` et les styles d'élément, de `html` à `pre`. Aucune police chargée.
 - `sketch.css` — les classes `.sk-*` des primitives, la mise en page des huit sections, puis la section responsive.
 - `fonts.css` — IBM Plex Sans, IBM Plex Mono et Caveat depuis Google Fonts, pour un consommateur sans build ; le site robusta ne le charge pas.
-- `assets/` — Niktux, la mascotte, en six illustrations WebP, l'ancienne `crystal-tux.png`, le wordmark `robusta-build-wordmark.svg`, 1597×273, et le décor banquise sous `decor/` : 17 dessins SVG de 160×160 sur une même ligne de sol, pour les séparations et les bas de panneaux.
+- `assets/` — Niktux, la mascotte, en huit illustrations WebP, le wordmark `robusta-build-wordmark.svg`, 1597×273, et le décor banquise sous `decor/` : 17 dessins SVG de 160×160 sur une même ligne de sol, pour les séparations et les bas de panneaux.
 - `preview/` — les planches HTML du système, dont `marketing-page.html`, les huit sections en une page à redimensionner depuis 320 px ; `ui_kits/marketing/`, le prototype JSX des sections ; `uploads/`, les images sources ; `SKILL.md`, le skill de la marque. Aucun n'est livré : `package.json#files` s'arrête à `dist`, `*.css`, `assets` et `README.md`.
 - `src/test-support/` — le rendu statique et `readableText`, le texte qu'un lecteur en reçoit, puis la lecture des fichiers livrés et celle des sources de `src/`, pour les specs ; hors build.
 
@@ -69,7 +69,7 @@ Feuilles de style, sous-chemins de `exports`, chargées une fois par site dans c
 - `colors_and_type.css` — papier et encre ; les rampes `--brand-primary`, `--brand-secondary`, `--brand-accent` et `--brand-error`, chacune en base, `-soft` et `-deep` ; les familles `--font-sans`, `--font-script` et `--font-mono` ; l'échelle `--t-*`, dix pas en `clamp()` de 320 à 1536 px ; `--lh-*`, `--sp-1` à `--sp-9`, `--r-*`, `--measure` à 68ch ; les surligneurs `.highlight-*`. Chaque famille lit `--font-ibm-plex-sans`, `--font-ibm-plex-mono` ou `--font-caveat`, puis le nom de la face, puis une pile système ; le site robusta ne pose aucune de ces propriétés et auto-héberge les faces sous ces noms.
 - `sketch.css` — les classes `.sk-*` ; la mise en page des sections sous `.sk-<section>`, `.sk-<section>__<part>` et `--<modifier>`, en spécificité d'une classe et sans `!important`, qu'un sélecteur du site portant une classe de plus surcharge quel que soit l'ordre de chargement ; 40, 48, 64, 80 et 96rem, chacune dans un seul `@media (min-width)`, la base étant la mise en page étroite.
 
-Assets, sous `./assets/` : `niktux-thinks.webp`, `niktux-presentation.webp`, `niktux-working-hard.webp`, `niktux-throw-money.webp`, `niktux-furious-at-computer.webp`, `niktux-pack-ice.webp`, `crystal-tux.png`, `robusta-build-wordmark.svg`, et `decor/*.svg`, exportés par un seul motif `./assets/decor/*`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
+Assets, sous `./assets/` : `niktux-thinks.webp`, `niktux-presentation.webp`, `niktux-gangster.webp`, `niktux-stonks.webp`, `niktux-working-hard.webp`, `niktux-throw-money.webp`, `niktux-furious-at-computer.webp`, `niktux-pack-ice.webp`, `robusta-build-wordmark.svg`, et `decor/*.svg`, exportés par un seul motif `./assets/decor/*`. Le bundler du site résout l'import en URL hachée, une chaîne sous Vite.
 
 ## Dependencies
 

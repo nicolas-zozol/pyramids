@@ -35,11 +35,10 @@ export function breadcrumbData(trail: Crumb[]): StructuredData {
   };
 }
 
-/** Organization: name, url, email, sameAs. */
+/** Organization: name, url, sameAs. No email: a bot reads JSON-LD, and the address is only revealed in the browser (`useContactEmail`). */
 export function organizationData(
   name: string,
   url: string,
-  email: string,
   profiles: string[],
 ): StructuredData {
   return {
@@ -47,7 +46,6 @@ export function organizationData(
     '@type': 'Organization',
     name,
     url,
-    email,
     sameAs: profiles,
   };
 }

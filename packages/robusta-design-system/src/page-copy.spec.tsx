@@ -175,7 +175,7 @@ const RENDERS: Record<string, ExportRenders> = {
       <HomeHero
         title=""
         eyebrow=""
-        lede={['']}
+        lede={[['']]}
         primaryCta={{ label: '', href: '/contact' }}
         secondaryCta={{ label: '', href: '/linkedin' }}
         mascotSrc={MASCOT}

@@ -1,5 +1,6 @@
 import { SiteHeader, type NavLink } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.tsx';
+import { useContactEmail } from '../components/use-contact-email.ts';
 import { wordmarkSrc } from '../design-system/assets.ts';
 import { LOCALES, urlScheme } from '../routing/scheme.ts';
 import {
@@ -9,7 +10,7 @@ import {
 } from '../routing/url-scheme/index.ts';
 import { MASALA_ANCHOR, ROOFTOP_ANCHOR } from '../landing/LandingPage.tsx';
 import { rbCompoundUrl } from '../rb-compound/index.ts';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { getPageCopy } from '../seopyramids.config.ts';
 
 interface HeaderProps {
   /** The page's Locale, whose page copy the header reads. */
@@ -22,8 +23,8 @@ interface HeaderProps {
 
 /** SiteHeader in the page copy of `locale`: wordmark to the landing of `locale`, the two products, Masala Parser and the articles when the Locale has a blog home, one link per other Locale to its counterpart or else its landing, contact. */
 export function Header({ locale, counterparts, rolls = [] }: HeaderProps) {
-  const { contact } = getSeoPyramidsConfig();
-  const { header } = getPageCopy(locale);
+  const { header } = getPageCopy(locale); // first: an unknown Locale throws before any hook
+  const email = useContactEmail();
 
   return (
     <SiteHeader
@@ -32,7 +33,7 @@ export function Header({ locale, counterparts, rolls = [] }: HeaderProps) {
       sections={sectionLinks(locale, rolls)}
       links={localeLinks(locale, counterparts)}
       ctaLabel={header.contactLabel}
-      ctaHref={`mailto:${contact.email}`}
+      ctaHref={`mailto:${email}`}
       linkComponent={SiteLink}
     />
   );

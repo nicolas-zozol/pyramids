@@ -2,8 +2,8 @@ import type { NotePost } from '@robusta/pyramids-design-system';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.ts';
 import {
-  ctaMascotSrc,
-  heroMascotSrc,
+  presentationMascotSrc,
+  stonksBillboardSrc,
   rooftopShotSrcs,
 } from '../design-system/assets.ts';
 import { localeRolls } from '../page-data/locale-rolls.ts';
@@ -35,7 +35,7 @@ import {
 } from './masala-recipes.ts';
 
 const { contact } = getSeoPyramidsConfig();
-const MAILTO = `mailto:${contact.email}`;
+const MAILTO = `mailto:${contact.decoyEmail}`;
 const WITH_NOTES: Locale[] = ['en', 'fr'];
 const BRAND = ['💪', '🏗', 'Robusta Build'];
 
@@ -85,7 +85,7 @@ async function suppliedTexts(locale: Locale): Promise<Set<string>> {
     [
       ...stringsOf(copy),
       ...otherLocaleNames,
-      contact.email,
+      contact.decoyEmail,
       ...feed.flatMap((post) => [post.title, post.date]),
       ...stringsOf(feed.map((post) => [post.dateParts, post.summary])),
       ...stepNumbers,
@@ -150,11 +150,10 @@ describe('LandingPage', () => {
     );
   });
 
-  it('keeps nothing of the shell’s demonstration, its only callout the greeting of the workshop', () => {
+  it('keeps nothing of the shell’s demonstration, and no callout', () => {
     for (const page of Object.values(pages)) {
       expect(page).not.toMatch(/placeholder|--font-script/);
-      expect(page.match(/class="sk-callout[ "]/g)).toHaveLength(1);
-      expect(page).toContain('class="sk-callout sk-workshop__greeting"');
+      expect(page).not.toContain('sk-callout');
     }
   });
 
@@ -218,14 +217,38 @@ describe('the words of the landing page', () => {
     }
   });
 
-  it('set the names of the two products in bold in the hero', () => {
-    for (const page of Object.values(pages)) {
-      expect(page).toContain(
-        '<strong class="sk-home-hero__strong">RB Compound</strong>',
+  it('stand Niktux and his figures on the roof of the hero, alt text from their Locale, the presentation of Nicolas in the workshop', () => {
+    for (const locale of LOCALES) {
+      const page = pages[locale];
+      const hero = sectionOf(page, 'class="sk-home-hero"');
+      const workshop = sectionOf(page, 'class="sk-workshop');
+      const { billboardAlt } = getPageCopy(locale).landing.hero;
+
+      expect(hero.match(/<img/g)).toHaveLength(1);
+      expect(hero).toContain(
+        `<img class="sk-home-hero__billboard-img" src="${htmlText(stonksBillboardSrc)}" alt="${htmlText(billboardAlt)}"/>`,
       );
-      expect(page).toContain(
-        '<strong class="sk-home-hero__strong">Rooftop</strong>',
+      expect(hero).not.toContain(`src="${htmlText(presentationMascotSrc)}"`);
+      expect(workshop).toContain(`src="${htmlText(presentationMascotSrc)}"`);
+    }
+  });
+
+  it('put the hero lede of their Locale under the eyebrow, one paragraph per sentence, about the repository and not about Nicolas', () => {
+    for (const locale of LOCALES) {
+      const { lede } = getPageCopy(locale).landing.hero;
+      const paragraphs = lede.map((runs) =>
+        runs
+          .map((run) => (typeof run === 'string' ? run : run.strong))
+          .join(''),
       );
+
+      expect(paragraphs, locale).toHaveLength(3);
+      expect(pages[locale]).toContain(
+        `<div class="sk-home-hero__ledes">${paragraphs
+          .map((text) => `<p class="sk-home-hero__lede">${htmlText(text)}</p>`)
+          .join('')}</div>`,
+      );
+      expect(paragraphs.join(' '), locale).not.toMatch(/Nicolas/);
     }
   });
 
@@ -255,6 +278,13 @@ describe('the words of the landing page', () => {
 });
 
 describe('the calls to contact of the landing page', () => {
+  it('show the decoy address, never the real one, header and head included: the browser reveals it after a delay', () => {
+    for (const page of Object.values(pages)) {
+      expect(page).toContain(contact.decoyEmail);
+      expect(page).not.toContain(contact.email);
+    }
+  });
+
   it('are, in the hero, the email address then the LinkedIn profile, labelled in its Locale, then its floors to Rooftop and RB Compound', () => {
     for (const locale of LOCALES) {
       const { hero } = getPageCopy(locale).landing;
@@ -289,17 +319,16 @@ describe('the calls to contact of the landing page', () => {
       const closing = sectionOf(pages[locale], 'class="sk-workshop');
 
       expect(hrefs(closing)).toEqual([MAILTO, contact.linkedIn]);
-      expect(closing).toContain(`>${htmlText(contact.email)}<`);
+      expect(closing).toContain(`>${htmlText(contact.decoyEmail)}<`);
       expect(closing).toContain(`>${htmlText(workshop.title)}<`);
     }
   });
 
   it('show the mascots and the screenshots of Rooftop from the design system, each with the alt text of its Locale', () => {
     for (const locale of LOCALES) {
-      const { hero, products, workshop } = getPageCopy(locale).landing;
+      const { products, workshop } = getPageCopy(locale).landing;
       const shown = [
-        [heroMascotSrc, hero.mascotAlt],
-        [ctaMascotSrc, workshop.mascotAlt],
+        [presentationMascotSrc, workshop.mascotAlt],
         ...rooftopShotSrcs.map((src, i) => [src, products.rooftop.shotAlts[i]]),
       ];
 

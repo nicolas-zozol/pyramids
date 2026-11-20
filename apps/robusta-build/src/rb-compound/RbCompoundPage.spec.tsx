@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.ts';
-import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
+import { ctaMascotSrc, presentationMascotSrc } from '../design-system/assets.ts';
 import { localeRolls } from '../page-data/locale-rolls.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
 import { contentUrls } from '../routing/content-urls.ts';
@@ -17,7 +17,7 @@ import { renderInRouter } from '../test-support/render-in-router.tsx';
 import { RbCompoundPage, rbCompoundHead, rbCompoundUrl } from './index.ts';
 
 const { contact } = getSeoPyramidsConfig();
-const MAILTO = `mailto:${contact.email}`;
+const MAILTO = `mailto:${contact.decoyEmail}`;
 const BRAND = ['💪', '🏗', 'Robusta Build'];
 
 /** The page of RB Compound as the prerender writes it, the chrome around it. */
@@ -205,7 +205,7 @@ describe('the words of the page of RB Compound', () => {
           ...LOCALES.filter((other) => other !== locale).map(
             (other) => getPageCopy(other).localeName,
           ),
-          contact.email,
+          contact.decoyEmail,
           ...[copy.rbCompound.agents, copy.rbCompound.boss].flatMap((flow) =>
             flow.steps.map((step) => String(step.n)),
           ),
@@ -284,6 +284,13 @@ describe('the words of the page of RB Compound', () => {
 });
 
 describe('the links of the page of RB Compound', () => {
+  it('show the decoy address, never the real one: the browser reveals it after a delay', () => {
+    for (const page of Object.values(pages)) {
+      expect(page).toContain(contact.decoyEmail);
+      expect(page).not.toContain(contact.email);
+    }
+  });
+
   it('are the email, the LinkedIn profile, the code on GitHub, an anchor of the landing or a path buildUrl produces', async () => {
     const built = new Set(
       [
@@ -316,7 +323,7 @@ describe('the links of the page of RB Compound', () => {
   it('show the mascot of the closing block, and not the one that presents Nicolas', () => {
     for (const page of Object.values(pages)) {
       expect(page).toContain(`src="${htmlText(ctaMascotSrc)}"`);
-      expect(page).not.toContain(`src="${htmlText(heroMascotSrc)}"`);
+      expect(page).not.toContain(`src="${htmlText(presentationMascotSrc)}"`);
     }
   });
 

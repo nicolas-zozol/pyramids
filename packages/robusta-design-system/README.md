@@ -44,15 +44,16 @@ import thinks   from '@robusta/pyramids-design-system/assets/niktux-thinks.webp'
 ```
 
 Available assets:
-- Niktux, the mascot, in six WebP illustrations:
+- Niktux, the mascot, in WebP illustrations:
   - `niktux-thinks.webp` — thinking, 720×720
+  - `niktux-gangster.webp` — Niktux in a suit, aiming a revolver, on a transparent ground, 720×720
+  - `niktux-stonks.webp` — Niktux in a suit, arms crossed, before a rising gold arrow on a purple grid of figures, 960×720
   - `niktux-presentation.webp` — Nicolas as Niktux, with handwritten notes around him, 720×720
   - `niktux-working-hard.webp` — working hard, 720×720
   - `rooftop-batches.webp`, `rooftop-stories.webp` — two screenshots of Rooftop, for its door on the home page
   - `niktux-throw-money.webp` — throwing money, 720×720
   - `niktux-furious-at-computer.webp` — furious at the computer, 720×600
   - `niktux-pack-ice.webp` — on the pack ice, 1600×533
-- `crystal-tux.png` — an earlier illustration: a detailed penguin in a Robusta Build hoodie, with a "debugging mode" note
 - `robusta-build-wordmark.svg` — the napkin wordmark, vectorized (1597×273)
 - `decor/*.svg` — the pack-ice decor, 17 drawings for dividers and panel feet, exported as `assets/decor/<name>.svg`: penguins, a polar bear, an oak, igloos, a snowman, towers, houses, phone booths, a rainbow. Each sits in a 160×160 box on the same ground line (y = 148), so they line up in a frieze; ink outline 3, details 2, fills from the brand hues and their nuances, plus a green for the oak. Gallery: `preview/decor.html`
 
@@ -296,7 +297,7 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 - **callouts** — `.sk-callout` — speech-bubble framing for emphasized notes.
 - **arrows** — `.sk-arrow-right` — the light pen arrow for copy (`request → queue → worker`).
 - **flows** — `.sk-flow` lays out `.sk-flow-item` columns joined by `.sk-flow-arrow`, a bold marker arrow; `.sk-step` is a numbered disk on the ink stamp, `--primary`, `--secondary` or `--accent` for its fill; `--sk-step` on the row sizes the steps.
-- **console** — `.sk-console` on an `ol` or a `pre` — code on `--night`, the one dark surface: a hand-cut night sticker on the ink stamp. `.sk-console-line` per command, `.sk-console-cmd` on its `code` after a `›` prompt, `.sk-console-agent` in gold on the agent's `strong`, `.sk-console-note` beside it, under it below 560px of console. Only code goes dark: never a section, a card or a page.
+- **console** — `.sk-console` on an `ol` or a `pre` — code on `--brand-primary-deep`, the one dark surface: a hand-cut night sticker on the ink stamp. `.sk-console-line` per command, `.sk-console-cmd` on its `code` after a `›` prompt, `.sk-console-agent` in gold on the agent's `strong`, `.sk-console-note` beside it, under it below 560px of console. Only code goes dark: never a section, a card or a page.
 - **scribbles** — `.sk-scribble` — pink under-squiggle for emphasized words.
 - **separators** — `.sk-divider` — wavy section breaks.
 - **highlighter washes** — `.highlight-blue/green/pink/yellow` on text spans.

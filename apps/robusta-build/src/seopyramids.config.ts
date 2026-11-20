@@ -52,8 +52,10 @@ interface SeoPyramidsConfig {
 }
 
 export interface Contact {
-  /** Shown as is; `mailto:` is derived from it. */
+  /** The real address: no prerendered page carries it, the browser swaps it in for `decoyEmail` after a delay (`useContactEmail`); `mailto:` is derived from it. */
   email: string;
+  /** The address the prerendered pages show, and the browser until the delay is over: no bot that reads the HTML gets the real one. */
+  decoyEmail: string;
   /** Absolute https URL of the profile. */
   linkedIn: string;
 }
@@ -130,12 +132,12 @@ export interface HomeHeroCopy {
   title: string;
   /** The tagline under the title. */
   eyebrow: string;
-  /** The paragraph, the names of the two products in bold. */
-  lede: TextRun[];
+  /** The paragraphs under the title, one sentence each. */
+  lede: TextRun[][];
   emailLabel: string;
   linkedInLabel: string;
-  mascotAlt: string;
-  annotation: string;
+  /** The alt text of the billboard on the roof. */
+  billboardAlt: string;
   /** Rooftop, the roof. */
   roof: FloorCopy;
   /** RB Compound, the floors. */
@@ -199,7 +201,6 @@ export interface WorkshopCopy {
   linkedInLabel: string;
   fine: string;
   mascotAlt: string;
-  greeting: string;
 }
 
 /** The hero of the page of RB Compound: the product, its two ways in, its license, and the documents its agents write. */
@@ -333,20 +334,19 @@ const en: PageCopy = {
         'Nicolas Zozol makes RB Compound, six agents for Claude Code, and Rooftop, the view from above that lets you steer them. Also Masala Parser, a library of parser combinators, and AI workshops for teams.',
     },
     hero: {
-      title: 'your agents write the code. you keep the plans.',
-      eyebrow: '// Robusta Build · building software with AI agents',
+      title: 'Invest in your code for the long term',
+      eyebrow: 'Stop gambling in a one-shot-app',
       lede: [
-        'I’m Nicolas Zozol, twenty years in software. I make two tools for teams who build with AI agents: ',
-        { strong: 'RB Compound' },
-        ', six agents that write a story and a design before any code, and ',
-        { strong: 'Rooftop' },
-        ', the view from above that lets you steer them. and I work alongside the teams who use them.',
+        [
+          'Every feature leaves its story and its decisions in your repository, at the right place.',
+        ],
+        ['The better you hold, the better your agents get.'],
+        ['That is compound interest.'],
       ],
       emailLabel: 'write me an email',
       linkedInLabel: 'see my LinkedIn profile',
-      mascotAlt:
-        'Nicolas drawn as Niktux, a penguin in a Robusta Build hoodie: 25 years of coding, sees the big picture, flexible frontend, solid foundations',
-      annotation: 'this is niktux, watching over the code.',
+      billboardAlt:
+        'Niktux, the Robusta Build penguin, in a suit and glasses, arms crossed in front of a board of figures and a gold arrow that climbs',
       roof: {
         name: 'Rooftop',
         kind: 'the roof · a desktop app',
@@ -429,8 +429,8 @@ const en: PageCopy = {
       ],
       linkedInLabel: 'see my LinkedIn profile',
       fine: 'no form, no newsletter: I read and answer every message myself.',
-      mascotAlt: 'Niktux, the Robusta Build penguin, thinking',
-      greeting: 'hi there!',
+      mascotAlt:
+        'Nicolas drawn as Niktux, a penguin in a Robusta Build hoodie: 25 years of coding, sees the big picture, flexible frontend, solid foundations',
     },
   },
   rbCompound: {
@@ -679,20 +679,19 @@ const fr: PageCopy = {
         'Nicolas Zozol fait RB Compound, six agents pour Claude Code, et Rooftop, la vue d’en haut pour les piloter. Et aussi Masala Parser, une bibliothèque de parser combinators, et des workshops IA pour les équipes.',
     },
     hero: {
-      title: 'vos agents écrivent le code. vous gardez les plans.',
-      eyebrow: '// Robusta Build · construire du logiciel avec des agents IA',
+      title: 'Investissez dans votre code sur le long terme',
+      eyebrow: 'Arrêtez de jouer votre code sur une app one-shot',
       lede: [
-        'Je suis Nicolas Zozol, vingt ans de logiciel. Je fais deux outils pour les équipes qui construisent avec des agents IA : ',
-        { strong: 'RB Compound' },
-        ', six agents qui écrivent une story et un design avant tout code, et ',
-        { strong: 'Rooftop' },
-        ', la vue d’en haut qui permet de les piloter. et je travaille aux côtés des équipes qui les utilisent.',
+        [
+          'Chaque feature laisse sa story et ses décisions dans votre dépôt, au bon endroit.',
+        ],
+        ['Mieux vous tenez, meilleurs deviennent vos agents.'],
+        ['Ce sont les intérêts composés.'],
       ],
       emailLabel: 'm’écrire un e-mail',
       linkedInLabel: 'voir mon profil LinkedIn',
-      mascotAlt:
-        'Nicolas dessiné en Niktux, un manchot en sweat Robusta Build : 25 ans de code, la vue d’ensemble, un frontend souple, des fondations solides',
-      annotation: 'voici niktux, qui veille sur le code.',
+      billboardAlt:
+        'Niktux, le pingouin de Robusta Build, en costume et lunettes, bras croisés devant un tableau de chiffres et une flèche dorée qui monte',
       roof: {
         name: 'Rooftop',
         kind: 'le toit · une app de bureau',
@@ -775,8 +774,8 @@ const fr: PageCopy = {
       ],
       linkedInLabel: 'voir mon profil LinkedIn',
       fine: 'pas de formulaire ni de newsletter : je lis et je réponds moi-même à chaque message.',
-      mascotAlt: 'Niktux, le manchot de Robusta Build, en pleine réflexion',
-      greeting: 'bonjour !',
+      mascotAlt:
+        'Nicolas dessiné en Niktux, un manchot en sweat Robusta Build : 25 ans de code, la vue d’ensemble, un frontend souple, des fondations solides',
     },
   },
   rbCompound: {
@@ -1032,20 +1031,19 @@ const es: PageCopy = {
         'Nicolas Zozol hace RB Compound, seis agentes para Claude Code, y Rooftop, la vista desde arriba para dirigirlos. Y también Masala Parser, una biblioteca de parser combinators, y talleres de IA para equipos.',
     },
     hero: {
-      title: 'tus agentes escriben el código. tú guardas los planos.',
-      eyebrow: '// Robusta Build · construir software con agentes de IA',
+      title: 'Invierte en tu código a largo plazo',
+      eyebrow: 'Deja de apostar tu código a una app de un solo uso',
       lede: [
-        'Soy Nicolas Zozol, veinte años en el software. Hago dos herramientas para los equipos que construyen con agentes de IA: ',
-        { strong: 'RB Compound' },
-        ', seis agentes que escriben una story y un design antes de cualquier código, y ',
-        { strong: 'Rooftop' },
-        ', la vista desde arriba que te permite dirigirlos. y trabajo junto a los equipos que los usan.',
+        [
+          'Cada feature deja su story y sus decisiones en tu repositorio, en el lugar correcto.',
+        ],
+        ['Cuanto mejor aguantas, mejores se vuelven tus agentes.'],
+        ['Es el interés compuesto.'],
       ],
       emailLabel: 'escribirme un e-mail',
       linkedInLabel: 'ver mi perfil de LinkedIn',
-      mascotAlt:
-        'Nicolas dibujado como Niktux, un pingüino con sudadera de Robusta Build: 25 años programando, visión de conjunto, frontend flexible, bases sólidas',
-      annotation: 'aquí está niktux, que vigila el código.',
+      billboardAlt:
+        'Niktux, el pingüino de Robusta Build, con traje y gafas, de brazos cruzados ante un tablero de cifras y una flecha dorada que sube',
       roof: {
         name: 'Rooftop',
         kind: 'el tejado · una app de escritorio',
@@ -1128,8 +1126,8 @@ const es: PageCopy = {
       ],
       linkedInLabel: 'ver mi perfil de LinkedIn',
       fine: 'sin formulario ni newsletter: leo y respondo yo mismo cada mensaje.',
-      mascotAlt: 'Niktux, el pingüino de Robusta Build, pensando',
-      greeting: '¡hola!',
+      mascotAlt:
+        'Nicolas dibujado como Niktux, un pingüino con sudadera de Robusta Build: 25 años programando, visión de conjunto, frontend flexible, bases sólidas',
     },
   },
   rbCompound: {
@@ -1349,7 +1347,9 @@ const robustaBuildPyramidsConfig: SeoPyramidsConfig = {
     author: 'Nicolas Zozol',
   },
   contact: {
-    email: 'nicolas@robusta.build',
+    // written in two halves: no bundle carries the address whole for a bot to grep
+    email: ['nicolas', 'robusta.build'].join('@'),
+    decoyEmail: 'fake@robusta.fake',
     linkedIn: 'https://www.linkedin.com/in/robustacode/',
   },
   pageCopy: { en, fr, es },

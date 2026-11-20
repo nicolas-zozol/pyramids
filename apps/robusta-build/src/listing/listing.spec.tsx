@@ -63,7 +63,7 @@ function suppliedTexts(locale: string, page: RollPage): Set<string> {
     [
       ...stringsOf(getPageCopy(locale)),
       ...otherLocaleNames,
-      contact.email,
+      contact.decoyEmail,
       ...page.posts.flatMap((post) => [post.title, post.date]),
       ...BRAND,
     ].map(htmlText),

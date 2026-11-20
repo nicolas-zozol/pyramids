@@ -25,9 +25,7 @@ export function landingHead(locale: string): RouteHead {
       url: landingUrl(other),
     })),
     structuredData: [
-      organizationData(siteName, absoluteUrl(url), contact.email, [
-        contact.linkedIn,
-      ]),
+      organizationData(siteName, absoluteUrl(url), [contact.linkedIn]),
     ],
   });
 }

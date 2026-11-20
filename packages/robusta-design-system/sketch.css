@@ -338,7 +338,7 @@
   margin: 0;
   padding: var(--sp-4) var(--sp-6) var(--sp-4) var(--sp-5);
   list-style: none;
-  background: transparent; /* the night fill is ::before, cut to the hand-drawn edge */
+  background: transparent; /* the deep plum fill is ::before, cut to the hand-drawn edge */
   border: none;
   border-radius: 0;
   color: var(--paper);
@@ -356,7 +356,7 @@
 }
 .sk-console::before {
   inset: 0;
-  background: var(--night);
+  background: var(--brand-primary-deep); /* night read too dark */
   z-index: -1;
 }
 .sk-console::after {
@@ -504,7 +504,7 @@ pre.sk-console {
   align-items: center;
   justify-content: center;
   gap: var(--sp-3) var(--sp-4);
-  padding: var(--sp-4);
+  padding: var(--sp-4) max(var(--sp-4), calc(50% - 640px + var(--sp-4)));
   border-bottom: 1.5px dashed var(--ink-faint);
 }
 .sk-site-header__brand { display: flex; align-items: center; min-width: 0; }
@@ -532,7 +532,7 @@ pre.sk-console {
 /* ---------- hero ---------- */
 .sk-hero {
   position: relative;
-  padding: var(--sp-6) var(--sp-4) var(--sp-5);
+  padding: var(--sp-6) max(var(--sp-4), calc(50% - 640px + var(--sp-4))) var(--sp-5);
 }
 .sk-hero__grid {
   display: grid;
@@ -597,7 +597,7 @@ pre.sk-console {
 .sk-hero__doodle { display: none; }
 
 /* ---------- services grid ---------- */
-.sk-services-grid { padding: var(--sp-6) var(--sp-4); }
+.sk-services-grid { padding: var(--sp-6) max(var(--sp-4), calc(50% - 640px + var(--sp-4))); }
 .sk-services-grid__head { margin-bottom: var(--sp-6); }
 .sk-services-grid__eyebrow {
   font-family: var(--font-sans);
@@ -682,7 +682,7 @@ pre.sk-console {
 
 /* ---------- flow diagram ---------- */
 .sk-flow-diagram {
-  padding: var(--sp-6) var(--sp-4);
+  padding: var(--sp-6) max(var(--sp-4), calc(50% - 640px + var(--sp-4)));
   background-color: var(--paper);
   background-image: radial-gradient(var(--paper-dot) 1px, transparent 1px);
   background-size: 22px 22px;
@@ -818,7 +818,7 @@ pre.sk-console {
 
 /* ---------- questions list ----------
    plain paper, no dots: the entries are documents, read closely. */
-.sk-questions-list { padding: var(--sp-7) var(--sp-4); background-color: var(--paper); }
+.sk-questions-list { padding: var(--sp-7) max(var(--sp-4), calc(50% - 640px + var(--sp-4))); background-color: var(--paper); }
 .sk-questions-list__head { margin-bottom: var(--sp-6); }
 .sk-questions-list__eyebrow {
   font-family: var(--font-sans);
@@ -888,7 +888,7 @@ pre.sk-console {
 }
 
 /* ---------- principles list ---------- */
-.sk-principles-list { padding: var(--sp-7) var(--sp-4); }
+.sk-principles-list { padding: var(--sp-7) max(var(--sp-4), calc(50% - 640px + var(--sp-4))); }
 .sk-principles-list__head { margin-bottom: var(--sp-6); }
 .sk-principles-list__eyebrow {
   font-family: var(--font-sans);
@@ -1036,7 +1036,7 @@ pre.sk-console {
 /* ---------- closing cta ---------- */
 .sk-cta {
   position: relative;
-  padding: var(--sp-7) var(--sp-4);
+  padding: var(--sp-7) max(var(--sp-4), calc(50% - 640px + var(--sp-4)));
   text-align: center;
 }
 .sk-cta__mascot {
@@ -1078,7 +1078,7 @@ pre.sk-console {
 }
 
 /* ---------- home sections ----------
-   The home page's sections share one column of at most 1280px: their side
+   Like every section, the header and the footer, they share one column of at most 1280px: their side
    padding grows past the gutter by half of what the viewport has over that
    width, so a full-bleed ground (the notes' darker paper, the workshop's
    dotted board) still spans the screen. Each title is followed by its
@@ -1105,15 +1105,21 @@ pre.sk-console {
   overflow-wrap: break-word;
 }
 .sk-home-hero__eyebrow {
-  margin: 0 0 var(--sp-5);
+  margin: 0 0 var(--sp-7);
   font-family: var(--font-mono);
   font-size: var(--t-lead);
   line-height: 1.4;
   color: var(--ink-mute);
 }
-.sk-home-hero__lede {
+.sk-home-hero__ledes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
   max-width: 35rem;
-  margin: 0 0 var(--sp-6);
+  margin: 0 0 var(--sp-8);
+}
+.sk-home-hero__lede {
+  margin: 0;
   font-size: var(--t-lead);
   line-height: 1.5;
   color: var(--ink-soft);
@@ -1146,6 +1152,31 @@ pre.sk-console {
 /* the mascot is ink on near-white: brightness lifts that to pure white, which multiply turns into the paper under it.
    it stands over the roof: its own z-index, and no stacking context on its parent, which would leave multiply nothing to blend with */
 .sk-home-hero__mascot { position: relative; z-index: 1; display: block; width: auto; height: 120px; mix-blend-mode: multiply; filter: brightness(1.02); }
+/* billboard: a picture standing on the roof, framed in ink on the stamp, held by two posts down to the roof.
+   the picture keeps its own ratio */
+.sk-home-hero__board {
+  display: flex;
+  justify-content: center;
+}
+.sk-home-hero__billboard {
+  position: relative;
+  box-sizing: border-box;
+  width: min(86%, 23rem);
+  margin-bottom: var(--sp-4);
+  border: var(--stroke) solid var(--ink);
+  background: var(--paper);
+  box-shadow: var(--shadow-offset);
+}
+.sk-home-hero__billboard-img { display: block; width: 100%; height: auto; }
+.sk-home-hero__post {
+  position: absolute;
+  top: 100%;
+  width: var(--stroke-bold);
+  height: calc(var(--sp-4) + var(--sp-3) + var(--stroke)); /* down through the building's gap to the roof */
+  background: var(--ink);
+}
+.sk-home-hero__post--left { left: 18%; }
+.sk-home-hero__post--right { right: 18%; }
 .sk-home-hero__note {
   max-width: 12rem;
   margin: 0 0 var(--sp-7);
@@ -1584,10 +1615,13 @@ pre.sk-console {
 .sk-workshop__host {
   position: relative;
   justify-self: center;
-  padding-top: var(--sp-6);
+  width: 100%;
+  max-width: 22rem;
+  padding-top: var(--sp-7);
   background: var(--paper);
 }
-.sk-workshop__mascot { display: block; width: auto; height: 190px; mix-blend-mode: multiply; filter: brightness(1.02); }
+/* the mascot can carry handwritten notes: it takes the width of its column, up to 22rem, so they stay readable */
+.sk-workshop__mascot { display: block; width: 100%; height: auto; mix-blend-mode: multiply; filter: brightness(1.02); }
 .sk-workshop__greeting {
   position: absolute;
   left: 60%;
@@ -1660,7 +1694,7 @@ pre.sk-console {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-5);
-  padding: var(--sp-6) var(--sp-4) var(--sp-7);
+  padding: var(--sp-6) max(var(--sp-4), calc(50% - 640px + var(--sp-4))) var(--sp-7);
   border-top: 1.5px solid var(--ink);
 }
 .sk-site-footer__brand { min-width: 0; }
@@ -1732,14 +1766,14 @@ pre.sk-console {
 
 /* -------- sm — two columns appear -------- */
 @media (min-width: 40rem) {
-  .sk-site-header    { padding: var(--sp-4) var(--sp-5); }
-  .sk-hero           { padding: var(--sp-7) var(--sp-5) var(--sp-5); }
-  .sk-services-grid  { padding: var(--sp-6) var(--sp-5); }
-  .sk-flow-diagram   { padding: var(--sp-6) var(--sp-5); }
-  .sk-principles-list{ padding: var(--sp-7) var(--sp-5); }
-  .sk-questions-list { padding: var(--sp-7) var(--sp-5); }
-  .sk-cta            { padding: var(--sp-7) var(--sp-5); }
-  .sk-site-footer    { padding: var(--sp-6) var(--sp-5) var(--sp-7); }
+  .sk-site-header    { padding: var(--sp-4) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-hero           { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))) var(--sp-5); }
+  .sk-services-grid  { padding: var(--sp-6) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-flow-diagram   { padding: var(--sp-6) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-principles-list{ padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-questions-list { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-cta            { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-site-footer    { padding: var(--sp-6) max(var(--sp-5), calc(50% - 640px + var(--sp-5))) var(--sp-7); }
   .sk-home-hero      { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
   .sk-product-hero   { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
   .sk-product-doors  { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
@@ -1755,12 +1789,12 @@ pre.sk-console {
 /* -------- md — the horizontal padding reaches its full width and the
    header becomes one row -------- */
 @media (min-width: 48rem) {
-  .sk-site-header    { padding: var(--sp-5) var(--sp-7); justify-content: space-between; }
-  .sk-hero           { padding: var(--sp-8) var(--sp-7) var(--sp-6); }
-  .sk-services-grid  { padding: var(--sp-8) var(--sp-7); }
-  .sk-flow-diagram   { padding: var(--sp-8) var(--sp-7); }
-  .sk-principles-list{ padding: var(--sp-9) var(--sp-7); }
-  .sk-questions-list { padding: var(--sp-8) var(--sp-7); }
+  .sk-site-header    { padding: var(--sp-5) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); justify-content: space-between; }
+  .sk-hero           { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))) var(--sp-6); }
+  .sk-services-grid  { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
+  .sk-flow-diagram   { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
+  .sk-principles-list{ padding: var(--sp-9) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
+  .sk-questions-list { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-flow-diagram__conductor { padding: var(--sp-7) var(--sp-6) var(--sp-5); }
   .sk-notes-preview  { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-home-hero      { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
@@ -1768,8 +1802,8 @@ pre.sk-console {
   .sk-product-doors  { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-library-showcase { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-workshop       { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
-  .sk-cta            { padding: var(--sp-9) var(--sp-7); }
-  .sk-site-footer    { padding: var(--sp-6) var(--sp-7) var(--sp-8); }
+  .sk-cta            { padding: var(--sp-9) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
+  .sk-site-footer    { padding: var(--sp-6) max(var(--sp-7), calc(50% - 640px + var(--sp-7))) var(--sp-8); }
 
   .sk-site-header__nav       { gap: var(--sp-5); }
   .sk-services-grid__list    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1800,8 +1834,7 @@ pre.sk-console {
   .sk-home-hero__floor--roof { margin-inline: calc(var(--sp-5) * -1); transform: rotate(-0.4deg); }
   .sk-product-doors__list    { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .sk-library-showcase__intro { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); }
-  .sk-workshop__card         { grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); gap: var(--sp-7); padding: var(--sp-8) var(--sp-7); }
-  .sk-workshop__mascot       { height: 230px; }
+  .sk-workshop__card         { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--sp-7); padding: var(--sp-8) var(--sp-7); }
 }
 
 /* -------- xl — the caption leaves the flow for the mascot's top-right corner.
