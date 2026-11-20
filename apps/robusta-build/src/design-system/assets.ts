@@ -8,7 +8,8 @@
  * Design: features/__done/pyramid-v2-epic/__done/robusta-landing-page/robusta-landing-page.design.md
  * Requirements: R-LANDING-82
  */
-import heroMascot from '@robusta/pyramids-design-system/assets/niktux-presentation.webp';
+import presentationMascot from '@robusta/pyramids-design-system/assets/niktux-presentation.webp';
+import stonks from '@robusta/pyramids-design-system/assets/niktux-stonks.webp';
 import ctaMascot from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
 import rooftopBatches from '@robusta/pyramids-design-system/assets/rooftop-batches.webp';
@@ -21,8 +22,11 @@ import rooftopStories from '@robusta/pyramids-design-system/assets/rooftop-stori
  */
 export const wordmarkSrc: string = wordmark;
 
-/** `niktux-presentation.webp`, the hero's mascot, at the URL the bundler published it under. */
-export const heroMascotSrc: string = heroMascot;
+/** `niktux-presentation.webp`, Nicolas as Niktux with his handwritten notes, at the URL the bundler published it under. */
+export const presentationMascotSrc: string = presentationMascot;
+
+/** `niktux-stonks.webp`, Niktux before a board of figures and a climbing arrow, the billboard on the roof of the home's hero, at the URL the bundler published it under. */
+export const stonksBillboardSrc: string = stonks;
 
 /** `niktux-thinks.webp`, the closing block's mascot, at the URL the bundler published it under. */
 export const ctaMascotSrc: string = ctaMascot;

@@ -102,20 +102,21 @@ describe('the SEO of the Site configuration', () => {
 });
 
 describe('the contact of the Site configuration', () => {
-  it('holds Nicolas’s email address and his LinkedIn profile as an https URL', () => {
+  it('holds Nicolas’s email address, its decoy and his LinkedIn profile as an https URL', () => {
     const { contact } = getSeoPyramidsConfig();
 
     expect(contact.email).toBe('nicolas@robusta.build');
+    expect(contact.decoyEmail).toBe('fake@robusta.fake');
     expect(contact.linkedIn).toMatch(/^https:\/\/www\.linkedin\.com\/in\//);
   });
 
-  it('is the only place the email address is written in the page copy’s module', async () => {
+  it('never writes the email address whole in the page copy’s module, so no bundle carries it', async () => {
     const source = await readFile(
       new URL('./seopyramids.config.ts', import.meta.url),
       'utf8',
     );
 
-    expect(source.match(/nicolas@robusta\.build/g)).toHaveLength(1);
+    expect(source).not.toContain('nicolas@robusta.build');
   });
 });
 
@@ -329,10 +330,6 @@ describe('the copy of the landing page and of the page of RB Compound in every L
 
       expect(landing.products.rooftop.name, locale).toBe('Rooftop');
       expect(landing.products.rbCompound.name, locale).toBe('RB Compound');
-      expect(landing.hero.lede, locale).toContainEqual({
-        strong: 'RB Compound',
-      });
-      expect(landing.hero.lede, locale).toContainEqual({ strong: 'Rooftop' });
       expect(Object.keys(landing.masala.meanings), locale).toEqual([
         'C',
         'N',

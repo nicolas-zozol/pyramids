@@ -78,12 +78,11 @@ describe('breadcrumbData', () => {
 
 // R-SEOEXCELLENCE-64: an Organization, never a LocalBusiness, with no address.
 describe('organizationData', () => {
-  it('declares the name, the url, the email and the profiles of the organization', () => {
+  it('declares the name, the url and the profiles of the organization, and no email', () => {
     expect(
       organizationData(
         'Robusta Build',
         'https://www.robusta.build/fr',
-        'nicolas@robusta.build',
         ['https://www.linkedin.com/in/robustacode/'],
       ),
     ).toEqual({
@@ -91,7 +90,6 @@ describe('organizationData', () => {
       '@type': 'Organization',
       name: 'Robusta Build',
       url: 'https://www.robusta.build/fr',
-      email: 'nicolas@robusta.build',
       sameAs: ['https://www.linkedin.com/in/robustacode/'],
     });
   });

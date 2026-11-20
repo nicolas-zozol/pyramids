@@ -31,13 +31,17 @@ export interface HomeHeroProps {
   title?: string;
   /** The tagline under the title, a line of comment in mono. */
   eyebrow?: string;
-  lede?: TextRun[];
+  /** The paragraphs under the title, each one a list of runs. */
+  lede?: TextRun[][];
   primaryCta?: ActionLink;
   secondaryCta?: ActionLink;
   mascotSrc?: string;
   mascotAlt?: string;
   /** The note beside the mascot, on the roof. */
   annotation?: string;
+  /** A picture standing on the roof on two posts, framed in ink; it takes the mascot's place. */
+  billboardSrc?: string;
+  billboardAlt?: string;
   /** The building, top down: roof first, ground last. */
   floors?: HomeFloor[];
   /** Renders the section's anchors, a router link for instance; a plain `<a>` when absent. */
@@ -67,6 +71,8 @@ export function HomeHero({
   mascotSrc,
   mascotAlt = '',
   annotation,
+  billboardSrc,
+  billboardAlt = '',
   floors = [],
   linkComponent: Link = PlainLink,
   className,
@@ -80,17 +86,21 @@ export function HomeHero({
         {title ? <h1 className="sk-home-hero__title">{title}</h1> : null}
         {eyebrow ? <p className="sk-home-hero__eyebrow">{eyebrow}</p> : null}
         {lede.length > 0 ? (
-          <p className="sk-home-hero__lede">
-            {lede.map((run, i) =>
-              typeof run === 'string' ? (
-                run
-              ) : (
-                <strong key={i} className="sk-home-hero__strong">
-                  {run.strong}
-                </strong>
-              ),
-            )}
-          </p>
+          <div className="sk-home-hero__ledes">
+            {lede.map((paragraph, p) => (
+              <p key={p} className="sk-home-hero__lede">
+                {paragraph.map((run, i) =>
+                  typeof run === 'string' ? (
+                    run
+                  ) : (
+                    <strong key={i} className="sk-home-hero__strong">
+                      {run.strong}
+                    </strong>
+                  ),
+                )}
+              </p>
+            ))}
+          </div>
         ) : null}
         <div className="sk-home-hero__actions">
           {primaryCta ? (
@@ -110,7 +120,25 @@ export function HomeHero({
         </div>
       </div>
       <div className="sk-home-hero__building">
-        {mascotSrc ? (
+        {billboardSrc ? (
+          <div className="sk-home-hero__board">
+            <div className="sk-home-hero__billboard">
+              <img
+                className="sk-home-hero__billboard-img"
+                src={billboardSrc}
+                alt={billboardAlt}
+              />
+              <span
+                className="sk-home-hero__post sk-home-hero__post--left"
+                aria-hidden="true"
+              />
+              <span
+                className="sk-home-hero__post sk-home-hero__post--right"
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+        ) : mascotSrc ? (
           <div className="sk-home-hero__roofline">
             {annotation ? (
               <p className="sk-home-hero__note">{annotation}</p>

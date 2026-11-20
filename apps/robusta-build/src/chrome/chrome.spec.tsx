@@ -104,7 +104,7 @@ describe('Header', () => {
         }),
         `${landingOf(locale)}#masala`,
         ...others.map(landingOf),
-        `mailto:${contact.email}`,
+        `mailto:${contact.decoyEmail}`,
       ]);
       expect(html).toContain(
         `>${htmlText(getPageCopy(locale).header.contactLabel)}<`,

@@ -6,8 +6,9 @@ import {
   QuestionsList,
 } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.tsx';
+import { useContactEmail } from '../components/use-contact-email.ts';
 import { ctaMascotSrc } from '../design-system/assets.ts';
-import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
+import { getPageCopy } from '../seopyramids.config.ts';
 import { rbCompoundUrl } from './rb-compound-head.ts';
 
 export interface RbCompoundPageProps {
@@ -17,10 +18,10 @@ export interface RbCompoundPageProps {
 
 /** The page of RB Compound in a Locale: ProductHero, the agents, their open questions, boss, PrinciplesList and CTA, every text from its page copy. */
 export function RbCompoundPage({ locale }: RbCompoundPageProps) {
-  const { contact } = getSeoPyramidsConfig();
+  const email = useContactEmail();
   const { hero, agents, openQuestions, boss, principles, cta } =
     getPageCopy(locale).rbCompound;
-  const mailto = `mailto:${contact.email}`;
+  const mailto = `mailto:${email}`;
   const [epic, stories, questions, design, docs] = hero.documents;
   const [epicman, storyman, bsman, designman, tddman, docman] =
     agents.steps.map((step) => step.label);
@@ -63,7 +64,7 @@ export function RbCompoundPage({ locale }: RbCompoundPageProps) {
         subtitle={cta.subtitle}
         footnote={cta.footnote}
         emailPlaceholder=""
-        ctaLabel={contact.email}
+        ctaLabel={email}
         ctaHref={mailto}
         mascotSrc={ctaMascotSrc}
         linkComponent={SiteLink}

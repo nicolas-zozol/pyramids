@@ -1,5 +1,5 @@
 /**
- * Package components — the site's own view pieces shared across pages: the router link, the breadcrumb, the not-found page and the error state of a failed navigation.
+ * Package components — the site's own view pieces shared across pages: the router link, the breadcrumb, the not-found page, the error state of a failed navigation and the contact address revealed after a delay.
  *
  * Design: features/__done/pyramid-v2-epic/__done/tanstack-start-migration/tanstack-start-migration.design.md
  * Requirements: R-TANSTACK-47, R-TANSTACK-81, R-TANSTACK-83, R-TANSTACK-84
@@ -14,3 +14,8 @@ export { Breadcrumb } from './Breadcrumb.tsx';
 export { NavigationFailure } from './NavigationFailure.tsx';
 export { NotFoundPage } from './NotFoundPage.tsx';
 export { SiteLink } from './SiteLink.tsx';
+export {
+  EMAIL_REVEAL_DELAY_MS,
+  revealContactEmail,
+  useContactEmail,
+} from './use-contact-email.ts';

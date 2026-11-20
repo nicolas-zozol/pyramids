@@ -23,9 +23,9 @@
   --ink-mute:     #6b6b66;   /* secondary captions */
   --ink-faint:    #a8a59a;   /* tertiary, dotted lines */
   --paper-dot:    #dcd9d0;   /* the dots of dotted-grid paper: 1.35:1 on paper, far under any text */
-  --night:        #2a1e36;   /* ink with a drop of plum: the console's ground, the one dark surface; never a section or a page */
-  --night-mute:   #b9adc6;   /* notes and the prompt on night (7.4:1); not text on paper (2:1) */
-  --night-rule:   #57486a;   /* dashed rules between console lines on night: decoration only */
+  --night:        #2a1e36;   /* ink with a drop of plum; the console moved to brand-primary-deep, night read too dark */
+  --night-mute:   #b9adc6;   /* notes and the prompt in the console (6.9:1 on brand-primary-deep); not text on paper (2:1) */
+  --night-rule:   #57486a;   /* dashed rules between console lines: decoration only */
 
   /* -------- brand: luxury palette --------
      primary   = royal purple (Robusta plum)
@@ -33,7 +33,7 @@
      accent    = signal blue, used sparingly for links / focus rings */
   --brand-primary:        #562571;
   --brand-primary-soft:   #e7d8f0;   /* tints — highlighter wash */
-  --brand-primary-deep:   #3a1850;   /* hover / pressed */
+  --brand-primary-deep:   #3a1850;   /* hover / pressed; the console's ground, the one dark surface: never a section or a page */
   --brand-secondary:      #FFCC3F;
   --brand-secondary-soft: #fff1c2;
   --brand-secondary-deep: #d6a624;

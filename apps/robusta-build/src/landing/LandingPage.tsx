@@ -6,10 +6,11 @@ import {
   type NotePost,
 } from '@robusta/pyramids-design-system';
 import { SiteLink } from '../components/SiteLink.tsx';
+import { useContactEmail } from '../components/use-contact-email.ts';
 import {
-  ctaMascotSrc,
-  heroMascotSrc,
+  presentationMascotSrc,
   rooftopShotSrcs,
+  stonksBillboardSrc,
 } from '../design-system/assets.ts';
 import { rbCompoundUrl } from '../rb-compound/index.ts';
 import { urlScheme } from '../routing/scheme.ts';
@@ -42,7 +43,8 @@ export function LandingPage({ locale, posts }: LandingPageProps) {
   const { contact } = getSeoPyramidsConfig();
   const { hero, products, masala, workshop } = getPageCopy(locale).landing;
   const { agents } = getPageCopy(locale).rbCompound;
-  const mailto = `mailto:${contact.email}`;
+  const email = useContactEmail();
+  const mailto = `mailto:${email}`;
   const rbCompound = rbCompoundUrl(locale);
   const rbCompoundPath = `robusta.build${rbCompound} →`;
   const rooftop = `${buildUrl(urlScheme, { kind: 'landing', locale })}#${ROOFTOP_ANCHOR}`;
@@ -56,9 +58,8 @@ export function LandingPage({ locale, posts }: LandingPageProps) {
         lede={hero.lede}
         primaryCta={{ label: hero.emailLabel, href: mailto }}
         secondaryCta={{ label: hero.linkedInLabel, href: contact.linkedIn }}
-        mascotSrc={heroMascotSrc}
-        mascotAlt={hero.mascotAlt}
-        annotation={hero.annotation}
+        billboardSrc={stonksBillboardSrc}
+        billboardAlt={hero.billboardAlt}
         floors={[
           { level: 'roof', ...hero.roof, href: rooftop },
           {
@@ -146,12 +147,11 @@ export function LandingPage({ locale, posts }: LandingPageProps) {
           { ...workshop.facts[0], tone: 'yellow' },
           { ...workshop.facts[1], tone: 'blue' },
         ]}
-        primaryCta={{ label: contact.email, href: mailto }}
+        primaryCta={{ label: email, href: mailto }}
         secondaryCta={{ label: workshop.linkedInLabel, href: contact.linkedIn }}
         fine={workshop.fine}
-        mascotSrc={ctaMascotSrc}
+        mascotSrc={presentationMascotSrc}
         mascotAlt={workshop.mascotAlt}
-        greeting={workshop.greeting}
         linkComponent={SiteLink}
       />
     </main>
