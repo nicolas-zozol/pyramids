@@ -420,6 +420,17 @@ pre.sk-console {
   .sk-console-note { padding-left: 2.2ch; } /* under the command, past the prompt */
 }
 
+/* ---------- cover link ----------
+   a link whose clickable area covers its nearest positioned ancestor, a card:
+   one link per card, and any other link of the card set above it (z-index 2). */
+.sk-cover-link { color: inherit; text-decoration: none; }
+.sk-cover-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 /* ---------- "scribble" emphasis ---------- */
 .sk-scribble {
   display: inline-block;
@@ -1014,6 +1025,7 @@ pre.sk-console {
   overflow-wrap: break-word;
 }
 .sk-notes-preview__tag { justify-self: start; }
+.sk-notes-preview__tag-link { position: relative; z-index: 2; justify-self: start; color: var(--ink); text-decoration: none; }
 .sk-notes-preview__summary {
   font-size: var(--t-small);
   line-height: 1.5;
@@ -1176,6 +1188,104 @@ pre.sk-console {
   text-decoration-thickness: var(--stroke-thin);
   text-underline-offset: 4px;
 }
+
+/* ---------- product hero ----------
+   the top of a product's page: what it is on one side, the documents it
+   writes on the other, down a stair whose step each item reads from its
+   --sk-depth. below lg the stair flattens into a column. */
+.sk-product-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-7);
+  padding: var(--sp-7) max(var(--sp-4), calc(50% - 640px + var(--sp-4)));
+  border-bottom: var(--stroke) dotted var(--ink-faint);
+}
+.sk-product-hero__copy { min-width: 0; }
+.sk-product-hero__kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  margin: 0 0 var(--sp-4);
+  font-size: var(--t-body);
+  line-height: 1.4;
+  color: var(--ink-mute);
+}
+.sk-product-hero__arrow { flex: none; width: 40px; height: 18px; background-size: contain; }
+.sk-product-hero__title {
+  margin: 0 0 var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+.sk-product-hero__lede {
+  max-width: 35rem;
+  margin: 0 0 var(--sp-6);
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.sk-product-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-5);
+}
+.sk-product-hero__note {
+  margin: var(--sp-5) 0 0;
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+.sk-product-hero__cascade {
+  --sk-step: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  width: 100%;
+  max-width: 33rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.sk-product-hero__sheet {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: min(19rem, 100%);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--t-body);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.sk-product-hero__step { margin-bottom: 0; font-size: var(--t-small); }
+.sk-product-hero__sheet-name { font-weight: 600; }
+.sk-product-hero__sheet-who {
+  margin-left: auto;
+  padding-left: var(--sp-3);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+}
+.sk-product-hero__gate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-2) 0;
+  font-size: var(--t-small);
+  color: var(--ink-soft);
+}
+.sk-product-hero__code { width: min(22rem, 100%); }
+.sk-product-hero__console { padding: var(--sp-3) var(--sp-5) var(--sp-3) var(--sp-4); font-size: var(--t-code); }
+.sk-product-hero__console-line { grid-template-columns: minmax(0, 1fr); padding: var(--sp-2) 0; }
 
 /* ---------- product doors ---------- */
 .sk-product-doors {
@@ -1631,6 +1741,7 @@ pre.sk-console {
   .sk-cta            { padding: var(--sp-7) var(--sp-5); }
   .sk-site-footer    { padding: var(--sp-6) var(--sp-5) var(--sp-7); }
   .sk-home-hero      { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
+  .sk-product-hero   { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
   .sk-product-doors  { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
   .sk-library-showcase { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
   .sk-workshop       { padding: var(--sp-7) max(var(--sp-5), calc(50% - 640px + var(--sp-5))); }
@@ -1653,6 +1764,7 @@ pre.sk-console {
   .sk-flow-diagram__conductor { padding: var(--sp-7) var(--sp-6) var(--sp-5); }
   .sk-notes-preview  { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-home-hero      { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
+  .sk-product-hero   { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-product-doors  { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-library-showcase { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
   .sk-workshop       { padding: var(--sp-8) max(var(--sp-7), calc(50% - 640px + var(--sp-7))); }
@@ -1681,6 +1793,10 @@ pre.sk-console {
   .sk-site-header__nav       { gap: var(--sp-6); }
   .sk-notes-preview__list    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sk-home-hero              { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+  .sk-product-hero           { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+  .sk-product-hero__sheet    { margin-left: calc(var(--sk-depth, 0) * var(--sp-5)); }
+  .sk-product-hero__gate     { margin-left: calc(var(--sk-depth, 0) * var(--sp-5)); }
+  .sk-product-hero__code     { margin-left: calc(var(--sk-depth, 0) * var(--sp-5)); }
   .sk-home-hero__floor--roof { margin-inline: calc(var(--sp-5) * -1); transform: rotate(-0.4deg); }
   .sk-product-doors__list    { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .sk-library-showcase__intro { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); }

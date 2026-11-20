@@ -141,7 +141,7 @@ describe('rollPageOf on a roll of 12 articles or fewer', () => {
 });
 
 describe('the posts of a roll page', () => {
-  it('carry the title, the canonical article URL and the date with its year, written in the Locale of the page', () => {
+  it('carry the title, the canonical article URL, the page of its Category and the date with its year, written in the Locale of the page', () => {
     const [english] = pageOf(blogHome(1), articles(1)).posts;
     const [french] = pageOf(blogHome(1, 'fr'), articles(1, 'fr')).posts;
 
@@ -149,12 +149,14 @@ describe('the posts of a roll page', () => {
       title: 'Article 1',
       href: '/articles/c/web/web-en-1',
       tag: 'web',
+      tagHref: '/articles/c/web',
       date: 'Dec 1, 2022',
     });
     expect(french).toEqual({
       title: 'Article 1',
       href: '/fr/articles/c/web/web-fr-1',
       tag: 'web',
+      tagHref: '/fr/articles/c/web',
       date: '1 déc. 2022',
     });
   });
@@ -279,6 +281,7 @@ describe('rollPage', () => {
       title: 'Ledger versus Metamask',
       href: '/articles/c/blockchain/ledger-versus-metamask',
       tag: 'blockchain',
+      tagHref: '/articles/c/blockchain',
       date: 'Jan 20, 2022',
     });
     expect(page.posts.at(-1)?.date).toBe('May 24, 2019');

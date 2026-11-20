@@ -100,11 +100,11 @@ describe('the URL of the page of RB Compound', () => {
 });
 
 describe('RbCompoundPage', () => {
-  it('is one <main> of Hero, the agents, their open questions, boss, PrinciplesList and CTA, in this order', () => {
+  it('is one <main> of ProductHero, the agents, their open questions, boss, PrinciplesList and CTA, in this order', () => {
     for (const locale of LOCALES) {
       const main = /<main>([\s\S]*)<\/main>/.exec(pages[locale])?.[1] ?? '';
       const order = [
-        'class="sk-hero"',
+        'class="sk-product-hero"',
         'id="agents"',
         'id="open-questions"',
         'id="boss"',
@@ -220,19 +220,65 @@ describe('the words of the page of RB Compound', () => {
     }
   });
 
-  it('put the hero eyebrow of their Locale in the eyebrow, its title in the one heading, and no "open source"', () => {
+  it('present RB Compound in the hero, its title in the one heading, and neither Nicolas nor "open source"', () => {
     for (const locale of LOCALES) {
       const { hero, head } = getPageCopy(locale).rbCompound;
+      const top =
+        /<section[^>]*class="sk-product-hero"[\s\S]*?<\/section>/.exec(
+          pages[locale],
+        )?.[0] ?? '';
 
-      expect(pages[locale]).toMatch(
-        new RegExp(
-          `class="sk-hero__eyebrow"[\\s\\S]*?${htmlText(hero.eyebrow)}`,
-        ),
-      );
+      expect(top).toContain(`>${htmlText(hero.kicker)}<`);
       expect(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(pages[locale])?.[1]).toBe(
         htmlText(hero.title),
       );
+      expect(hero.title).toMatch(/^RB Compound\b/);
+      expect(readableTexts(top).join(' ')).not.toMatch(
+        /Nicolas|Niktux|I’m|je suis|soy/i,
+      );
+      expect(top).not.toContain('<img');
       expect(head.description).not.toMatch(/open source/i);
+    }
+  });
+
+  it('lay the documents of the agents down the hero, the reader’s approval before the code', () => {
+    for (const locale of LOCALES) {
+      const { hero, agents } = getPageCopy(locale).rbCompound;
+      const top =
+        /<section[^>]*class="sk-product-hero"[\s\S]*?<\/section>/.exec(
+          pages[locale],
+        )?.[0] ?? '';
+      const [epic, stories, questions, design, docs] = hero.documents;
+      const names = agents.steps.map((step) => step.label);
+
+      expect(
+        readableTexts(
+          top.slice(top.indexOf('<ol class="sk-product-hero__cascade"')),
+        ),
+        locale,
+      ).toEqual(
+        [
+          '1',
+          epic,
+          names[0],
+          '2',
+          stories,
+          names[1],
+          '3',
+          questions,
+          names[2],
+          '4',
+          design,
+          names[3],
+          hero.gate.label,
+          hero.gate.say,
+          names[4],
+          '6',
+          docs,
+          names[5],
+          hero.cascadeLabel,
+        ].map(htmlText),
+      );
     }
   });
 });
@@ -258,6 +304,7 @@ describe('the links of the page of RB Compound', () => {
         ),
         `${landing}#rooftop`,
         `${landing}#masala`,
+        `${rbCompoundUrl(locale)}#agents`,
         ...built,
       ];
 
@@ -266,14 +313,24 @@ describe('the links of the page of RB Compound', () => {
     }
   });
 
-  it('show the two mascots from the design system, the hero’s with the alt text of its Locale', () => {
-    for (const locale of LOCALES) {
-      const { hero } = getPageCopy(locale).rbCompound;
+  it('show the mascot of the closing block, and not the one that presents Nicolas', () => {
+    for (const page of Object.values(pages)) {
+      expect(page).toContain(`src="${htmlText(ctaMascotSrc)}"`);
+      expect(page).not.toContain(`src="${htmlText(heroMascotSrc)}"`);
+    }
+  });
 
-      expect(pages[locale]).toContain(
-        `src="${htmlText(heroMascotSrc)}" alt="${htmlText(hero.mascotAlt)}"`,
-      );
-      expect(pages[locale]).toContain(`src="${htmlText(ctaMascotSrc)}"`);
+  it('lead from the hero to the code on GitHub, then down to the agents', () => {
+    for (const locale of LOCALES) {
+      const top =
+        /<section[^>]*class="sk-product-hero"[\s\S]*?<\/section>/.exec(
+          pages[locale],
+        )?.[0] ?? '';
+
+      expect(hrefs(top)).toEqual([
+        'https://github.com/robusta-build/rb-compound',
+        `${rbCompoundUrl(locale)}#agents`,
+      ]);
     }
   });
 

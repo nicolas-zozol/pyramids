@@ -13,7 +13,7 @@ import {
   type RollUrl,
 } from '../routing/url-scheme/index.ts';
 import { isIndexable, type PageVersion } from '../seo/index.ts';
-import { articleUrl } from './article-url.ts';
+import { articleUrl, categoryUrl } from './article-url.ts';
 import type { RollPage } from './types.ts';
 
 /** One page of a roll, read from the article index and the URL set at build. */
@@ -77,7 +77,7 @@ function rollPost(article: ArticleIndexEntry, tagged: boolean): NotePost {
     title: article.title,
     href: articleUrl(article),
     ...(tagged && article.category !== undefined
-      ? { tag: article.category }
+      ? { tag: article.category, tagHref: categoryUrl(article) }
       : {}),
     date: dateWithYear(article.date, article.locale),
   };

@@ -8,6 +8,8 @@ export interface NotePost {
   /** Short tag label, e.g. "distributed systems". Empty hides the tag. */
   tag?: string;
   tagTone?: SkTagTone;
+  /** Where the tag leads, the page of its Category for instance; absent, the tag is no link. */
+  tagHref?: string;
   /** Date label like "apr 12". */
   date: string;
   /** The date in three parts, the day in large between the month and the year; `date` alone when absent. */
@@ -38,7 +40,8 @@ export interface NotesPreviewProps {
 
 /**
  * The latest notes on the darker paper, a card each: the date down its left
- * edge, the title, the summary and the subject. One column below `lg`, two above.
+ * edge, the title, the summary and the subject. The title's link covers the
+ * card; the subject, when it has a destination, is a link of its own above it. One column below `lg`, two above.
  */
 export function NotesPreview({
   eyebrow,
@@ -70,10 +73,7 @@ export function NotesPreview({
       <ul className="sk-notes-preview__list">
         {posts.map((p, i) => (
           <li key={i} className="sk-notes-preview__item">
-            <Link
-              href={p.href ?? '#'}
-              className="sk-box sk-notes-preview__post"
-            >
+            <article className="sk-box sk-notes-preview__post">
               {p.dateParts ? (
                 <span className="sk-notes-preview__date">
                   <span>{p.dateParts.month}</span>
@@ -85,16 +85,25 @@ export function NotesPreview({
               ) : (
                 <span className="sk-notes-preview__date">{p.date}</span>
               )}
-              <span className="sk-notes-preview__post-title">{p.title}</span>
+              <Link
+                href={p.href ?? '#'}
+                className="sk-cover-link sk-notes-preview__post-title"
+              >
+                {p.title}
+              </Link>
               {p.summary ? (
                 <span className="sk-notes-preview__summary">{p.summary}</span>
               ) : null}
-              {p.tag ? (
+              {p.tag && p.tagHref ? (
+                <Link href={p.tagHref} className="sk-notes-preview__tag-link">
+                  <SkTag tone={p.tagTone}>{p.tag}</SkTag>
+                </Link>
+              ) : p.tag ? (
                 <SkTag tone={p.tagTone} className="sk-notes-preview__tag">
                   {p.tag}
                 </SkTag>
               ) : null}
-            </Link>
+            </article>
           </li>
         ))}
       </ul>

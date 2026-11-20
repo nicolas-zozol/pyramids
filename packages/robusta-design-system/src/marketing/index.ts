@@ -1,5 +1,5 @@
 /**
- * Package marketing — the thirteen sections of a marketing page, composed of the primitives and laid out by `sketch.css`.
+ * Package marketing — the fourteen sections of a marketing page, composed of the primitives and laid out by `sketch.css`.
  *
  * Design: features/__done/pyramid-v2-epic/__done/design-system-responsive/design-system-responsive.design.md
  * Requirements: R-RESPONSIVE-03, R-RESPONSIVE-22, R-RESPONSIVE-24, R-RESPONSIVE-42, R-RESPONSIVE-43, R-RESPONSIVE-45, R-RESPONSIVE-63, R-RESPONSIVE-82, R-RESPONSIVE-83, R-RESPONSIVE-101, R-RESPONSIVE-102, R-RESPONSIVE-103, R-RESPONSIVE-104
@@ -33,15 +33,32 @@ export {
   type LibraryShowcaseProps,
   type LibraryWord,
 } from './LibraryShowcase.tsx';
-export { Workshop, type WorkshopFact, type WorkshopProps } from './Workshop.tsx';
-export { SiteHeader, type SiteHeaderProps, type NavLink } from './SiteHeader.tsx';
+export {
+  ProductHero,
+  type CascadeItem,
+  type ProductHeroProps,
+} from './ProductHero.tsx';
+export {
+  Workshop,
+  type WorkshopFact,
+  type WorkshopProps,
+} from './Workshop.tsx';
+export {
+  SiteHeader,
+  type SiteHeaderProps,
+  type NavLink,
+} from './SiteHeader.tsx';
 export {
   SiteFooter,
   type SiteFooterProps,
   type FooterColumn,
   type FooterLink,
 } from './SiteFooter.tsx';
-export { ServicesGrid, type ServicesGridProps, type ServiceItem } from './ServicesGrid.tsx';
+export {
+  ServicesGrid,
+  type ServicesGridProps,
+  type ServiceItem,
+} from './ServicesGrid.tsx';
 export {
   FlowDiagram,
   type FlowDiagramProps,
@@ -56,7 +73,11 @@ export {
   type QuestionLabels,
   type QuestionsListProps,
 } from './QuestionsList.tsx';
-export { PrinciplesList, type PrinciplesListProps, type Principle } from './PrinciplesList.tsx';
+export {
+  PrinciplesList,
+  type PrinciplesListProps,
+  type Principle,
+} from './PrinciplesList.tsx';
 export {
   NotesPreview,
   type NoteDateParts,

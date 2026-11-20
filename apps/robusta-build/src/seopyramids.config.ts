@@ -202,10 +202,28 @@ export interface WorkshopCopy {
   greeting: string;
 }
 
+/** The hero of the page of RB Compound: the product, its two ways in, its license, and the documents its agents write. */
+export interface ProductHeroCopy {
+  kicker: string;
+  title: string;
+  lede: string;
+  /** The primary action, to the code on GitHub. */
+  codeLabel: string;
+  /** The secondary action, down to the agents. */
+  agentsLabel: string;
+  /** The line under the actions. */
+  license: string;
+  cascadeLabel: string;
+  /** The epic, the stories, the questions, the design and the docs, in that order; each agent's name is the one of its step. */
+  documents: [string, string, string, string, string];
+  /** The reader's approval, between the design and the code. */
+  gate: { label: string; say: string };
+}
+
 /** The page of RB Compound. */
 export interface RbCompoundCopy {
   head: { title: string; description: string };
-  hero: HeroCopy;
+  hero: ProductHeroCopy;
   /** The agents of RB Compound, one step each. */
   agents: FlowCopy;
   /** The open questions that close every step. */
@@ -214,16 +232,6 @@ export interface RbCompoundCopy {
   boss: FlowCopy;
   principles: PrinciplesCopy;
   cta: CtaCopy;
-}
-
-export interface HeroCopy {
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-  emailLabel: string;
-  linkedInLabel: string;
-  mascotAlt: string;
-  annotation: string;
 }
 
 /** The texts of one FlowDiagram, plain strings, named as its props. */
@@ -432,15 +440,22 @@ const en: PageCopy = {
         'RB Compound is the workflow Nicolas Zozol uses to build software with AI agents: a story, a design you approve, then test-first code. Free for noncommercial use, and a complete version with an accompaniment of your team.',
     },
     hero: {
-      eyebrow: 'RB Compound · building software with AI agents',
-      title: 'documents first. then the agents write the code.',
-      subtitle:
-        'I’m Nicolas Zozol, twenty years in software. RB Compound is how I build software with AI agents: each feature gets a story and a design, you approve the design, and only then do the agents write the code, tests first. I work with teams and technical leads who build software with agents.',
-      emailLabel: 'write me an email',
-      linkedInLabel: 'see my LinkedIn profile',
-      mascotAlt:
-        'Nicolas drawn as Niktux, a penguin in a Robusta Build hoodie: 25 years of coding, sees the big picture, flexible frontend, solid foundations',
-      annotation: 'this is niktux, watching over the code.',
+      kicker: 'RB Compound · agents for Claude Code',
+      title: 'RB Compound: Enterprise grade agents suite',
+      lede: 'six agents for Claude Code that write before they code: each feature gets a story and a design, you approve the design, and only then do the agents write the code, tests first. every step leaves a Markdown file in your repository.',
+      codeLabel: 'see the code on GitHub',
+      agentsLabel: 'meet the six agents',
+      license:
+        'license PolyForm Noncommercial 1.0.0: free for noncommercial use.',
+      cascadeLabel: 'the documents, in the order they are written',
+      documents: [
+        'the epic',
+        'the stories',
+        'the questions',
+        'the design',
+        'the docs',
+      ],
+      gate: { label: 'you approve', say: 'and only then, the code:' },
     },
     agents: {
       eyebrow: '// RB Compound, the agents',
@@ -772,15 +787,22 @@ const fr: PageCopy = {
         'RB Compound est le workflow de Nicolas Zozol pour construire du logiciel avec des agents IA : une story, un design que vous approuvez, puis du code écrit test-first. Gratuit pour un usage non commercial, et une version complète avec un accompagnement de votre équipe.',
     },
     hero: {
-      eyebrow: 'RB Compound · construire du logiciel avec des agents IA',
-      title: 'la documentation d’abord. ensuite, les agents écrivent le code.',
-      subtitle:
-        'Je suis Nicolas Zozol, vingt ans de logiciel. RB Compound est ma façon de construire du logiciel avec des agents IA : chaque feature a sa story et son design, vous approuvez le design, et seulement ensuite les agents écrivent le code, tests d’abord. Je travaille avec les équipes et les responsables techniques qui construisent du logiciel avec des agents.',
-      emailLabel: 'm’écrire un e-mail',
-      linkedInLabel: 'voir mon profil LinkedIn',
-      mascotAlt:
-        'Nicolas dessiné en Niktux, un manchot en sweat Robusta Build : 25 ans de code, la vue d’ensemble, un frontend souple, des fondations solides',
-      annotation: 'voici niktux, qui veille sur le code.',
+      kicker: 'RB Compound · des agents pour Claude Code',
+      title: 'RB Compound : une suite d’agents de niveau entreprise',
+      lede: 'six agents pour Claude Code qui écrivent avant de coder : chaque feature a sa story et son design, vous approuvez le design, et seulement ensuite les agents écrivent le code, tests d’abord. chaque étape laisse un fichier Markdown dans votre dépôt.',
+      codeLabel: 'voir le code sur GitHub',
+      agentsLabel: 'découvrir les six agents',
+      license:
+        'licence PolyForm Noncommercial 1.0.0 : gratuit pour un usage non commercial.',
+      cascadeLabel: 'les documents, dans l’ordre où ils sont écrits',
+      documents: [
+        'l’epic',
+        'les stories',
+        'les questions',
+        'le design',
+        'la doc',
+      ],
+      gate: { label: 'vous approuvez', say: 'et seulement ensuite, le code :' },
     },
     agents: {
       eyebrow: '// RB Compound, les agents',
@@ -1118,16 +1140,22 @@ const es: PageCopy = {
         'RB Compound es el workflow de Nicolas Zozol para construir software con agentes de IA: una story, un design que tú apruebas y luego código escrito test-first. Gratis para uso no comercial, y una versión completa con acompañamiento de tu equipo.',
     },
     hero: {
-      eyebrow: 'RB Compound · construir software con agentes de IA',
-      title:
-        'primero la documentación. después, los agentes escriben el código.',
-      subtitle:
-        'Soy Nicolas Zozol, veinte años en el software. RB Compound es mi forma de construir software con agentes de IA: cada feature tiene su story y su design, tú apruebas el design, y solo entonces los agentes escriben el código, con los tests primero. Trabajo con equipos y responsables técnicos que construyen software con agentes.',
-      emailLabel: 'escribirme un e-mail',
-      linkedInLabel: 'ver mi perfil de LinkedIn',
-      mascotAlt:
-        'Nicolas dibujado como Niktux, un pingüino con sudadera de Robusta Build: 25 años programando, visión de conjunto, frontend flexible, bases sólidas',
-      annotation: 'aquí está niktux, que vigila el código.',
+      kicker: 'RB Compound · agentes para Claude Code',
+      title: 'RB Compound: una suite de agentes de nivel empresarial',
+      lede: 'seis agentes para Claude Code que escriben antes de programar: cada feature tiene su story y su design, tú apruebas el design, y solo entonces los agentes escriben el código, con los tests primero. cada paso deja un archivo Markdown en tu repositorio.',
+      codeLabel: 'ver el código en GitHub',
+      agentsLabel: 'conocer los seis agentes',
+      license:
+        'licencia PolyForm Noncommercial 1.0.0: gratis para uso no comercial.',
+      cascadeLabel: 'los documentos, en el orden en que se escriben',
+      documents: [
+        'la epic',
+        'las stories',
+        'las preguntas',
+        'el design',
+        'la documentación',
+      ],
+      gate: { label: 'tú apruebas', say: 'y solo entonces, el código:' },
     },
     agents: {
       eyebrow: '// RB Compound, los agentes',

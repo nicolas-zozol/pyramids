@@ -4,7 +4,7 @@ import {
   getExcerptText,
   type ArticleIndexEntry,
 } from '../content/article-index.ts';
-import { articleUrl } from './article-url.ts';
+import { articleUrl, categoryUrl } from './article-url.ts';
 import type { NotesFeedRequest } from './types.ts';
 
 /** The newest published articles of one locale as notes posts, newest first, each date written as that locale writes it. */
@@ -33,7 +33,9 @@ function notePost(article: ArticleIndexEntry): NotePost {
   return {
     title: article.title,
     href: articleUrl(article),
-    ...(article.category === undefined ? {} : { tag: article.category }),
+    ...(article.category === undefined
+      ? {}
+      : { tag: article.category, tagHref: categoryUrl(article) }),
     date: shortDate(article.date, article.locale),
     dateParts: dateParts(article.date, article.locale),
     summary: summaryOf(getExcerptText(article)),
