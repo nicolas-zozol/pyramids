@@ -19,6 +19,7 @@ export function articlesListedBy(
         .filter((article) => inRoll(article, page))
         .slice(start, start + urlScheme.rollSize);
     }
+    case 'product':
     case 'tag':
     case 'article':
       return [];

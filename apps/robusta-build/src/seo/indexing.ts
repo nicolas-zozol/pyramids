@@ -11,13 +11,14 @@ export function robotsOf(indexable: boolean, open = INDEXING_OPEN): string {
   return indexable && open ? 'index, follow' : 'noindex, nofollow';
 }
 
-/** Landing and article pages; a roll page when it lists an article; never a tag page. */
+/** Landing, product and article pages; a roll page when it lists an article; never a tag page. */
 export function isIndexable(
   page: PageUrl,
   articles: readonly ArticleIndexEntry[],
 ): boolean {
   switch (page.kind) {
     case 'landing':
+    case 'product':
     case 'article':
       return true;
     case 'tag':

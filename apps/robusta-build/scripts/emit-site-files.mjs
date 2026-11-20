@@ -13,9 +13,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const LISTING_KINDS = ['blog-home', 'category'];
 
-/** The sitemap of the indexable pages, landing pages then content URLs, robots.txt, and the summary line counting the pages by kind. */
-export function siteFiles({ landings, content, articles, seo }) {
-  const pages = [...landings, ...content];
+/** The sitemap of the indexable pages, landing pages, product pages then content URLs, robots.txt, and the summary line counting the pages by kind. */
+export function siteFiles({ landings, products = [], content, articles, seo }) {
+  const pages = [...landings, ...products, ...content];
   const indexable = pages.filter((page) => seo.isIndexable(page, articles));
   const count = (kinds) =>
     indexable.filter((page) => kinds.includes(page.kind)).length;
@@ -23,7 +23,7 @@ export function siteFiles({ landings, content, articles, seo }) {
   return {
     sitemap: seo.sitemapXml(seo.sitemapEntries(pages, articles)),
     robots: seo.robotsTxt(),
-    summary: `site files: sitemap.xml lists ${indexable.length} indexable pages (${count(['landing'])} landing pages, ${count(LISTING_KINDS)} listing pages, ${count(['article'])} articles), robots.txt names it`,
+    summary: `site files: sitemap.xml lists ${indexable.length} indexable pages (${count(['landing'])} landing pages, ${count(['product'])} product pages, ${count(LISTING_KINDS)} listing pages, ${count(['article'])} articles), robots.txt names it`,
   };
 }
 
@@ -32,13 +32,11 @@ async function main() {
   const source = join(app, 'src');
   const client = join(app, 'dist/client');
 
-  const { landingPages } = await import(
+  const { landingPages, productPages } = await import(
     join(source, 'routing/url-scheme/index.ts')
   );
   const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
-  const { contentUrls } = await import(
-    join(source, 'routing/content-urls.ts')
-  );
+  const { contentUrls } = await import(join(source, 'routing/content-urls.ts'));
   const { getArticleIndex } = await import(
     join(source, 'content/article-index.ts')
   );
@@ -46,6 +44,7 @@ async function main() {
 
   const { sitemap, robots, summary } = siteFiles({
     landings: landingPages(urlScheme),
+    products: productPages(urlScheme),
     content: await contentUrls(),
     articles: await getArticleIndex(),
     seo,

@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react';
-import { SkArrowRight } from '../primitives/SkArrowRight.tsx';
 import { PlainLink, type SkLinkComponent } from '../primitives/SkLink.tsx';
 import { SkTag, type SkTagTone } from '../primitives/SkTag.tsx';
 
@@ -11,6 +10,17 @@ export interface NotePost {
   tagTone?: SkTagTone;
   /** Date label like "apr 12". */
   date: string;
+  /** The date in three parts, the day in large between the month and the year; `date` alone when absent. */
+  dateParts?: NoteDateParts;
+  /** One or two lines under the title. */
+  summary?: string;
+}
+
+/** A date as a note card writes it, one part a line. */
+export interface NoteDateParts {
+  month: string;
+  day: string;
+  year: string;
 }
 
 export interface NotesPreviewProps {
@@ -27,8 +37,8 @@ export interface NotesPreviewProps {
 }
 
 /**
- * Engineering-blog preview grid: date + title + tag rows, one column below
- * `sm` and two above.
+ * The latest notes on the darker paper, a card each: the date down its left
+ * edge, the title, the summary and the subject. One column below `lg`, two above.
  */
 export function NotesPreview({
   eyebrow,
@@ -46,32 +56,48 @@ export function NotesPreview({
     <section id="notes" className={merged} style={style}>
       <div className="sk-notes-preview__head">
         <div>
-          {eyebrow ? (
-            <div className="sk-notes-preview__eyebrow">{eyebrow}</div>
-          ) : null}
           {title ? <h2 className="sk-notes-preview__title">{title}</h2> : null}
+          {eyebrow ? (
+            <p className="sk-notes-preview__eyebrow">{eyebrow}</p>
+          ) : null}
         </div>
         {allLinkLabel ? (
           <Link href={allLinkHref} className="sk-notes-preview__all">
-            {allLinkLabel} <SkArrowRight width={50} verticalAlign="middle" />
+            {allLinkLabel}
           </Link>
         ) : null}
       </div>
-      <div className="sk-notes-preview__list">
+      <ul className="sk-notes-preview__list">
         {posts.map((p, i) => (
-          <Link key={i} href={p.href ?? '#'} className="sk-notes-preview__post">
-            <div className="sk-notes-preview__date">{p.date}</div>
-            <div className="sk-notes-preview__post-body">
-              <div className="sk-notes-preview__post-title">{p.title}</div>
-              {p.tag ? (
-                <div className="sk-notes-preview__tag-row">
-                  <SkTag tone={p.tagTone}>{p.tag}</SkTag>
-                </div>
+          <li key={i} className="sk-notes-preview__item">
+            <Link
+              href={p.href ?? '#'}
+              className="sk-box sk-notes-preview__post"
+            >
+              {p.dateParts ? (
+                <span className="sk-notes-preview__date">
+                  <span>{p.dateParts.month}</span>
+                  <strong className="sk-notes-preview__day">
+                    {p.dateParts.day}
+                  </strong>
+                  <span>{p.dateParts.year}</span>
+                </span>
+              ) : (
+                <span className="sk-notes-preview__date">{p.date}</span>
+              )}
+              <span className="sk-notes-preview__post-title">{p.title}</span>
+              {p.summary ? (
+                <span className="sk-notes-preview__summary">{p.summary}</span>
               ) : null}
-            </div>
-          </Link>
+              {p.tag ? (
+                <SkTag tone={p.tagTone} className="sk-notes-preview__tag">
+                  {p.tag}
+                </SkTag>
+              ) : null}
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

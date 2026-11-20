@@ -2,7 +2,11 @@ import { getArticleIndex } from '../content/article-index.ts';
 import { contentUrls } from '../routing/content-urls.ts';
 import { counterpartsOf } from '../routing/counterparts.ts';
 import { urlScheme } from '../routing/scheme.ts';
-import { landingPages, type PageUrl } from '../routing/url-scheme/index.ts';
+import {
+  landingPages,
+  productPages,
+  type PageUrl,
+} from '../routing/url-scheme/index.ts';
 
 /** The counterparts of one page among the landing pages and the content URLs, read from the article index at build. */
 export async function pageCounterparts(page: PageUrl): Promise<PageUrl[]> {
@@ -12,7 +16,7 @@ export async function pageCounterparts(page: PageUrl): Promise<PageUrl[]> {
   ]);
   return counterpartsOf(
     page,
-    [...landingPages(urlScheme), ...content],
+    [...landingPages(urlScheme), ...productPages(urlScheme), ...content],
     articles,
   );
 }

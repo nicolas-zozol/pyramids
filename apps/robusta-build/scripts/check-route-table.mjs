@@ -32,12 +32,12 @@ export function urlOfHtmlFile(file) {
   return file === 'index.html' ? '/' : `/${file.replace(/\.html$/, '')}`;
 }
 
-/** The data files the prerender owes, per source: each article page, each landing page's notes feed, the counterparts of each page carrying a page URL, each listing page, and the footer's rolls of each Locale. */
-export function expectedDataFiles({ landings, content }) {
+/** The data files the prerender owes, per source: each article page, each landing page's notes feed, the counterparts of each page carrying a page URL, product pages included, each listing page, and the footer's rolls of each Locale. */
+export function expectedDataFiles({ landings, content, products = [] }) {
   return {
     articles: content.filter((page) => page.kind === 'article').length,
     notesFeeds: landings.length,
-    counterparts: landings.length + content.length,
+    counterparts: landings.length + products.length + content.length,
     rollPages: content.filter(
       (page) => page.kind === 'blog-home' || page.kind === 'category',
     ).length,
@@ -106,15 +106,14 @@ async function main() {
   const source = join(app, 'src');
   const client = join(app, 'dist/client');
 
-  const { buildUrl, landingPages } = await import(
+  const { buildUrl, landingPages, productPages } = await import(
     join(source, 'routing/url-scheme/index.ts')
   );
   const { urlScheme } = await import(join(source, 'routing/scheme.ts'));
-  const { contentUrls } = await import(
-    join(source, 'routing/content-urls.ts')
-  );
+  const { contentUrls } = await import(join(source, 'routing/content-urls.ts'));
 
   const landings = landingPages(urlScheme);
+  const products = productPages(urlScheme);
   const content = await contentUrls();
   const htmlFiles = await filesUnder(client, '.html');
   const failedRenders = pagesRenderedWithAnError(
@@ -135,10 +134,12 @@ async function main() {
     process.exit(1);
   }
 
-  const owed = expectedDataFiles({ landings, content });
+  const owed = expectedDataFiles({ landings, content, products });
   const report = routeTableReport({
     htmlFiles,
-    landingUrls: landings.map((page) => buildUrl(urlScheme, page)),
+    landingUrls: [...landings, ...products].map((page) =>
+      buildUrl(urlScheme, page),
+    ),
     contentUrls: content.map((page) => buildUrl(urlScheme, page)),
     expectedDataFiles: owed,
     dataFileCount: (await filesUnder(join(client, DATA_FILES), '.json')).length,
@@ -162,7 +163,7 @@ async function main() {
   }
 
   console.log(
-    `route table: ${report.built} pages built (${landings.length} landing pages, ${content.length} content URLs), and the derivation contains exactly those; ${report.actualDataFiles} data files written (${owedLine}).`,
+    `route table: ${report.built} pages built (${landings.length} landing pages, ${products.length} product pages, ${content.length} content URLs), and the derivation contains exactly those; ${report.actualDataFiles} data files written (${owedLine}).`,
   );
 }
 

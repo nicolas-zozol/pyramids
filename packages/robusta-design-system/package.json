@@ -19,6 +19,8 @@
     "./assets/niktux-thinks.webp": "./assets/niktux-thinks.webp",
     "./assets/niktux-throw-money.webp": "./assets/niktux-throw-money.webp",
     "./assets/niktux-working-hard.webp": "./assets/niktux-working-hard.webp",
+    "./assets/rooftop-batches.webp": "./assets/rooftop-batches.webp",
+    "./assets/rooftop-stories.webp": "./assets/rooftop-stories.webp",
     "./assets/robusta-build-wordmark.svg": "./assets/robusta-build-wordmark.svg",
     "./assets/decor/*": "./assets/decor/*"
   },

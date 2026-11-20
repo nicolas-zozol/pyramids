@@ -48,6 +48,7 @@ Available assets:
   - `niktux-thinks.webp` — thinking, 720×720
   - `niktux-presentation.webp` — Nicolas as Niktux, with handwritten notes around him, 720×720
   - `niktux-working-hard.webp` — working hard, 720×720
+  - `rooftop-batches.webp`, `rooftop-stories.webp` — two screenshots of Rooftop, for its door on the home page
   - `niktux-throw-money.webp` — throwing money, 720×720
   - `niktux-furious-at-computer.webp` — furious at the computer, 720×600
   - `niktux-pack-ice.webp` — on the pack ice, 1600×533
@@ -295,6 +296,7 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 - **callouts** — `.sk-callout` — speech-bubble framing for emphasized notes.
 - **arrows** — `.sk-arrow-right` — the light pen arrow for copy (`request → queue → worker`).
 - **flows** — `.sk-flow` lays out `.sk-flow-item` columns joined by `.sk-flow-arrow`, a bold marker arrow; `.sk-step` is a numbered disk on the ink stamp, `--primary`, `--secondary` or `--accent` for its fill; `--sk-step` on the row sizes the steps.
+- **console** — `.sk-console` on an `ol` or a `pre` — code on `--night`, the one dark surface: a hand-cut night sticker on the ink stamp. `.sk-console-line` per command, `.sk-console-cmd` on its `code` after a `›` prompt, `.sk-console-agent` in gold on the agent's `strong`, `.sk-console-note` beside it, under it below 560px of console. Only code goes dark: never a section, a card or a page.
 - **scribbles** — `.sk-scribble` — pink under-squiggle for emphasized words.
 - **separators** — `.sk-divider` — wavy section breaks.
 - **highlighter washes** — `.highlight-blue/green/pink/yellow` on text spans.
@@ -303,7 +305,7 @@ The visual language is built from these motifs, CSS classes of `sketch.css` exce
 - **buttons** — `.sk-btn`, `.sk-btn--primary`, `.sk-btn--ghost`.
 - **inputs** — `.sk-input` inside `.sk-input-wrap`.
 
-The marketing sections carry their layout as classes of `sketch.css`, one block per section named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, and `.sk-brand-logo` for the logo. A part is `.sk-<section>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
+The marketing sections carry their layout as classes of `sketch.css`, one block per section named after its component in kebab-case: `.sk-hero`, `.sk-site-header`, `.sk-site-footer`, `.sk-services-grid`, `.sk-flow-diagram`, `.sk-questions-list`, `.sk-principles-list`, `.sk-notes-preview`, `.sk-cta`, the home page's `.sk-home-hero` (the building, one floor per product), `.sk-product-doors`, `.sk-library-showcase` and `.sk-workshop`, and `.sk-brand-logo` for the logo. A part is `.sk-<section>__<part>` and a variant `--<modifier>`, as in `.sk-hero__title` or `.sk-services-grid__card--tilt-left`.
 
 These class names are what a site overrides in the layout. Every layout rule of the package is written at single-class specificity with no `!important`, so a site selector carrying one class more, `.home .sk-hero__grid` for instance, wins whatever the load order. A section root takes `className` and `style`, `style` applied last; no section takes a prop per part.
 

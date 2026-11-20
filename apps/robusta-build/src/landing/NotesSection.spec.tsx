@@ -30,7 +30,7 @@ describe('NotesSection', () => {
       <NotesSection locale="fr" posts={[theory, theory, untagged]} />,
     );
 
-    expect(html.match(/class="sk-notes-preview__post"/g)).toHaveLength(3);
+    expect(html.match(/class="sk-box sk-notes-preview__post"/g)).toHaveLength(3);
   });
 
   it('reads its eyebrow, title and "all articles" label in the page copy of its Locale', async () => {

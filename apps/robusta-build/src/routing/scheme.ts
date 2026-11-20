@@ -58,4 +58,5 @@ export const urlScheme: UrlScheme = {
   defaultLocale,
   otherLocales,
   rollSize: ROLL_SIZE,
+  products: ['rb-compound'],
 };

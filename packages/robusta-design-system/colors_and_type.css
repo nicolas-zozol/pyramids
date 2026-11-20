@@ -22,6 +22,10 @@
   --ink-soft:     #2b2b2b;   /* body text */
   --ink-mute:     #6b6b66;   /* secondary captions */
   --ink-faint:    #a8a59a;   /* tertiary, dotted lines */
+  --paper-dot:    #dcd9d0;   /* the dots of dotted-grid paper: 1.35:1 on paper, far under any text */
+  --night:        #2a1e36;   /* ink with a drop of plum: the console's ground, the one dark surface; never a section or a page */
+  --night-mute:   #b9adc6;   /* notes and the prompt on night (7.4:1); not text on paper (2:1) */
+  --night-rule:   #57486a;   /* dashed rules between console lines on night: decoration only */
 
   /* -------- brand: luxury palette --------
      primary   = royal purple (Robusta plum)
@@ -175,7 +179,7 @@ html, body {
 /* dotted-grid paper, like a bullet journal */
 .paper-grid {
   background-color: var(--paper);
-  background-image: radial-gradient(var(--ink-faint) 1px, transparent 1px);
+  background-image: radial-gradient(var(--paper-dot) 1px, transparent 1px);
   background-size: 22px 22px;
   background-position: 11px 11px;
   opacity: 1;

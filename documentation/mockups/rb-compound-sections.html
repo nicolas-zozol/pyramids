@@ -1,0 +1,1494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RB Compound sections</title>
+<!-- the three RB Compound sections of robusta.build, as the site renders them today: agents, open questions, boss.
+     generated from the running site; the stylesheets are the design system's colors_and_type.css and sketch.css, inlined. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Robusta Build — Foundations
+   hand-drawn sketchnote system. lowercase, ink, paper.
+   ========================================================= */
+
+/* -------- webfont delivery: not here --------
+   This stylesheet loads no font. The package owns the families and their
+   fallback order (see --font-sans / --font-script / --font-mono below). Each
+   token reads a custom property, --font-ibm-plex-sans, --font-ibm-plex-mono or
+   --font-caveat, then falls back to the face name, then to a system stack.
+
+   The robusta site sets no property: it self-hosts the faces from Fontsource
+   under those face names. A consumer with no build step opts into the Google
+   Fonts delivery by also linking `@robusta/pyramids-design-system/fonts.css`. */
+
+:root {
+  /* -------- color: paper + ink -------- */
+  --paper:        #fafaf7;   /* off-white background, slightly warm */
+  --paper-2:      #f3f1ea;   /* slightly darker paper for panels */
+  --paper-edge:   #e8e4d6;   /* paper fold/edge tone */
+  --ink:          #1a1a1a;   /* primary stroke */
+  --ink-soft:     #2b2b2b;   /* body text */
+  --ink-mute:     #6b6b66;   /* secondary captions */
+  --ink-faint:    #a8a59a;   /* tertiary, dotted lines */
+  --paper-dot:    #dcd9d0;   /* the dots of dotted-grid paper: 1.35:1 on paper, far under any text */
+  --night:        #2a1e36;   /* ink with a drop of plum: the console's ground, the one dark surface; never a section or a page */
+  --night-mute:   #b9adc6;   /* notes and the prompt on night (7.4:1); not text on paper (2:1) */
+  --night-rule:   #57486a;   /* dashed rules between console lines on night: decoration only */
+
+  /* -------- brand: luxury palette --------
+     primary   = royal purple (Robusta plum)
+     secondary = champagne gold
+     accent    = signal blue, used sparingly for links / focus rings */
+  --brand-primary:        #562571;
+  --brand-primary-soft:   #e7d8f0;   /* tints — highlighter wash */
+  --brand-primary-deep:   #3a1850;   /* hover / pressed */
+  --brand-secondary:      #FFCC3F;
+  --brand-secondary-soft: #fff1c2;
+  --brand-secondary-deep: #d6a624;
+  --brand-accent:         #0B65C2;
+  --brand-accent-soft:    #cfe2f5;
+  --brand-accent-deep:    #074a8f;
+
+  /* -------- error --------
+     One ramp, shaped like the three above, so a consumer can alias a
+     semantic name onto it (--destructive, --error, whatever its token layer
+     calls it) instead of coining a colour of its own.
+
+     The value is constrained by contrast rather than by taste: the base
+     reads 6.25:1 against --paper, which holds it as body text and holds
+     --paper as text on top of it. No component of this package consumes
+     the ramp — it exists so that the naming is the consumer's. */
+  --brand-error:          #b3261e;
+  --brand-error-soft:     #f7d9d6;
+  --brand-error-deep:     #7d1a15;
+
+  /* -------- legacy accent aliases (kept for compatibility) --------
+     Old code still references --accent-blue/green/pink/yellow.
+     We point them at the new brand tokens so existing components shift palette. */
+  --accent-blue:        var(--brand-accent);
+  --accent-blue-soft:   var(--brand-accent-soft);
+  --accent-green:       var(--brand-primary);        /* re-mapped: "primary action" */
+  --accent-green-soft:  var(--brand-primary-soft);
+  --accent-pink:        var(--brand-secondary-deep); /* re-mapped: "warm highlight" */
+  --accent-pink-soft:   var(--brand-secondary-soft);
+  --accent-yellow-soft: var(--brand-secondary-soft);
+
+  /* -------- semantic -------- */
+  --fg-1:        var(--ink);
+  --fg-2:        var(--ink-soft);
+  --fg-3:        var(--ink-mute);
+  --fg-4:        var(--ink-faint);
+  --bg-1:        var(--paper);
+  --bg-2:        var(--paper-2);
+  --border:      var(--ink);
+  --border-soft: var(--ink-faint);
+
+  /* -------- type families --------
+     IBM Plex Sans is the single family for body, headings, UI.
+     Caveat is reserved for the logo wordmark and rare hand-drawn accents.
+     IBM Plex Mono for code. */
+  --font-sans:    var(--font-ibm-plex-sans, 'IBM Plex Sans'), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-sans);                       /* headings — same family */
+  --font-hand:    var(--font-sans);                       /* legacy alias for body */
+  --font-annot:   var(--font-sans);                       /* legacy alias for captions */
+  --font-script:  var(--font-caveat, 'Caveat'), cursive;  /* logo + rare accents only */
+  --font-mono:    var(--font-ibm-plex-mono, 'IBM Plex Mono'), ui-monospace, Menlo, monospace;
+
+  /* -------- type scale — ten steps, every one fluid --------
+     Each step is clamp(floor, viewport-relative, ceiling). The ceiling is
+     what the role renders at on a wide viewport, the floor what it renders
+     at 320px, and the middle term interpolates linearly between the two
+     across 320px → 1536px. No step is a fixed length, so a headline shrinks
+     continuously as the viewport narrows rather than in steps.
+
+     px and not rem: `html` below takes its font-size from --t-body, so a
+     rem-based step would be relative to a length this very block defines.
+
+     No component of this package declares a font size. Every size it
+     renders reads one of these ten names, which is what makes the scale
+     worth having — a scale nothing consumes changes nothing. */
+  --t-display: clamp(34px, 21.9px + 3.78vw, 80px);  /* the largest text of a section */
+  --t-h1:      clamp(28px, 20.63px + 2.3vw, 56px);  /* a section headline */
+  --t-h2:      clamp(24px, 19.79px + 1.32vw, 40px);
+  --t-h3:      clamp(20px, 17.89px + 0.66vw, 28px);
+  --t-h4:      clamp(18px, 17.47px + 0.16vw, 20px);
+  --t-lead:    clamp(17px, 16.47px + 0.16vw, 19px); /* one step above running text */
+  --t-body:    clamp(16px, 15.74px + 0.08vw, 17px); /* readable floor */
+  --t-small:   clamp(14px, 13.74px + 0.08vw, 15px);
+  --t-tiny:    clamp(12px, 11.74px + 0.08vw, 13px);
+  --t-code:    clamp(13px, 12.74px + 0.08vw, 14px);
+
+  --lh-display: 1.0;
+  --lh-tight:   1.15;
+  --lh-body:    1.45;
+
+  /* -------- measure -------- *
+     the line length a body of text stays readable at. in characters and
+     not pixels on purpose: a measure written in px stops being a measure
+     the moment the type scale moves. */
+  --measure: 68ch;
+
+  /* -------- spacing (loose, hand-measured) -------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  48px;
+  --sp-8:  64px;
+  --sp-9:  96px;
+
+  /* -------- corner radii -------- *
+     real sketches don't have perfect curves; we keep
+     these tiny and combine with hand-drawn SVG borders */
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-lg: 10px;
+
+  /* -------- "shadows" -------- *
+     no drop shadows in this system. instead we use
+     offset double-strokes (see component examples).
+     these vars exist for the rare case we need depth. */
+  --shadow-offset: 4px 4px 0 0 var(--ink);   /* sticker offset */
+  --shadow-soft:   2px 2px 0 0 var(--ink);
+
+  /* -------- stroke widths -------- */
+  --stroke-thin:   1.5px;
+  --stroke:        2px;
+  --stroke-bold:   3px;
+  --stroke-heavy:  4px;
+}
+
+/* =========================================================
+   base resets / paper feel
+   ========================================================= */
+
+html, body {
+  background: var(--paper);
+  color: var(--fg-2);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* subtle paper grain — applied to body via class .paper */
+.paper {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.018) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 2px;
+}
+
+/* dotted-grid paper, like a bullet journal */
+.paper-grid {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--paper-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  opacity: 1;
+}
+
+/* ruled paper, faint */
+.paper-ruled {
+  background-color: var(--paper);
+  background-image: linear-gradient(to bottom, transparent 27px, rgba(168,165,154,0.45) 28px);
+  background-size: 100% 28px;
+}
+
+/* =========================================================
+   typography — semantic
+   ========================================================= */
+
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h1);
+  line-height: var(--lh-display);
+  color: var(--fg-1);
+  letter-spacing: -1px;
+  margin: 0 0 var(--sp-5);
+}
+
+h2, .h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h2);
+  line-height: var(--lh-tight);
+  color: var(--fg-1);
+  letter-spacing: -0.5px;
+  margin: 0 0 var(--sp-4);
+}
+
+h3, .h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h3);
+  line-height: var(--lh-tight);
+  color: var(--fg-1);
+  letter-spacing: -0.3px;
+  margin: 0 0 var(--sp-3);
+}
+
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-h4);
+  line-height: var(--lh-tight);
+  color: var(--fg-1);
+  margin: 0 0 var(--sp-3);
+}
+
+p, .p {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+  margin: 0 0 var(--sp-4);
+}
+
+.caption, small {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--fg-3);
+  line-height: 1.4;
+}
+
+.tiny {
+  font-family: var(--font-sans);
+  font-size: var(--t-tiny);
+  color: var(--fg-3);
+}
+
+/* annotation — used for arrow labels, side notes, "fyi" copy */
+.annot {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  font-style: normal;
+  line-height: 1.4;
+}
+
+/* script accent — handwritten, reserved for the logo & rare highlights */
+.script {
+  font-family: var(--font-script);
+  font-weight: 700;
+}
+
+/* code */
+code, .code {
+  font-family: var(--font-mono);
+  font-size: var(--t-code);
+  background: var(--paper-2);
+  padding: 2px 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--t-code);
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-5);
+  line-height: 1.5;
+  overflow: auto;
+}
+
+/* a real underline made of a wavy svg works too,
+   but a dashed bottom border is good enough as a primitive */
+.underline-hand {
+  background-image: linear-gradient(to right, var(--ink) 60%, transparent 60%);
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  background-size: 6px 2px;
+  padding-bottom: 2px;
+}
+
+/* highlighter wash behind text */
+.highlight-blue   { background: linear-gradient(transparent 55%, var(--accent-blue-soft)  55%); padding: 0 2px; }
+.highlight-green  { background: linear-gradient(transparent 55%, var(--accent-green-soft) 55%); padding: 0 2px; }
+.highlight-pink   { background: linear-gradient(transparent 55%, var(--accent-pink-soft)  55%); padding: 0 2px; }
+.highlight-yellow { background: linear-gradient(transparent 55%, var(--accent-yellow-soft)55%); padding: 0 2px; }
+
+/* =========================================================
+   sketch.css — hand-drawn primitives
+   wobbly borders, sticker-offset shadows, paper feel.
+   import after colors_and_type.css.
+   ========================================================= */
+
+/* ---------- rough box ----------
+   wobbly border drawn with svg. add .sk-sticker for the offset stamp behind. */
+.sk-box {
+  position: relative;
+  background: var(--paper);
+  padding: var(--sp-5) var(--sp-5);
+  border: none;
+  /* the "border" is an svg in ::before */
+}
+.sk-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M2,3 Q15,1.5 30,2.2 T60,2.5 Q80,1.8 98,3 Q97.5,20 97.8,40 Q98.2,60 97.5,80 Q98,90 97,98 Q80,97.5 60,98 T20,97.5 Q8,98 2.5,97.5 Q3,80 2.2,60 T2.5,30 Q1.8,15 2,3 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* sticker — offset stamp underneath gives 3d feel without shadow.
+   the sticker is its own stacking context: the stamp (::after) sits under the fill (::before),
+   and shows on any background. with .sk-box, ::before carries the outline as well. */
+.sk-sticker {
+  position: relative;
+  z-index: 0;
+  background: var(--paper);
+  padding: var(--sp-4) var(--sp-5);
+}
+.sk-sticker::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: inherit; /* the sticker's fill, laid above the stamp */
+  z-index: -1;
+}
+.sk-sticker::after {
+  content: "";
+  position: absolute;
+  inset: 4px -4px -4px 4px;
+  background: var(--ink);
+  z-index: -2; /* the stamp, under the fill */
+}
+.sk-sticker > * { position: relative; z-index: 1; }
+
+/* filled colored sticker */
+.sk-sticker--blue   { background: var(--accent-blue-soft); }
+.sk-sticker--green  { background: var(--accent-green-soft); }
+.sk-sticker--pink   { background: var(--accent-pink-soft); }
+.sk-sticker--yellow { background: var(--accent-yellow-soft); }
+
+/* ---------- callout / speech bubble ---------- */
+.sk-callout {
+  position: relative;
+  background: var(--paper);
+  padding: var(--sp-4) var(--sp-5);
+  display: inline-block;
+}
+.sk-callout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'><path d='M5,8 Q40,3 100,5 T195,8 Q197,30 196,55 Q197,75 195,92 Q140,97 100,95 T20,95 Q6,96 5,92 Q3,70 4,50 T5,8 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ---------- divider — wavy hand-drawn line ---------- */
+.sk-divider {
+  display: block;
+  width: 100%;
+  height: 14px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M2,7 Q15,3 30,7 T60,7 T90,8 T120,6 T150,7 T180,7 T198,7' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.sk-divider--dashed {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 4' preserveAspectRatio='none'><path d='M2,2 L198,2' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-dasharray='12 10' vector-effect='non-scaling-stroke'/></svg>");
+  height: 4px;
+}
+
+/* ---------- arrow ----------
+   the light arrow for copy: a nearly straight pen line. flows use .sk-flow-arrow. */
+.sk-arrow-right {
+  display: inline-block;
+  width: 80px; height: 24px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 24'><path d='M3,12.5 Q37,11 71,12' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/><path d='M63,6 L71.5,12 L63,18' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-repeat: no-repeat;
+  vertical-align: middle;
+}
+
+/* ---------- hand-drawn checkmark ---------- */
+.sk-check {
+  display: inline-block;
+  width: 22px; height: 22px;
+  background-color: var(--brand-primary); /* the mark's colour is a token; the svg is only its shape */
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3,12 Q6,15 9,18 Q14,8 19,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3,12 Q6,15 9,18 Q14,8 19,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
+  vertical-align: middle;
+}
+
+/* ---------- buttons ---------- */
+.sk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-annot);
+  font-size: var(--t-lead);
+  text-transform: lowercase;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px 22px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  transition: transform 120ms ease-out;
+  z-index: 0; /* its own stacking context: the stamp shows on any background */
+}
+.sk-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: inherit; /* the button's fill, laid above the stamp */
+  z-index: -1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-btn::after {
+  content: "";
+  position: absolute;
+  inset: 4px -4px -4px 4px; /* the same ink stamp as a sticker */
+  background: var(--ink);
+  z-index: -2; /* the stamp, under the fill */
+  transition: inset 120ms ease-out, opacity 120ms ease-out;
+}
+.sk-btn:hover::after { inset: 6px -6px -6px 6px; } /* the sticker lifts: 4px → 6px */
+.sk-btn:active        { transform: translate(2px,2px); }
+.sk-btn:active::after { inset: 0; opacity: 0; } /* shadow tucked away during press */
+.sk-btn:focus-visible { outline: var(--stroke) dashed var(--brand-accent); outline-offset: 4px; }
+
+/* primary: brand purple fill, paper text — wobbly white outline */
+.sk-btn--primary { background: var(--brand-primary); color: var(--paper); }
+.sk-btn--primary::before {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M4,6 Q50,2 100,4 T196,6 Q198,30 196,54 Q140,58 100,56 T6,56 Q3,30 4,6 Z' fill='none' stroke='%23fafaf7' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
+}
+
+/* secondary: brand gold fill, ink text — for warmer secondary CTAs */
+.sk-btn--secondary { background: var(--brand-secondary); color: var(--ink); }
+
+.sk-btn--ghost { background: transparent; }
+.sk-btn--ghost::after { display:none; }
+
+/* ---------- input ---------- */
+.sk-input {
+  font-family: var(--font-hand);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  position: relative;
+}
+.sk-input-wrap {
+  position: relative;
+  background: var(--paper);
+}
+.sk-input-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'><path d='M3,5 Q50,3 100,4 T197,5 Q198,25 197,46 Q140,48 100,47 T5,46 Q2,25 3,5 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-input-wrap:focus-within { outline: var(--stroke) dashed var(--brand-accent); outline-offset: 4px; }
+
+/* ---------- badge / tag ---------- */
+.sk-tag {
+  display: inline-block;
+  font-family: var(--font-annot);
+  font-size: var(--t-small);
+  padding: 3px 10px;
+  background: var(--paper);
+  color: var(--ink);
+  position: relative;
+  text-transform: lowercase;
+}
+.sk-tag::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'><path d='M3,4 Q25,1 50,2.5 T97,4 Q98,15 97,26 Q60,28 50,27 T4,26 Q2,15 3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-tag--blue  { background: var(--accent-blue-soft); }
+.sk-tag--green { background: var(--accent-green-soft); }
+.sk-tag--pink  { background: var(--accent-pink-soft); }
+
+/* ---------- circle — a plain ring around a number or a word, for annotations ---------- */
+.sk-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  position: relative;
+  font-family: var(--font-annot);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><path d='M30,3 Q45,4 54,15 Q58,30 53,45 Q42,57 28,56 Q13,55 6,42 Q2,28 9,14 Q19,3 30,3 Z' fill='none' stroke='%231a1a1a' stroke-width='1.5' vector-effect='non-scaling-stroke'/></svg>");
+  background-size: 100% 100%;
+}
+
+/* ---------- flow: numbered steps joined by bold arrows ----------
+   a step is a sticker cut round: a filled disk with the pen outline, on the ink stamp.
+   the arrow is the marker line: straight, stroke-bold thick, with a solid head.
+   --sk-step sizes the steps and keeps each arrow on their centres. */
+.sk-flow {
+  --sk-step: 64px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+.sk-flow-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  text-align: center;
+  min-width: 0;
+}
+.sk-step {
+  position: relative;
+  z-index: 0; /* its own stacking context: the stamp shows on any background */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--sk-step, 64px);
+  height: var(--sk-step, 64px);
+  margin-bottom: var(--sp-2);
+  border-radius: 52% 48% 50% 50% / 48% 52% 50% 50%; /* round, by hand */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--t-h3);
+  line-height: 1;
+}
+.sk-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: inherit; /* the step's fill, laid above the stamp */
+  border: var(--stroke-thin) solid var(--ink);
+  z-index: -1;
+}
+.sk-step::after {
+  content: "";
+  position: absolute;
+  inset: 4px -4px -4px 4px; /* the same ink stamp as a sticker */
+  border-radius: inherit;
+  background: var(--ink);
+  z-index: -2;
+}
+.sk-step--primary   { background: var(--brand-primary);   color: var(--paper); }
+.sk-step--secondary { background: var(--brand-secondary); color: var(--ink); }
+.sk-step--accent    { background: var(--brand-accent);    color: var(--paper); }
+.sk-flow-arrow {
+  position: relative;
+  flex: 1 1 32px;
+  min-width: 32px;
+  height: var(--sk-step, 64px);
+  color: var(--ink); /* set color to recolor shaft and head together */
+}
+.sk-flow-arrow::before { /* the shaft */
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 12px;
+  top: 50%;
+  height: var(--stroke-bold);
+  margin-top: calc(var(--stroke-bold) / -2);
+  border-radius: var(--stroke-bold);
+  background: currentColor;
+}
+.sk-flow-arrow::after { /* the head */
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 16px;
+  height: 18px;
+  margin-top: -9px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 22% 50%);
+}
+
+/* ---------- console: code on the night panel ----------
+   robusta has no dark mode: the site stays cheerful. the console is its one dark surface, kept for
+   code, so the reader sees at once that this is code and can focus without the paper glaring.
+   a night sticker cut by hand, on the same ink stamp; one command per line, its note beside it.
+     <ol class="sk-console">
+       <li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">epicman</strong> create an epic</code>
+         <span class="sk-console-note">writes the epic and its stories</span></li>
+     </ol>
+   a plain block of code: <pre class="sk-console">. use it alone, not with .sk-box or .sk-sticker. */
+.sk-console {
+  position: relative;
+  z-index: 0; /* its own stacking context: the stamp shows on any background */
+  container-type: inline-size;
+  margin: 0;
+  padding: var(--sp-4) var(--sp-6) var(--sp-4) var(--sp-5);
+  list-style: none;
+  background: transparent; /* the night fill is ::before, cut to the hand-drawn edge */
+  border: none;
+  border-radius: 0;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  line-height: 1.55;
+}
+.sk-console::before,
+.sk-console::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0.8,1.5 Q25,0.2 50,1 T99.2,0.8 Q100,25 99.4,50 T99,98.6 Q75,99.8 50,99 T0.6,99.2 Q0,75 0.7,50 T0.8,1.5 Z'/></svg>") no-repeat center / 100% 100%;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0.8,1.5 Q25,0.2 50,1 T99.2,0.8 Q100,25 99.4,50 T99,98.6 Q75,99.8 50,99 T0.6,99.2 Q0,75 0.7,50 T0.8,1.5 Z'/></svg>") no-repeat center / 100% 100%;
+}
+.sk-console::before {
+  inset: 0;
+  background: var(--night);
+  z-index: -1;
+}
+.sk-console::after {
+  inset: 4px -4px -4px 4px; /* the same ink stamp as a sticker, cut to the same edge */
+  background: var(--ink);
+  z-index: -2;
+}
+pre.sk-console {
+  overflow: visible; /* keeps the stamp; long lines wrap instead of scrolling */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sk-console-line {
+  display: grid;
+  grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+  gap: var(--sp-1) var(--sp-6);
+  align-items: baseline;
+  padding: var(--sp-3) 0;
+}
+.sk-console-line + .sk-console-line { border-top: var(--stroke-thin) dashed var(--night-rule); }
+.sk-console-cmd {
+  display: block;
+  position: relative;
+  padding: 0 0 0 2.2ch;
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--t-small); /* the console's size: the base `code` rule would set its own */
+  line-height: inherit;
+  overflow-wrap: anywhere;
+}
+.sk-console-cmd::before { /* the prompt */
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: var(--night-mute);
+}
+.sk-console-agent,
+.sk-console-cmd strong {
+  color: var(--brand-secondary); /* gold: the console's one colour */
+  font-weight: 600;
+}
+.sk-console-note {
+  color: var(--night-mute);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.45;
+}
+.sk-console code:not(.sk-console-cmd) { /* inline code inside a note */
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--paper);
+  font-size: var(--t-small);
+}
+.sk-console ::selection { background: var(--brand-primary); color: var(--paper); }
+@container (max-width: 560px) {
+  .sk-console-line { grid-template-columns: minmax(0, 1fr); }
+  .sk-console-note { padding-left: 2.2ch; } /* under the command, past the prompt */
+}
+
+/* ---------- "scribble" emphasis ---------- */
+.sk-scribble {
+  display: inline-block;
+  position: relative;
+}
+.sk-scribble::after {
+  content: "";
+  position: absolute;
+  left: -4px; right: -4px;
+  bottom: -4px; height: 12px;
+  background-color: var(--brand-primary); /* the mark's colour is a token; the svg is only its shape */
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,5 Q25,2 50,6 T100,5 T150,7 T198,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>") no-repeat center / 100% 100%;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,5 Q25,2 50,6 T100,5 T150,7 T198,4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/></svg>") no-repeat center / 100% 100%;
+}
+
+/* slight tape effect for stickers */
+.sk-tape {
+  position: relative;
+}
+.sk-tape::before {
+  content: "";
+  position: absolute;
+  top: -8px; left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px; height: 18px;
+  background: color-mix(in srgb, var(--accent-yellow-soft) 85%, transparent);
+  border-left: 1px dashed rgba(0,0,0,0.15);
+  border-right: 1px dashed rgba(0,0,0,0.15);
+}
+
+/* =========================================================
+   marketing sections — layout
+   =========================================================
+
+   One block per section, named after the component in kebab-case:
+   `.sk-<section>` for the root, `.sk-<section>__<part>` for a part,
+   `--<modifier>` for a variant — the rule `.sk-btn--primary` already
+   follows, extended with a part separator.
+
+   These class names are what a site overrides. Every rule below is written
+   at single-class specificity and carries no `!important`, so a consuming
+   site overrides one with a selector carrying one class more and wins
+   whatever the load order — which matters, since a site's own stylesheet
+   may well load before this file.
+
+   Mobile-first: what follows is the narrow layout, and the responsive
+   section at the end of this file widens it. No section declares a font
+   size; every size reads a --t-* step of colors_and_type.css.
+   ========================================================= */
+
+/* ---------- brand logo ----------
+   Not a section — a primitive the header and the footer both embed. The
+   lockup has to be able to shrink, or the wordmark alone is wider than a
+   320px viewport. The emoji glyph sizes and the tagline's indent stay
+   inline: they are dimensions of the mark, tuned against the wordmark's
+   1597×273 ratio, and not type. */
+.sk-brand-logo        { max-width: 100%; }
+.sk-brand-logo__lockup   { min-width: 0; max-width: 100%; }
+.sk-brand-logo__wordmark { min-width: 0; max-width: 100%; height: auto; }
+.sk-brand-logo__tagline {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-top: 10px;
+}
+
+/* ---------- site header ---------- */
+.sk-site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4);
+  border-bottom: 1.5px dashed var(--ink-faint);
+}
+.sk-site-header__brand { display: flex; align-items: center; min-width: 0; }
+.sk-site-header__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3) var(--sp-4);
+}
+.sk-site-header__link {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ---------- hero ---------- */
+.sk-hero {
+  position: relative;
+  padding: var(--sp-6) var(--sp-4) var(--sp-5);
+}
+.sk-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: center;
+}
+.sk-hero__copy { min-width: 0; }
+.sk-hero__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-4);
+}
+.sk-hero__eyebrow-arrow { margin-right: var(--sp-2); }
+.sk-hero__title-scribble { margin-right: var(--sp-3); }
+.sk-hero__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--t-display);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-hero__subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  margin: var(--sp-5) 0 0;
+  max-width: 520px;
+}
+.sk-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}
+.sk-hero__footnote {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+}
+.sk-hero__figure { position: relative; justify-self: center; width: fit-content; max-width: 100%; text-align: center; }
+/* the mascot is ink on near-white: brightness lifts that to pure white, which multiply turns into the paper under it */
+.sk-hero__mascot { height: 240px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.02); }
+.sk-hero__annotation {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  transform: rotate(4deg);
+  margin-top: var(--sp-4);
+}
+/* the little pointing squiggle: it aims at the mascot from the caption,
+   which only means anything once the figure sits in its own column. */
+.sk-hero__doodle { display: none; }
+
+/* ---------- services grid ---------- */
+.sk-services-grid { padding: var(--sp-6) var(--sp-4); }
+.sk-services-grid__head { margin-bottom: var(--sp-6); }
+.sk-services-grid__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-services-grid__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-services-grid__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+.sk-services-grid__card { position: relative; min-width: 0; }
+.sk-services-grid__card--tilt-left  { transform: rotate(-0.4deg); }
+.sk-services-grid__card--tilt-right { transform: rotate(0.4deg); }
+.sk-services-grid__stamp {
+  position: absolute;
+  inset: 6px -6px -6px 6px;
+  background: var(--ink);
+  z-index: 0;
+}
+.sk-services-grid__face {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  padding: var(--sp-5);
+  min-height: 200px;
+}
+.sk-services-grid__frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'><path d='M3,4 Q40,2 100,3 T197,5 Q198,60 197,120 Q198,170 196,196 Q140,198 100,196 T6,196 Q3,140 4,80 T3,4 Z' fill='none' stroke='%231a1a1a' stroke-width='0.7'/></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sk-services-grid__card-body { position: relative; z-index: 2; }
+.sk-services-grid__tag-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--sp-1);
+}
+.sk-services-grid__card-title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h2);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: var(--sp-1);
+  overflow-wrap: break-word;
+}
+.sk-services-grid__time {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-3);
+}
+.sk-services-grid__body {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  margin: 0;
+}
+.sk-services-grid__more {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ---------- flow diagram ---------- */
+.sk-flow-diagram {
+  padding: var(--sp-6) var(--sp-4);
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--paper-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  border-top: 1.5px dashed var(--ink-faint);
+  border-bottom: 1.5px dashed var(--ink-faint);
+}
+/* every text of the diagram sits on a patch of plain paper, the dots only
+   around it: a pattern under letters reads as punctuation. */
+.sk-flow-diagram__head {
+  width: fit-content;
+  max-width: calc(100% + var(--sp-4));
+  margin: 0 0 var(--sp-6) calc(-1 * var(--sp-4));
+  padding: var(--sp-3) var(--sp-4);
+  background-color: var(--paper);
+}
+.sk-flow-diagram__intro {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  max-width: var(--measure);
+  margin: var(--sp-4) 0 0;
+}
+.sk-flow-diagram__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-flow-diagram__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-flow-diagram__steps {
+  --sk-step: 64px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--sp-5) var(--sp-4);
+}
+.sk-flow-diagram__step {
+  text-align: center;
+  min-width: 96px;
+  max-width: 160px;
+  padding: var(--sp-2) var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  background-color: var(--paper);
+}
+.sk-flow-diagram__label {
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+}
+.sk-flow-diagram__sub {
+  font-family: var(--font-sans);
+  font-size: var(--t-tiny);
+  color: var(--ink-mute);
+  margin-top: var(--sp-1);
+}
+/* the arrows read left-to-right, which is only true once the steps sit on
+   one row. Wrapped, an arrow at the end of a line points at nothing. */
+.sk-flow-diagram__arrow { display: none; }
+/* the conductor: one agent running every step, a purple frame around the row
+   on the ink stamp, its name on a tab across the top edge. */
+.sk-flow-diagram__conductor {
+  position: relative;
+  padding: var(--sp-7) var(--sp-4) var(--sp-5);
+  border: var(--stroke-bold) solid var(--brand-primary);
+  border-radius: var(--r-lg);
+  background-color: var(--paper);
+  box-shadow: var(--shadow-offset);
+}
+.sk-flow-diagram__conductor-label {
+  position: absolute;
+  top: calc(-1 * var(--sp-4));
+  left: var(--sp-5);
+  padding: var(--sp-1) var(--sp-4);
+  background: var(--brand-primary);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--t-h4);
+  font-weight: 700;
+  line-height: 1.2;
+  box-shadow: var(--shadow-soft);
+}
+/* the example: a console of commands under the steps, its title above it. */
+.sk-flow-diagram__example {
+  max-width: 960px;
+  margin: var(--sp-7) auto 0;
+}
+.sk-flow-diagram__example-title {
+  width: fit-content;
+  max-width: calc(100% + var(--sp-3));
+  margin-left: calc(-1 * var(--sp-3));
+  padding: var(--sp-1) var(--sp-3);
+  background-color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: var(--sp-4);
+}
+.sk-flow-diagram__caveat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}
+.sk-flow-diagram__mascot { height: 96px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.02); }
+.sk-flow-diagram__bubble { max-width: 320px; }
+.sk-flow-diagram__caveat-text {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+}
+/* a link in the caveat: blue and underlined, and never cut, so a URL moves
+   whole to the next line rather than splitting on its hyphen */
+.sk-flow-diagram__caveat-link {
+  display: inline-block;
+  white-space: nowrap;
+  color: var(--brand-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---------- questions list ----------
+   plain paper, no dots: the entries are documents, read closely. */
+.sk-questions-list { padding: var(--sp-7) var(--sp-4); background-color: var(--paper); }
+.sk-questions-list__head { margin-bottom: var(--sp-6); }
+.sk-questions-list__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-questions-list__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-questions-list__intro {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  max-width: var(--measure);
+  margin: var(--sp-4) 0 0;
+}
+.sk-questions-list__entries {
+  display: grid;
+  gap: var(--sp-6);
+}
+.sk-questions-list__entry { padding: var(--sp-5) calc(3% + var(--sp-4)); }
+.sk-questions-list__question {
+  font-family: var(--font-sans);
+  font-size: var(--t-h4);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0 0 var(--sp-4);
+}
+.sk-questions-list__key {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+.sk-questions-list__fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--sp-2) var(--sp-4);
+  margin: 0;
+}
+.sk-questions-list__label {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  line-height: 1.6;
+}
+.sk-questions-list__value {
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  color: var(--ink);
+  margin: 0;
+}
+.sk-questions-list__value--resolution { font-weight: 600; }
+.sk-questions-list__legend {
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  color: var(--ink);
+  max-width: var(--measure);
+  margin: var(--sp-6) 0 0;
+}
+
+/* ---------- principles list ---------- */
+.sk-principles-list { padding: var(--sp-7) var(--sp-4); }
+.sk-principles-list__head { margin-bottom: var(--sp-6); }
+.sk-principles-list__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-principles-list__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-principles-list__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+.sk-principles-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+.sk-principles-list__check { flex-shrink: 0; margin-top: 4px; }
+.sk-principles-list__key {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--t-lead);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.sk-principles-list__value {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-top: 2px;
+}
+
+/* ---------- notes preview ---------- */
+.sk-notes-preview {
+  padding: var(--sp-6) var(--sp-4);
+  background: var(--paper-2);
+}
+.sk-notes-preview__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+.sk-notes-preview__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-bottom: var(--sp-1);
+}
+.sk-notes-preview__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+.sk-notes-preview__all {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sk-notes-preview__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-4) var(--sp-6);
+}
+.sk-notes-preview__post {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-bottom: 1.5px dashed var(--ink-faint);
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
+.sk-notes-preview__date {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  min-width: 52px;
+  padding-top: 4px;
+}
+.sk-notes-preview__post-body { flex: 1; min-width: 0; }
+.sk-notes-preview__post-title {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  line-height: 1.25;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+.sk-notes-preview__tag-row { margin-top: var(--sp-2); }
+
+/* ---------- closing cta ---------- */
+.sk-cta {
+  position: relative;
+  padding: var(--sp-7) var(--sp-4);
+  text-align: center;
+}
+.sk-cta__mascot {
+  height: 110px;
+  max-width: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply; filter: brightness(1.02);
+  margin-bottom: var(--sp-2);
+}
+.sk-cta__title {
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  line-height: 1;
+  color: var(--ink);
+  margin: var(--sp-3) 0 var(--sp-2);
+  overflow-wrap: break-word;
+}
+.sk-cta__subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--t-lead);
+  color: var(--ink-soft);
+  max-width: 540px;
+  margin: 0 auto var(--sp-6);
+}
+.sk-cta__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+}
+.sk-cta__email { width: min(320px, 100%); height: 52px; }
+.sk-cta__email-field { height: 52px; }
+.sk-cta__footnote {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+  margin-top: var(--sp-4);
+}
+
+/* ---------- site footer ---------- */
+.sk-site-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+  padding: var(--sp-6) var(--sp-4) var(--sp-7);
+  border-top: 1.5px solid var(--ink);
+}
+.sk-site-footer__brand { min-width: 0; }
+.sk-site-footer__tagline {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  line-height: 1.4;
+  color: var(--ink-mute);
+  white-space: pre-line;
+  max-width: 280px;
+  margin: var(--sp-3) 0 0;
+}
+.sk-site-footer__col { min-width: 0; }
+.sk-site-footer__col-title {
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
+  color: var(--ink);
+}
+.sk-site-footer__items {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-2) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.sk-site-footer__link {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink);
+  text-decoration: none;
+}
+/* an item with no destination — a label, and no anchor around it */
+.sk-site-footer__text {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--ink-mute);
+}
+.sk-site-footer__bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-family: var(--font-sans);
+  font-size: var(--t-tiny);
+  color: var(--ink-mute);
+  border-top: 1.5px dashed var(--ink-faint);
+  padding-top: var(--sp-4);
+  margin-top: var(--sp-3);
+}
+
+/* =========================================================
+   responsive — the five widths, each written once
+   =========================================================
+
+   Five widths — sm, md, lg, xl, 2xl at 640, 768, 1024, 1280 and 1536px, the
+   Tailwind default set shadcn sits on. This package imports no Tailwind theme
+   and inherits nothing: it restates the five values, so a site writing `md:`
+   and a section's own query switch at the same width. Each appears in exactly
+   one `@media` prelude below and nowhere else in this file.
+
+   No --bp-* custom property ships. A media query cannot read one, so a token
+   named for a breakpoint would fail where its name promises.
+
+   320px is a floor and not a breakpoint: no rule keys on it, and the base
+   rule set above must already hold there.
+   ========================================================= */
+
+/* -------- sm — two columns appear -------- */
+@media (min-width: 40rem) {
+  .sk-site-header    { padding: var(--sp-4) var(--sp-5); }
+  .sk-hero           { padding: var(--sp-7) var(--sp-5) var(--sp-5); }
+  .sk-services-grid  { padding: var(--sp-6) var(--sp-5); }
+  .sk-flow-diagram   { padding: var(--sp-6) var(--sp-5); }
+  .sk-principles-list{ padding: var(--sp-7) var(--sp-5); }
+  .sk-questions-list { padding: var(--sp-7) var(--sp-5); }
+  .sk-notes-preview  { padding: var(--sp-6) var(--sp-5); }
+  .sk-cta            { padding: var(--sp-7) var(--sp-5); }
+  .sk-site-footer    { padding: var(--sp-6) var(--sp-5) var(--sp-7); }
+
+  .sk-principles-list__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-notes-preview__list    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-site-footer            { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* -------- md — the horizontal padding reaches its full width and the
+   header becomes one row -------- */
+@media (min-width: 48rem) {
+  .sk-site-header    { padding: var(--sp-5) var(--sp-7); justify-content: space-between; }
+  .sk-hero           { padding: var(--sp-8) var(--sp-7) var(--sp-6); }
+  .sk-services-grid  { padding: var(--sp-8) var(--sp-7); }
+  .sk-flow-diagram   { padding: var(--sp-8) var(--sp-7); }
+  .sk-principles-list{ padding: var(--sp-9) var(--sp-7); }
+  .sk-questions-list { padding: var(--sp-8) var(--sp-7); }
+  .sk-flow-diagram__conductor { padding: var(--sp-7) var(--sp-6) var(--sp-5); }
+  .sk-notes-preview  { padding: var(--sp-8) var(--sp-7); }
+  .sk-cta            { padding: var(--sp-9) var(--sp-7); }
+  .sk-site-footer    { padding: var(--sp-6) var(--sp-7) var(--sp-8); }
+
+  .sk-site-header__nav       { gap: var(--sp-5); }
+  .sk-services-grid__list    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-flow-diagram__caveat   { justify-content: flex-end; }
+  .sk-notes-preview__head    { flex-wrap: nowrap; }
+}
+
+/* -------- lg — the hero splits, the grids reach their full count, and the
+   five steps fit on one row, which is what makes the arrows mean something:
+   below this the row wants 800px against less paper than that, so it wraps
+   and the arrows stay hidden -------- */
+@media (min-width: 64rem) {
+  .sk-flow-diagram__steps    { --sk-step: 76px; flex-wrap: nowrap; justify-content: space-between; gap: var(--sp-3); }
+  .sk-flow-diagram__arrow    { display: block; }
+  .sk-questions-list__entries { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-hero__grid             { grid-template-columns: 1.3fr minmax(0, 1fr); gap: var(--sp-6); }
+  .sk-hero__mascot           { height: 300px; }
+  .sk-services-grid__list    { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
+  .sk-principles-list__items { gap: var(--sp-5) var(--sp-7); }
+  .sk-site-footer            { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--sp-6); }
+  .sk-site-header__nav       { gap: var(--sp-6); }
+}
+
+/* -------- xl — the caption leaves the flow for the mascot's top-right corner.
+   The figure is exactly the mascot's box, so every offset below is a share of
+   the mascot: the caption and its squiggle follow it at any screen width -------- */
+@media (min-width: 80rem) {
+  .sk-hero__grid       { gap: var(--sp-7); }
+  .sk-hero__annotation { position: absolute; top: 2%; left: 92%; width: max-content; max-width: 11em; margin-top: 0; text-align: left; }
+  .sk-hero__doodle     { display: block; position: absolute; top: 14%; left: 86%; width: 22%; height: auto; aspect-ratio: 4 / 3; }
+}
+
+/* -------- 2xl — the sections reach the proportions they render at their
+   widest, which is where the type scale tops out as well -------- */
+@media (min-width: 96rem) {
+  .sk-hero__mascot         { height: 360px; }
+  .sk-flow-diagram__mascot { height: 110px; }
+  .sk-cta__mascot          { height: 140px; }
+}
+
+body { margin: 0; background: var(--paper); }
+</style>
+</head>
+<body>
+<main>
+<section id="agents" class="sk-flow-diagram"><div class="sk-flow-diagram__head"><div class="sk-flow-diagram__eyebrow">// RB Compound, the agents</div><h2 class="sk-flow-diagram__title">six agents, from the epic to the docs.</h2><p class="sk-flow-diagram__intro">RB Compound is a suite of agents for Claude Code. each one does one job and leaves a written file behind: the next agent starts from that file, and so do you.</p></div><div class="sk-flow sk-flow-diagram__steps"><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--primary">1</span><div class="sk-flow-diagram__label">epicman</div><div class="sk-flow-diagram__sub">cuts the project into stories</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--secondary">2</span><div class="sk-flow-diagram__label">storyman</div><div class="sk-flow-diagram__sub">writes what the feature must do</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--accent">3</span><div class="sk-flow-diagram__label">bsman</div><div class="sk-flow-diagram__sub">challenges the story before any code</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--primary">4</span><div class="sk-flow-diagram__label">designman</div><div class="sk-flow-diagram__sub">writes the design you approve</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--secondary">5</span><div class="sk-flow-diagram__label">tddman</div><div class="sk-flow-diagram__sub">writes the tests, then the code</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--accent">6</span><div class="sk-flow-diagram__label">docman</div><div class="sk-flow-diagram__sub">updates the docs to what shipped</div></div></div><figure class="sk-flow-diagram__example"><figcaption class="sk-flow-diagram__example-title">for example, an epic that compares todo-list algorithms:</figcaption><ol class="sk-console"><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">epicman</strong> create an epic for comparing todo-list algorithms, and its stories</code><span class="sk-console-note">writes the epic and five stories, benchmark among them</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">bsman</strong> on benchmark</code><span class="sk-console-note">asks the open questions, each with a proposition and its rationale</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">storyman</strong> update</code><span class="sk-console-note">folds your answers into the story</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">designman</strong> on benchmark</code><span class="sk-console-note">plans the code from what the repository holds today</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">tddman</strong> on benchmark</code><span class="sk-console-note">writes the tests, sees them fail, then writes the code</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">docman</strong> on benchmark</code><span class="sk-console-note">completes the documentation</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">storyman</strong> submit</code><span class="sk-console-note">closes the story: it no longer blocks the others</span></li></ol></figure><div class="sk-flow-diagram__caveat"><div class="sk-callout sk-flow-diagram__bubble"><div class="sk-flow-diagram__caveat-text">license PolyForm Noncommercial 1.0.0: free for noncommercial use.<br/>open code: <a class="sk-flow-diagram__caveat-link" href="https://github.com/robusta-build/rb-compound" target="_blank" rel="noopener noreferrer">github.com/robusta-build/rb-compound</a></div></div></div></section>
+<section id="open-questions" class="sk-questions-list"><div class="sk-questions-list__head"><div class="sk-questions-list__eyebrow">// open questions</div><h2 class="sk-questions-list__title">every step ends on questions.</h2><p class="sk-questions-list__intro">an agent never guesses what you did not say. when the epic, a story, a brainstorm or a design leaves a choice open, its agent writes an open question at the end of the file: the question, the one answer it proposes, and why. you answer in a line, and the next agent starts from your answer. one step after the other, the project gets sharper.</p></div><div class="sk-questions-list__entries"><article class="sk-box sk-sticker sk-questions-list__entry"><p class="sk-questions-list__question"><span class="sk-questions-list__key">OQ-BENCH-2</span> how many items does the benchmark measure?</p><dl class="sk-questions-list__fields"><dt class="sk-questions-list__label">Proposition:</dt><dd class="sk-questions-list__value">1,000, 10,000 and 100,000 items.</dd><dt class="sk-questions-list__label">Rationale:</dt><dd class="sk-questions-list__value">three orders of magnitude show where an algorithm stops scaling, and a run stays under a minute.</dd><dt class="sk-questions-list__label">Resolution:</dt><dd class="sk-questions-list__value sk-questions-list__value--resolution"><span class="highlight-yellow">lgtm</span></dd></dl></article><article class="sk-box sk-sticker sk-questions-list__entry"><p class="sk-questions-list__question"><span class="sk-questions-list__key">OQ-BENCH-3</span> which algorithms go into the first comparison?</p><dl class="sk-questions-list__fields"><dt class="sk-questions-list__label">Proposition:</dt><dd class="sk-questions-list__value">an array, a linked list and a balanced tree.</dd><dt class="sk-questions-list__label">Rationale:</dt><dd class="sk-questions-list__value">they cover the three costs of an insertion: shifting, linking, rebalancing.</dd><dt class="sk-questions-list__label">Resolution:</dt><dd class="sk-questions-list__value sk-questions-list__value--resolution"><span class="highlight-yellow">keep the array and the list, add a skip list instead of the tree.</span></dd></dl></article></div><p class="sk-questions-list__legend">lgtm, “looks good to me”: the proposition is taken as it is. any other answer is yours, in your own words.</p></section>
+<section id="boss" class="sk-flow-diagram"><div class="sk-flow-diagram__head"><div class="sk-flow-diagram__eyebrow">// boss, the complete version</div><h2 class="sk-flow-diagram__title">one command, the whole pipeline.</h2><p class="sk-flow-diagram__intro">boss runs the six agents in your place, one after the other, story after story. it answers the open questions their propositions settle, signs each answer, and leaves you the ones that need you. it stops where you tell it to, and logs every decision in one file.</p></div><div class="sk-flow-diagram__conductor"><span class="sk-flow-diagram__conductor-label">boss</span><div class="sk-flow sk-flow-diagram__steps"><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--primary">1</span><div class="sk-flow-diagram__label">epicman</div><div class="sk-flow-diagram__sub">the epic</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--secondary">2</span><div class="sk-flow-diagram__label">storyman</div><div class="sk-flow-diagram__sub">the story</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--accent">3</span><div class="sk-flow-diagram__label">bsman</div><div class="sk-flow-diagram__sub">the questions</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--primary">4</span><div class="sk-flow-diagram__label">designman</div><div class="sk-flow-diagram__sub">the design</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--secondary">5</span><div class="sk-flow-diagram__label">tddman</div><div class="sk-flow-diagram__sub">the tests, the code</div></div><span class="sk-flow-arrow sk-flow-diagram__arrow"></span><div class="sk-flow-item sk-flow-diagram__step"><span class="sk-step sk-step--accent">6</span><div class="sk-flow-diagram__label">docman</div><div class="sk-flow-diagram__sub">the docs</div></div></div></div><figure class="sk-flow-diagram__example"><figcaption class="sk-flow-diagram__example-title">the same epic, with boss:</figcaption><ol class="sk-console"><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">epicman</strong> create an epic for comparing todo-list algorithms, and its stories</code><span class="sk-console-note">writes the epic and five stories</span></li><li class="sk-console-line"><code class="sk-console-cmd"><strong class="sk-console-agent">boss</strong> atw todo-list-algorithms</code><span class="sk-console-note">runs the five stories to the commit, answers the open questions and logs why</span></li></ol></figure><div class="sk-flow-diagram__caveat"><div class="sk-callout sk-flow-diagram__bubble"><div class="sk-flow-diagram__caveat-text">this version only comes with a paid, personalized accompaniment of your team.</div></div></div></section>
+</main>
+</body>
+</html>

@@ -146,7 +146,7 @@ describe('ListingPage', () => {
     );
 
     expect(html.indexOf('<h1')).toBeLessThan(html.indexOf('sk-notes-preview'));
-    expect(html.match(/class="sk-notes-preview__post"/g)).toHaveLength(12);
+    expect(html.match(/class="sk-box sk-notes-preview__post"/g)).toHaveLength(12);
     expect(html).not.toMatch(
       /<h2|sk-notes-preview__eyebrow|sk-notes-preview__all/,
     );

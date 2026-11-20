@@ -66,7 +66,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header locale={locale} counterparts={counterparts} />
+        <Header locale={locale} counterparts={counterparts} rolls={rolls} />
         {children}
         <Footer locale={locale} rolls={rolls} />
         {isNotFoundDocument ? null : <Scripts />}

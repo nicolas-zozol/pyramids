@@ -46,6 +46,9 @@ function readPageOfLocale(
   }
 
   const [head, ...rest] = segments;
+  if (rest.length === 0 && (scheme.products ?? []).includes(head)) {
+    return { kind: 'product', locale, product: head };
+  }
   if (head !== scheme.contentRoot.toLowerCase()) {
     return undefined;
   }

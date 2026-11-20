@@ -14,7 +14,7 @@ describe('notesFeed', () => {
     expect(french).toHaveLength(4);
   });
 
-  it('points each post at its canonical article URL, tagged with its category', async () => {
+  it('points each post at its canonical article URL, tagged with its category, dated in three parts and summed up by its excerpt', async () => {
     const french = await notesFeed({ locale: 'fr', limit: 4 });
     const yieldFarming = french.find((post) =>
       post.title.startsWith('Provenance des rendements'),
@@ -25,7 +25,11 @@ describe('notesFeed', () => {
       href: '/fr/articles/c/blockchain/provenance-des-rendements-du-yield-farming-dans-la-blockchain',
       tag: 'blockchain',
       date: '30 nov.',
+      dateParts: { month: 'nov.', day: '30', year: '2021' },
+      summary: expect.any(String),
     });
+    expect(yieldFarming?.summary?.length).toBeLessThanOrEqual(141);
+    expect(yieldFarming?.summary).not.toMatch(/[<>*_`[\]]/);
   });
 
   it('feeds the French landing page, four places wide, the four newest French articles under /fr', async () => {

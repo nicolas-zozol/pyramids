@@ -31,5 +31,5 @@ export type {
 export { buildUrl } from './build-url.ts';
 export { localeOfSegment } from './locale-of-segment.ts';
 export { parseUrl } from './parse-url.ts';
-export { landingPages, urlSet } from './url-set.ts';
+export { landingPages, productPages, urlSet } from './url-set.ts';
 export { validateArticles } from './validate-articles.ts';

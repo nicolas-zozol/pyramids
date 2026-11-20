@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root.tsx'
 import { Route as R404RouteImport } from './routes/404.tsx'
 import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route.tsx'
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}/index.tsx'
+import { Route as Char123LocaleChar125RbCompoundRouteImport } from './routes/{-$locale}/rb-compound.tsx'
 import { Route as Char123LocaleChar125ArticlesIndexRouteImport } from './routes/{-$locale}/articles/index.tsx'
 import { Route as Char123LocaleChar125ArticlesSlugRouteImport } from './routes/{-$locale}/articles/$slug.tsx'
 import { Route as Char123LocaleChar125ArticlesPNRouteImport } from './routes/{-$locale}/articles/p/$n.tsx'
@@ -34,6 +35,12 @@ const Char123LocaleChar125IndexRoute =
   Char123LocaleChar125IndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125RbCompoundRoute =
+  Char123LocaleChar125RbCompoundRouteImport.update({
+    id: '/rb-compound',
+    path: '/rb-compound',
     getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
 const Char123LocaleChar125ArticlesIndexRoute =
@@ -76,6 +83,7 @@ const Char123LocaleChar125ArticlesCCategoryPNRoute =
 export interface FileRoutesByFullPath {
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
   '/404': typeof R404Route
+  '/{-$locale}/rb-compound': typeof Char123LocaleChar125RbCompoundRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/{-$locale}/articles/$slug': typeof Char123LocaleChar125ArticlesSlugRoute
   '/{-$locale}/articles/': typeof Char123LocaleChar125ArticlesIndexRoute
@@ -86,6 +94,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/404': typeof R404Route
+  '/{-$locale}/rb-compound': typeof Char123LocaleChar125RbCompoundRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
   '/{-$locale}/articles/$slug': typeof Char123LocaleChar125ArticlesSlugRoute
   '/{-$locale}/articles': typeof Char123LocaleChar125ArticlesIndexRoute
@@ -98,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
   '/404': typeof R404Route
+  '/{-$locale}/rb-compound': typeof Char123LocaleChar125RbCompoundRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/{-$locale}/articles/$slug': typeof Char123LocaleChar125ArticlesSlugRoute
   '/{-$locale}/articles/': typeof Char123LocaleChar125ArticlesIndexRoute
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/{-$locale}'
     | '/404'
+    | '/{-$locale}/rb-compound'
     | '/{-$locale}/'
     | '/{-$locale}/articles/$slug'
     | '/{-$locale}/articles/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/404'
+    | '/{-$locale}/rb-compound'
     | '/{-$locale}'
     | '/{-$locale}/articles/$slug'
     | '/{-$locale}/articles'
@@ -132,6 +144,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/{-$locale}'
     | '/404'
+    | '/{-$locale}/rb-compound'
     | '/{-$locale}/'
     | '/{-$locale}/articles/$slug'
     | '/{-$locale}/articles/'
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/{-$locale}/'
       preLoaderRoute: typeof Char123LocaleChar125IndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
+    }
+    '/{-$locale}/rb-compound': {
+      id: '/{-$locale}/rb-compound'
+      path: '/rb-compound'
+      fullPath: '/{-$locale}/rb-compound'
+      preLoaderRoute: typeof Char123LocaleChar125RbCompoundRouteImport
       parentRoute: typeof Char123LocaleChar125RouteRoute
     }
     '/{-$locale}/articles/': {
@@ -215,6 +235,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface Char123LocaleChar125RouteRouteChildren {
+  Char123LocaleChar125RbCompoundRoute: typeof Char123LocaleChar125RbCompoundRoute
   Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
   Char123LocaleChar125ArticlesSlugRoute: typeof Char123LocaleChar125ArticlesSlugRoute
   Char123LocaleChar125ArticlesIndexRoute: typeof Char123LocaleChar125ArticlesIndexRoute
@@ -226,6 +247,7 @@ interface Char123LocaleChar125RouteRouteChildren {
 
 const Char123LocaleChar125RouteRouteChildren: Char123LocaleChar125RouteRouteChildren =
   {
+    Char123LocaleChar125RbCompoundRoute: Char123LocaleChar125RbCompoundRoute,
     Char123LocaleChar125IndexRoute: Char123LocaleChar125IndexRoute,
     Char123LocaleChar125ArticlesSlugRoute:
       Char123LocaleChar125ArticlesSlugRoute,

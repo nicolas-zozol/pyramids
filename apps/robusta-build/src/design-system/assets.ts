@@ -11,6 +11,8 @@
 import heroMascot from '@robusta/pyramids-design-system/assets/niktux-presentation.webp';
 import ctaMascot from '@robusta/pyramids-design-system/assets/niktux-thinks.webp';
 import wordmark from '@robusta/pyramids-design-system/assets/robusta-build-wordmark.svg';
+import rooftopBatches from '@robusta/pyramids-design-system/assets/rooftop-batches.webp';
+import rooftopStories from '@robusta/pyramids-design-system/assets/rooftop-stories.webp';
 
 /**
  * The design system's wordmark, at the URL the bundler published it under.
@@ -24,3 +26,9 @@ export const heroMascotSrc: string = heroMascot;
 
 /** `niktux-thinks.webp`, the closing block's mascot, at the URL the bundler published it under. */
 export const ctaMascotSrc: string = ctaMascot;
+
+/** The two screenshots of Rooftop, the batches of a module then the stories of its first batch, at the URLs the bundler published them under. */
+export const rooftopShotSrcs: [string, string] = [
+  rooftopBatches,
+  rooftopStories,
+];

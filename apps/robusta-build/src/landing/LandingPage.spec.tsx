@@ -1,13 +1,22 @@
 import type { NotePost } from '@robusta/pyramids-design-system';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Footer, Header } from '../chrome/index.ts';
-import { ctaMascotSrc, heroMascotSrc } from '../design-system/assets.ts';
+import {
+  ctaMascotSrc,
+  heroMascotSrc,
+  rooftopShotSrcs,
+} from '../design-system/assets.ts';
 import { localeRolls } from '../page-data/locale-rolls.ts';
 import { notesFeed } from '../page-data/notes-feed.ts';
 import { pageCounterparts } from '../page-data/page-counterparts.ts';
+import { rbCompoundUrl } from '../rb-compound/index.ts';
 import { contentUrls } from '../routing/content-urls.ts';
 import { LOCALES, urlScheme, type Locale } from '../routing/scheme.ts';
-import { buildUrl, landingPages } from '../routing/url-scheme/index.ts';
+import {
+  buildUrl,
+  landingPages,
+  productPages,
+} from '../routing/url-scheme/index.ts';
 import { getPageCopy, getSeoPyramidsConfig } from '../seopyramids.config.ts';
 import {
   anchorsTo,
@@ -17,11 +26,25 @@ import {
 } from '../test-support/markup.ts';
 import { renderInRouter } from '../test-support/render-in-router.tsx';
 import { LandingPage } from './index.ts';
+import {
+  MASALA_GITHUB,
+  MASALA_PACKAGE,
+  MASALA_RECIPES,
+  MASALA_VIDEO,
+  MASALA_WORDS,
+} from './masala-recipes.ts';
 
 const { contact } = getSeoPyramidsConfig();
 const MAILTO = `mailto:${contact.email}`;
 const WITH_NOTES: Locale[] = ['en', 'fr'];
 const BRAND = ['💪', '🏗', 'Robusta Build'];
+
+const landingOf = (locale: Locale) =>
+  buildUrl(urlScheme, { kind: 'landing', locale });
+const rooftopOf = (locale: Locale) => `${landingOf(locale)}#rooftop`;
+const masalaOf = (locale: Locale) => `${landingOf(locale)}#masala`;
+const waitingListOf = (locale: Locale) =>
+  `${MAILTO}?subject=${encodeURIComponent(getPageCopy(locale).landing.products.rooftop.waitingListSubject)}`;
 
 /** A landing page as the prerender writes it: the chrome around it, on the real feed of its Locale. */
 async function landingPage(
@@ -29,29 +52,33 @@ async function landingPage(
   posts?: NotePost[],
 ): Promise<string> {
   const page = { kind: 'landing', locale } as const;
+  const rolls = await localeRolls({ locale });
   return renderInRouter(
     <>
-      <Header locale={locale} counterparts={await pageCounterparts(page)} />
+      <Header
+        locale={locale}
+        counterparts={await pageCounterparts(page)}
+        rolls={rolls}
+      />
       <LandingPage
         locale={locale}
         posts={posts ?? (await notesFeed({ locale, limit: 4 }))}
       />
-      <Footer locale={locale} rolls={await localeRolls({ locale })} />
+      <Footer locale={locale} rolls={rolls} />
     </>,
     buildUrl(urlScheme, page),
   );
 }
 
-/** Every text the site supplies to the landing page of `locale`, as React DOM escapes it. */
+/** Every text the site supplies to the landing page of `locale`, as React DOM escapes it: its page copy, the code of Masala Parser and the paths it writes. */
 async function suppliedTexts(locale: Locale): Promise<Set<string>> {
   const copy = getPageCopy(locale);
-  const { openSource, complete } = copy.landing;
   const otherLocaleNames = LOCALES.filter((other) => other !== locale).map(
     (other) => getPageCopy(other).localeName,
   );
   const feed = await notesFeed({ locale, limit: 4 });
-  const stepNumbers = [openSource, complete].flatMap((flow) =>
-    flow.steps.map((step) => String(step.n)),
+  const stepNumbers = copy.rbCompound.agents.steps.map((step) =>
+    String(step.n),
   );
 
   return new Set(
@@ -60,9 +87,16 @@ async function suppliedTexts(locale: Locale): Promise<Set<string>> {
       ...otherLocaleNames,
       contact.email,
       ...feed.flatMap((post) => [post.title, post.date]),
+      ...stringsOf(feed.map((post) => [post.dateParts, post.summary])),
       ...stepNumbers,
+      ...stringsOf(MASALA_RECIPES),
+      ...MASALA_WORDS.map((word) => word.term),
+      'npm',
+      `install ${MASALA_PACKAGE}`,
+      `${MASALA_GITHUB.replace('https://', '')} →`,
+      `robusta.build${rbCompoundUrl(locale)} →`,
       ...BRAND,
-    ].map(htmlText),
+    ].map((text) => htmlText(text.trim())),
   );
 }
 
@@ -87,16 +121,15 @@ beforeAll(async () => {
 });
 
 describe('LandingPage', () => {
-  it('is one <main> of Hero, the two diagrams, PrinciplesList, the notes section and CTA, in this order', () => {
+  it('is one <main> of HomeHero, ProductDoors, Masala Parser, the notes section and Workshop, in this order', () => {
     for (const locale of WITH_NOTES) {
       const main = /<main>([\s\S]*)<\/main>/.exec(pages[locale])?.[1] ?? '';
       const order = [
-        'class="sk-hero"',
-        'id="open-source"',
-        'id="complete"',
-        'class="sk-principles-list"',
+        'class="sk-home-hero"',
+        'class="sk-product-doors"',
+        'id="masala"',
         'class="sk-notes-preview"',
-        'class="sk-cta"',
+        'class="sk-workshop',
       ].map((marker) => main.indexOf(marker));
 
       expect(
@@ -112,18 +145,16 @@ describe('LandingPage', () => {
 
   it('renders no notes section on the Spanish landing page, no Spanish article being published', () => {
     expect(pages.es).not.toContain('sk-notes-preview');
-    expect(pages.es.indexOf('id="complete"')).toBeLessThan(
-      pages.es.indexOf('class="sk-principles-list"'),
+    expect(pages.es.indexOf('id="masala"')).toBeLessThan(
+      pages.es.indexOf('class="sk-workshop'),
     );
   });
 
-  it('keeps nothing of the shell’s demonstration, its only callouts the bubbles of the diagrams', () => {
+  it('keeps nothing of the shell’s demonstration, its only callout the greeting of the workshop', () => {
     for (const page of Object.values(pages)) {
       expect(page).not.toMatch(/placeholder|--font-script/);
-      expect(page.match(/class="sk-callout[ "]/g)).toHaveLength(2);
-      expect(
-        page.match(/class="sk-callout sk-flow-diagram__bubble"/g),
-      ).toHaveLength(2);
+      expect(page.match(/class="sk-callout[ "]/g)).toHaveLength(1);
+      expect(page).toContain('class="sk-callout sk-workshop__greeting"');
     }
   });
 
@@ -132,7 +163,9 @@ describe('LandingPage', () => {
     const three = await landingPage('en', feed.slice(0, 3));
     const none = await landingPage('en', []);
 
-    expect(three.match(/class="sk-notes-preview__post"/g)).toHaveLength(3);
+    expect(three.match(/class="sk-box sk-notes-preview__post"/g)).toHaveLength(
+      3,
+    );
     expect(none).not.toContain('sk-notes-preview');
   });
 
@@ -140,49 +173,19 @@ describe('LandingPage', () => {
     for (const page of Object.values(pages))
       expect(page).not.toMatch(/<form|<input|<textarea|<select/);
   });
-});
 
-describe('the two diagrams of a landing page', () => {
-  it('carry the ids open-source and complete, distinct, the same in every Locale, and no approach', () => {
+  it('carries distinct ids, rooftop on the door of Rooftop and masala on the section of Masala Parser', () => {
     for (const page of Object.values(pages)) {
       const ids = [...page.matchAll(/\sid="([^"]*)"/g)].map(([, id]) => id);
 
-      expect(ids.filter((id) => id === 'open-source')).toHaveLength(1);
-      expect(ids.filter((id) => id === 'complete')).toHaveLength(1);
       expect(new Set(ids).size).toBe(ids.length);
-      expect(page).not.toContain('id="approach"');
+      expect(page).toMatch(
+        /<article id="rooftop" class="[^"]*sk-product-doors__door"/,
+      );
+      expect(page).toContain(
+        '<section id="masala" class="sk-library-showcase"',
+      );
     }
-  });
-
-  it('take every text from the page copy of their Locale', () => {
-    for (const locale of LOCALES) {
-      const { openSource, complete } = getPageCopy(locale).landing;
-
-      for (const [id, copy] of [
-        ['open-source', openSource],
-        ['complete', complete],
-      ] as const) {
-        const section = sectionOf(pages[locale], `id="${id}"`);
-        const texts = readableTexts(section);
-        const written = [
-          copy.eyebrow,
-          copy.title,
-          ...copy.steps.flatMap((step) => [
-            String(step.n),
-            step.label,
-            step.sub,
-          ]),
-          copy.caveat,
-        ];
-
-        expect(texts, `${locale} ${id}`).toEqual(written.map(htmlText));
-      }
-    }
-  });
-
-  it('carry no mascot', () => {
-    for (const page of Object.values(pages))
-      expect(page).not.toContain('sk-flow-diagram__mascot');
   });
 });
 
@@ -202,90 +205,171 @@ describe('the words of the landing page', () => {
     }
   });
 
-  it('put the tagline of their Locale in the eyebrow and its hero title in the one heading', () => {
+  it('put the hero title of their Locale in the one heading, its eyebrow under it', () => {
     for (const locale of LOCALES) {
-      const { tagline, landing } = getPageCopy(locale);
+      const { hero } = getPageCopy(locale).landing;
 
-      expect(pages[locale]).toMatch(
-        new RegExp(`class="sk-hero__eyebrow"[\\s\\S]*?${htmlText(tagline)}`),
-      );
       expect(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(pages[locale])?.[1]).toBe(
-        htmlText(landing.hero.title),
+        htmlText(hero.title),
+      );
+      expect(pages[locale]).toContain(
+        `<p class="sk-home-hero__eyebrow">${htmlText(hero.eyebrow)}</p>`,
       );
     }
   });
 
-  it('carry no hero footnote and no copy for the SMEs of Toulouse (R-MULTILINGUAL-44)', () => {
+  it('set the names of the two products in bold in the hero', () => {
     for (const page of Object.values(pages)) {
-      expect(page).not.toContain('sk-hero__footnote');
+      expect(page).toContain(
+        '<strong class="sk-home-hero__strong">RB Compound</strong>',
+      );
+      expect(page).toContain(
+        '<strong class="sk-home-hero__strong">Rooftop</strong>',
+      );
+    }
+  });
+
+  it('carry no copy for the SMEs of Toulouse (R-MULTILINGUAL-44)', () => {
+    for (const page of Object.values(pages)) {
       expect(readableTexts(page).join(' ')).not.toMatch(
         /PME|Haute-Garonne|sur place|Renault|BCG/,
       );
     }
   });
 
-  it('name neither EVM, Toptal, Oracle, remote, a price, a revenue threshold nor a dated availability (AC-LANDING-3)', () => {
-    for (const page of Object.values(pages)) {
-      const pitch = page.replace(
-        /class="sk-notes-preview"[\s\S]*?<\/section>/,
-        '',
-      );
+  it('name neither EVM, Toptal, Oracle, remote, a price but the day rate of the workshop, a revenue threshold nor a dated availability (AC-LANDING-3)', () => {
+    for (const locale of LOCALES) {
+      const [dayRate] = getPageCopy(locale).landing.workshop.facts;
+      const pitch = pages[locale]
+        .replace(/class="sk-notes-preview"[\s\S]*?<\/section>/, '')
+        .replace(/class="sk-library-showcase"[\s\S]*?<\/section>/, '')
+        .replace(htmlText(dayRate.strong), '');
       const text = readableTexts(pitch).join(' ');
 
-      expect(text).not.toMatch(
+      expect(text, locale).not.toMatch(
         /EVM|Toptal|Oracle|remote|chiffre d|[€$£]|\bq[1-4]\b|slots?|créneau|20[0-9]{2}/i,
       );
+      expect(dayRate.strong, locale).toMatch(/2[ ,.]000 ?€|€2,000/);
     }
   });
 });
 
 describe('the calls to contact of the landing page', () => {
-  it('are, in the hero, the email address then the LinkedIn profile, labelled in its Locale', () => {
+  it('are, in the hero, the email address then the LinkedIn profile, labelled in its Locale, then its floors to Rooftop and RB Compound', () => {
     for (const locale of LOCALES) {
       const { hero } = getPageCopy(locale).landing;
-      const heroSection = sectionOf(pages[locale], 'class="sk-hero"');
+      const heroSection = sectionOf(pages[locale], 'class="sk-home-hero"');
 
-      expect(hrefs(heroSection)).toEqual([MAILTO, contact.linkedIn]);
+      expect(hrefs(heroSection)).toEqual([
+        MAILTO,
+        contact.linkedIn,
+        rooftopOf(locale),
+        rbCompoundUrl(locale),
+      ]);
       expect(heroSection).toContain(`>${htmlText(hero.emailLabel)}<`);
       expect(heroSection).toContain(`>${htmlText(hero.linkedInLabel)}<`);
     }
   });
 
-  it('is, in the closing block, the address itself leading to an email', () => {
+  it('are, on the doors, the waiting list of Rooftop by email, then the page of RB Compound twice', () => {
     for (const locale of LOCALES) {
-      const { cta } = getPageCopy(locale).landing;
-      const closing = sectionOf(pages[locale], 'class="sk-cta"');
+      const doors = sectionOf(pages[locale], 'class="sk-product-doors"');
 
-      expect(hrefs(closing)).toEqual([MAILTO]);
-      expect(closing).toContain(`>${htmlText(contact.email)}<`);
-      expect(closing).toContain(`>${htmlText(cta.title)}<`);
+      expect(hrefs(doors)).toEqual([
+        htmlText(waitingListOf(locale)),
+        rbCompoundUrl(locale),
+        rbCompoundUrl(locale),
+      ]);
     }
   });
 
-  it('show the two mascots from the design system, the hero’s with the alt text of its Locale', () => {
+  it('is, in the workshop, the address itself leading to an email, then the LinkedIn profile', () => {
     for (const locale of LOCALES) {
-      const { hero } = getPageCopy(locale).landing;
+      const { workshop } = getPageCopy(locale).landing;
+      const closing = sectionOf(pages[locale], 'class="sk-workshop');
 
-      expect(pages[locale]).toContain(
-        `src="${htmlText(heroMascotSrc)}" alt="${htmlText(hero.mascotAlt)}"`,
-      );
-      expect(pages[locale]).toContain(`src="${htmlText(ctaMascotSrc)}"`);
+      expect(hrefs(closing)).toEqual([MAILTO, contact.linkedIn]);
+      expect(closing).toContain(`>${htmlText(contact.email)}<`);
+      expect(closing).toContain(`>${htmlText(workshop.title)}<`);
+    }
+  });
+
+  it('show the mascots and the screenshots of Rooftop from the design system, each with the alt text of its Locale', () => {
+    for (const locale of LOCALES) {
+      const { hero, products, workshop } = getPageCopy(locale).landing;
+      const shown = [
+        [heroMascotSrc, hero.mascotAlt],
+        [ctaMascotSrc, workshop.mascotAlt],
+        ...rooftopShotSrcs.map((src, i) => [src, products.rooftop.shotAlts[i]]),
+      ];
+
+      for (const [src, alt] of shown)
+        expect(pages[locale]).toContain(
+          `src="${htmlText(src)}" alt="${htmlText(alt)}"`,
+        );
     }
   });
 });
 
 describe('every link of the three landing pages', () => {
-  it('leads to the contact email, the LinkedIn profile or a path buildUrl produces, header and footer included', async () => {
+  it('leads to the contact email, the LinkedIn profile, Masala Parser’s repository and video, an anchor of the landing or a path buildUrl produces, header and footer included', async () => {
     const built = new Set(
-      [...landingPages(urlScheme), ...(await contentUrls())].map((url) =>
-        buildUrl(urlScheme, url),
-      ),
+      [
+        ...landingPages(urlScheme),
+        ...productPages(urlScheme),
+        ...(await contentUrls()),
+      ].map((url) => buildUrl(urlScheme, url)),
     );
 
-    for (const [locale, page] of Object.entries(pages)) {
-      expect(hrefs(page).length, locale).toBeGreaterThan(0);
-      for (const href of hrefs(page))
-        expect([MAILTO, contact.linkedIn, ...built], locale).toContain(href);
+    for (const locale of LOCALES) {
+      const allowed = [
+        MAILTO,
+        htmlText(waitingListOf(locale)),
+        contact.linkedIn,
+        MASALA_GITHUB,
+        MASALA_VIDEO,
+        rooftopOf(locale),
+        masalaOf(locale),
+        ...built,
+      ];
+
+      expect(hrefs(pages[locale]).length, locale).toBeGreaterThan(0);
+      for (const href of hrefs(pages[locale]))
+        expect(allowed, locale).toContain(href);
+    }
+  });
+
+  it('names in the header Rooftop and RB Compound in bold, then Masala Parser, then the articles of its Locale when it has some', () => {
+    for (const locale of LOCALES) {
+      const header = /<header[\s\S]*?<\/header>/.exec(pages[locale])?.[0] ?? '';
+      const sections = [
+        ...header.matchAll(
+          /<a\b[^>]*class="(sk-site-header__section[^"]*)"[^>]*>/g,
+        ),
+      ].map(([tag, className]) => [
+        /\shref="([^"]*)"/.exec(tag)?.[1],
+        className,
+      ]);
+
+      expect(sections, locale).toEqual([
+        [
+          rooftopOf(locale),
+          'sk-site-header__section sk-site-header__section--product',
+        ],
+        [
+          rbCompoundUrl(locale),
+          'sk-site-header__section sk-site-header__section--product',
+        ],
+        [masalaOf(locale), 'sk-site-header__section'],
+        ...(WITH_NOTES.includes(locale)
+          ? [
+              [
+                buildUrl(urlScheme, { kind: 'blog-home', locale, page: 1 }),
+                'sk-site-header__section',
+              ],
+            ]
+          : []),
+      ]);
     }
   });
 
